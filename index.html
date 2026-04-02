@@ -496,6 +496,7 @@
     border-radius: 10px; margin-bottom: 6px;
     border: 1px solid var(--border);
     transition: all .2s;
+    flex-wrap: wrap; gap: 8px;
   }
   .kk-row:first-of-type { border-color: var(--accent-dark); background: rgba(254,208,1,0.04); }
   .kk-row-left { display: flex; align-items: center; gap: 12px; }
@@ -509,12 +510,25 @@
   .kk-row:first-of-type .kk-rank { background: var(--badge); color: var(--badge-text); }
   .kk-insurer { font-weight: 600; font-size: 15px; }
   .kk-model { font-size: 12px; color: var(--muted); }
+  .kk-price-cta { display: flex; align-items: center; gap: 10px; }
   .kk-price {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 20px; font-weight: 800;
     white-space: nowrap;
   }
   .kk-price-label { font-size: 11px; color: var(--muted); }
+  .kk-cta {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 6px 14px; border-radius: 8px;
+    background: var(--badge); color: var(--badge-text);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 12px; font-weight: 700;
+    text-decoration: none; white-space: nowrap;
+    transition: all .2s;
+    border: none; cursor: pointer;
+  }
+  .kk-cta:hover { background: #e6bb00; transform: translateY(-1px); }
+  .kk-cta svg { width: 12px; height: 12px; flex-shrink: 0; }
   .kk-loading {
     text-align: center; padding: 24px;
     color: var(--muted); font-size: 14px;
@@ -993,24 +1007,66 @@ async function checkKK() {
 
     subEl.textContent = `${data.locality} (${data.canton}) · ${data.age_class} · Franchise CHF ${data.franchise.toLocaleString('de-CH')}`;
 
+    // Insurer website mapping
+    const insurerUrls = {
+      'Aquilana': 'https://www.aquilana.ch',
+      'Assura': 'https://www.assura.ch',
+      'Atupri': 'https://www.atupri.ch',
+      'Concordia': 'https://www.concordia.ch',
+      'CSS': 'https://www.css.ch',
+      'EGK': 'https://www.egk.ch',
+      'Galenos': 'https://www.galenos.ch',
+      'Groupe Mutuel': 'https://www.groupemutuel.ch',
+      'Helsana': 'https://www.helsana.ch',
+      'Intras': 'https://www.css.ch',
+      'KPT': 'https://www.kpt.ch',
+      'Mutuel': 'https://www.groupemutuel.ch',
+      'ÖKK': 'https://www.oekk.ch',
+      'Progrès': 'https://www.helsana.ch',
+      'Rhenusana': 'https://www.rhenusana.ch',
+      'Sanitas': 'https://www.sanitas.com',
+      'Swica': 'https://www.swica.ch',
+      'Sympany': 'https://www.sympany.ch',
+      'Visana': 'https://www.visana.ch',
+      'Vivao': 'https://www.sympany.ch',
+      'Wincare': 'https://www.sanitas.com'
+    };
+
+    function affiliateLink(insurerName) {
+      const base = insurerUrls[insurerName];
+      if (!base) return null;
+      return base + '?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=kk-vergleich';
+    }
+
+    const arrowSvg = '<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h8M7 3l3 3-3 3"/></svg>';
+
+    function renderRow(p, i, modelLabel) {
+      const link = affiliateLink(p.insurer_name);
+      const ctaHtml = link
+        ? `<a href="${link}" target="_blank" rel="noopener noreferrer" class="kk-cta">Zur Kasse ${arrowSvg}</a>`
+        : '';
+      return `<div class="kk-row">
+        <div class="kk-row-left">
+          <div class="kk-rank">${i + 1}</div>
+          <div>
+            <div class="kk-insurer">${p.insurer_name}</div>
+            <div class="kk-model">${modelLabel}</div>
+          </div>
+        </div>
+        <div class="kk-price-cta">
+          <div style="text-align:right;">
+            <div class="kk-price">CHF ${p.premium.toFixed(2)}</div>
+            <div class="kk-price-label">/ Monat</div>
+          </div>
+          ${ctaHtml}
+        </div>
+      </div>`;
+    }
+
     // Render standard model results
     if (data.standard_model && data.standard_model.length > 0) {
       stdEl.innerHTML = '<div class="kk-result-group-title">Standard-Modell (freie Arztwahl)</div>' +
-        data.standard_model.map((p, i) => `
-          <div class="kk-row">
-            <div class="kk-row-left">
-              <div class="kk-rank">${i + 1}</div>
-              <div>
-                <div class="kk-insurer">${p.insurer_name}</div>
-                <div class="kk-model">${p.tariff_name}</div>
-              </div>
-            </div>
-            <div style="text-align:right;">
-              <div class="kk-price">CHF ${p.premium.toFixed(2)}</div>
-              <div class="kk-price-label">/ Monat</div>
-            </div>
-          </div>
-        `).join('');
+        data.standard_model.map((p, i) => renderRow(p, i, p.tariff_name)).join('');
     } else {
       stdEl.innerHTML = '<div style="color:var(--muted);font-size:14px;">Keine Prämien für diese Kombination gefunden.</div>';
     }
@@ -1019,21 +1075,7 @@ async function checkKK() {
     if (data.cheapest_any_model && data.cheapest_any_model.length > 0) {
       const modelNames = { hmo: 'HMO', telmed: 'Telmed', family_doctor: 'Hausarzt', standard: 'Standard', diverse: 'Alternativ' };
       cheapEl.innerHTML = '<div class="kk-result-group-title">Günstigster Tarif (alle Modelle)</div>' +
-        data.cheapest_any_model.map((p, i) => `
-          <div class="kk-row">
-            <div class="kk-row-left">
-              <div class="kk-rank">${i + 1}</div>
-              <div>
-                <div class="kk-insurer">${p.insurer_name}</div>
-                <div class="kk-model">${modelNames[p.model_type] || p.model_type} · ${p.tariff_name}</div>
-              </div>
-            </div>
-            <div style="text-align:right;">
-              <div class="kk-price">CHF ${p.premium.toFixed(2)}</div>
-              <div class="kk-price-label">/ Monat</div>
-            </div>
-          </div>
-        `).join('');
+        data.cheapest_any_model.map((p, i) => renderRow(p, i, (modelNames[p.model_type] || p.model_type) + ' · ' + p.tariff_name)).join('');
     }
 
   } catch (err) {
