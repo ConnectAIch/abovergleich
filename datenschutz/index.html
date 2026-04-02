@@ -31,7 +31,7 @@
     font-size: 16px; line-height: 1.6;
     -webkit-font-smoothing: antialiased;
   }
-  h1,h2,h3,h4 { font-family: 'Plus Jakarta Sans', sans-serif; line-height: 1.1; color: var(--text); }
+  h1,h2,h3,h4 { font-family: 'Plus Jakarta Sans', sans-serif; line-height: 1.2; color: var(--text); }
   a { color: inherit; text-decoration: none; }
 
   nav {
@@ -49,18 +49,48 @@
   .logo span { color: var(--accent-dark); }
 
   .legal-page {
-    max-width: 640px; margin: 0 auto;
+    max-width: 700px; margin: 0 auto;
     padding: 120px 40px 80px;
   }
   .legal-page h1 {
-    font-size: 32px; font-weight: 800; margin-bottom: 32px;
+    font-size: 32px; font-weight: 800; margin-bottom: 12px;
+  }
+  .legal-page .legal-date {
+    font-size: 13px; color: var(--muted); margin-bottom: 40px;
+  }
+  .legal-page h2 {
+    font-size: 20px; font-weight: 700; margin-top: 40px; margin-bottom: 12px;
+  }
+  .legal-page h3 {
+    font-size: 16px; font-weight: 600; margin-top: 24px; margin-bottom: 8px;
+  }
+  .legal-page p, .legal-page li {
+    font-size: 15px; color: var(--muted); line-height: 1.8;
   }
   .legal-page p {
-    font-size: 15px; color: var(--muted); line-height: 1.8;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
+  }
+  .legal-page ul {
+    margin-bottom: 16px; padding-left: 20px;
+  }
+  .legal-page li {
+    margin-bottom: 6px;
   }
   .legal-page strong { color: var(--text); }
   .legal-page a { color: var(--accent-dark); text-decoration: underline; }
+  .legal-page table {
+    width: 100%; border-collapse: collapse; margin: 16px 0;
+    font-size: 14px;
+  }
+  .legal-page table th, .legal-page table td {
+    text-align: left; padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+  }
+  .legal-page table th {
+    color: var(--text); font-weight: 600; font-size: 13px;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
 
   footer {
     padding: 48px 40px;
@@ -90,6 +120,9 @@
     nav { padding: 14px 20px; }
     .legal-page { padding: 100px 20px 60px; }
     .legal-page h1 { font-size: 26px; }
+    .legal-page h2 { font-size: 18px; }
+    .legal-page table { font-size: 13px; }
+    .legal-page table th, .legal-page table td { padding: 8px 6px; }
     footer { padding: 40px 20px; }
     .footer-inner { flex-direction: column; text-align: center; }
     .footer-note { max-width: 100%; }
@@ -103,28 +136,156 @@
 </nav>
 
 <main class="legal-page">
-  <h1>Datenschutzerklärung</h1>
-  <p><strong>Verantwortlich</strong><br>
-  abovergleich.com / ConnectAI, Schweiz<br>
-  E-Mail: <a href="mailto:hello@handyabo.com">hello@handyabo.com</a></p>
-  <p><strong>Erhebung und Verwendung von Daten</strong><br>
-  abovergleich.com erhebt keine personenbezogenen Daten. Es werden keine Cookies gesetzt und keine Tracking-Tools verwendet, die personenbezogene Daten erfassen. Die Nutzung des Krankenkassen-Rechners erfolgt anonym — eingegebene PLZ und Jahrgang werden nicht gespeichert.</p>
-  <p><strong>Externe Links</strong><br>
-  Diese Website enthält Links zu externen Websites (Anbieter, BAG Priminfo). Für den Datenschutz auf diesen Seiten sind deren Betreiber verantwortlich.</p>
-  <p><strong>Hosting</strong><br>
-  Diese Website wird über Vercel Inc. (USA) gehostet. Beim Aufruf der Website wird deine IP-Adresse technisch bedingt an Vercel übermittelt. Weitere Informationen: vercel.com/legal/privacy-policy.</p>
-  <p><strong>Datenverarbeitung Krankenkassen-Rechner</strong><br>
-  Die eingegebenen Daten (PLZ, Jahrgang, Franchise) werden an unseren Server (Supabase, EU-Region) gesendet, um die passenden Prämien abzurufen. Diese Daten werden nicht gespeichert und nicht an Dritte weitergegeben.</p>
-  <p><strong>Deine Rechte</strong><br>
-  Du hast das Recht auf Auskunft, Berichtigung und Löschung deiner Daten gemäss dem Schweizer Datenschutzgesetz (DSG). Kontakt: <a href="mailto:hello@handyabo.com">hello@handyabo.com</a>.</p>
-  <p><strong>Änderungen</strong><br>
-  Diese Datenschutzerklärung kann jederzeit angepasst werden. Stand: April 2026.</p>
+  <h1>Datenschutzerkl&auml;rung</h1>
+  <p class="legal-date">Stand: April 2026 &middot; Gilt ab 1. September 2023 (revDSG)</p>
+
+  <h2>1. Verantwortliche Stelle</h2>
+  <p>
+    <strong>abovergleich.com / ConnectAI</strong><br>
+    Schweiz<br>
+    E-Mail: <a href="mailto:hello@handyabo.com">hello@handyabo.com</a>
+  </p>
+  <p>Wenn du Fragen zum Datenschutz hast oder deine Rechte aus&uuml;ben m&ouml;chtest, erreichst du uns unter der oben genannten E-Mail-Adresse.</p>
+
+  <h2>2. Geltungsbereich</h2>
+  <p>Diese Datenschutzerkl&auml;rung gilt f&uuml;r die Website <strong>abovergleich.com</strong> und alle damit verbundenen Dienste (Krankenkassen-Rechner, K&uuml;ndigungsschreiben-Service, Wechsel-Wecker, Benutzerkonten). Sie erl&auml;utert, welche Personendaten wir bearbeiten, zu welchem Zweck und an wen wir sie weitergeben.</p>
+  <p>Das anwendbare Recht ist das <strong>Schweizer Bundesgesetz &uuml;ber den Datenschutz (DSG / revDSG)</strong> in der seit 1. September 2023 geltenden Fassung.</p>
+
+  <h2>3. Welche Daten wir bearbeiten</h2>
+
+  <h3>3.1 Krankenkassen-Rechner (anonym)</h3>
+  <p>Bei Nutzung des Pr&auml;mienrechners werden folgende Angaben an unseren Server &uuml;bermittelt:</p>
+  <ul>
+    <li>PLZ (Postleitzahl)</li>
+    <li>Jahrgang</li>
+    <li>Franchise-Stufe</li>
+  </ul>
+  <p>Diese Daten sind <strong>nicht personenbezogen</strong> und werden ausschliesslich zur Berechnung der passenden Pr&auml;mien verwendet. Sie werden nicht gespeichert und nicht mit anderen Daten verkn&uuml;pft.</p>
+
+  <h3>3.2 K&uuml;ndigungsschreiben-Service</h3>
+  <p>Wenn du ein kostenloses K&uuml;ndigungsschreiben f&uuml;r deine Krankenkasse erstellen l&auml;sst, erheben wir:</p>
+  <ul>
+    <li>Vor- und Nachname</li>
+    <li>Strasse und Hausnummer</li>
+    <li>PLZ und Ort</li>
+    <li>E-Mail-Adresse</li>
+    <li>Aktuelle und gew&uuml;nschte Krankenkasse</li>
+  </ul>
+  <p><strong>Zweck:</strong> Erstellung und Versand des personalisierten K&uuml;ndigungsschreibens (PDF) per E-Mail.<br>
+  <strong>Rechtsgrundlage:</strong> Einwilligung (du klickst aktiv auf &laquo;K&uuml;ndigung erstellen&raquo;).<br>
+  <strong>Speicherdauer:</strong> Die Daten werden in unserer Datenbank gespeichert und nach 24 Monaten automatisch gel&ouml;scht, sofern du nicht vorher die L&ouml;schung verlangst.</p>
+
+  <h3>3.3 Benutzerkonten &amp; Wechsel-Wecker</h3>
+  <p>Du kannst ein Benutzerkonto erstellen, um den <strong>Wechsel-Wecker</strong> zu aktivieren. Dabei speichern wir:</p>
+  <ul>
+    <li>E-Mail-Adresse</li>
+    <li>PLZ, Jahrgang, Franchise</li>
+    <li>Aktuelle Krankenkasse und Modell</li>
+    <li>Wechsel-Wecker-Status (aktiv/inaktiv)</li>
+  </ul>
+  <p><strong>Zweck:</strong> Einmal j&auml;hrlich (jeweils im Herbst) pr&uuml;fen wir, ob eine g&uuml;nstigere Krankenkasse f&uuml;r dich verf&uuml;gbar ist, und senden dir eine E-Mail mit deinem pers&ouml;nlichen Sparpotenzial.<br>
+  <strong>Rechtsgrundlage:</strong> Einwilligung (du aktivierst den Wechsel-Wecker bewusst).<br>
+  <strong>Speicherdauer:</strong> Bis du dein Konto l&ouml;schst oder den Wechsel-Wecker deaktivierst. Du kannst dies jederzeit in deinem Profil oder per E-Mail an uns tun.</p>
+
+  <h3>3.4 Technische Zugriffsdaten</h3>
+  <p>Beim Besuch unserer Website werden automatisch folgende Daten &uuml;bermittelt:</p>
+  <ul>
+    <li>IP-Adresse (anonymisiert)</li>
+    <li>Datum und Uhrzeit des Zugriffs</li>
+    <li>Aufgerufene Seite / URL</li>
+    <li>Browser-Typ und Betriebssystem</li>
+    <li>Referrer-URL</li>
+  </ul>
+  <p>Diese Daten werden f&uuml;r den technischen Betrieb und die Sicherheit der Website ben&ouml;tigt und nach 30 Tagen gel&ouml;scht.</p>
+
+  <h2>4. Cookies &amp; Tracking</h2>
+  <p>abovergleich.com setzt <strong>keine Marketing- oder Werbe-Cookies</strong>.</p>
+  <p>Folgende Technologien werden eingesetzt:</p>
+  <table>
+    <tr><th>Dienst</th><th>Zweck</th><th>Cookie</th></tr>
+    <tr><td>Vercel Analytics</td><td>Anonyme Nutzungsstatistiken (Seitenaufrufe, Performance)</td><td>Keine Cookies, kein Fingerprinting</td></tr>
+    <tr><td>Vercel Speed Insights</td><td>Performance-Messung (Web Vitals)</td><td>Keine Cookies</td></tr>
+    <tr><td>Supabase Auth</td><td>Login-Session f&uuml;r Benutzerkonten</td><td>Session-Token (technisch notwendig, nur wenn eingeloggt)</td></tr>
+  </table>
+  <p>Da wir keine Marketing-Cookies verwenden, ist <strong>kein Cookie-Banner</strong> erforderlich. Die einzigen Cookies sind technisch notwendig (Session-Management bei Login).</p>
+
+  <h2>5. Drittanbieter &amp; Daten&uuml;bermittlung ins Ausland</h2>
+  <p>Wir arbeiten mit folgenden Dienstleistern zusammen:</p>
+
+  <table>
+    <tr><th>Anbieter</th><th>Zweck</th><th>Standort</th><th>Datenschutz</th></tr>
+    <tr>
+      <td><strong>Vercel Inc.</strong></td>
+      <td>Website-Hosting, Analytics, Speed Insights</td>
+      <td>USA</td>
+      <td><a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener">Privacy Policy</a></td>
+    </tr>
+    <tr>
+      <td><strong>Supabase Inc.</strong></td>
+      <td>Datenbank (Pr&auml;mien, Leads), Authentifizierung, API (Edge Functions)</td>
+      <td>EU (Frankfurt)</td>
+      <td><a href="https://supabase.com/privacy" target="_blank" rel="noopener">Privacy Policy</a></td>
+    </tr>
+    <tr>
+      <td><strong>Twilio SendGrid</strong></td>
+      <td>Versand von transaktionalen E-Mails (K&uuml;ndigungsschreiben, Wechsel-Wecker)</td>
+      <td>USA</td>
+      <td><a href="https://www.twilio.com/legal/privacy" target="_blank" rel="noopener">Privacy Policy</a></td>
+    </tr>
+    <tr>
+      <td><strong>Google Fonts</strong></td>
+      <td>Schriftarten (Plus Jakarta Sans, Inter)</td>
+      <td>USA</td>
+      <td><a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Privacy Policy</a></td>
+    </tr>
+  </table>
+
+  <p><strong>Daten&uuml;bermittlung in die USA:</strong> Die USA verf&uuml;gen nicht &uuml;ber ein dem Schweizer Recht gleichwertiges Datenschutzniveau. Die &Uuml;bermittlung erfolgt auf Basis von Standardvertragsklauseln (SCC) gem&auml;ss Art. 16 Abs. 2 lit. d DSG bzw. auf Basis des berechtigten Interesses am Betrieb der Website. Vercel und Twilio sind zudem unter dem EU-US Data Privacy Framework zertifiziert.</p>
+
+  <h2>6. Affiliate-Links</h2>
+  <p>abovergleich.com enth&auml;lt <strong>Affiliate-Links</strong> zu Krankenkassen und anderen Anbietern. Wenn du auf einen solchen Link klickst, wirst du auf die Website des Anbieters weitergeleitet. In der URL werden UTM-Parameter &uuml;bermittelt (z.B. <code>utm_source=abovergleich</code>), die dem Anbieter die Herkunft des Besuchs anzeigen. Dabei werden <strong>keine personenbezogenen Daten</strong> von uns an den Anbieter &uuml;bertragen. F&uuml;r die Datenbearbeitung auf den Websites der Anbieter gelten deren eigene Datenschutzerkl&auml;rungen.</p>
+  <p>Wir verkaufen keine Leads und geben <strong>keine Telefonnummern oder E-Mail-Adressen</strong> an Dritte (Versicherer, Callcenter o.&Auml;.) weiter.</p>
+
+  <h2>7. Datenquellen</h2>
+  <p>Die im Krankenkassen-Rechner angezeigten Pr&auml;mien stammen aus den offiziellen Daten des <strong>Bundesamts f&uuml;r Gesundheit (BAG)</strong>, publiziert auf <a href="https://www.priminfo.admin.ch" target="_blank" rel="noopener">priminfo.admin.ch</a>. Alle Angaben ohne Gew&auml;hr.</p>
+
+  <h2>8. Datensicherheit</h2>
+  <p>Wir treffen angemessene technische und organisatorische Massnahmen zum Schutz deiner Daten:</p>
+  <ul>
+    <li>Verschl&uuml;sselte &Uuml;bertragung (HTTPS/TLS) auf allen Seiten und API-Endpunkten</li>
+    <li>Row Level Security (RLS) auf Datenbankebene &mdash; Benutzer k&ouml;nnen nur eigene Daten lesen und bearbeiten</li>
+    <li>Passwortlose Authentifizierung via Magic Link (kein Passwort wird gespeichert)</li>
+    <li>Zugang zu Servern und Datenbanken ist auf autorisierte Personen beschr&auml;nkt</li>
+  </ul>
+
+  <h2>9. Deine Rechte (Art. 25&ndash;29 DSG)</h2>
+  <p>Du hast gem&auml;ss dem Schweizer Datenschutzgesetz folgende Rechte:</p>
+  <ul>
+    <li><strong>Auskunftsrecht:</strong> Du kannst jederzeit Auskunft dar&uuml;ber verlangen, ob und welche Personendaten wir &uuml;ber dich bearbeiten.</li>
+    <li><strong>Recht auf Berichtigung:</strong> Du kannst die Berichtigung unrichtiger Personendaten verlangen.</li>
+    <li><strong>Recht auf L&ouml;schung:</strong> Du kannst die L&ouml;schung deiner Personendaten verlangen, sofern keine gesetzliche Aufbewahrungspflicht entgegensteht.</li>
+    <li><strong>Recht auf Datenherausgabe / -&uuml;bertragung:</strong> Du kannst die Herausgabe deiner Daten in einem g&auml;ngigen elektronischen Format verlangen.</li>
+    <li><strong>Widerspruchsrecht:</strong> Du kannst der Bearbeitung deiner Daten jederzeit widersprechen, insbesondere den Wechsel-Wecker deaktivieren.</li>
+  </ul>
+  <p>Zur Aus&uuml;bung deiner Rechte gen&uuml;gt eine E-Mail an: <a href="mailto:hello@handyabo.com">hello@handyabo.com</a>. Wir beantworten deine Anfrage innert 30 Tagen.</p>
+
+  <h2>10. Beschwerderecht</h2>
+  <p>Wenn du der Meinung bist, dass die Bearbeitung deiner Daten gegen das Datenschutzgesetz verst&ouml;sst, kannst du eine Beschwerde beim <strong>Eidgen&ouml;ssischen Datenschutz- und &Ouml;ffentlichkeitsbeauftragten (ED&Ouml;B)</strong> einreichen:</p>
+  <p>
+    ED&Ouml;B<br>
+    Feldeggweg 1<br>
+    3003 Bern<br>
+    <a href="https://www.edoeb.admin.ch" target="_blank" rel="noopener">www.edoeb.admin.ch</a>
+  </p>
+
+  <h2>11. &Auml;nderungen</h2>
+  <p>Wir k&ouml;nnen diese Datenschutzerkl&auml;rung jederzeit anpassen. Die aktuelle Version ist stets auf dieser Seite verf&uuml;gbar. Wesentliche &Auml;nderungen werden auf der Website kommuniziert.</p>
 </main>
 
 <footer>
   <div class="footer-inner">
     <div class="footer-logo">abo<span>vergleich</span>.com</div>
-    <div class="footer-note">Unabhängiger Abo-Vergleich für die Schweiz.</div>
+    <div class="footer-note">Unabh&auml;ngiger Abo-Vergleich f&uuml;r die Schweiz.</div>
     <div class="footer-links">
       <a href="/impressum/">Impressum</a>
       <a href="/datenschutz/">Datenschutz</a>
