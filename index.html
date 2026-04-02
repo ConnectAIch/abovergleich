@@ -534,33 +534,6 @@
     .kk-btn { width: 100%; }
   }
 
-  /* LEGAL OVERLAY */
-  .legal-overlay {
-    position: fixed; inset: 0; z-index: 1000;
-    background: rgba(0,0,0,0.5);
-    display: flex; align-items: center; justify-content: center;
-    padding: 20px;
-  }
-  .legal-content {
-    background: var(--surface); border-radius: 20px;
-    max-width: 640px; width: 100%; max-height: 80vh;
-    overflow-y: auto; padding: 40px; position: relative;
-  }
-  .legal-content h2 {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 24px; font-weight: 800; margin-bottom: 24px;
-  }
-  .legal-content p {
-    font-size: 14px; color: var(--muted); line-height: 1.7;
-    margin-bottom: 16px;
-  }
-  .legal-content strong { color: var(--text); }
-  .legal-close {
-    position: absolute; top: 16px; right: 20px;
-    background: none; border: none; font-size: 28px;
-    color: var(--muted); cursor: pointer; line-height: 1;
-  }
-  .legal-close:hover { color: var(--text); }
 
   /* KK SECTION */
   .kk-section {
@@ -960,54 +933,13 @@
     <div class="footer-logo">abo<span>vergleich</span>.com</div>
     <div class="footer-note">Unabhängiger Abo-Vergleich für die Schweiz. Wir verdienen eine Provision bei Vertragsabschluss über unsere Links — für dich entstehen keine zusätzlichen Kosten.</div>
     <div class="footer-links">
-      <a href="javascript:void(0)" onclick="toggleLegal('impressum')">Impressum</a>
-      <a href="javascript:void(0)" onclick="toggleLegal('datenschutz')">Datenschutz</a>
-      <a href="mailto:info@abovergleich.com">Kontakt</a>
+      <a href="/impressum/">Impressum</a>
+      <a href="/datenschutz/">Datenschutz</a>
+      <a href="/kontakt/">Kontakt</a>
     </div>
   </div>
 </footer>
 
-<!-- LEGAL OVERLAY -->
-<div class="legal-overlay" id="legal-overlay" style="display:none;" onclick="if(event.target===this)closeLegal()">
-  <div class="legal-content">
-    <button class="legal-close" onclick="closeLegal()">&times;</button>
-
-    <div id="legal-impressum" style="display:none;">
-      <h2>Impressum</h2>
-      <p><strong>abovergleich.com</strong><br>
-      Ein Angebot von ConnectAI<br>
-      Schweiz</p>
-      <p><strong>Kontakt</strong><br>
-      E-Mail: info@abovergleich.com</p>
-      <p><strong>Haftungsausschluss</strong><br>
-      Die auf dieser Website veröffentlichten Informationen werden mit grösster Sorgfalt zusammengestellt. Es kann jedoch keine Gewähr für die Richtigkeit und Vollständigkeit übernommen werden. abovergleich.com übernimmt keine Haftung für Schäden, die durch die Nutzung dieser Website entstehen.</p>
-      <p><strong>Affiliate-Hinweis</strong><br>
-      abovergleich.com enthält Affiliate-Links. Wenn du über diese Links einen Vertrag abschliesst, erhalten wir eine Provision vom Anbieter. Für dich entstehen keine zusätzlichen Kosten. Die Provision beeinflusst unsere Empfehlungen nicht.</p>
-      <p><strong>Datenquellen</strong><br>
-      Krankenkassenprämien: Bundesamt für Gesundheit (BAG), Priminfo 2026.<br>
-      Handy-Abos: Eigene Recherche, Anbieter-Websites.</p>
-    </div>
-
-    <div id="legal-datenschutz" style="display:none;">
-      <h2>Datenschutzerklärung</h2>
-      <p><strong>Verantwortlich</strong><br>
-      abovergleich.com / ConnectAI, Schweiz<br>
-      E-Mail: info@abovergleich.com</p>
-      <p><strong>Erhebung und Verwendung von Daten</strong><br>
-      abovergleich.com erhebt keine personenbezogenen Daten. Es werden keine Cookies gesetzt und keine Tracking-Tools verwendet, die personenbezogene Daten erfassen. Die Nutzung des Krankenkassen-Rechners erfolgt anonym — eingegebene PLZ und Jahrgang werden nicht gespeichert.</p>
-      <p><strong>Externe Links</strong><br>
-      Diese Website enthält Links zu externen Websites (Anbieter, BAG Priminfo). Für den Datenschutz auf diesen Seiten sind deren Betreiber verantwortlich.</p>
-      <p><strong>Hosting</strong><br>
-      Diese Website wird über Vercel Inc. (USA) gehostet. Beim Aufruf der Website wird deine IP-Adresse technisch bedingt an Vercel übermittelt. Weitere Informationen: vercel.com/legal/privacy-policy.</p>
-      <p><strong>Datenverarbeitung Krankenkassen-Rechner</strong><br>
-      Die eingegebenen Daten (PLZ, Jahrgang, Franchise) werden an unseren Server (Supabase, EU-Region) gesendet, um die passenden Prämien abzurufen. Diese Daten werden nicht gespeichert und nicht an Dritte weitergegeben.</p>
-      <p><strong>Deine Rechte</strong><br>
-      Du hast das Recht auf Auskunft, Berichtigung und Löschung deiner Daten gemäss dem Schweizer Datenschutzgesetz (DSG). Kontakt: info@abovergleich.com.</p>
-      <p><strong>Änderungen</strong><br>
-      Diese Datenschutzerklärung kann jederzeit angepasst werden. Stand: April 2026.</p>
-    </div>
-  </div>
-</div>
 
 <script>
 // NAV
@@ -1020,18 +952,6 @@ function closeNav() {
   document.getElementById('nav-burger').classList.remove('open');
 }
 
-// LEGAL
-function toggleLegal(section) {
-  document.getElementById('legal-impressum').style.display = 'none';
-  document.getElementById('legal-datenschutz').style.display = 'none';
-  document.getElementById('legal-' + section).style.display = 'block';
-  document.getElementById('legal-overlay').style.display = 'flex';
-  document.body.style.overflow = 'hidden';
-}
-function closeLegal() {
-  document.getElementById('legal-overlay').style.display = 'none';
-  document.body.style.overflow = '';
-}
 
 // KK CALCULATOR
 const KK_API = 'https://zexpmaegqsayleaohiip.supabase.co/functions/v1/get-cheapest-premiums';

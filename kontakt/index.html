@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kontakt – abovergleich.com</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #fed001;
+    --accent-hover: #ffe033;
+    --accent-dark: #c9a400;
+    --bg: #fafaf9;
+    --surface: #ffffff;
+    --border: rgba(0,0,0,0.06);
+    --text: #1c1917;
+    --text2: #292524;
+    --muted: #78716c;
+    --dark: #1c1917;
+    --dark2: #141210;
+    --dark-text: #f5f5f4;
+    --dark-muted: #a8a29e;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg); color: var(--text);
+    font-size: 16px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,h2,h3,h4 { font-family: 'Plus Jakarta Sans', sans-serif; line-height: 1.1; color: var(--text); }
+  a { color: inherit; text-decoration: none; }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 40px;
+    background: rgba(250,250,248,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800; font-size: 20px; color: var(--text); letter-spacing: -.5px;
+  }
+  .logo span { color: var(--accent-dark); }
+
+  .legal-page {
+    max-width: 640px; margin: 0 auto;
+    padding: 120px 40px 80px;
+    min-height: calc(100vh - 130px);
+  }
+  .legal-page h1 {
+    font-size: 32px; font-weight: 800; margin-bottom: 32px;
+  }
+  .legal-page p {
+    font-size: 15px; color: var(--muted); line-height: 1.8;
+    margin-bottom: 20px;
+  }
+  .legal-page strong { color: var(--text); }
+  .legal-page a { color: var(--accent-dark); text-decoration: underline; }
+
+  footer {
+    padding: 48px 40px;
+    background: var(--dark2); color: var(--dark-text);
+  }
+  .footer-inner {
+    max-width: 1000px; margin: 0 auto;
+    display: flex; justify-content: space-between;
+    align-items: center; flex-wrap: wrap; gap: 16px;
+  }
+  .footer-logo {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800; font-size: 16px; color: var(--dark-text);
+  }
+  .footer-logo span { color: var(--accent); }
+  .footer-note {
+    font-size: 12px; color: var(--dark-muted);
+    max-width: 400px; line-height: 1.6;
+  }
+  .footer-links { display: flex; gap: 20px; }
+  .footer-links a {
+    font-size: 13px; color: var(--dark-muted); transition: color .2s;
+  }
+  .footer-links a:hover { color: var(--dark-text); }
+
+  @media (max-width: 768px) {
+    nav { padding: 14px 20px; }
+    .legal-page { padding: 100px 20px 60px; }
+    .legal-page h1 { font-size: 26px; }
+    footer { padding: 40px 20px; }
+    .footer-inner { flex-direction: column; text-align: center; }
+    .footer-note { max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">abo<span>vergleich</span>.com</a>
+</nav>
+
+<main class="legal-page">
+  <h1>Kontakt</h1>
+  <p>Hast du Fragen, Feedback oder möchtest du mit uns zusammenarbeiten? Schreib uns gerne eine E-Mail.</p>
+  <p><strong>E-Mail</strong><br>
+  <a href="mailto:hello@handyabo.com">hello@handyabo.com</a></p>
+  <p><strong>Betreiber</strong><br>
+  abovergleich.com / ConnectAI<br>
+  Schweiz</p>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">abo<span>vergleich</span>.com</div>
+    <div class="footer-note">Unabhängiger Abo-Vergleich für die Schweiz.</div>
+    <div class="footer-links">
+      <a href="/impressum/">Impressum</a>
+      <a href="/datenschutz/">Datenschutz</a>
+      <a href="/kontakt/">Kontakt</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
