@@ -425,7 +425,7 @@
   }
   .kk-fields {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr auto;
+    grid-template-columns: 1fr 1fr 1fr 1fr auto;
     gap: 12px;
     align-items: end;
   }
@@ -988,6 +988,13 @@
             <option value="1500">CHF 1'500</option>
             <option value="2000">CHF 2'000</option>
             <option value="2500" selected>CHF 2'500</option>
+          </select>
+        </div>
+        <div class="kk-field">
+          <label for="kk-accident">Unfalldeckung</label>
+          <select id="kk-accident">
+            <option value="true" selected>Mit Unfall</option>
+            <option value="false">Ohne Unfall</option>
           </select>
         </div>
         <div class="kk-field kk-field-btn">
@@ -1796,6 +1803,7 @@ async function checkKK() {
   const plz = document.getElementById('kk-plz').value.trim();
   const year = document.getElementById('kk-year').value.trim();
   const franchise = document.getElementById('kk-franchise').value;
+  const accidentIncluded = document.getElementById('kk-accident').value === 'true';
 
   if (!plz || plz.length < 4) { alert('Bitte gültige PLZ eingeben.'); return; }
   if (!year || year < 1930 || year > 2010) { alert('Bitte gültiges Geburtsjahr eingeben.'); return; }
@@ -1816,7 +1824,7 @@ async function checkKK() {
     const res = await fetch(KK_API, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ plz, year_of_birth: year, franchise })
+      body: JSON.stringify({ plz, year_of_birth: year, franchise, accident_included: accidentIncluded })
     });
 
     const data = await res.json();
@@ -1827,7 +1835,7 @@ async function checkKK() {
       return;
     }
 
-    subEl.textContent = `${data.locality} (${data.canton}) · ${data.age_class} · Franchise CHF ${data.franchise.toLocaleString('de-CH')}`;
+    subEl.textContent = `${data.locality} (${data.canton}) · ${data.age_class} · Franchise CHF ${data.franchise.toLocaleString('de-CH')} · ${accidentIncluded ? 'Mit Unfall' : 'Ohne Unfall'}`;
 
     // Insurer website mapping
     const insurerUrls = {
