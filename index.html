@@ -5,16 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- Primary SEO -->
-<title>Abo Vergleich Schweiz 2026 – Handy, Krankenkasse, Internet & TV vergleichen</title>
-<meta name="description" content="Unabhängiger Abo-Vergleich für die Schweiz. Handy-Abos ab CHF 13/Mt., Krankenkassen-Rechner mit BAG-Daten 2026, Internet & TV – transparent und kostenlos.">
+<title>Krankenkassen-Vergleich Schweiz 2026 – Günstigste Grundversicherung finden | abovergleich.com</title>
+<meta name="description" content="Krankenkassen-Vergleich mit offiziellen BAG-Daten 2026. Finde die günstigste Grundversicherung für deine PLZ — spare bis CHF 1'200 pro Jahr. Unabhängig, transparent, kostenlos.">
 <meta name="keywords" content="Abo Vergleich Schweiz, Handy Abo Vergleich, Internet Abo Schweiz, Streaming Vergleich, günstigstes Abo Schweiz">
 <link rel="canonical" href="https://www.abovergleich.com/">
 
 <!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://www.abovergleich.com/">
-<meta property="og:title" content="Abo Vergleich Schweiz – Alle Abos. Ein Vergleich.">
-<meta property="og:description" content="Finde das günstigste Abo in der Schweiz. Handy, Internet, TV – unabhängig verglichen.">
+<meta property="og:title" content="Krankenkassen-Vergleich Schweiz 2026 – Günstigste Grundversicherung finden">
+<meta property="og:description" content="Spare bis CHF 1'200 pro Jahr. Vergleiche alle 34 Krankenkassen mit offiziellen BAG-Daten. Unabhängig und kostenlos.">
 <meta property="og:site_name" content="abovergleich.com">
 <meta property="og:locale" content="de_CH">
 <meta property="og:image" content="https://www.abovergleich.com/og-image.svg">
@@ -23,8 +23,8 @@
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Abo Vergleich Schweiz – Alle Abos. Ein Vergleich.">
-<meta name="twitter:description" content="Unabhängiger Abo-Vergleich. Handy-Abos ab CHF 13/Mt. Transparent, einfach, ehrlich.">
+<meta name="twitter:title" content="Krankenkassen-Vergleich Schweiz 2026 – Günstigste Grundversicherung finden">
+<meta name="twitter:description" content="Spare bis CHF 1'200 pro Jahr. Vergleiche alle 34 Krankenkassen mit offiziellen BAG-Daten.">
 <meta name="twitter:image" content="https://www.abovergleich.com/og-image.svg">
 
 <!-- Structured Data -->
@@ -961,25 +961,73 @@
   </button>
 </nav>
 
-<!-- HERO -->
-<section class="hero">
+<!-- HERO with KK Calculator -->
+<section class="hero" id="kk-rechner">
   <div class="hero-bg"></div>
-  <div class="hero-content">
-    <div class="hero-badge">Unabhängiger Vergleich für die Schweiz</div>
-    <h1>Alle Schweizer Abos.<br><em>Ein Vergleich.</em></h1>
-    <p class="hero-sub">Wir vergleichen Handy-, Internet- und TV-Abos in der Schweiz — unabhängig, transparent und ohne versteckte Kosten.</p>
-    <div class="hero-stats">
+  <div class="hero-content" style="max-width:700px;">
+    <div class="hero-badge">Krankenkassen-Vergleich Schweiz 2026</div>
+    <h1>Zahlst du zu viel<br>für deine <em>Krankenkasse?</em></h1>
+    <p class="hero-sub">Gleiche Leistung, tieferer Preis. Die Grundversicherung ist bei allen Kassen gesetzlich identisch — vergleiche jetzt in 60 Sekunden.</p>
+
+    <div class="kk-calculator" id="kk-calc" style="text-align:left;">
+      <div class="kk-fields">
+        <div class="kk-field">
+          <label for="kk-plz">PLZ</label>
+          <input type="text" id="kk-plz" placeholder="z.B. 8001" maxlength="4" inputmode="numeric">
+        </div>
+        <div class="kk-field">
+          <label for="kk-year">Jahrgang</label>
+          <input type="number" id="kk-year" placeholder="z.B. 1990" min="1930" max="2010">
+        </div>
+        <div class="kk-field">
+          <label for="kk-franchise">Franchise</label>
+          <select id="kk-franchise">
+            <option value="300">CHF 300</option>
+            <option value="500">CHF 500</option>
+            <option value="1000">CHF 1'000</option>
+            <option value="1500">CHF 1'500</option>
+            <option value="2000">CHF 2'000</option>
+            <option value="2500" selected>CHF 2'500</option>
+          </select>
+        </div>
+        <div class="kk-field kk-field-btn">
+          <button class="kk-btn" onclick="checkKK()">Prämien prüfen</button>
+        </div>
+      </div>
+
+      <div class="kk-result" id="kk-result" style="display:none;">
+        <div class="kk-result-header">
+          <div class="kk-result-title">Günstigste Grundversicherungen</div>
+          <div class="kk-result-sub" id="kk-result-sub"></div>
+        </div>
+        <div class="kk-result-note">
+          Die Leistung der Grundversicherung ist bei allen Kassen <strong>gesetzlich identisch</strong> — du zahlst nur für den Namen.
+        </div>
+        <div id="kk-results-standard"></div>
+        <div id="kk-results-cheapest" style="margin-top:16px;"></div>
+        <div style="font-size:12px;color:var(--muted);margin-top:16px;text-align:center;">Quelle: BAG Priminfo 2026 · Alle Angaben ohne Gewähr</div>
+
+        <!-- Wechsel-Wecker CTA (inside results) -->
+        <div class="wecker-cta" id="wecker-cta" style="display:none;">
+          <h3>⏰ Wechsel-Wecker aktivieren</h3>
+          <p>Wir prüfen jedes Jahr im Herbst automatisch, ob du zu viel zahlst — und schicken dir eine E-Mail mit deinem persönlichen Sparpotenzial.</p>
+          <button class="wecker-btn" onclick="openAuth()">Kostenlos erinnern lassen →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-stats" style="margin-top:32px;">
       <div class="hero-stat">
-        <div class="hero-stat-num">200+</div>
-        <div class="hero-stat-label">Abos verglichen</div>
+        <div class="hero-stat-num">34</div>
+        <div class="hero-stat-label">Kassen verglichen</div>
       </div>
       <div class="hero-stat">
-        <div class="hero-stat-num">CHF 700+</div>
+        <div class="hero-stat-num">CHF 1'200+</div>
         <div class="hero-stat-label">max. Ersparnis / Jahr</div>
       </div>
       <div class="hero-stat">
         <div class="hero-stat-num">60 Sek.</div>
-        <div class="hero-stat-label">bis zur Empfehlung</div>
+        <div class="hero-stat-label">bis zum Ergebnis</div>
       </div>
     </div>
   </div>
@@ -1003,14 +1051,14 @@
         <a href="https://www.handyabo.com" class="vertical-cta">Jetzt vergleichen &rarr;</a>
       </div>
 
-      <!-- KRANKENKASSE - LIVE CALCULATOR -->
+      <!-- KRANKENKASSE - LIVE (points to hero calculator) -->
       <div class="vertical-card live">
         <div class="vertical-status live-badge">Live</div>
         <div class="vertical-icon teal">🛡️</div>
         <div class="vertical-title">Krankenkasse</div>
         <div class="vertical-desc">Günstigste Grundversicherung für deine PLZ. Alle Kassen bieten dieselbe Leistung — nur der Preis unterscheidet sich.</div>
         <div class="vertical-price">Bis CHF 1'200+/Jahr sparen &middot; 34 Kassen</div>
-        <a href="#kk-rechner" class="vertical-cta">Prämien berechnen &rarr;</a>
+        <a href="#kk-rechner" class="vertical-cta" onclick="document.getElementById('kk-plz').focus()">Prämien berechnen &rarr;</a>
       </div>
 
       <!-- INTERNET ABO -->
@@ -1063,61 +1111,7 @@
   </div>
 </section>
 
-<!-- KRANKENKASSE RECHNER -->
-<section class="kk-section" id="kk-rechner">
-  <div class="kk-inner">
-    <div class="section-label">Krankenkassen-Rechner</div>
-    <h2 class="section-headline">Günstigste Grundversicherung finden</h2>
-    <p style="text-align:center;color:var(--muted);max-width:560px;margin:0 auto 40px;font-size:16px;line-height:1.7;">Die Leistung der Grundversicherung ist bei allen Kassen gesetzlich identisch. Du zahlst nur für den Namen — spare bis zu CHF 1'200 pro Jahr.</p>
-
-    <div class="kk-calculator" id="kk-calc">
-      <div class="kk-fields">
-        <div class="kk-field">
-          <label for="kk-plz">PLZ</label>
-          <input type="text" id="kk-plz" placeholder="z.B. 8001" maxlength="4" inputmode="numeric">
-        </div>
-        <div class="kk-field">
-          <label for="kk-year">Jahrgang</label>
-          <input type="number" id="kk-year" placeholder="z.B. 1990" min="1930" max="2010">
-        </div>
-        <div class="kk-field">
-          <label for="kk-franchise">Franchise</label>
-          <select id="kk-franchise">
-            <option value="300">CHF 300</option>
-            <option value="500">CHF 500</option>
-            <option value="1000">CHF 1'000</option>
-            <option value="1500">CHF 1'500</option>
-            <option value="2000">CHF 2'000</option>
-            <option value="2500" selected>CHF 2'500</option>
-          </select>
-        </div>
-        <div class="kk-field kk-field-btn">
-          <button class="kk-btn" onclick="checkKK()">Prämien prüfen</button>
-        </div>
-      </div>
-
-      <div class="kk-result" id="kk-result" style="display:none;">
-        <div class="kk-result-header">
-          <div class="kk-result-title">Günstigste Grundversicherungen</div>
-          <div class="kk-result-sub" id="kk-result-sub"></div>
-        </div>
-        <div class="kk-result-note">
-          Die Leistung der Grundversicherung ist bei allen Kassen <strong>gesetzlich identisch</strong> — du zahlst nur für den Namen.
-        </div>
-        <div id="kk-results-standard"></div>
-        <div id="kk-results-cheapest" style="margin-top:16px;"></div>
-        <div style="font-size:12px;color:var(--muted);margin-top:16px;text-align:center;">Quelle: BAG Priminfo 2026 · Alle Angaben ohne Gewähr</div>
-
-        <!-- Wechsel-Wecker CTA (inside results) -->
-        <div class="wecker-cta" id="wecker-cta" style="display:none;">
-          <h3>⏰ Wechsel-Wecker aktivieren</h3>
-          <p>Wir prüfen jedes Jahr im Herbst automatisch, ob du zu viel zahlst — und schicken dir eine E-Mail mit deinem persönlichen Sparpotenzial.</p>
-          <button class="wecker-btn" onclick="openAuth()">Kostenlos erinnern lassen →</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+<!-- (KK Calculator is now in the Hero section above) -->
 
 <!-- KK SEO CONTENT -->
 <section style="padding:60px 40px;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
