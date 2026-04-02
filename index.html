@@ -792,6 +792,46 @@
     box-shadow: 0 4px 12px rgba(254,208,1,0.35);
   }
 
+  /* KUENDIGUNG CAPTURE MODAL */
+  .capture-steps { display: flex; gap: 8px; margin-bottom: 24px; }
+  .capture-step {
+    flex: 1; height: 4px; border-radius: 4px;
+    background: var(--border2); transition: background .3s;
+  }
+  .capture-step.active { background: var(--accent); }
+  .capture-step.done { background: var(--accent-dark); }
+  .capture-view { display: none; }
+  .capture-view.active { display: block; }
+  .capture-insurer-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+    max-height: 320px; overflow-y: auto; padding-right: 4px;
+  }
+  .capture-insurer-btn {
+    padding: 12px 14px; border-radius: 10px;
+    border: 1px solid var(--border2); background: var(--surface);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px; font-weight: 600; color: var(--text);
+    cursor: pointer; transition: all .2s; text-align: left;
+  }
+  .capture-insurer-btn:hover { border-color: var(--accent-dark); background: var(--accent-bg); }
+  .capture-insurer-btn.selected {
+    border-color: var(--accent-dark); background: var(--accent-bg2);
+    box-shadow: 0 0 0 2px var(--accent);
+  }
+  .capture-skip {
+    display: block; margin: 16px auto 0; background: none; border: none;
+    font-size: 13px; color: var(--muted); cursor: pointer;
+    font-family: 'Inter', sans-serif; text-decoration: underline;
+  }
+  .capture-skip:hover { color: var(--text); }
+  .capture-success { text-align: center; }
+  .capture-success-icon { font-size: 48px; margin-bottom: 16px; }
+  .capture-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 480px) {
+    .capture-insurer-grid { grid-template-columns: 1fr; }
+    .capture-row { grid-template-columns: 1fr; }
+  }
+
   /* PROFILE PAGE */
   .profile-section {
     display: none; padding: 120px 40px 80px;
@@ -1162,12 +1202,94 @@
   </div>
 </section>
 
-<!-- AUTH MODAL -->
+<!-- CAPTURE MODAL (Kündigung + Lead Capture) -->
+<div class="auth-overlay" id="capture-overlay" onclick="if(event.target===this)closeCapture()">
+  <div class="auth-modal" style="max-width:480px;">
+    <button class="auth-close" onclick="closeCapture()">&times;</button>
+
+    <!-- Progress Steps -->
+    <div class="capture-steps">
+      <div class="capture-step active" id="cap-step-1"></div>
+      <div class="capture-step" id="cap-step-2"></div>
+      <div class="capture-step" id="cap-step-3"></div>
+    </div>
+
+    <!-- Step 1: Current Insurer -->
+    <div class="capture-view active" id="cap-view-1">
+      <div class="auth-title">Bei welcher Kasse bist du aktuell?</div>
+      <div class="auth-subtitle">Wir erstellen dir ein fertiges Kündigungsschreiben — kostenlos.</div>
+      <div class="capture-insurer-grid" id="cap-insurer-grid"></div>
+      <button class="capture-skip" onclick="skipCapture()">Nein danke, direkt weiter →</button>
+    </div>
+
+    <!-- Step 2: Name & Address -->
+    <div class="capture-view" id="cap-view-2">
+      <div class="auth-title">Deine Daten für das Schreiben</div>
+      <div class="auth-subtitle">Diese Angaben erscheinen auf dem Kündigungsbrief.</div>
+      <div class="auth-msg" id="cap-msg-2"></div>
+      <div class="auth-field">
+        <label for="cap-name">Vor- und Nachname</label>
+        <input type="text" id="cap-name" placeholder="Max Muster">
+      </div>
+      <div class="auth-field">
+        <label for="cap-street">Strasse & Nr.</label>
+        <input type="text" id="cap-street" placeholder="Musterstrasse 1">
+      </div>
+      <div class="capture-row">
+        <div class="auth-field">
+          <label for="cap-plz">PLZ</label>
+          <input type="text" id="cap-plz" placeholder="8001" maxlength="4">
+        </div>
+        <div class="auth-field">
+          <label for="cap-city">Ort</label>
+          <input type="text" id="cap-city" placeholder="Zürich">
+        </div>
+      </div>
+      <button class="auth-btn" onclick="captureStep3()">Weiter →</button>
+    </div>
+
+    <!-- Step 3: Email + Wecker -->
+    <div class="capture-view" id="cap-view-3">
+      <div class="auth-title">Fast fertig!</div>
+      <div class="auth-subtitle">Wohin sollen wir das Kündigungsschreiben senden?</div>
+      <div class="auth-msg" id="cap-msg-3"></div>
+      <div class="auth-field">
+        <label for="cap-email">E-Mail</label>
+        <input type="email" id="cap-email" placeholder="deine@email.ch">
+      </div>
+      <div class="wecker-toggle" style="margin-bottom:16px;">
+        <div>
+          <div class="wecker-toggle-label">⏰ Wechsel-Wecker</div>
+          <div class="wecker-toggle-sub">Nächstes Jahr wieder erinnern</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="cap-wecker" checked>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <button class="auth-btn" id="cap-submit" onclick="submitCapture()">Kündigungsschreiben senden →</button>
+      <div style="margin-top:12px;font-size:11px;color:var(--muted);text-align:center;line-height:1.5;">
+        Kostenlos. Kein Abo. Wir senden dir das PDF per E-Mail.
+      </div>
+    </div>
+
+    <!-- Step 4: Success -->
+    <div class="capture-view" id="cap-view-4">
+      <div class="capture-success">
+        <div class="capture-success-icon">✅</div>
+        <div class="auth-title">Kündigungsschreiben unterwegs!</div>
+        <div class="auth-subtitle">Check deine Inbox — du bekommst gleich eine E-Mail mit dem PDF. Drucke es aus, unterschreibe es und sende es per Einschreiben.</div>
+        <button class="auth-btn" id="cap-redirect-btn" onclick="redirectToInsurer()" style="margin-top:16px;">Jetzt bei der neuen Kasse anmelden →</button>
+        <div style="margin-top:12px;font-size:13px;color:var(--muted);">Du wirst automatisch in <span id="cap-countdown">5</span>s weitergeleitet...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AUTH MODAL (simple, for nav login / wecker-only) -->
 <div class="auth-overlay" id="auth-overlay" onclick="if(event.target===this)closeAuth()">
   <div class="auth-modal">
     <button class="auth-close" onclick="closeAuth()">&times;</button>
-
-    <!-- Step 1: Email -->
     <div id="auth-step-email">
       <div class="auth-title">Wechsel-Wecker aktivieren</div>
       <div class="auth-subtitle">Wir prüfen jedes Jahr im Herbst, ob du bei deiner Krankenkasse zu viel zahlst — und erinnern dich rechtzeitig.</div>
@@ -1181,8 +1303,6 @@
         Kein Passwort nötig. Du bekommst einen Login-Link per E-Mail.
       </div>
     </div>
-
-    <!-- Step 2: Magic Link Sent -->
     <div id="auth-step-sent" style="display:none;text-align:center;">
       <div style="font-size:48px;margin-bottom:16px;">✉️</div>
       <div class="auth-title">Check deine Inbox</div>
@@ -1502,6 +1622,165 @@ async function logout() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// CAPTURE MODAL (Kündigung Flow)
+const KUENDIGUNG_API = SUPABASE_URL + '/functions/v1/generate-kuendigung';
+
+const captureInsurers = [
+  'Aquilana','Assura','Atupri','Concordia','CSS','EGK',
+  'Galenos','Groupe Mutuel','Helsana','KPT','ÖKK',
+  'Rhenusana','Sanitas','Swica','Sympany','Visana'
+];
+
+// Map display names to keys used by Edge Function
+const insurerKeyMap = {
+  'ÖKK': 'OeKK',
+  'Progrès': 'Progres'
+};
+
+let captureState = {
+  currentInsurer: null,
+  targetInsurerName: null,
+  targetAffiliateLink: null,
+  step: 1
+};
+
+function populateCaptureInsurers() {
+  const grid = document.getElementById('cap-insurer-grid');
+  grid.innerHTML = captureInsurers.map(name =>
+    `<button class="capture-insurer-btn" onclick="selectCaptureInsurer('${name}', this)">${name}</button>`
+  ).join('');
+}
+populateCaptureInsurers();
+
+function openCapture(insurerName, affiliateLink) {
+  captureState = {
+    currentInsurer: null,
+    targetInsurerName: insurerName,
+    targetAffiliateLink: affiliateLink,
+    step: 1
+  };
+  showCaptureStep(1);
+  // Pre-fill PLZ from calculator
+  const calcPlz = document.getElementById('kk-plz').value;
+  if (calcPlz) document.getElementById('cap-plz').value = calcPlz;
+  document.getElementById('capture-overlay').classList.add('open');
+}
+
+function closeCapture() {
+  document.getElementById('capture-overlay').classList.remove('open');
+}
+
+function skipCapture() {
+  closeCapture();
+  if (captureState.targetAffiliateLink) {
+    window.open(captureState.targetAffiliateLink, '_blank');
+  }
+}
+
+function showCaptureStep(step) {
+  captureState.step = step;
+  for (let i = 1; i <= 4; i++) {
+    const view = document.getElementById('cap-view-' + i);
+    view.classList.toggle('active', i === step);
+  }
+  for (let i = 1; i <= 3; i++) {
+    const s = document.getElementById('cap-step-' + i);
+    s.classList.toggle('active', i === step);
+    s.classList.toggle('done', i < step);
+  }
+}
+
+function selectCaptureInsurer(name, btn) {
+  document.querySelectorAll('.capture-insurer-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  captureState.currentInsurer = name;
+  setTimeout(() => showCaptureStep(2), 300);
+}
+
+function captureStep3() {
+  const name = document.getElementById('cap-name').value.trim();
+  const street = document.getElementById('cap-street').value.trim();
+  const plz = document.getElementById('cap-plz').value.trim();
+  const city = document.getElementById('cap-city').value.trim();
+  const msg = document.getElementById('cap-msg-2');
+
+  if (!name || !street || !plz || !city) {
+    msg.className = 'auth-msg error';
+    msg.textContent = 'Bitte alle Felder ausfüllen.';
+    return;
+  }
+  msg.className = 'auth-msg';
+  msg.textContent = '';
+  showCaptureStep(3);
+}
+
+async function submitCapture() {
+  const email = document.getElementById('cap-email').value.trim();
+  const msg = document.getElementById('cap-msg-3');
+  const btn = document.getElementById('cap-submit');
+
+  if (!email || !email.includes('@')) {
+    msg.className = 'auth-msg error';
+    msg.textContent = 'Bitte gib eine gültige E-Mail-Adresse ein.';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Wird erstellt...';
+
+  const insurerKey = insurerKeyMap[captureState.currentInsurer] || captureState.currentInsurer;
+
+  try {
+    const res = await fetch(KUENDIGUNG_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email,
+        name: document.getElementById('cap-name').value.trim(),
+        street: document.getElementById('cap-street').value.trim(),
+        plz_city: document.getElementById('cap-plz').value.trim() + ' ' + document.getElementById('cap-city').value.trim(),
+        current_insurer: insurerKey,
+        target_insurer_name: captureState.targetInsurerName,
+        wecker_active: document.getElementById('cap-wecker').checked
+      })
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      if (data.affiliate_link) captureState.targetAffiliateLink = data.affiliate_link;
+      showCaptureStep(4);
+      // Auto-redirect countdown
+      let count = 5;
+      const countEl = document.getElementById('cap-countdown');
+      const timer = setInterval(() => {
+        count--;
+        countEl.textContent = count;
+        if (count <= 0) {
+          clearInterval(timer);
+          redirectToInsurer();
+        }
+      }, 1000);
+    } else {
+      msg.className = 'auth-msg error';
+      msg.textContent = data.error || 'Etwas ist schiefgelaufen. Bitte versuche es erneut.';
+    }
+  } catch (err) {
+    msg.className = 'auth-msg error';
+    msg.textContent = 'Verbindungsfehler. Bitte versuche es erneut.';
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Kündigungsschreiben senden →';
+}
+
+function redirectToInsurer() {
+  closeCapture();
+  if (captureState.targetAffiliateLink) {
+    window.open(captureState.targetAffiliateLink, '_blank');
+  }
+}
+
 // Init auth on page load
 initAuth();
 
@@ -1592,7 +1871,7 @@ async function checkKK() {
     function renderRow(p, i, modelLabel) {
       const link = affiliateLink(p.insurer_name);
       const ctaHtml = link
-        ? `<a href="${link}" target="_blank" rel="noopener noreferrer" class="kk-cta">Zur Kasse ${arrowSvg}</a>`
+        ? `<button onclick="openCapture('${p.insurer_name.replace(/'/g, "\\'")}', '${link}')" class="kk-cta">Zur Kasse ${arrowSvg}</button>`
         : '';
       return `<div class="kk-row">
         <div class="kk-row-left">
