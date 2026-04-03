@@ -547,11 +547,263 @@
   </div>
 </section>
 
-<!-- RISK STATISTICS -->
-<section class="risk-section">
+<!-- CALCULATOR -->
+<section class="calc-section" id="rechner">
+  <div class="calc-inner">
+    <div class="section-label">Bedarfsrechner</div>
+    <h2 class="section-headline">Was brauchst du wirklich?</h2>
+    <p class="section-sub">Berechne deine empfohlene Deckungssumme und finde heraus, welche Bausteine für dich sinnvoll sind.</p>
+
+    <div class="calc-card">
+      <div class="calc-title">Dein persönlicher Bedarf</div>
+      <div class="calc-sub">4 Angaben, 10 Sekunden — fertig.</div>
+
+      <div class="calc-fields">
+        <div class="calc-field">
+          <label for="calc-rooms">Zimmerzahl</label>
+          <select id="calc-rooms">
+            <option value="1">1 Zimmer</option>
+            <option value="1.5">1.5 Zimmer</option>
+            <option value="2">2 Zimmer</option>
+            <option value="2.5">2.5 Zimmer</option>
+            <option value="3">3 Zimmer</option>
+            <option value="3.5" selected>3.5 Zimmer</option>
+            <option value="4">4 Zimmer</option>
+            <option value="4.5">4.5 Zimmer</option>
+            <option value="5">5+ Zimmer</option>
+          </select>
+        </div>
+        <div class="calc-field">
+          <label for="calc-type">Wohnsituation</label>
+          <select id="calc-type">
+            <option value="miete" selected>Mieter/in</option>
+            <option value="eigentum">Eigentümer/in</option>
+          </select>
+        </div>
+        <div class="calc-field">
+          <label for="calc-household">Haushalt</label>
+          <select id="calc-household">
+            <option value="single">Single</option>
+            <option value="paar" selected>Paar</option>
+            <option value="familie">Familie mit Kind(ern)</option>
+            <option value="wg">WG</option>
+          </select>
+        </div>
+        <div class="calc-field">
+          <label for="calc-velo">E-Bike / teures Velo?</label>
+          <select id="calc-velo">
+            <option value="nein" selected>Nein</option>
+            <option value="velo">Velo (CHF 1'000+)</option>
+            <option value="ebike">E-Bike (CHF 3'000+)</option>
+          </select>
+        </div>
+        <button class="calc-btn" onclick="calculateBedarf()">Bedarf berechnen</button>
+      </div>
+
+      <div class="calc-result" id="calc-result">
+        <div class="calc-result-title">Deine Empfehlung</div>
+        <div class="calc-result-grid">
+          <div class="calc-result-item">
+            <div class="calc-result-num" id="res-summe">—</div>
+            <div class="calc-result-label">Empf. Deckungssumme</div>
+          </div>
+          <div class="calc-result-item">
+            <div class="calc-result-num" id="res-preis">—</div>
+            <div class="calc-result-label">Geschätzte Prämie/Mt.</div>
+          </div>
+          <div class="calc-result-item">
+            <div class="calc-result-num" id="res-selbstbehalt">—</div>
+            <div class="calc-result-label">Empf. Selbstbehalt</div>
+          </div>
+        </div>
+
+        <div class="calc-underinsured" id="calc-underinsured" style="display:none;">
+          <strong>Achtung:</strong> Bei 1 von 3 Schadenfällen stellt sich heraus, dass Kunden unterversichert sind — im Schnitt CHF 40'000 zu tief. Lieber etwas höher versichern als zu niedrig.
+        </div>
+
+        <div class="calc-result-title" style="margin-top:20px;font-size:15px;">Was du brauchst</div>
+        <ul class="calc-checklist" id="calc-checklist"></ul>
+
+        <div style="text-align:center;margin-top:24px;">
+          <a href="#vergleich" class="cta-btn" style="font-size:14px;padding:12px 24px;">Anbieter vergleichen ↓</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT ACTUALLY MATTERS -->
+<section class="matters-section">
+  <div class="matters-inner">
+    <div class="section-label">Ehrliche Einschätzung</div>
+    <h2 class="section-headline" style="color:var(--dark-text);">Was du wirklich brauchst — und was nicht</h2>
+    <p class="section-sub">Versicherer verdienen mehr, wenn du alles dazubuchst. Hier ist unsere ehrliche Einschätzung, basierend auf den Schadendaten.</p>
+
+    <div class="matters-grid">
+
+      <div class="matter-item">
+        <div class="matter-verdict must">✓</div>
+        <div>
+          <div class="matter-tag must-tag">Pflicht</div>
+          <div class="matter-title">Privathaftpflicht</div>
+          <div class="matter-reason">Ein Unfall kann Millionen kosten. 51% aller Haftpflichtfälle sind Mieterschaden — und du bist als Mieter fast sicher betroffen. Grösster Einzelschaden: über CHF 2 Mio.</div>
+        </div>
+      </div>
+
+      <div class="matter-item">
+        <div class="matter-verdict must">✓</div>
+        <div>
+          <div class="matter-tag must-tag">Pflicht</div>
+          <div class="matter-title">Hausrat-Grunddeckung</div>
+          <div class="matter-reason">Feuer, Wasser, Einbruch, Elementar — die Basis. CHF 80'000 Deckung kostet oft nur CHF 15-25/Monat. Deine gesamte Wohnungseinrichtung ist mehr wert als du denkst.</div>
+        </div>
+      </div>
+
+      <div class="matter-item">
+        <div class="matter-verdict must">✓</div>
+        <div>
+          <div class="matter-tag must-tag">Wichtig</div>
+          <div class="matter-title">Diebstahl ausserhalb</div>
+          <div class="matter-reason">Besonders wenn du ein E-Bike oder teures Velo hast. 54'000 Velos werden pro Jahr gestohlen, Rückführquote 3%. Auch Laptop im Zug, Gepäck auf Reisen etc.</div>
+        </div>
+      </div>
+
+      <div class="matter-item">
+        <div class="matter-verdict nice">~</div>
+        <div>
+          <div class="matter-tag nice-tag">Situativ</div>
+          <div class="matter-title">Glasbruch</div>
+          <div class="matter-reason">20% der Schadenfälle, aber meistens kleine Beträge. Lohnt sich bei grosser Glasfläche (Wintergarten, Ceranfeld, teure Duschkabine). Sonst eher nein.</div>
+        </div>
+      </div>
+
+      <div class="matter-item">
+        <div class="matter-verdict nice">~</div>
+        <div>
+          <div class="matter-tag nice-tag">Situativ</div>
+          <div class="matter-title">Wertsachen-Zusatz</div>
+          <div class="matter-reason">Nur wenn du Schmuck, Uhren oder Kunst über CHF 5'000 pro Stück besitzt. Die Standard-Deckung hat oft Limiten für Einzelobjekte (CHF 2'000-5'000).</div>
+        </div>
+      </div>
+
+      <div class="matter-item">
+        <div class="matter-verdict skip">✗</div>
+        <div>
+          <div class="matter-tag skip-tag">Meistens überflüssig</div>
+          <div class="matter-title">Reiseversicherung via Hausrat</div>
+          <div class="matter-reason">Klingt gut, ist aber fast immer teurer als eine separate Reiseversicherung. Und deine Kreditkarte deckt oft schon das Wichtigste ab.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON TABLE -->
+<section class="compare-section" id="vergleich">
+  <div class="compare-inner">
+    <div class="section-label">Anbieter-Vergleich</div>
+    <h2 class="section-headline">Hausrat &amp; Haftpflicht im Vergleich</h2>
+    <p class="section-sub">Kombinierte Deckung für eine 3.5-Zi-Wohnung, CHF 80'000 Versicherungssumme, CHF 200 Selbstbehalt.</p>
+
+    <div style="overflow-x:auto;">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Anbieter</th>
+          <th>Prämie/Jahr</th>
+          <th>Besonderheiten</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="compare-row">
+          <td>
+            <div class="compare-name">Smile<span class="compare-badge">Günstig</span></div>
+            <div class="compare-type">Online-Versicherer (Helvetia)</div>
+          </td>
+          <td><div class="compare-price">~CHF 150</div></td>
+          <td><div class="compare-features">100% online, schneller Abschluss. Reine Online-Abwicklung, kein Berater.</div></td>
+          <td><a href="https://www.smile-direct.ch/de/hausratversicherung?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=hausrat-vergleich" target="_blank" rel="noopener" class="compare-cta">Offerte →</a></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="compare-name">Baloise</div>
+            <div class="compare-type">Vollversicherer</div>
+          </td>
+          <td><div class="compare-price">~CHF 200</div></td>
+          <td><div class="compare-features">Flexible Bausteine, guter Kundenservice. Glasbruch optional zubuchbar.</div></td>
+          <td><a href="https://www.baloise.ch/de/privatkunden/versicherungen/hausrat-haftpflicht.html?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=hausrat-vergleich" target="_blank" rel="noopener" class="compare-cta">Offerte →</a></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="compare-name">Helvetia</div>
+            <div class="compare-type">Vollversicherer</div>
+          </td>
+          <td><div class="compare-price">~CHF 220</div></td>
+          <td><div class="compare-features">Starkes Filialnetz, persönliche Beratung. Zusatzbaustein Cyber-Schutz.</div></td>
+          <td><a href="https://www.helvetia.com/ch/web/de/privatkunden/versicherungen/wohnen/hausratversicherung.html?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=hausrat-vergleich" target="_blank" rel="noopener" class="compare-cta">Offerte →</a></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="compare-name">AXA</div>
+            <div class="compare-type">Vollversicherer</div>
+          </td>
+          <td><div class="compare-price">~CHF 250</div></td>
+          <td><div class="compare-features">Umfassende Deckung, 24h-Schadenhotline. Gute E-Bike-Deckung inkl.</div></td>
+          <td><a href="https://www.axa.ch/de/privatkunden/angebote/wohnen-eigentum/hausratversicherung.html?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=hausrat-vergleich" target="_blank" rel="noopener" class="compare-cta">Offerte →</a></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="compare-name">Zurich</div>
+            <div class="compare-type">Vollversicherer</div>
+          </td>
+          <td><div class="compare-price">~CHF 260</div></td>
+          <td><div class="compare-features">International stark, guter Reiseschutz. Online-Schadenabwicklung.</div></td>
+          <td><a href="https://www.zurich.ch/de/privat/wohnen-und-recht/hausratversicherung?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=hausrat-vergleich" target="_blank" rel="noopener" class="compare-cta">Offerte →</a></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="compare-name">Die Mobiliar</div>
+            <div class="compare-type">Genossenschaft</div>
+          </td>
+          <td><div class="compare-price">~CHF 300</div></td>
+          <td><div class="compare-features">Grösstes Agenturnetz der Schweiz, Genossenschaft (Gewinnbeteiligung). Premium-Service.</div></td>
+          <td><a href="https://www.mobiliar.ch/versicherungen-und-vorsorge/wohnen-und-recht/hausratversicherung?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=hausrat-vergleich" target="_blank" rel="noopener" class="compare-cta">Offerte →</a></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="compare-name">Allianz Suisse</div>
+            <div class="compare-type">Vollversicherer</div>
+          </td>
+          <td><div class="compare-price">~CHF 270</div></td>
+          <td><div class="compare-features">Modularer Aufbau, starke Elementardeckung. Online + Beratung.</div></td>
+          <td><a href="https://www.allianz.ch/de/privatkunden/wohnen/hausratversicherung.html?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=hausrat-vergleich" target="_blank" rel="noopener" class="compare-cta">Offerte →</a></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="compare-name">Generali</div>
+            <div class="compare-type">Vollversicherer</div>
+          </td>
+          <td><div class="compare-price">~CHF 240</div></td>
+          <td><div class="compare-features">Gutes Preis-Leistungs-Verhältnis. Flexible Selbstbehalt-Optionen.</div></td>
+          <td><a href="https://www.generali.ch/de/privatkunden/wohnen/hausratversicherung?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=hausrat-vergleich" target="_blank" rel="noopener" class="compare-cta">Offerte →</a></td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <p class="compare-note">
+      Preise sind Richtwerte für eine 3.5-Zi-Wohnung (80m²) in Zürich, kombinierte Hausrat + Haftpflicht, CHF 200 Selbstbehalt. Dein Preis hängt von PLZ, Deckungssumme und Zusatzmodulen ab. Stand: 2026. Alle Links führen direkt zum Anbieter.
+    </p>
+  </div>
+</section>
+
+<!-- RISK STATISTICS (moved after calculator) -->
+<section class="risk-section" id="statistiken">
   <div class="risk-inner">
-    <div class="section-label">Echte Zahlen</div>
-    <h2 class="section-headline">Die 4 grössten Risiken für deinen Haushalt</h2>
+    <div class="section-label">Die Beweise</div>
+    <h2 class="section-headline">Warum das wichtig ist — echte Zahlen</h2>
     <p class="section-sub">Basierend auf der polizeilichen Kriminalstatistik, BFB-Brandstatistik und Versicherer-Schadendaten.</p>
 
     <div class="risk-grid">
@@ -660,158 +912,6 @@
   </div>
 </section>
 
-<!-- WHAT ACTUALLY MATTERS -->
-<section class="matters-section">
-  <div class="matters-inner">
-    <div class="section-label">Ehrliche Einschätzung</div>
-    <h2 class="section-headline" style="color:var(--dark-text);">Was du wirklich brauchst — und was nicht</h2>
-    <p class="section-sub">Versicherer verdienen mehr, wenn du alles dazubuchst. Hier ist unsere ehrliche Einschätzung, basierend auf den Schadendaten.</p>
-
-    <div class="matters-grid">
-
-      <div class="matter-item">
-        <div class="matter-verdict must">✓</div>
-        <div>
-          <div class="matter-tag must-tag">Pflicht</div>
-          <div class="matter-title">Privathaftpflicht</div>
-          <div class="matter-reason">Ein Unfall kann Millionen kosten. 51% aller Haftpflichtfälle sind Mieterschaden — und du bist als Mieter fast sicher betroffen. Grösster Einzelschaden: über CHF 2 Mio.</div>
-        </div>
-      </div>
-
-      <div class="matter-item">
-        <div class="matter-verdict must">✓</div>
-        <div>
-          <div class="matter-tag must-tag">Pflicht</div>
-          <div class="matter-title">Hausrat-Grunddeckung</div>
-          <div class="matter-reason">Feuer, Wasser, Einbruch, Elementar — die Basis. CHF 80'000 Deckung kostet oft nur CHF 15-25/Monat. Deine gesamte Wohnungseinrichtung ist mehr wert als du denkst.</div>
-        </div>
-      </div>
-
-      <div class="matter-item">
-        <div class="matter-verdict must">✓</div>
-        <div>
-          <div class="matter-tag must-tag">Wichtig</div>
-          <div class="matter-title">Diebstahl ausserhalb</div>
-          <div class="matter-reason">Besonders wenn du ein E-Bike oder teures Velo hast. 54'000 Velos werden pro Jahr gestohlen, Rückführquote 3%. Auch Laptop im Zug, Gepäck auf Reisen etc.</div>
-        </div>
-      </div>
-
-      <div class="matter-item">
-        <div class="matter-verdict nice">~</div>
-        <div>
-          <div class="matter-tag nice-tag">Situativ</div>
-          <div class="matter-title">Glasbruch</div>
-          <div class="matter-reason">20% der Schadenfälle, aber meistens kleine Beträge. Lohnt sich bei grosser Glasfläche (Wintergarten, Ceranfeld, teure Duschkabine). Sonst eher nein.</div>
-        </div>
-      </div>
-
-      <div class="matter-item">
-        <div class="matter-verdict nice">~</div>
-        <div>
-          <div class="matter-tag nice-tag">Situativ</div>
-          <div class="matter-title">Wertsachen-Zusatz</div>
-          <div class="matter-reason">Nur wenn du Schmuck, Uhren oder Kunst über CHF 5'000 pro Stück besitzt. Die Standard-Deckung hat oft Limiten für Einzelobjekte (CHF 2'000-5'000).</div>
-        </div>
-      </div>
-
-      <div class="matter-item">
-        <div class="matter-verdict skip">✗</div>
-        <div>
-          <div class="matter-tag skip-tag">Meistens überflüssig</div>
-          <div class="matter-title">Reiseversicherung via Hausrat</div>
-          <div class="matter-reason">Klingt gut, ist aber fast immer teurer als eine separate Reiseversicherung. Und deine Kreditkarte deckt oft schon das Wichtigste ab.</div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- CALCULATOR -->
-<section class="calc-section" id="rechner">
-  <div class="calc-inner">
-    <div class="section-label">Bedarfsrechner</div>
-    <h2 class="section-headline">Was brauchst du wirklich?</h2>
-    <p class="section-sub">Berechne deine empfohlene Deckungssumme und finde heraus, welche Bausteine für dich sinnvoll sind.</p>
-
-    <div class="calc-card">
-      <div class="calc-title">Dein persönlicher Bedarf</div>
-      <div class="calc-sub">4 Angaben, 10 Sekunden — fertig.</div>
-
-      <div class="calc-fields">
-        <div class="calc-field">
-          <label for="calc-rooms">Zimmerzahl</label>
-          <select id="calc-rooms">
-            <option value="1">1 Zimmer</option>
-            <option value="1.5">1.5 Zimmer</option>
-            <option value="2">2 Zimmer</option>
-            <option value="2.5">2.5 Zimmer</option>
-            <option value="3">3 Zimmer</option>
-            <option value="3.5" selected>3.5 Zimmer</option>
-            <option value="4">4 Zimmer</option>
-            <option value="4.5">4.5 Zimmer</option>
-            <option value="5">5+ Zimmer</option>
-          </select>
-        </div>
-        <div class="calc-field">
-          <label for="calc-type">Wohnsituation</label>
-          <select id="calc-type">
-            <option value="miete" selected>Mieter/in</option>
-            <option value="eigentum">Eigentümer/in</option>
-          </select>
-        </div>
-        <div class="calc-field">
-          <label for="calc-household">Haushalt</label>
-          <select id="calc-household">
-            <option value="single">Single</option>
-            <option value="paar" selected>Paar</option>
-            <option value="familie">Familie mit Kind(ern)</option>
-            <option value="wg">WG</option>
-          </select>
-        </div>
-        <div class="calc-field">
-          <label for="calc-velo">E-Bike / teures Velo?</label>
-          <select id="calc-velo">
-            <option value="nein" selected>Nein</option>
-            <option value="velo">Velo (CHF 1'000+)</option>
-            <option value="ebike">E-Bike (CHF 3'000+)</option>
-          </select>
-        </div>
-        <button class="calc-btn" onclick="calculateBedarf()">Bedarf berechnen</button>
-      </div>
-
-      <div class="calc-result" id="calc-result">
-        <div class="calc-result-title">Deine Empfehlung</div>
-        <div class="calc-result-grid">
-          <div class="calc-result-item">
-            <div class="calc-result-num" id="res-summe">—</div>
-            <div class="calc-result-label">Empf. Deckungssumme</div>
-          </div>
-          <div class="calc-result-item">
-            <div class="calc-result-num" id="res-preis">—</div>
-            <div class="calc-result-label">Geschätzte Prämie/Mt.</div>
-          </div>
-          <div class="calc-result-item">
-            <div class="calc-result-num" id="res-selbstbehalt">—</div>
-            <div class="calc-result-label">Empf. Selbstbehalt</div>
-          </div>
-        </div>
-
-        <div class="calc-underinsured" id="calc-underinsured" style="display:none;">
-          <strong>Achtung:</strong> Bei 1 von 3 Schadenfällen stellt sich heraus, dass Kunden unterversichert sind — im Schnitt CHF 40'000 zu tief. Lieber etwas höher versichern als zu niedrig.
-        </div>
-
-        <div class="calc-result-title" style="margin-top:20px;font-size:15px;">Was du brauchst</div>
-        <ul class="calc-checklist" id="calc-checklist"></ul>
-
-        <div style="text-align:center;margin-top:24px;">
-          <a href="#vergleich" class="cta-btn" style="font-size:14px;padding:12px 24px;">Anbieter vergleichen ↓</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- HAFTPFLICHT DEEP DIVE -->
 <section class="haftpflicht-section">
   <div class="haftpflicht-inner">
@@ -862,106 +962,6 @@
         </div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- COMPARISON TABLE -->
-<section class="compare-section" id="vergleich">
-  <div class="compare-inner">
-    <div class="section-label">Anbieter-Vergleich</div>
-    <h2 class="section-headline">Hausrat &amp; Haftpflicht im Vergleich</h2>
-    <p class="section-sub">Kombinierte Deckung für eine 3.5-Zi-Wohnung, CHF 80'000 Versicherungssumme, CHF 200 Selbstbehalt.</p>
-
-    <div style="overflow-x:auto;">
-    <table class="compare-table">
-      <thead>
-        <tr>
-          <th>Anbieter</th>
-          <th>Prämie/Jahr</th>
-          <th>Besonderheiten</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="compare-row">
-          <td>
-            <div class="compare-name">Smile<span class="compare-badge">Günstig</span></div>
-            <div class="compare-type">Online-Versicherer (Helvetia)</div>
-          </td>
-          <td><div class="compare-price">~CHF 150</div></td>
-          <td><div class="compare-features">100% online, schneller Abschluss. Reine Online-Abwicklung, kein Berater.</div></td>
-          <td><a href="https://www.smile-direct.ch/de/hausratversicherung?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=hausrat-vergleich" target="_blank" rel="noopener" class="compare-cta">Offerte →</a></td>
-        </tr>
-        <tr>
-          <td>
-            <div class="compare-name">Baloise</div>
-            <div class="compare-type">Vollversicherer</div>
-          </td>
-          <td><div class="compare-price">~CHF 200</div></td>
-          <td><div class="compare-features">Flexible Bausteine, guter Kundenservice. Glasbruch optional zubuchbar.</div></td>
-          <td><a href="https://www.baloise.ch/de/privatkunden/versicherungen/hausrat-haftpflicht.html?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=hausrat-vergleich" target="_blank" rel="noopener" class="compare-cta">Offerte →</a></td>
-        </tr>
-        <tr>
-          <td>
-            <div class="compare-name">Helvetia</div>
-            <div class="compare-type">Vollversicherer</div>
-          </td>
-          <td><div class="compare-price">~CHF 220</div></td>
-          <td><div class="compare-features">Starkes Filialnetz, persönliche Beratung. Zusatzbaustein Cyber-Schutz.</div></td>
-          <td><a href="https://www.helvetia.com/ch/web/de/privatkunden/versicherungen/wohnen/hausratversicherung.html?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=hausrat-vergleich" target="_blank" rel="noopener" class="compare-cta">Offerte →</a></td>
-        </tr>
-        <tr>
-          <td>
-            <div class="compare-name">AXA</div>
-            <div class="compare-type">Vollversicherer</div>
-          </td>
-          <td><div class="compare-price">~CHF 250</div></td>
-          <td><div class="compare-features">Umfassende Deckung, 24h-Schadenhotline. Gute E-Bike-Deckung inkl.</div></td>
-          <td><a href="https://www.axa.ch/de/privatkunden/angebote/wohnen-eigentum/hausratversicherung.html?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=hausrat-vergleich" target="_blank" rel="noopener" class="compare-cta">Offerte →</a></td>
-        </tr>
-        <tr>
-          <td>
-            <div class="compare-name">Zurich</div>
-            <div class="compare-type">Vollversicherer</div>
-          </td>
-          <td><div class="compare-price">~CHF 260</div></td>
-          <td><div class="compare-features">International stark, guter Reiseschutz. Online-Schadenabwicklung.</div></td>
-          <td><a href="https://www.zurich.ch/de/privat/wohnen-und-recht/hausratversicherung?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=hausrat-vergleich" target="_blank" rel="noopener" class="compare-cta">Offerte →</a></td>
-        </tr>
-        <tr>
-          <td>
-            <div class="compare-name">Die Mobiliar</div>
-            <div class="compare-type">Genossenschaft</div>
-          </td>
-          <td><div class="compare-price">~CHF 300</div></td>
-          <td><div class="compare-features">Grösstes Agenturnetz der Schweiz, Genossenschaft (Gewinnbeteiligung). Premium-Service.</div></td>
-          <td><a href="https://www.mobiliar.ch/versicherungen-und-vorsorge/wohnen-und-recht/hausratversicherung?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=hausrat-vergleich" target="_blank" rel="noopener" class="compare-cta">Offerte →</a></td>
-        </tr>
-        <tr>
-          <td>
-            <div class="compare-name">Allianz Suisse</div>
-            <div class="compare-type">Vollversicherer</div>
-          </td>
-          <td><div class="compare-price">~CHF 270</div></td>
-          <td><div class="compare-features">Modularer Aufbau, starke Elementardeckung. Online + Beratung.</div></td>
-          <td><a href="https://www.allianz.ch/de/privatkunden/wohnen/hausratversicherung.html?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=hausrat-vergleich" target="_blank" rel="noopener" class="compare-cta">Offerte →</a></td>
-        </tr>
-        <tr>
-          <td>
-            <div class="compare-name">Generali</div>
-            <div class="compare-type">Vollversicherer</div>
-          </td>
-          <td><div class="compare-price">~CHF 240</div></td>
-          <td><div class="compare-features">Gutes Preis-Leistungs-Verhältnis. Flexible Selbstbehalt-Optionen.</div></td>
-          <td><a href="https://www.generali.ch/de/privatkunden/wohnen/hausratversicherung?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=hausrat-vergleich" target="_blank" rel="noopener" class="compare-cta">Offerte →</a></td>
-        </tr>
-      </tbody>
-    </table>
-    </div>
-
-    <p class="compare-note">
-      Preise sind Richtwerte für eine 3.5-Zi-Wohnung (80m²) in Zürich, kombinierte Hausrat + Haftpflicht, CHF 200 Selbstbehalt. Dein Preis hängt von PLZ, Deckungssumme und Zusatzmodulen ab. Stand: 2026. Alle Links führen direkt zum Anbieter.
-    </p>
   </div>
 </section>
 
