@@ -509,7 +509,36 @@
   }
   .kk-row:first-of-type .kk-rank { background: var(--badge); color: var(--badge-text); }
   .kk-insurer { font-weight: 600; font-size: 15px; }
-  .kk-model { font-size: 12px; color: var(--muted); }
+  .kk-model { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 4px; }
+  .kk-model-tip {
+    position: relative; cursor: help;
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--border); font-size: 9px; font-weight: 700;
+    color: var(--muted); flex-shrink: 0;
+  }
+  .kk-model-tip .tip-text {
+    display: none; position: absolute; bottom: calc(100% + 8px); left: 50%;
+    transform: translateX(-50%); width: 220px; padding: 10px 12px;
+    background: var(--dark); color: var(--dark-text); font-size: 12px;
+    line-height: 1.5; border-radius: 8px; font-weight: 400;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15); z-index: 10; text-align: left;
+    pointer-events: none;
+  }
+  .kk-model-tip .tip-text::after {
+    content: ''; position: absolute; top: 100%; left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent; border-top-color: var(--dark);
+  }
+  .kk-model-tip:hover .tip-text,
+  .kk-model-tip.active .tip-text { display: block; }
+  .kk-model-legend {
+    display: flex; flex-wrap: wrap; gap: 8px 16px;
+    margin-top: 16px; padding: 14px 16px;
+    background: rgba(0,0,0,0.02); border-radius: 10px;
+    font-size: 12px; color: var(--muted); line-height: 1.6;
+  }
+  .kk-model-legend span { font-weight: 600; color: var(--text); }
   .kk-price-cta { display: flex; align-items: center; gap: 10px; }
   .kk-price {
     font-family: 'Plus Jakarta Sans', sans-serif;
@@ -1012,6 +1041,13 @@
         </div>
         <div id="kk-results-standard"></div>
         <div id="kk-results-cheapest" style="margin-top:16px;"></div>
+        <div class="kk-model-legend" id="kk-model-legend" style="display:none;">
+          <div><span>Standard</span> = Freie Arztwahl</div>
+          <div><span>Hausarzt</span> = Immer zuerst zum Hausarzt</div>
+          <div><span>HMO</span> = Behandlung im Gesundheitszentrum</div>
+          <div><span>Telmed</span> = Zuerst telefonische Beratung</div>
+          <div style="flex-basis:100%;font-size:11px;color:var(--muted);margin-top:4px;">Die Leistungen der Grundversicherung sind bei allen Modellen gesetzlich identisch. Nur der Zugangsweg unterscheidet sich.</div>
+        </div>
         <div style="font-size:12px;color:var(--muted);margin-top:16px;text-align:center;">Quelle: BAG Priminfo 2026 · Alle Angaben ohne Gewähr</div>
 
         <!-- Wechsel-Wecker CTA (inside results) -->
@@ -1870,17 +1906,35 @@ async function checkKK() {
 
     const arrowSvg = '<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h8M7 3l3 3-3 3"/></svg>';
 
+    const modelExplain = {
+      'standard': 'Freie Arztwahl — du gehst direkt zu jedem Arzt oder Spital deiner Wahl.',
+      'hmo': 'Du gehst zuerst in ein HMO-Zentrum (Gruppenpraxis). Von dort wirst du bei Bedarf überwiesen.',
+      'hausarzt': 'Du gehst immer zuerst zu deinem gewählten Hausarzt. Er überweist dich bei Bedarf weiter.',
+      'family_doctor': 'Du gehst immer zuerst zu deinem gewählten Hausarzt. Er überweist dich bei Bedarf weiter.',
+      'telmed': 'Du rufst zuerst eine medizinische Hotline an, bevor du einen Arzt aufsuchst.',
+      'apotheke': 'Erste Anlaufstelle ist die Apotheke. Von dort wirst du bei Bedarf an einen Arzt verwiesen.',
+      'diverse': 'Alternatives Versicherungsmodell mit eingeschränkter Arztwahl.',
+    };
+
+    function modelTip(modelType) {
+      const key = (modelType || '').toLowerCase();
+      const text = modelExplain[key];
+      if (!text) return '';
+      return ` <span class="kk-model-tip" onclick="this.classList.toggle('active')" aria-label="Info">i<span class="tip-text">${text}</span></span>`;
+    }
+
     function renderRow(p, i, modelLabel) {
       const link = affiliateLink(p.insurer_name);
       const ctaHtml = link
         ? `<button onclick="openCapture('${p.insurer_name.replace(/'/g, "\\'")}', '${link}')" class="kk-cta">Zur Kasse ${arrowSvg}</button>`
         : '';
+      const modelKey = p.model_type || 'standard';
       return `<div class="kk-row">
         <div class="kk-row-left">
           <div class="kk-rank">${i + 1}</div>
           <div>
             <div class="kk-insurer">${p.insurer_name}</div>
-            <div class="kk-model">${modelLabel}</div>
+            <div class="kk-model">${modelLabel}${modelTip(modelKey)}</div>
           </div>
         </div>
         <div class="kk-price-cta">
@@ -1907,6 +1961,10 @@ async function checkKK() {
       cheapEl.innerHTML = '<div class="kk-result-group-title">Günstigster Tarif (alle Modelle)</div>' +
         data.cheapest_any_model.map((p, i) => renderRow(p, i, (modelNames[p.model_type] || p.model_type) + ' · ' + p.tariff_name)).join('');
     }
+
+    // Show model legend when results are displayed
+    const legendEl = document.getElementById('kk-model-legend');
+    if (legendEl) legendEl.style.display = '';
 
     // Show Wechsel-Wecker CTA for non-logged-in users
     const weckerCta = document.getElementById('wecker-cta');
