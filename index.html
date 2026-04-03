@@ -168,7 +168,7 @@
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; overflow-x: hidden; }
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     background: var(--bg);
@@ -186,6 +186,7 @@
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
     display: flex; align-items: center; justify-content: space-between;
     padding: 16px 40px;
+    max-width: 100vw;
     background: rgba(250,250,248,0.92);
     backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--border);
@@ -966,6 +967,9 @@
     footer { padding: 40px 20px; }
     .footer-inner { flex-direction: column; text-align: center; }
     .footer-note { max-width: 100%; }
+    .steps-grid { grid-template-columns: 1fr !important; gap: 20px !important; }
+    .ratgeber-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
+    .seo-section, .ratgeber-section { padding-left: 20px !important; padding-right: 20px !important; }
   }
 
   @media (max-width: 480px) {
@@ -1174,11 +1178,11 @@
 <!-- (KK Calculator is now in the Hero section above) -->
 
 <!-- KK SEO CONTENT -->
-<section style="padding:60px 40px;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+<section class="seo-section" style="padding:60px 40px;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
   <div style="max-width:800px;margin:0 auto;">
     <h2 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:28px;font-weight:800;letter-spacing:-1px;margin-bottom:32px;">Krankenkasse wechseln — so funktioniert's</h2>
 
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:40px;">
+    <div class="steps-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:40px;">
       <div style="text-align:center;">
         <div style="width:48px;height:48px;border-radius:50%;background:var(--badge);color:var(--badge-text);display:flex;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:20px;margin:0 auto 12px;">1</div>
         <div style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:15px;margin-bottom:6px;">Prämie vergleichen</div>
@@ -1222,11 +1226,11 @@
 </section>
 
 <!-- RATGEBER / BLOG LINKS -->
-<section style="padding:60px 40px;background:var(--bg);">
+<section class="ratgeber-section" style="padding:60px 40px;background:var(--bg);">
   <div style="max-width:800px;margin:0 auto;">
     <div class="section-label">Ratgeber</div>
     <h2 class="section-headline" style="margin-bottom:32px;">Das solltest du wissen</h2>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;">
+    <div class="ratgeber-grid" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;">
       <a href="/blog/beste-franchise-schweiz/" style="display:block;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px;transition:box-shadow .2s,transform .2s;text-decoration:none;">
         <div style="font-size:28px;margin-bottom:12px;">💰</div>
         <div style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:17px;margin-bottom:8px;color:var(--text);">Welche Franchise ist die beste?</div>
