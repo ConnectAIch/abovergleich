@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unsere Methode &mdash; Wie wir vergleichen und warum wir keine Telefonnummer nehmen</title>
+<meta name="description" content="Warum abovergleich.com anders ist: keine Broker-Anrufe, keine Provisionen, nur transparente Daten vom BAG. 217'000+ Datens&auml;tze, 34 Kassen, alle Kantone.">
+<link rel="canonical" href="https://www.abovergleich.com/methode/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.abovergleich.com/methode/">
+<meta property="og:title" content="Unsere Methode &mdash; abovergleich.com">
+<meta property="og:description" content="Transparenter Krankenkassenvergleich ohne Broker, ohne Anrufe. Unsere Methode erkl&auml;rt.">
+<meta property="og:site_name" content="abovergleich.com">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #fed001; --accent-hover: #ffe033; --accent-dark: #c9a400;
+    --bg: #fafaf9; --surface: #ffffff; --border: rgba(0,0,0,0.06);
+    --text: #1c1917; --text2: #292524; --muted: #78716c;
+    --dark: #1c1917; --dark2: #141210; --dark-text: #f5f5f4; --dark-muted: #a8a29e;
+    --green: #16a34a; --red: #dc2626;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg); color: var(--text);
+    font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  h1,h2,h3,h4 { font-family: 'Plus Jakarta Sans', sans-serif; line-height: 1.2; color: var(--text); }
+  a { color: inherit; text-decoration: none; }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 40px; background: rgba(250,250,248,0.92);
+    backdrop-filter: blur(16px); border-bottom: 1px solid var(--border);
+  }
+  .logo { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 20px; color: var(--text); letter-spacing: -.5px; }
+  .logo span { color: var(--accent-dark); }
+  .nav-back { font-size: 14px; color: var(--muted); transition: color .2s; }
+  .nav-back:hover { color: var(--text); }
+
+  .article {
+    max-width: 680px; margin: 0 auto; padding: 120px 40px 80px;
+  }
+  .article-badge {
+    display: inline-block; font-size: 12px; font-weight: 600;
+    color: var(--accent-dark); background: rgba(254,208,1,0.15);
+    padding: 4px 12px; border-radius: 20px; margin-bottom: 16px;
+    text-transform: uppercase; letter-spacing: .05em;
+  }
+  .article h1 {
+    font-size: 36px; font-weight: 800; margin-bottom: 16px; line-height: 1.15;
+  }
+  .article-meta {
+    font-size: 13px; color: var(--muted); margin-bottom: 40px;
+    padding-bottom: 24px; border-bottom: 1px solid var(--border);
+  }
+  .article h2 {
+    font-size: 22px; font-weight: 700; margin-top: 48px; margin-bottom: 16px;
+  }
+  .article h3 {
+    font-size: 17px; font-weight: 600; margin-top: 32px; margin-bottom: 10px;
+  }
+  .article p {
+    font-size: 16px; color: var(--text2); line-height: 1.8; margin-bottom: 18px;
+  }
+  .article ul, .article ol {
+    margin-bottom: 18px; padding-left: 24px;
+  }
+  .article li {
+    font-size: 16px; color: var(--text2); line-height: 1.8; margin-bottom: 6px;
+  }
+  .article strong { color: var(--text); }
+  .article a { color: var(--accent-dark); text-decoration: underline; }
+  .article blockquote {
+    border-left: 3px solid var(--accent); margin: 24px 0;
+    padding: 16px 20px; background: rgba(254,208,1,0.06); border-radius: 0 8px 8px 0;
+    font-size: 15px; color: var(--text2); line-height: 1.7;
+  }
+  .article blockquote strong { color: var(--text); }
+
+  .fact-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 24px; margin: 24px 0;
+  }
+  .fact-box-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700; font-size: 15px; margin-bottom: 10px;
+  }
+  .fact-box p { font-size: 14px; margin-bottom: 8px; }
+  .fact-box p:last-child { margin-bottom: 0; }
+  .fact-box ul { padding-left: 20px; }
+  .fact-box li { font-size: 14px; line-height: 1.7; margin-bottom: 4px; }
+
+  .warn-box {
+    background: rgba(220,38,38,0.04); border-left: 3px solid var(--red);
+    padding: 16px 20px; margin: 24px 0; border-radius: 0 8px 8px 0;
+  }
+  .warn-box .warn-label {
+    font-size: 12px; font-weight: 700; color: var(--red);
+    text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px;
+  }
+  .warn-box p { font-size: 15px; margin-bottom: 6px; }
+  .warn-box p:last-child { margin-bottom: 0; }
+
+  .good-box {
+    background: rgba(22,163,74,0.04); border-left: 3px solid var(--green);
+    padding: 16px 20px; margin: 24px 0; border-radius: 0 8px 8px 0;
+  }
+  .good-box .good-label {
+    font-size: 12px; font-weight: 700; color: var(--green);
+    text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px;
+  }
+  .good-box p { font-size: 15px; margin-bottom: 6px; }
+  .good-box p:last-child { margin-bottom: 0; }
+
+  .num-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 24px 0;
+  }
+  .num-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px; text-align: center;
+  }
+  .num-card-val {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 28px; font-weight: 800; color: var(--text);
+    letter-spacing: -1px;
+  }
+  .num-card-label {
+    font-size: 13px; color: var(--muted); margin-top: 4px;
+  }
+
+  .data-table {
+    width: 100%; border-collapse: collapse; margin: 20px 0 24px;
+    font-size: 14px; line-height: 1.6;
+  }
+  .data-table th, .data-table td {
+    text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border);
+  }
+  .data-table th {
+    color: var(--text); font-weight: 600; font-size: 12px;
+    text-transform: uppercase; letter-spacing: .5px; background: rgba(0,0,0,0.02);
+  }
+  .data-table td { color: var(--text2); }
+
+  .cta-box {
+    background: var(--dark); color: var(--dark-text); border-radius: 16px;
+    padding: 32px; margin: 40px 0; text-align: center;
+  }
+  .cta-box h3 { color: var(--dark-text); font-size: 20px; margin-bottom: 8px; }
+  .cta-box p { color: var(--dark-muted); font-size: 14px; margin-bottom: 16px; }
+  .cta-box a {
+    display: inline-block; background: var(--accent); color: var(--text);
+    padding: 12px 28px; border-radius: 10px; font-weight: 600;
+    font-size: 15px; text-decoration: none; transition: background .2s;
+  }
+  .cta-box a:hover { background: var(--accent-hover); }
+
+  footer {
+    padding: 48px 40px; background: var(--dark2); color: var(--dark-text);
+  }
+  .footer-inner {
+    max-width: 1000px; margin: 0 auto;
+    display: flex; justify-content: space-between;
+    align-items: center; flex-wrap: wrap; gap: 16px;
+  }
+  .footer-logo { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 16px; color: var(--dark-text); }
+  .footer-logo span { color: var(--accent); }
+  .footer-note { font-size: 12px; color: var(--dark-muted); max-width: 400px; line-height: 1.6; }
+  .footer-links { display: flex; gap: 20px; }
+  .footer-links a { font-size: 13px; color: var(--dark-muted); transition: color .2s; text-decoration: none; }
+  .footer-links a:hover { color: var(--dark-text); }
+
+  @media (max-width: 768px) {
+    nav { padding: 14px 20px; }
+    .article { padding: 100px 20px 60px; }
+    .article h1 { font-size: 28px; }
+    .article h2 { font-size: 20px; }
+    .num-grid { grid-template-columns: 1fr; }
+    .data-table { font-size: 12px; }
+    .data-table th, .data-table td { padding: 8px 6px; }
+    footer { padding: 40px 20px; }
+    .footer-inner { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">abo<span>vergleich</span>.com</a>
+  <a href="/" class="nav-back">&larr; Zum Vergleich</a>
+</nav>
+
+<article class="article">
+  <div class="article-badge">Transparenz</div>
+  <h1>Wir haben genug von intransparenten Vergleichsportalen.</h1>
+  <div class="article-meta">Unsere Methode &mdash; wie und warum wir vergleichen</div>
+
+  <!-- ─── STORY ─────────────────────────────────────────── -->
+
+  <p>Wir wollten einfach nur unsere Krankenkasse wechseln. Also haben wir gemacht, was alle machen: ein Vergleichsportal besucht, Daten eingegeben, Ergebnis angeschaut.</p>
+
+  <p>Dann haben wir den Fehler gemacht, unsere Telefonnummer einzugeben.</p>
+
+  <p>Was folgte: Anrufe. Nicht einer, nicht zwei &mdash; <strong>Wochen von Anrufen</strong>. Verschiedene Nummern, verschiedene Broker, immer dieselbe Masche. &laquo;Wir haben ein super Angebot f&uuml;r Sie.&raquo; Wir haben f&uuml;nfmal gesagt, sie sollen uns nicht mehr bel&auml;stigen. Es hat nichts ge&auml;ndert.</p>
+
+  <p>Irgendwann haben wir uns gefragt: <strong>Warum ist das so?</strong> Warum kann ein Vergleichsportal nicht einfach vergleichen &mdash; ohne dich danach zu bel&auml;stigen?</p>
+
+  <p>Die Antwort liegt im Gesch&auml;ftsmodell.</p>
+
+  <!-- ─── WARUM BROKER ANRUFEN ─────────────────────────── -->
+
+  <h2>Warum rufen die Broker an?</h2>
+
+  <p>Am 14. August 2024 hat der Bundesrat die Branchenvereinbarung &uuml;ber Vermittler in der Krankenversicherung f&uuml;r allgemeinverbindlich erkl&auml;rt. Seit dem <strong>1. September 2024</strong> gelten neue Regeln:</p>
+
+  <div class="fact-box">
+    <div class="fact-box-title">Die neuen Regeln seit September 2024</div>
+    <ul>
+      <li><strong>Grundversicherung:</strong> Vermittlungsprovision gedeckelt auf <strong>CHF 70 pro Abschluss</strong></li>
+      <li><strong>Kaltakquise verboten:</strong> Keine unaufgeforderten Telefonanrufe mehr</li>
+      <li><strong>Beratungsprotokolle:</strong> Jede Beratung muss dokumentiert werden</li>
+      <li><strong>Bussen:</strong> Bis zu <strong>CHF 100'000</strong> bei Verst&ouml;ssen</li>
+    </ul>
+  </div>
+
+  <p>CHF 70 pro Abschluss. Das klingt nach dem Ende des Broker-Gesch&auml;fts. Aber hier wird es interessant:</p>
+
+  <h3>Das Gesch&auml;ft liegt in der Zusatzversicherung</h3>
+
+  <p>F&uuml;r die <strong>Zusatzversicherung</strong> gibt es keine solche Deckelung. Im Gegenteil &mdash; die Branchenvereinbarung erlaubt Provisionen von <strong>bis zu 16 Monatspr&auml;mien</strong> pro Abschluss.</p>
+
+  <div class="warn-box">
+    <div class="warn-label">Rechenbeispiel</div>
+    <p>Eine typische Zusatzversicherung (Spital, Zahn, Alternativmedizin) kostet <strong>CHF 150 pro Monat</strong>.</p>
+    <p>Bei 16 Monatspr&auml;mien verdient der Broker an einem einzigen Abschluss: <strong>CHF 2'400</strong>.</p>
+    <p style="font-size:14px;color:var(--muted);margin-bottom:0;">Das ist mehr als dein gesamtes erstes Jahr an Zusatzversicherung. Quelle: SVV, Branchenvereinbarung.</p>
+  </div>
+
+  <p>Dazu kommen bei einigen Kassen &laquo;Superprovisionen&raquo; &mdash; Bonussysteme, die Brokern <strong>40&ndash;60% zus&auml;tzlich</strong> zur Grundprovision zahlen, wenn sie genug Abschl&uuml;sse liefern.</p>
+
+  <p>Die gesamte Branche gibt j&auml;hrlich &uuml;ber <strong>CHF 500 Millionen</strong> f&uuml;r Broker-Provisionen aus. Dieses Geld fliesst in deine Pr&auml;mie.</p>
+
+  <p>Deshalb versuchen Broker bei jedem Anruf, dich zu einem <strong>Komplettwechsel</strong> zu bewegen &mdash; Grundversicherung <em>und</em> Zusatzversicherung zusammen. Die Grundversicherung ist das Lockmittel. Das Geld liegt in der Zusatz.</p>
+
+  <h3>Und das Kaltakquise-Verbot?</h3>
+
+  <p>Seit September 2024 verboten. Trotzdem hat die <strong>FINMA in den ersten zwei Monaten &uuml;ber 100 Meldungen</strong> erhalten. Sie hat &uuml;ber <strong>350 Vermittler</strong> identifiziert, die ohne Bewilligung t&auml;tig waren.</p>
+
+  <p>Das Gesetz ist da. Die Durchsetzung hinkt hinterher.</p>
+
+  <!-- ─── WAS WIR ANDERS MACHEN ────────────────────────── -->
+
+  <h2>Was wir anders machen</h2>
+
+  <p>abovergleich.com ist kein Broker. Wir vermitteln keine Versicherungen. Wir nehmen keine Provisionen. Wir nehmen keine Telefonnummer.</p>
+
+  <div class="good-box">
+    <div class="good-label">Unser Versprechen</div>
+    <p><strong>Wir vergleichen. Punkt.</strong></p>
+    <p style="font-size:14px;color:var(--text2);margin-bottom:0;">Keine Anrufe. Keine Weitergabe deiner Daten. Kein Kleingedrucktes. Du gibst deine PLZ und dein Geburtsjahr ein &mdash; wir zeigen dir die g&uuml;nstigsten Kassen. Was du damit machst, ist deine Sache.</p>
+  </div>
+
+  <!-- ─── WIE WIR VERGLEICHEN ──────────────────────────── -->
+
+  <h2>Wie wir vergleichen</h2>
+
+  <p>Unsere Daten kommen <strong>direkt vom BAG</strong> (Bundesamt f&uuml;r Gesundheit). Exakt dieselbe Quelle, die auch das offizielle Pr&auml;mienvergleichstool priminfo.admin.ch nutzt.</p>
+
+  <div class="num-grid">
+    <div class="num-card">
+      <div class="num-card-val">217'000+</div>
+      <div class="num-card-label">Datens&auml;tze</div>
+    </div>
+    <div class="num-card">
+      <div class="num-card-val">34</div>
+      <div class="num-card-label">Kassen</div>
+    </div>
+    <div class="num-card">
+      <div class="num-card-val">26</div>
+      <div class="num-card-label">Kantone</div>
+    </div>
+  </div>
+
+  <p>Wir zeigen dir die <strong>exakt gleichen Pr&auml;mien</strong>, die das BAG genehmigt hat. Kein Versicherer kann bei uns &laquo;h&ouml;her gerankt&raquo; werden, weil er mehr zahlt. Es gibt kein Ranking zu kaufen. Die Sortierung ist immer: <strong>g&uuml;nstigste zuerst</strong>.</p>
+
+  <h3>Was wir konkret f&uuml;r dich aufbereiten</h3>
+
+  <ul>
+    <li><strong>Preisvergleich nach PLZ:</strong> Jede PLZ hat eigene Pr&auml;mienregionen. Wir ordnen deine PLZ automatisch der richtigen Region zu.</li>
+    <li><strong>Alle Modelle im Vergleich:</strong> Standard, HMO, Hausarzt, Telmed &mdash; alles auf einen Blick, filterbar.</li>
+    <li><strong>Pr&auml;mien-Insights:</strong> Wir analysieren &uuml;ber mehrere Jahre, welche Kassen konstant g&uuml;nstig sind und welche mit Preis-Spikes arbeiten.</li>
+    <li><strong>Keine Registrierung:</strong> Du brauchst kein Konto. Keine E-Mail. Keine Telefonnummer.</li>
+  </ul>
+
+  <h3>Die Grundversicherung ist bei allen Kassen identisch</h3>
+
+  <p>Das ist der wichtigste Fakt, den viele nicht wissen: Die <strong>Leistung der Grundversicherung ist gesetzlich geregelt</strong> (KVG). Jede Kasse &mdash; ob CSS, Helsana oder Assura &mdash; muss exakt dieselben Behandlungen, Medikamente und Spit&auml;ler decken.</p>
+
+  <p>Der einzige Unterschied ist der <strong>Preis</strong>. Und der Kundenservice. Deshalb lohnt sich ein Vergleich so sehr &mdash; du bekommst die gleiche Leistung f&uuml;r weniger Geld.</p>
+
+  <!-- ─── WER WIR SIND ─────────────────────────────────── -->
+
+  <h2>Wer wir sind</h2>
+
+  <p>Wir sind ein kleines <strong>Schweizer Team</strong>, das selbst genug von intransparenten Vergleichsportalen hatte. abovergleich.com ist aus eigener Frustration entstanden &mdash; nicht aus einem Business-Plan.</p>
+
+  <p>Unser Ziel: Vergleichen so einfach und transparent wie m&ouml;glich machen. Ohne Hintergedanken, ohne versteckte Interessen. Die Daten sind &ouml;ffentlich, unsere Methode ist offen, und du beh&auml;ltst die Kontrolle.</p>
+
+  <div class="fact-box">
+    <div class="fact-box-title">Auf einen Blick</div>
+    <ul>
+      <li><strong>Unabh&auml;ngig:</strong> Keine Versicherung bezahlt uns f&uuml;r bessere Platzierung</li>
+      <li><strong>Schweizer Team:</strong> Entwickelt und betrieben in der Schweiz</li>
+      <li><strong>Open Data:</strong> Alle Pr&auml;miendaten stammen vom BAG (priminfo.admin.ch)</li>
+      <li><strong>Kein Broker:</strong> Wir sind keine Versicherungsvermittler</li>
+      <li><strong>Kein Tracking:</strong> Wir verkaufen keine Nutzerdaten</li>
+    </ul>
+  </div>
+
+  <!-- ─── CTA ──────────────────────────────────────────── -->
+
+  <div class="cta-box">
+    <h3>Bereit zum Vergleichen?</h3>
+    <p>217'000+ Datens&auml;tze, 34 Kassen, 0 Anrufe.</p>
+    <a href="/#kk-rechner">Pr&auml;mien vergleichen &rarr;</a>
+  </div>
+
+  <p style="font-size:13px;color:var(--muted);margin-top:40px;line-height:1.7;">
+    <strong style="color:var(--text);">Quellen:</strong>
+    Branchenvereinbarung &uuml;ber Vermittler in der Krankenversicherung (sant&eacute;suisse / curafutura, allgemeinverbindlich seit 1.9.2024) &middot;
+    FINMA Medienmitteilung 21.11.2024 (Kaltakquise-Verbot, &uuml;ber 100 Meldungen) &middot;
+    BAG Priminfo (Pr&auml;miendaten 2025/2026) &middot;
+    SVV Stellungnahme Vermittlergesch&auml;ft &middot;
+    KVG Art. 25&ndash;31 (Leistungskatalog Grundversicherung) &middot;
+    Alle Angaben ohne Gew&auml;hr.
+  </p>
+</article>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">abo<span>vergleich</span>.com</div>
+    <div class="footer-note">Unabh&auml;ngiger Vergleich f&uuml;r die Schweiz.</div>
+    <div class="footer-links">
+      <a href="/impressum/">Impressum</a>
+      <a href="/datenschutz/">Datenschutz</a>
+      <a href="/kontakt/">Kontakt</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
