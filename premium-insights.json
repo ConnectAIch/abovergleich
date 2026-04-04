@@ -1,0 +1,175 @@
+{
+  "generated": "1775289180.915873",
+  "years": [
+    2025,
+    2026
+  ],
+  "premium_changes": {
+    "period": "2025→2026",
+    "average_change": 3.7,
+    "below_average": [
+      {
+        "name": "Visana",
+        "prev": 562.8,
+        "curr": 538.48,
+        "change_pct": -4.3,
+        "vs_avg": -8.0
+      },
+      {
+        "name": "Rhenusana",
+        "prev": 534.27,
+        "curr": 536.67,
+        "change_pct": 0.4,
+        "vs_avg": -3.3
+      },
+      {
+        "name": "KPT",
+        "prev": 570.73,
+        "curr": 575.63,
+        "change_pct": 0.9,
+        "vs_avg": -2.8
+      }
+    ],
+    "above_average": [
+      {
+        "name": "EGK",
+        "prev": 448.5,
+        "curr": 470.9,
+        "change_pct": 5.0,
+        "vs_avg": 1.3
+      },
+      {
+        "name": "Galenos",
+        "prev": 546.4,
+        "curr": 576.48,
+        "change_pct": 5.5,
+        "vs_avg": 1.8
+      },
+      {
+        "name": "Wincare",
+        "prev": 555.02,
+        "curr": 587.65,
+        "change_pct": 5.9,
+        "vs_avg": 2.2
+      },
+      {
+        "name": "Vivao Sympany",
+        "prev": 530.0,
+        "curr": 570.2,
+        "change_pct": 7.6,
+        "vs_avg": 3.9
+      },
+      {
+        "name": "Aquilana",
+        "prev": 520.55,
+        "curr": 573.89,
+        "change_pct": 10.2,
+        "vs_avg": 6.5
+      }
+    ]
+  },
+  "consistency_ranking": [
+    {
+      "name": "KPT",
+      "total_top3_appearances": 45,
+      "per_year": {
+        "2025": 20,
+        "2026": 25
+      },
+      "consistency_score": 86.5
+    },
+    {
+      "name": "Helsana",
+      "total_top3_appearances": 19,
+      "per_year": {
+        "2025": 9,
+        "2026": 10
+      },
+      "consistency_score": 36.5
+    },
+    {
+      "name": "ÖKK",
+      "total_top3_appearances": 16,
+      "per_year": {
+        "2025": 9,
+        "2026": 7
+      },
+      "consistency_score": 30.8
+    },
+    {
+      "name": "Atupri",
+      "total_top3_appearances": 12,
+      "per_year": {
+        "2025": 6,
+        "2026": 6
+      },
+      "consistency_score": 23.1
+    },
+    {
+      "name": "Sanitas",
+      "total_top3_appearances": 10,
+      "per_year": {
+        "2025": 5,
+        "2026": 5
+      },
+      "consistency_score": 19.2
+    },
+    {
+      "name": "Swica",
+      "total_top3_appearances": 9,
+      "per_year": {
+        "2025": 6,
+        "2026": 3
+      },
+      "consistency_score": 17.3
+    },
+    {
+      "name": "Progrès",
+      "total_top3_appearances": 8,
+      "per_year": {
+        "2025": 3,
+        "2026": 5
+      },
+      "consistency_score": 15.4
+    },
+    {
+      "name": "Assura",
+      "total_top3_appearances": 8,
+      "per_year": {
+        "2025": 4,
+        "2026": 4
+      },
+      "consistency_score": 15.4
+    },
+    {
+      "name": "Wincare",
+      "total_top3_appearances": 7,
+      "per_year": {
+        "2025": 4,
+        "2026": 3
+      },
+      "consistency_score": 13.5
+    },
+    {
+      "name": "Groupe Mutuel",
+      "total_top3_appearances": 5,
+      "per_year": {
+        "2025": 2,
+        "2026": 3
+      },
+      "consistency_score": 9.6
+    }
+  ],
+  "model_trends": {
+    "2025": {
+      "diverse": 19,
+      "hmo": 4,
+      "hausarzt": 3
+    },
+    "2026": {
+      "diverse": 21,
+      "hausarzt": 4,
+      "hmo": 1
+    }
+  }
+}

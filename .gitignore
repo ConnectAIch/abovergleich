@@ -1,0 +1,9 @@
+# Large data files (BAG premium CSVs ~22MB each)
+scripts/data/*.csv
+scripts/data/*.zip
+
+# Node
+node_modules/
+
+# OS
+.DS_Store
