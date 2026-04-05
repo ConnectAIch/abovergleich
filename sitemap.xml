@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Homepage -->
+  <url>
+    <loc>https://www.abovergleich.com/</loc>
+    <lastmod>2026-04-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Hausratversicherung -->
+  <url>
+    <loc>https://www.abovergleich.com/hausratversicherung/</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Methode / Transparenz -->
+  <url>
+    <loc>https://www.abovergleich.com/methode/</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Blog: Beste Franchise -->
+  <url>
+    <loc>https://www.abovergleich.com/blog/beste-franchise-schweiz/</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Blog: HMO / Telmed / Hausarzt -->
+  <url>
+    <loc>https://www.abovergleich.com/blog/hmo-telmed-hausarzt-erklaert/</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Blog: Unfallversicherung Ausland -->
+  <url>
+    <loc>https://www.abovergleich.com/blog/unfallversicherung-schweiz-ausland/</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>

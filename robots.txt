@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://www.abovergleich.com/sitemap.xml
+
+# Legal pages (noindex via meta tag, but also block here)
+Disallow: /datenschutz/
+Disallow: /impressum/
+Disallow: /kontakt/

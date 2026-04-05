@@ -1,0 +1,39 @@
+# abovergleich.com
+
+> Unabhaengiger Vergleich fuer die Schweiz: Krankenkassen, Handy-Abo, Internet und mehr. Basierend auf offiziellen BAG-Daten.
+
+## Ueber uns
+
+abovergleich.com ist eine unabhaengige Vergleichsplattform fuer die Schweiz. Wir helfen Nutzerinnen und Nutzern, bei Krankenkassen, Handy-Abos und Internet-Abos Geld zu sparen. Unsere Daten stammen direkt vom Bundesamt fuer Gesundheit (BAG) und werden jaehrlich aktualisiert.
+
+- Keine Broker, keine Anrufe, keine Weitergabe von Nutzerdaten
+- 217'000+ BAG-Datensaetze, 34 Krankenkassen, alle Kantone
+- Kostenlos und transparent
+
+## Hauptseiten
+
+- [Krankenkassen-Vergleich](https://www.abovergleich.com/): Guenstigste Grundversicherung finden nach PLZ, Jahrgang, Franchise und Modell (Standard, HMO, Telmed, Hausarzt). Alle 34 Schweizer Krankenkassen verglichen.
+- [Hausrat & Haftpflicht](https://www.abovergleich.com/hausratversicherung/): Bedarfsrechner und Anbieter-Vergleich fuer Hausratversicherung und Privathaftpflicht in der Schweiz. 8 Versicherer, echte Risiko-Statistiken.
+- [Unsere Methode](https://www.abovergleich.com/methode/): Transparenzseite, die erklaert wie wir vergleichen und warum wir keine Telefonnummern verlangen.
+
+## Blog / Ratgeber
+
+- [HMO, Telmed oder Hausarzt? Alle Modelle erklaert](https://www.abovergleich.com/blog/hmo-telmed-hausarzt-erklaert/): Erklaerung aller Krankenkassen-Modelle der Grundversicherung mit Ersparnissen und Empfehlungen.
+- [Welche Franchise ist die beste?](https://www.abovergleich.com/blog/beste-franchise-schweiz/): CHF 300 vs. CHF 2'500 im Vergleich mit konkreten Rechenbeispielen.
+- [Unfallversicherung Schweiz & Ausland](https://www.abovergleich.com/blog/unfallversicherung-schweiz-ausland/): Was die obligatorische Unfallversicherung deckt und wann Zusatzschutz sinnvoll ist.
+
+## Externe Vergleiche (separate Domains)
+
+- [Handy-Abo Vergleich](https://www.handyabo.com): 22 Anbieter auf Swisscom-, Sunrise- und Salt-Netz.
+- [Internet-Abo Vergleich](https://handyabo.com/internet/): 14 Anbieter, Glasfaser, 4G/5G und Kabel.
+
+## Datenquellen
+
+- Krankenkassenpraemien: Bundesamt fuer Gesundheit (BAG), Priminfo-Datenbank
+- Aktualisierung: Jaehrlich im September/Oktober nach Veroeffentlichung der neuen Praemien
+- Aktuelles Datenjahr: 2026 (Vergleich 2025 vs. 2026)
+
+## Kontakt
+
+- Website: https://www.abovergleich.com
+- E-Mail: hello@handyabo.com
