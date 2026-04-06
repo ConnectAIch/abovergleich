@@ -621,33 +621,6 @@
   }
   .auth-switch a:hover { text-decoration: underline; }
 
-  /* PROFILE BAR */
-  .profile-bar {
-    display: none; align-items: center; gap: 10px;
-  }
-  .profile-bar.show { display: flex; }
-  .profile-avatar {
-    width: 32px; height: 32px; border-radius: 50%;
-    background: var(--accent-bg2); color: var(--accent-dark);
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 13px; font-weight: 700;
-  }
-  .profile-menu-btn {
-    background: none; border: none; cursor: pointer;
-    font-size: 14px; font-weight: 500; color: var(--muted);
-    font-family: 'Inter', sans-serif;
-  }
-  .profile-menu-btn:hover { color: var(--text); }
-  .nav-login-btn {
-    background: var(--accent); color: var(--text);
-    border: none; border-radius: 8px; padding: 8px 16px;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 13px; font-weight: 700; cursor: pointer;
-    transition: all .2s;
-  }
-  .nav-login-btn:hover { background: var(--accent-hover); }
-
   /* WECKER CTA */
   .wecker-cta {
     margin-top: 20px; padding: 24px;
@@ -719,78 +692,8 @@
     .capture-row { grid-template-columns: 1fr; }
   }
 
-  /* PROFILE PAGE */
-  .profile-section {
-    display: none; padding: 120px 40px 80px;
-  }
-  .profile-section.show { display: block; }
-  .profile-inner { max-width: 560px; margin: 0 auto; }
-  .profile-card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 20px; padding: 32px;
-  }
-  .profile-header {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 24px; flex-wrap: wrap; gap: 12px;
-  }
-  .profile-header h2 {
-    font-size: 22px; font-weight: 800; letter-spacing: -.5px;
-  }
-  .profile-logout {
-    background: none; border: 1px solid var(--border2);
-    border-radius: 8px; padding: 6px 14px;
-    font-size: 13px; font-weight: 600; color: var(--muted);
-    cursor: pointer; transition: all .2s;
-    font-family: 'Inter', sans-serif;
-  }
-  .profile-logout:hover { border-color: var(--text); color: var(--text); }
-  .profile-form { display: grid; gap: 16px; }
-  .profile-form .auth-field { margin-bottom: 0; }
-  .profile-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .profile-saved {
-    padding: 12px 16px; border-radius: 10px;
-    background: #ecfdf5; color: #065f46;
-    font-size: 14px; display: none; text-align: center;
-  }
-  .profile-saved.show { display: block; }
-  .wecker-toggle {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 16px; background: var(--accent-bg);
-    border: 1px solid rgba(254,208,1,0.2);
-    border-radius: 12px; margin-top: 8px;
-  }
-  .wecker-toggle-label {
-    font-size: 14px; font-weight: 600; color: var(--text);
-  }
-  .wecker-toggle-sub {
-    font-size: 12px; color: var(--muted); margin-top: 2px;
-  }
-  .toggle-switch {
-    position: relative; width: 44px; height: 24px;
-  }
-  .toggle-switch input { opacity: 0; width: 0; height: 0; }
-  .toggle-slider {
-    position: absolute; inset: 0; cursor: pointer;
-    background: var(--border2); border-radius: 24px;
-    transition: .3s;
-  }
-  .toggle-slider::before {
-    content: ''; position: absolute;
-    width: 18px; height: 18px; left: 3px; bottom: 3px;
-    background: white; border-radius: 50%;
-    transition: .3s;
-  }
-  .toggle-switch input:checked + .toggle-slider {
-    background: var(--accent-dark);
-  }
-  .toggle-switch input:checked + .toggle-slider::before {
-    transform: translateX(20px);
-  }
-
   @media (max-width: 768px) {
     .auth-modal { padding: 28px; }
-    .profile-section { padding: 100px 20px 60px; }
-    .profile-row { grid-template-columns: 1fr; }
   }
 
   /* RESPONSIVE (page-specific) */
@@ -826,11 +729,6 @@
     <a href="https://handyabo.com/internet/" class="nav-link">Internet</a>
     <a href="https://www.handyabo.com" class="nav-link">Handy-Abo</a>
     <a href="/methode/" class="nav-link">Unsere Methode</a>
-    <button class="nav-login-btn" id="nav-login" onclick="openAuth()">Anmelden</button>
-    <div class="profile-bar" id="profile-bar">
-      <div class="profile-avatar" id="profile-avatar"></div>
-      <button class="profile-menu-btn" onclick="showProfile()">Mein Profil</button>
-    </div>
   </div>
   <button class="nav-burger" id="nav-burger" onclick="toggleNav()" aria-label="Menü">
     <span></span><span></span><span></span>
@@ -907,7 +805,7 @@
         <div class="wecker-cta" id="wecker-cta" style="display:none;">
           <h3>⏰ Wechsel-Wecker aktivieren</h3>
           <p>Wir prüfen jedes Jahr im Herbst automatisch, ob du zu viel zahlst und schicken dir eine E-Mail mit deinem persönlichen Sparpotenzial.</p>
-          <button class="wecker-btn" onclick="openAuth()">Kostenlos erinnern lassen →</button>
+          <button class="wecker-btn" onclick="openCapture()">Kostenlos erinnern lassen →</button>
         </div>
       </div>
     </div>
@@ -1318,101 +1216,7 @@
   </div>
 </div>
 
-<!-- AUTH MODAL (simple, for nav login / wecker-only) -->
-<div class="auth-overlay" id="auth-overlay" onclick="if(event.target===this)closeAuth()">
-  <div class="auth-modal">
-    <button class="auth-close" onclick="closeAuth()">&times;</button>
-    <div id="auth-step-email">
-      <div class="auth-title">Wechsel-Wecker aktivieren</div>
-      <div class="auth-subtitle">Wir prüfen jedes Jahr im Herbst, ob du bei deiner Krankenkasse zu viel zahlst und erinnern dich rechtzeitig.</div>
-      <div class="auth-msg" id="auth-msg"></div>
-      <div class="auth-field">
-        <label for="auth-email">E-Mail</label>
-        <input type="email" id="auth-email" placeholder="deine@email.ch">
-      </div>
-      <button class="auth-btn" id="auth-submit" onclick="sendMagicLink()">Magic Link senden</button>
-      <div style="margin-top:16px;font-size:12px;color:var(--muted);text-align:center;line-height:1.5;">
-        Kein Passwort nötig. Du bekommst einen Login-Link per E-Mail.
-      </div>
-    </div>
-    <div id="auth-step-sent" style="display:none;text-align:center;">
-      <div style="font-size:48px;margin-bottom:16px;">✉️</div>
-      <div class="auth-title">Check deine Inbox</div>
-      <div class="auth-subtitle">Wir haben dir einen Login-Link an <strong id="auth-sent-email"></strong> geschickt. Klick den Link, um dich anzumelden.</div>
-      <div style="font-size:13px;color:var(--muted);">Kein Mail? Prüfe den Spam-Ordner oder <a style="color:var(--accent-dark);cursor:pointer;font-weight:600;" onclick="showEmailStep()">versuch es nochmal</a>.</div>
-    </div>
-  </div>
-</div>
 
-<!-- PROFILE SECTION (hidden by default) -->
-<section class="profile-section" id="profile-section">
-  <div class="profile-inner">
-    <div class="profile-card">
-      <div class="profile-header">
-        <h2>Mein Profil</h2>
-        <button class="profile-logout" onclick="logout()">Abmelden</button>
-      </div>
-      <div class="profile-saved" id="profile-saved">Profil gespeichert ✓</div>
-      <div class="profile-form" id="profile-form">
-        <div class="auth-field">
-          <label>E-Mail</label>
-          <input type="email" id="profile-email" disabled style="opacity:.6;">
-        </div>
-        <div class="profile-row">
-          <div class="auth-field">
-            <label for="profile-plz">PLZ</label>
-            <input type="text" id="profile-plz" placeholder="z.B. 8001" maxlength="4">
-          </div>
-          <div class="auth-field">
-            <label for="profile-jahrgang">Jahrgang</label>
-            <input type="number" id="profile-jahrgang" placeholder="z.B. 1990" min="1930" max="2010">
-          </div>
-        </div>
-        <div class="profile-row">
-          <div class="auth-field">
-            <label for="profile-franchise">Franchise</label>
-            <select id="profile-franchise">
-              <option value="">Bitte wählen</option>
-              <option value="300">CHF 300</option>
-              <option value="500">CHF 500</option>
-              <option value="1000">CHF 1'000</option>
-              <option value="1500">CHF 1'500</option>
-              <option value="2000">CHF 2'000</option>
-              <option value="2500">CHF 2'500</option>
-            </select>
-          </div>
-          <div class="auth-field">
-            <label for="profile-model">Modell</label>
-            <select id="profile-model">
-              <option value="">Bitte wählen</option>
-              <option value="standard">Standard (freie Arztwahl)</option>
-              <option value="hmo">HMO</option>
-              <option value="telmed">Telmed</option>
-              <option value="family_doctor">Hausarzt</option>
-            </select>
-          </div>
-        </div>
-        <div class="auth-field">
-          <label for="profile-insurer">Aktuelle Krankenkasse</label>
-          <select id="profile-insurer">
-            <option value="">Bitte wählen</option>
-          </select>
-        </div>
-        <div class="wecker-toggle">
-          <div>
-            <div class="wecker-toggle-label">⏰ Wechsel-Wecker aktiv</div>
-            <div class="wecker-toggle-sub">Wir erinnern dich jeden Herbst per E-Mail</div>
-          </div>
-          <label class="toggle-switch">
-            <input type="checkbox" id="profile-wecker" checked>
-            <span class="toggle-slider"></span>
-          </label>
-        </div>
-        <button class="auth-btn" onclick="saveProfile()">Profil speichern</button>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- FOOTER -->
 <footer>
@@ -1429,14 +1233,9 @@
 </footer>
 
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
-// SUPABASE INIT
 const SUPABASE_URL = 'https://zexpmaegqsayleaohiip.supabase.co';
-const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpleHBtYWVncXNheWxlYW9oaWlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwOTIwOTEsImV4cCI6MjA5MDY2ODA5MX0.Xm0uXlt3L02KHAgFU4qgtrDJK4OLp6NL9GoqqqrQj54';
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
-let currentUser = null;
 
 // ── SWISS VALIDATION HELPERS ──────────────────────────────────────────
 const SwissValidation = {
@@ -1529,225 +1328,7 @@ function attachPLZAutoCity(plzId, cityId) {
 // Attach PLZ → City autofill on page load
 document.addEventListener('DOMContentLoaded', () => {
   attachPLZAutoCity('cap-plz', 'cap-city');
-  attachPLZAutoCity('profile-plz', 'profile-city');
 });
-
-// Insurer list for profile dropdown
-const insurerList = [
-  { id: 246, name: 'Aquilana' },
-  { id: 1318, name: 'Assura' },
-  { id: 194, name: 'Atupri' },
-  { id: 32, name: 'Concordia' },
-  { id: 8, name: 'CSS' },
-  { id: 1040, name: 'EGK' },
-  { id: 290, name: 'Galenos' },
-  { id: 1113, name: 'Groupe Mutuel' },
-  { id: 312, name: 'Helsana' },
-  { id: 376, name: 'KPT' },
-  { id: 455, name: 'ÖKK' },
-  { id: 780, name: 'Rhenusana' },
-  { id: 360, name: 'Sanitas' },
-  { id: 923, name: 'Swica' },
-  { id: 881, name: 'Sympany' },
-  { id: 134, name: 'Visana' }
-];
-
-// Populate insurer dropdown
-function populateInsurers() {
-  const sel = document.getElementById('profile-insurer');
-  insurerList.forEach(ins => {
-    const opt = document.createElement('option');
-    opt.value = ins.id;
-    opt.textContent = ins.name;
-    sel.appendChild(opt);
-  });
-}
-populateInsurers();
-
-// AUTH STATE
-async function initAuth() {
-  const { data: { session } } = await sb.auth.getSession();
-  if (session) {
-    currentUser = session.user;
-    updateUI(true);
-    // Check if URL has profile hash (after magic link redirect)
-    if (window.location.hash === '#profil') {
-      showProfile();
-    }
-  }
-
-  sb.auth.onAuthStateChange((event, session) => {
-    if (event === 'SIGNED_IN' && session) {
-      currentUser = session.user;
-      updateUI(true);
-      closeAuth();
-      // Auto-create profile if new user
-      ensureProfile();
-    } else if (event === 'SIGNED_OUT') {
-      currentUser = null;
-      updateUI(false);
-    }
-  });
-}
-
-function updateUI(loggedIn) {
-  const loginBtn = document.getElementById('nav-login');
-  const profileBar = document.getElementById('profile-bar');
-  const avatar = document.getElementById('profile-avatar');
-  const weckerCta = document.getElementById('wecker-cta');
-
-  if (loggedIn && currentUser) {
-    loginBtn.style.display = 'none';
-    profileBar.classList.add('show');
-    const letter = (currentUser.email || '?')[0].toUpperCase();
-    avatar.textContent = letter;
-    if (weckerCta) weckerCta.style.display = 'none';
-  } else {
-    loginBtn.style.display = '';
-    profileBar.classList.remove('show');
-    document.getElementById('profile-section').classList.remove('show');
-  }
-}
-
-// AUTH MODAL
-function openAuth() {
-  if (currentUser) { showProfile(); return; }
-  document.getElementById('auth-overlay').classList.add('open');
-  showEmailStep();
-  document.getElementById('auth-email').focus();
-}
-
-function closeAuth() {
-  document.getElementById('auth-overlay').classList.remove('open');
-}
-
-function showEmailStep() {
-  document.getElementById('auth-step-email').style.display = '';
-  document.getElementById('auth-step-sent').style.display = 'none';
-  document.getElementById('auth-msg').className = 'auth-msg';
-  document.getElementById('auth-msg').textContent = '';
-}
-
-async function sendMagicLink() {
-  const email = document.getElementById('auth-email').value.trim();
-  const msgEl = document.getElementById('auth-msg');
-  const btn = document.getElementById('auth-submit');
-
-  if (!email || !SwissValidation.isValidEmail(email)) {
-    msgEl.className = 'auth-msg error';
-    msgEl.textContent = 'Bitte gib eine gültige E-Mail-Adresse ein (z.B. name@beispiel.ch).';
-    return;
-  }
-
-  btn.disabled = true;
-  btn.textContent = 'Wird gesendet...';
-
-  const { error } = await sb.auth.signInWithOtp({
-    email,
-    options: {
-      emailRedirectTo: window.location.origin + '/#profil'
-    }
-  });
-
-  btn.disabled = false;
-  btn.textContent = 'Magic Link senden';
-
-  if (error) {
-    msgEl.className = 'auth-msg error';
-    msgEl.textContent = 'Fehler: ' + error.message;
-    return;
-  }
-
-  // Show success step
-  document.getElementById('auth-step-email').style.display = 'none';
-  document.getElementById('auth-step-sent').style.display = '';
-  document.getElementById('auth-sent-email').textContent = email;
-}
-
-// PROFILE
-async function ensureProfile() {
-  if (!currentUser) return;
-  const { data } = await sb.from('user_profiles')
-    .select('*')
-    .eq('id', currentUser.id)
-    .single();
-
-  if (!data) {
-    // Create new profile
-    await sb.from('user_profiles').insert({
-      id: currentUser.id,
-      email: currentUser.email,
-      // Pre-fill from calculator if values exist
-      plz: document.getElementById('kk-plz').value.trim() || null,
-      jahrgang: parseInt(document.getElementById('kk-year').value) || null,
-      franchise: parseInt(document.getElementById('kk-franchise').value) || null,
-      wecker_active: true
-    });
-  }
-}
-
-async function showProfile() {
-  if (!currentUser) { openAuth(); return; }
-
-  // Load profile data
-  const { data } = await sb.from('user_profiles')
-    .select('*')
-    .eq('id', currentUser.id)
-    .single();
-
-  if (data) {
-    document.getElementById('profile-email').value = currentUser.email || '';
-    document.getElementById('profile-plz').value = data.plz || '';
-    document.getElementById('profile-jahrgang').value = data.jahrgang || '';
-    document.getElementById('profile-franchise').value = data.franchise || '';
-    document.getElementById('profile-model').value = data.current_model || '';
-    document.getElementById('profile-insurer').value = data.current_insurer_id || '';
-    document.getElementById('profile-wecker').checked = data.wecker_active !== false;
-  } else {
-    document.getElementById('profile-email').value = currentUser.email || '';
-    // Pre-fill from calculator
-    document.getElementById('profile-plz').value = document.getElementById('kk-plz').value || '';
-    document.getElementById('profile-jahrgang').value = document.getElementById('kk-year').value || '';
-    document.getElementById('profile-franchise').value = document.getElementById('kk-franchise').value || '';
-  }
-
-  // Show profile section and scroll to it
-  document.getElementById('profile-section').classList.add('show');
-  document.getElementById('profile-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  document.getElementById('profile-saved').classList.remove('show');
-}
-
-async function saveProfile() {
-  if (!currentUser) return;
-
-  const profileData = {
-    id: currentUser.id,
-    email: currentUser.email,
-    plz: document.getElementById('profile-plz').value.trim() || null,
-    jahrgang: parseInt(document.getElementById('profile-jahrgang').value) || null,
-    franchise: parseInt(document.getElementById('profile-franchise').value) || null,
-    current_model: document.getElementById('profile-model').value || null,
-    current_insurer_id: parseInt(document.getElementById('profile-insurer').value) || null,
-    wecker_active: document.getElementById('profile-wecker').checked
-  };
-
-  const { error } = await sb.from('user_profiles').upsert(profileData);
-
-  if (error) {
-    alert('Fehler beim Speichern: ' + error.message);
-    return;
-  }
-
-  const saved = document.getElementById('profile-saved');
-  saved.classList.add('show');
-  setTimeout(() => saved.classList.remove('show'), 3000);
-}
-
-async function logout() {
-  await sb.auth.signOut();
-  document.getElementById('profile-section').classList.remove('show');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
 
 // CAPTURE MODAL (Kündigung Flow)
 const KUENDIGUNG_API = SUPABASE_URL + '/functions/v1/generate-kuendigung';
@@ -1937,7 +1518,6 @@ function redirectToInsurer() {
 }
 
 // Init auth on page load
-initAuth();
 
 // Inject data year from premium-insights.json into .data-year / .data-year-prev spans
 fetch('/premium-insights.json').then(r => r.json()).then(d => {
@@ -2134,7 +1714,7 @@ async function checkKK() {
 
     // Show Wechsel-Wecker CTA for non-logged-in users
     const weckerCta = document.getElementById('wecker-cta');
-    if (weckerCta && !currentUser) {
+    if (weckerCta) {
       weckerCta.style.display = '';
     }
 
