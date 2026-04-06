@@ -12,15 +12,15 @@ abovergleich.com ist eine unabhaengige Vergleichsplattform fuer die Schweiz. Wir
 
 ## Hauptseiten
 
-- [Krankenkassen-Vergleich](https://www.abovergleich.com/): Guenstigste Grundversicherung finden nach PLZ, Jahrgang, Franchise und Modell (Standard, HMO, Telmed, Hausarzt). Alle 34 Schweizer Krankenkassen verglichen.
-- [Hausrat & Haftpflicht](https://www.abovergleich.com/hausratversicherung/): Bedarfsrechner und Anbieter-Vergleich fuer Hausratversicherung und Privathaftpflicht in der Schweiz. 8 Versicherer, echte Risiko-Statistiken.
-- [Unsere Methode](https://www.abovergleich.com/methode/): Transparenzseite, die erklaert wie wir vergleichen und warum wir keine Telefonnummern verlangen.
+- [Krankenkassen-Vergleich](https://abovergleich.com/): Guenstigste Grundversicherung finden nach PLZ, Jahrgang, Franchise und Modell (Standard, HMO, Telmed, Hausarzt). Alle 34 Schweizer Krankenkassen verglichen.
+- [Hausrat & Haftpflicht](https://abovergleich.com/hausratversicherung/): Bedarfsrechner und Anbieter-Vergleich fuer Hausratversicherung und Privathaftpflicht in der Schweiz. 8 Versicherer, echte Risiko-Statistiken.
+- [Unsere Methode](https://abovergleich.com/methode/): Transparenzseite, die erklaert wie wir vergleichen und warum wir keine Telefonnummern verlangen.
 
 ## Blog / Ratgeber
 
-- [HMO, Telmed oder Hausarzt? Alle Modelle erklaert](https://www.abovergleich.com/blog/hmo-telmed-hausarzt-erklaert/): Erklaerung aller Krankenkassen-Modelle der Grundversicherung mit Ersparnissen und Empfehlungen.
-- [Welche Franchise ist die beste?](https://www.abovergleich.com/blog/beste-franchise-schweiz/): CHF 300 vs. CHF 2'500 im Vergleich mit konkreten Rechenbeispielen.
-- [Unfallversicherung Schweiz & Ausland](https://www.abovergleich.com/blog/unfallversicherung-schweiz-ausland/): Was die obligatorische Unfallversicherung deckt und wann Zusatzschutz sinnvoll ist.
+- [HMO, Telmed oder Hausarzt? Alle Modelle erklaert](https://abovergleich.com/blog/hmo-telmed-hausarzt-erklaert/): Erklaerung aller Krankenkassen-Modelle der Grundversicherung mit Ersparnissen und Empfehlungen.
+- [Welche Franchise ist die beste?](https://abovergleich.com/blog/beste-franchise-schweiz/): CHF 300 vs. CHF 2'500 im Vergleich mit konkreten Rechenbeispielen.
+- [Unfallversicherung Schweiz & Ausland](https://abovergleich.com/blog/unfallversicherung-schweiz-ausland/): Was die obligatorische Unfallversicherung deckt und wann Zusatzschutz sinnvoll ist.
 
 ## Externe Vergleiche (separate Domains)
 
@@ -35,5 +35,5 @@ abovergleich.com ist eine unabhaengige Vergleichsplattform fuer die Schweiz. Wir
 
 ## Kontakt
 
-- Website: https://www.abovergleich.com
+- Website: https://abovergleich.com
 - E-Mail: hello@handyabo.com
