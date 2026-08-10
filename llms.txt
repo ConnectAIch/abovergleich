@@ -24,8 +24,8 @@ abovergleich.com ist eine unabhaengige Vergleichsplattform fuer die Schweiz. Wir
 
 ## Externe Vergleiche (separate Domains)
 
-- [Handy-Abo Vergleich](https://www.handyabo.com): 22 Anbieter auf Swisscom-, Sunrise- und Salt-Netz.
-- [Internet-Abo Vergleich](https://handyabo.com/internet/): 14 Anbieter, Glasfaser, 4G/5G und Kabel.
+- [Handy-Abo Vergleich](https://handyabo.com/): 22 Anbieter auf Swisscom-, Sunrise- und Salt-Netz.
+- [Internet-Abo Vergleich](https://handyabo.com/internet/): 15 Anbieter, Glasfaser, 4G/5G und Kabel.
 
 ## Datenquellen
 
