@@ -46,6 +46,12 @@ python3 import_premiums.py 2027 --dry-run   # zählen, Mapping prüfen
 python3 import_premiums.py 2027             # schreiben
 ```
 
+In derselben Datei `ENV_REFUND` um das neue Jahr ergänzen: die Rückverteilung
+der Umweltabgaben pro Person und Monat (2026: 5.15, 2027: 4.75). Die Kassen
+ziehen sie auf der Rechnung ab; ohne den Wert erkennt der Rechner den Tarif
+nicht, wenn jemand seinen Rechnungsbetrag eingibt. Quelle: BAFU bzw. die
+Merkblätter der Kassen, meist ab September publiziert.
+
 Vorjahre bleiben in `premiums` (für Vergleiche und Auswertungen). Welches Jahr
 der Rechner zeigt, steht als `PREMIUM_YEAR` in
 `supabase/functions/get-cheapest-premiums/index.ts`. Reihenfolge beachten:

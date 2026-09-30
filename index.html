@@ -331,7 +331,9 @@
     gap: 12px;
     align-items: end;
   }
-  .kk-field-insurer { grid-column: 1 / 4; }
+  .kk-field-insurer { grid-column: 1 / 3; }
+  .kk-own-match { margin-top: 10px; font-size: 13px; color: var(--text2); line-height: 1.5; }
+  .kk-own-bill { font-size: 13px; color: var(--text2); margin-top: 2px; }
   .kk-optional { text-transform: none; letter-spacing: 0; font-weight: 400; }
   .kk-hint { font-size: 12px; color: var(--muted); margin-top: 10px; line-height: 1.5; }
   .kk-own {
@@ -813,11 +815,15 @@
           <label for="kk-current">Deine Kasse heute <span class="kk-optional">optional</span></label>
           <select id="kk-current"><option value="">Weiss nicht / keine Angabe</option></select>
         </div>
+        <div class="kk-field">
+          <label for="kk-paid">Du zahlst heute <span class="kk-optional">CHF/Mt.</span></label>
+          <input type="text" id="kk-paid" placeholder="z.B. 371.85" inputmode="decimal">
+        </div>
         <div class="kk-field kk-field-btn">
           <button class="kk-btn" onclick="checkKK()">Prämien prüfen</button>
         </div>
       </div>
-      <div class="kk-hint">Angestellt mit mindestens 8 Stunden pro Woche? Dann bist du über den Arbeitgeber gegen Unfall versichert und wählst «Ohne Unfall».</div>
+      <div class="kk-hint">Angestellt mit mindestens 8 Stunden pro Woche? Dann bist du über den Arbeitgeber gegen Unfall versichert und wählst «Ohne Unfall». Mit dem Betrag der Grundversicherung von deiner Rechnung erkennen wir deinen Tarif.</div>
 
       <div class="kk-result" id="kk-result" style="display:none;">
         <div class="kk-result-header">
@@ -1541,6 +1547,9 @@ const KK_INSURERS = [
   KK_INSURERS.forEach(([id, name]) => sel.add(new Option(name, id)));
   try { const saved = localStorage.getItem('kk-current'); if (saved) sel.value = saved; } catch (e) {}
   sel.addEventListener('change', () => { try { localStorage.setItem('kk-current', sel.value); } catch (e) {} });
+  const paid = document.getElementById('kk-paid');
+  try { const v = localStorage.getItem('kk-paid'); if (v) paid.value = v; } catch (e) {}
+  paid.addEventListener('change', () => { try { localStorage.setItem('kk-paid', paid.value); } catch (e) {} });
 })();
 
 async function checkKK() {
@@ -1568,7 +1577,8 @@ async function checkKK() {
     const res = await fetch(KK_API, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ plz, year_of_birth: year, franchise, accident_included: accidentIncluded })
+      body: JSON.stringify({ plz, year_of_birth: year, franchise, accident_included: accidentIncluded,
+        current_insurer_id: parseInt(document.getElementById('kk-current').value) || null })
     });
 
     const data = await res.json();
@@ -1661,6 +1671,38 @@ async function checkKK() {
     const ownOffers = currentId ? offers.filter(p => p.insurer_id === currentId) : [];
     // Vorauswahl Standardmodell: wer sein Modell nicht kennt, hat meist dieses
     let ownPick = ownOffers.find(p => p.model_type === 'standard') || ownOffers[ownOffers.length - 1] || null;
+    let ownGuessed = true;       // Tarif nur angenommen, nicht erkannt
+    let ownChoices = ownOffers;  // Tarife, die in der Auswahl stehen
+    let matchNote = '';
+    let matchOther = null;       // Treffer bei anderer Franchise/Unfalldeckung
+
+    // Rechnungsbetrag -> Tarif. Die Kassen ziehen die Umweltabgabe direkt ab,
+    // auf der Rechnung steht also BAG-Prämie minus Rückverteilung.
+    const refund = data.env_refund || 0, refundPrev = data.env_refund_prev || 0;
+    const paid = parseFloat((document.getElementById('kk-paid').value || '').replace(/[^0-9.,]/g, '').replace(',', '.')) || null;
+    if (currentId && paid) {
+      const near = (a, b) => Math.abs(a - b) < 0.06;
+      const matches = (data.current_options || []).filter(p => p.premium_prev
+        && (near(p.premium_prev - refundPrev, paid) || near(p.premium_prev, paid)));
+      const here = matches.filter(p => p.franchise === data.franchise && p.accident_included === data.accident_included);
+      const hereTariffs = new Set(here.map(p => p.tariff));
+      const found = ownOffers.filter(p => hereTariffs.has(p.tariff));
+      if (found.length) {
+        ownPick = found[0];
+        ownGuessed = false;
+        if (found.length > 1) {
+          ownChoices = found;
+          matchNote = `Dein Betrag passt zu ${found.length} Tarifen mit gleicher Prämie ${data.prev_year}. Wähle unten, welcher auf deiner Police steht.`;
+        } else {
+          matchNote = `Tarif anhand deiner Rechnung erkannt.`;
+        }
+      } else if (matches.length) {
+        matchOther = matches[0];
+        matchNote = `Dein Betrag passt zu Franchise CHF ${fmt0(matchOther.franchise)} ${matchOther.accident_included ? 'mit' : 'ohne'} Unfall (${tariffLabel(matchOther)}). <button class="kk-link" id="kk-apply-match">Damit rechnen</button>`;
+      } else {
+        matchNote = `Kein Tarif deiner Kasse kostete ${data.prev_year} genau CHF ${fmt(paid)}. Nimm den Betrag der Grundversicherung von der Rechnung, ohne Zusatzversicherung, oder wähle deinen Tarif unten.`;
+      }
+    }
 
     function bestPerInsurer(list) {
       const seen = new Set();
@@ -1672,15 +1714,21 @@ async function checkKK() {
       if (!currentId) { el.innerHTML = ''; return; }
       if (!ownPick) {
         el.innerHTML = `<div class="kk-own"><div class="kk-own-title">${currentSelect.selectedOptions[0].textContent}</div>
-          <div class="kk-own-delta">Bietet an deinem Wohnort keine Grundversicherung für dieses Profil an.</div></div>`;
+          <div class="kk-own-delta">Bietet an deinem Wohnort keine Grundversicherung für dieses Profil an.</div>
+          ${matchNote ? `<div class="kk-own-match">${matchNote}</div>` : ''}</div>`;
+        bindMatch(el);
         return;
       }
       const best = offers[0];
       const bestSame = offers.find(p => p.model_type === ownPick.model_type);
       const saveAll = (ownPick.premium - best.premium) * 12;
       const saveSame = bestSame ? (ownPick.premium - bestSame.premium) * 12 : 0;
-      const delta = ownPick.premium_prev
-        ? `${data.prev_year}: CHF ${fmt(ownPick.premium_prev)} · ${signed((ownPick.premium / ownPick.premium_prev - 1) * 100)}%, ${ownPick.premium >= ownPick.premium_prev ? '+' : '−'}CHF ${fmt0(Math.abs(ownPick.premium - ownPick.premium_prev) * 12)} pro Jahr`
+      // Was auf der Rechnung steht: BAG-Prämie minus Umweltabgabe des Jahres
+      const bill = ownPick.premium - refund;
+      const billPrev = ownPick.premium_prev ? ownPick.premium_prev - refundPrev : null;
+      const billLine = refund ? `Auf deiner Rechnung ${data.year}: <strong>CHF ${fmt(bill)}</strong> (nach Abzug Umweltabgabe CHF ${fmt(refund)})` : '';
+      const delta = billPrev
+        ? `${data.prev_year} auf der Rechnung: CHF ${fmt(billPrev)} · ${signed((bill / billPrev - 1) * 100)}%, ${bill >= billPrev ? '+' : '−'}CHF ${fmt0(Math.abs(bill - billPrev) * 12)} pro Jahr`
         : `Tarif neu im Angebot ${data.year}`;
       let save;
       if (saveAll < 12) {
@@ -1693,23 +1741,43 @@ async function checkKK() {
             : `<br>Im Modell ${modelNames[ownPick.model_type]} bist du bereits am günstigsten.`;
         }
       }
-      const tariffs = ownOffers.map((p, i) => `<div class="kk-own-tariff${p === ownPick ? ' selected' : ''}" data-i="${i}">
+      const guessNote = ownGuessed
+        ? `<div class="kk-own-match">Angenommen: Standardmodell. Gib oben ein, was du heute zahlst, oder wähle deinen Tarif, sonst stimmt die Ersparnis nicht.</div>`
+        : '';
+      const tariffs = ownChoices.map((p, i) => `<div class="kk-own-tariff${p === ownPick ? ' selected' : ''}" data-i="${i}">
           <span>${tariffLabel(p)}</span><span>CHF ${fmt(p.premium)}</span></div>`).join('');
+      const pickerOpen = ownGuessed || ownChoices.length < ownOffers.length;
+      const pickerLabel = ownChoices.length < ownOffers.length ? 'Welcher Tarif steht auf deiner Police?' : 'Anderes Modell? Wähle deinen Tarif';
       el.innerHTML = `<div class="kk-own">
         <div class="kk-own-label">Deine Kasse ${data.year}</div>
         <div class="kk-own-head">
           <div><div class="kk-own-title">${ownPick.insurer_name}</div><div class="kk-own-delta">${tariffLabel(ownPick)}</div></div>
-          <div style="text-align:right;"><div class="kk-own-price">CHF ${fmt(ownPick.premium)}</div><div class="kk-own-delta">${delta}</div></div>
+          <div style="text-align:right;"><div class="kk-own-price">CHF ${fmt(ownPick.premium)}</div><div class="kk-own-bill">${billLine}</div><div class="kk-own-delta">${delta}</div></div>
         </div>
+        ${matchNote ? `<div class="kk-own-match">${matchNote}</div>` : guessNote}
         <div class="kk-own-save">${save}</div>
-        ${ownOffers.length > 1 ? `<details class="kk-own-tariffs"><summary>Anderes Modell? Wähle deinen Tarif (${ownOffers.length})</summary>${tariffs}</details>` : ''}
+        ${ownChoices.length > 1 ? `<details class="kk-own-tariffs"${pickerOpen ? ' open' : ''}><summary>${pickerLabel} (${ownChoices.length})</summary>${tariffs}</details>` : ''}
       </div>`;
       el.querySelectorAll('.kk-own-tariff').forEach(t => t.onclick = () => {
-        ownPick = ownOffers[parseInt(t.dataset.i)];
+        ownPick = ownChoices[parseInt(t.dataset.i)];
+        ownGuessed = false;
+        if (matchNote.startsWith('Dein Betrag passt zu') && !matchOther) matchNote = 'Tarif gewählt.';
         renderOwn();
-        el.querySelector('.kk-own-tariffs').open = true;
+        const d = el.querySelector('.kk-own-tariffs'); if (d) d.open = true;
         renderFiltered(document.querySelector('.kk-filter-chip.active').dataset.filter);
       });
+      bindMatch(el);
+    }
+
+    // "Damit rechnen": Franchise und Unfalldeckung aus dem Rechnungstreffer übernehmen
+    function bindMatch(el) {
+      const btn = el.querySelector('#kk-apply-match');
+      if (!btn || !matchOther) return;
+      btn.onclick = () => {
+        document.getElementById('kk-franchise').value = String(matchOther.franchise);
+        document.getElementById('kk-accident').value = String(matchOther.accident_included);
+        checkKK();
+      };
     }
 
     function renderRow(p, rank, opts = {}) {
@@ -1757,7 +1825,7 @@ async function checkKK() {
       if (ownIdx >= top.length) {
         html += '<div class="kk-gap">···</div>' + renderRow(ranked[ownIdx], ownIdx + 1);
       }
-      html += `<div style="font-size:12px;color:var(--muted);margin-top:8px;">Pro Kasse der günstigste Tarif${filter === 'alle' ? '' : ' im Modell ' + (modelNames[filter] || filter)} · ${ranked.length} Kassen an deinem Wohnort · Prämie pro Monat</div>`;
+      html += `<div style="font-size:12px;color:var(--muted);margin-top:8px;">Pro Kasse der günstigste Tarif${filter === 'alle' ? '' : ' im Modell ' + (modelNames[filter] || filter)} · ${ranked.length} Kassen an deinem Wohnort · Prämie pro Monat laut BAG${refund ? `, auf der Rechnung ziehen alle Kassen noch CHF ${fmt(refund)} Umweltabgabe ab` : ''}</div>`;
       listEl.innerHTML = html;
     }
 

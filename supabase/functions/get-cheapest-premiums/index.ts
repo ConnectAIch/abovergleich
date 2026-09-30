@@ -7,6 +7,11 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const PREMIUM_YEAR = 2027;
 const PREV_YEAR = PREMIUM_YEAR - 1;
 
+// Rückverteilung der Umweltabgaben (CO2/VOC) pro Person und Monat. Die Kassen
+// ziehen sie direkt auf der Prämienrechnung ab, darum steht auf der Rechnung
+// weniger als die BAG-Prämie. Quelle BAFU, via Merkblätter der Kassen.
+const ENV_REFUND: Record<number, number> = { 2026: 5.15, 2027: 4.75 };
+
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -36,7 +41,7 @@ Deno.serve(async (req: Request) => {
   }
 
   try {
-    const { plz, year_of_birth, franchise, accident_included } = await req.json();
+    const { plz, year_of_birth, franchise, accident_included, current_insurer_id } = await req.json();
 
     if (!plz || !year_of_birth || !franchise) {
       return json({ error: 'Missing required fields: plz, year_of_birth, franchise' }, 400);
@@ -109,6 +114,45 @@ Deno.serve(async (req: Request) => {
       return { ...p, premium: Number(p.premium), premium_prev: before };
     });
 
+    // 4. Eigene Kasse: alle Tarife über alle Franchisen und beide Unfall-
+    //    varianten, damit der Rechner einen Rechnungsbetrag zuordnen kann.
+    let current_options: unknown[] = [];
+    const cid = parseInt(current_insurer_id);
+    if (cid) {
+      // Für den Abgleich mit der Rechnung zählt die Altersklasse des Vorjahres:
+      // wer 2027 26 wird, hat 2026 noch als junge/r Erwachsene/r bezahlt.
+      const classFor = (year: number) => {
+        const a = year - parseInt(year_of_birth);
+        return a <= 18 ? 'AKL-KIN' : a <= 25 ? 'AKL-JUG' : 'AKL-ERW';
+      };
+      const fetchOwn = (year: number) => {
+        let q = supabase
+          .from('premiums')
+          .select('insurer_id, insurer_name, premium, model_type, tariff, tariff_name, franchise, accident_included')
+          .eq('year', year)
+          .eq('insurer_id', cid)
+          .eq('canton', canton)
+          .eq('region', premiumRegion)
+          .eq('age_class', classFor(year))
+          .limit(1000);
+        if (classFor(year) === 'AKL-KIN') q = q.eq('age_subgroup', 'K1');
+        return q;
+      };
+      const [{ data: ownCur }, { data: ownPrev }] = await Promise.all([fetchOwn(PREMIUM_YEAR), fetchOwn(PREV_YEAR)]);
+      const prevOwn = new Map<string, number>();
+      for (const p of (ownPrev || []) as (Row & { franchise: number; accident_included: boolean })[]) {
+        prevOwn.set(`${p.tariff.toLowerCase()}|${p.franchise}|${p.accident_included}`, Number(p.premium));
+      }
+      current_options = ((ownCur || []) as (Row & { franchise: number; accident_included: boolean })[]).map(p => {
+        let before: number | null = null;
+        for (const t of tariffCandidates(p.tariff)) {
+          const hit = prevOwn.get(`${t}|${p.franchise}|${p.accident_included}`);
+          if (hit !== undefined) { before = hit; break; }
+        }
+        return { ...p, premium: Number(p.premium), premium_prev: before };
+      });
+    }
+
     // Kompatibel zur bisherigen Antwort (älterer Frontend-Stand im Cache)
     const seen = new Set<string>();
     const standard_model = offers.filter(p => p.model_type === 'standard')
@@ -130,7 +174,10 @@ Deno.serve(async (req: Request) => {
       franchise: parseInt(franchise),
       accident_included: withAccident,
       insurer_count: new Set(offers.map(p => p.insurer_id)).size,
+      env_refund: ENV_REFUND[PREMIUM_YEAR] ?? null,
+      env_refund_prev: ENV_REFUND[PREV_YEAR] ?? null,
       offers,
+      current_options,
       standard_model,
       cheapest_any_model,
     });
