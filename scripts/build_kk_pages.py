@@ -395,6 +395,8 @@ ANALYTICS = """<script>
 
 def page(path, title, description, body, jsonld):
     url = f"{SITE}{path}"
+    if len(description) > 160 or len(title) > 70:
+        print(f"! {path}: Titel {len(title)} / Beschreibung {len(description)} Zeichen, Google kürzt ab")
     ld = "\n".join(f'<script type="application/ld+json">\n{json.dumps(x, ensure_ascii=False, indent=1)}\n</script>' for x in jsonld)
     return f"""<!DOCTYPE html>
 <html lang="de">
@@ -526,9 +528,10 @@ def canton_page(c, cur, prev_idx, cantons, insurers_c, regions):
     where = f"in der {region_label(main, len(regs), c)}" if len(regs) > 1 else "im ganzen Kanton"
 
     title = f"Günstigste Krankenkasse {name} {YEAR}: Prämien im Vergleich"
-    desc = (f"Krankenkasse {name} {YEAR}: günstigste Grundversicherung ab CHF {chf(cheapest['premium'])} "
-            f"({cheapest['insurer']}, Franchise 2'500). Prämien steigen im Schnitt {pct(info['change_pct'])}. "
-            f"Offizielle BAG-Daten, alle Kassen.")
+    if len(title) > 65:
+        title = f"Krankenkasse {name} {YEAR}: die günstigsten Prämien"
+    desc = (f"Krankenkasse {name} {YEAR}: ab CHF {chf(cheapest['premium'])} ({cheapest['insurer']}, Franchise 2'500), "
+            f"Prämien im Schnitt {pct(info['change_pct'])}. Alle Kassen, BAG-Daten, Preistreue-Rating.")
 
     parts = [crumbs_html([("Krankenkassen-Vergleich", "/"), ("Kantone", "/krankenkasse/"), (name, path)])]
     parts.append(f'<div class="article-badge">Prämien {YEAR}</div>')
@@ -1111,10 +1114,10 @@ def kasse_page(i, cur, by_canton_cur, prev_idx, insurers, ic, top3_cur, kv):
     group_name = group.split(" (")[0] if group else None
     siblings = [j for j in KASSE_SLUG if j != i and ((kv.get(j) or {}).get("group") or "").split(" (")[0] == group_name] if group_name else []
 
-    title = f"{name} Prämien {YEAR}: Erhöhung je Kanton und günstigere Modelle"
-    desc = (f"{name} {YEAR}: Standardprämie im Schnitt {pct(chg)} gegenüber {PREV}. "
-            f"Alle Kantone, alle Modelle, Vergleich mit den anderen Kassen und Kündigungsadresse. Offizielle BAG-Daten.") if chg is not None else \
-           (f"{name} {YEAR}: Prämien in allen Kantonen, Modelle und Vergleich mit den anderen Kassen. Offizielle BAG-Daten.")
+    title = f"{name} Prämien {YEAR}: Erhöhung, Modelle und Rating"
+    desc = (f"{name} {YEAR}: Standardprämie {pct(chg)} gegenüber {PREV}. Alle Kantone und Modelle, "
+            f"Preistreue-Note und Kündigungsadresse. Offizielle BAG-Daten.") if chg is not None else \
+           (f"{name} {YEAR}: Prämien in allen Kantonen, Modelle, Preistreue-Note und Kündigungsadresse. BAG-Daten.")
 
     p = [crumbs_html([("Krankenkassen-Vergleich", "/"), ("Kassen", "/kasse/"), (name, path)])]
     p.append(f'<div class="article-badge">Prämien {YEAR}</div>')
@@ -1376,7 +1379,8 @@ def write_sitemap(paths):
     static = [("/", "1.0"), ("/hausratversicherung/", "0.9"), ("/methode/", "0.6"),
               ("/blog/beste-franchise-schweiz/", "0.7"), ("/blog/hmo-telmed-hausarzt-erklaert/", "0.7"),
               ("/blog/unfallversicherung-schweiz-ausland/", "0.7"), ("/blog/provisionen-zusatzversicherung/", "0.7"),
-              ("/blog/krankenkasse-mit-26/", "0.7")]
+              ("/blog/krankenkasse-mit-26/", "0.7"),
+              ("/blog/", "0.6")]
     items = [(p, pr) for p, pr in static] + [(p, "0.8") for p in paths]
     body = "\n".join(f"  <url>\n    <loc>{SITE}{p}</loc>\n    <lastmod>{today}</lastmod>\n    <priority>{pr}</priority>\n  </url>"
                      for p, pr in items)
