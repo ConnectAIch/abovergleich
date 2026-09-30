@@ -569,7 +569,7 @@ def canton_page(c, cur, prev_idx, cantons, insurers_c, regions):
     qa = [
         (f"Welche Krankenkasse ist {YEAR} im Kanton {name} am günstigsten?",
          f"Für Erwachsene mit Franchise 2'500 und Unfalldeckung ist {cheapest['insurer']} "
-         f"({MODEL_LABEL[cheapest['model']]}) mit CHF {chf(cheapest['premium'])} pro Monat am günstigsten ({where}). "
+         f"({MODEL_LABEL[cheapest['model']]}) mit CHF {chf(cheapest['premium'])} pro Monat am günstigsten, {where}. "
          f"Im Standardmodell mit Franchise 300 ist es {std_300[0]['insurer']} mit CHF {chf(std_300[0]['premium'])}."),
         (f"Wie stark steigen die Krankenkassenprämien {YEAR} im Kanton {name}?",
          f"Die Standardprämie für Erwachsene mit Franchise 300 steigt im Kanton {name} im Schnitt um "
