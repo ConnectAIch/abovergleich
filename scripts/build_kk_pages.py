@@ -29,13 +29,14 @@ import html
 import json
 import os
 import re
+import statistics as st
 import sys
 from collections import defaultdict
 from datetime import date
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
-from import_premiums import build_rows, load_env  # noqa: E402
+from import_premiums import build_rows, load_env, read_csv  # noqa: E402
 from premium_analysis import INSURER_NAMES  # noqa: E402
 
 YEAR = 2027
@@ -117,16 +118,17 @@ def load_regions():
 
 
 def index_rows(rows):
-    """(canton, region, insurer, tariff, franchise) -> row"""
-    return {(r["canton"], r["region"], r["insurer_id"], r["tariff"], r["franchise"]): r for r in rows}
+    """(canton, region, insurer, tariff, franchise) -> row. Tarifcode klein
+    geschrieben, Swica schreibt denselben Tarif 2026 «CASA» und 2027 «Casa»."""
+    return {(r["canton"], r["region"], r["insurer_id"], r["tariff"].lower(), r["franchise"]): r for r in rows}
 
 
 def tariff_match(prev_idx, r, franchise):
     """Vorjahresprämie desselben Tarifs. Einige Tarifcodes wurden umbenannt,
     z.B. 'Santé (HMO)' hiess vorher 'HMO'."""
     base = (r["canton"], r["region"], r["insurer_id"])
-    cands = [r["tariff"]]
-    m = re.match(r"^(.*?)\s*\((.*)\)\s*$", r["tariff"])
+    cands = [r["tariff"].lower()]
+    m = re.match(r"^(.*?)\s*\((.*)\)\s*$", r["tariff"].lower())
     if m:
         cands += [m.group(2), m.group(1)]
     for c in cands:
@@ -227,6 +229,93 @@ def ranking(rows, canton, region, franchise, prev_idx, standard_only=False, n=10
             "tariff": r["tariff_name"], "premium": r["premium"],
             "change": (r["premium"] / before - 1) * 100 if before else None,
         })
+    return out
+
+
+def _cands(t):
+    t = t.lower()
+    m = re.match(r"^(.*?)\s*\((.*)\)\s*$", t)
+    return [t] + ([m.group(2), m.group(1)] if m else [])
+
+
+def _regions(rows, franchise, accident):
+    out = defaultdict(dict)
+    for r in rows:
+        if r["franchise"] == franchise and r["accident_included"] == accident:
+            out[(r["canton"], r["region"])][(r["insurer_id"], r["tariff"].lower())] = r
+    return out
+
+
+def _find(reg, r):
+    for c in _cands(r["tariff"]):
+        hit = reg.get((r["insurer_id"], c))
+        if hit:
+            return hit
+    return None
+
+
+def _ranked(reg):
+    best = {}
+    for (i, _), r in reg.items():
+        if i not in best or r["premium"] < best[i]["premium"]:
+            best[i] = r
+    return sorted(best.values(), key=lambda r: r["premium"])
+
+
+def jojo_analysis():
+    """Wie entwickelt sich der günstigste Tarif des Vorjahres? Pro Prämienregion
+    der günstigste Tarif (Erwachsene, Franchise 2'500, ohne Unfall, alle Modelle)
+    und derselbe Tarif ein Jahr später, verglichen mit dem Median aller Tarife
+    der Region. Regionen, in denen der Tarif wegfällt, zählen nicht."""
+    years = [y for y in (YEAR - 2, PREV, YEAR) if (DATA / f"praemien_{y}.csv").exists()]
+    names = {}
+    for y in years:
+        for r in read_csv(DATA / f"praemien_{y}.csv"):
+            i = r["Versicherer"].lstrip("0")
+            names[int(i)] = INSURER_NAMES.get(i, f"Nr. {i}")
+    idx = {y: _regions([r for r in build_rows(y, names) if r["age_class"] == "AKL-ERW"], 2500, False) for y in years}
+
+    def step(y0, y1):
+        res = []
+        for k, reg in idx[y0].items():
+            if k not in idx[y1]:
+                continue
+            win = _ranked(reg)[0]
+            nxt = _find(idx[y1][k], win)
+            chs = [_find(idx[y1][k], r)["premium"] / r["premium"] - 1 for r in reg.values() if _find(idx[y1][k], r)]
+            if not nxt or not chs:
+                continue
+            pos = sum(1 for x in _ranked(idx[y1][k]) if x["premium"] < nxt["premium"]) + 1
+            res.append({"canton": k[0], "region": k[1], "insurer": win["insurer_name"], "tariff": win["tariff_name"],
+                        "model": win["model_type"], "before": win["premium"], "after": nxt["premium"],
+                        "change": (nxt["premium"] / win["premium"] - 1) * 100, "market": st.median(chs) * 100,
+                        "rank_after": pos, "n_after": len(_ranked(idx[y1][k]))})
+        return res
+
+    out = {}
+    for y0, y1 in [(PREV, YEAR), (YEAR - 2, PREV)]:
+        if y0 in idx and y1 in idx:
+            r = step(y0, y1)
+            out[f"{y0}-{y1}"] = {
+                "regions": len(r),
+                "winner_change": st.mean(x["change"] for x in r),
+                "market_change": st.mean(x["market"] for x in r),
+                "still_first": sum(1 for x in r if x["rank_after"] == 1),
+                "out_of_top5": sum(1 for x in r if x["rank_after"] > 5),
+                "rows": sorted(r, key=lambda x: -x["change"]),
+            }
+    # gleiche Kasse, anderes Modell: Standard gegen das günstigste andere Modell
+    gaps = []
+    for reg in idx[YEAR].values():
+        by = defaultdict(list)
+        for (i, _), r in reg.items():
+            by[i].append(r)
+        for rs in by.values():
+            std = [r["premium"] for r in rs if r["model_type"] == "standard"]
+            oth = [r["premium"] for r in rs if r["model_type"] != "standard"]
+            if std and oth:
+                gaps.append((min(std) - min(oth)) * 12)
+    out["model_switch_median"] = st.median(gaps)
     return out
 
 
@@ -529,7 +618,7 @@ def hub_page(cantons, cheapest_by_canton):
     return path, page(path, title, desc, "\n".join(body), jsonld)
 
 
-def report_page(cantons, insurers, nat, model_counts):
+def report_page(cantons, insurers, nat, model_counts, jojo):
     path = f"/krankenkassenpraemien-{YEAR}/"
     by_change = sorted(cantons.items(), key=lambda x: -x[1]["change_pct"])
     big = sorted([x for x in insurers.values() if x["bestand"] >= MIN_BESTAND_RANKING], key=lambda x: x["change_pct"])
@@ -585,6 +674,7 @@ def report_page(cantons, insurers, nat, model_counts):
         f"Aufgeführt sind Kassen mit mindestens {chf(MIN_BESTAND_RANKING, 0)} Versicherten. Wer am wenigsten aufschlägt, steht oben.</p>",
         f'<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Kasse</th><th class="num">vs. {PREV}</th></tr></thead>'
         f'<tbody>{ins_rows}</tbody></table></div>',
+        *jojo_html(jojo),
         f"<h2>Welches Modell ist {YEAR} am günstigsten?</h2>",
         f"<p>In wie vielen Kantonen stellt welches Modell die günstigste Prämie (Erwachsene, Franchise 300, Hauptregion)? "
         f"Das BAG teilt die Modelle ab {YEAR} neu ein: Alternativ steht für flexible Modelle, bei denen du zwischen Hausarzt, "
@@ -610,6 +700,38 @@ def report_page(cantons, insurers, nat, model_counts):
         "mainEntityOfPage": f"{SITE}{path}", "inLanguage": "de-CH",
     }]
     return path, page(path, title, desc, "\n".join(body), jsonld)
+
+
+def jojo_html(jojo):
+    cur = jojo.get(f"{PREV}-{YEAR}")
+    if not cur:
+        return []
+    prev = jojo.get(f"{YEAR - 2}-{PREV}")
+    rows = "".join(
+        f'<tr><td><a href="/krankenkasse/{CANTONS[x["canton"]][1]}/">{e(CANTONS[x["canton"]][0])}</a>'
+        f'<span class="sub">{"Region " + x["region"][-1] if x["region"][-1] != "0" else "ganzer Kanton"}</span></td>'
+        f'<td><strong>{e(x["insurer"])}</strong><span class="sub">{MODEL_LABEL[x["model"]]} · {e(x["tariff"])}</span></td>'
+        f'<td class="num">CHF {chf(x["before"])}<span class="sub">→ CHF {chf(x["after"])}</span></td>'
+        f'<td class="num kk-up">{pct(x["change"])}<span class="sub">Markt {pct(x["market"])}</span></td>'
+        f'<td class="num">{x["rank_after"]} / {x["n_after"]}</td></tr>'
+        for x in cur["rows"][:10])
+    prev_txt = (f" Im Jahr davor war es gleich: Die Sieger von {YEAR - 2} stiegen um {pct(prev['winner_change'])}, "
+                f"der Markt um {pct(prev['market_change'])}." if prev else "")
+    return [
+        f'<h2 id="vorjahressieger">Der günstigste Tarif vom letzten Jahr schlägt am stärksten auf</h2>',
+        f"<p>Wir haben in jeder Prämienregion den günstigsten Tarif von {PREV} genommen und geschaut, was er {YEAR} kostet "
+        f"(Erwachsene, Franchise 2'500, ohne Unfall). Ergebnis über {cur['regions']} Regionen: Der Vorjahressieger steigt im Schnitt um "
+        f"<strong>{pct(cur['winner_change'])}</strong>, der Median aller Tarife in derselben Region um {pct(cur['market_change'])}. "
+        f"Nur in {cur['still_first']} von {cur['regions']} Regionen ist er noch der günstigste, in {cur['out_of_top5']} fällt er aus den Top 5.{prev_txt}</p>",
+        f"<p>Wer einmal zur günstigsten Kasse wechselt und dann bleibt, verliert den Vorsprung also oft schon im nächsten Jahr. "
+        f"Es lohnt sich, jedes Jahr neu zu vergleichen. Oft reicht auch ein anderes Modell bei der eigenen Kasse: "
+        f"Der Wechsel vom Standardmodell ins günstigste andere Modell derselben Kasse spart im Median "
+        f"<strong>CHF {chf(jojo['model_switch_median'], 0)} pro Jahr</strong>.</p>",
+        f'<p>Die zehn stärksten Aufschläge bei Vorjahressiegern:</p>',
+        f'<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Region</th><th>Sieger {PREV}</th>'
+        f'<th class="num">Prämie</th><th class="num">{YEAR}</th><th class="num">Rang {YEAR}</th></tr></thead><tbody>{rows}</tbody></table></div>',
+        f'<p class="kk-note">Regionen, in denen der Siegertarif {YEAR} nicht mehr angeboten wird oder umbenannt wurde, sind nicht mitgezählt.</p>',
+    ]
 
 
 def insights_block(cantons, insurers, nat, top3_prev, top3_cur):
@@ -782,13 +904,14 @@ def main():
         paths.append(path)
         cheapest[c] = ranking(by_canton_cur[c], c, main_region(by_canton_cur[c], c), 2500, prev_idx, n=1)[0]
 
+    jojo = jojo_analysis()
     model_counts = defaultdict(int)
     for c in CANTONS:
         reg = main_region(by_canton_cur[c], c)
         best = min((r for r in by_canton_cur[c] if r["region"] == reg and r["franchise"] == 300), key=lambda r: r["premium"])
         model_counts[best["model_type"]] += 1
 
-    for fn in (lambda: hub_page(cantons, cheapest), lambda: report_page(cantons, insurers, nat, model_counts)):
+    for fn in (lambda: hub_page(cantons, cheapest), lambda: report_page(cantons, insurers, nat, model_counts, jojo)):
         path, content = fn()
         write(path, content)
         paths.insert(0, path)
@@ -815,6 +938,7 @@ def main():
     (ROOT / "premium-insights.json").write_text(json.dumps({
         "generated": date.today().isoformat(), "data_year": YEAR, "previous_year": PREV,
         "bag_official": BAG_OFFICIAL, "national_change_standard_pct": round(nat, 2),
+        "vorjahressieger": {k: ({kk: vv for kk, vv in v.items() if kk != "rows"} if isinstance(v, dict) else v) for k, v in jojo.items()},
         "cantons": {c: {k: round(v, 2) for k, v in d.items()} for c, d in cantons.items()},
         "insurers": {str(i): {**d, "change_pct": round(d["change_pct"], 2), "bestand": round(d["bestand"])}
                      for i, d in insurers.items()},

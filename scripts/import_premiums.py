@@ -105,15 +105,16 @@ def previous_models(year):
     for r in read_csv(prev):
         m = MODEL_BY_TYPE.get(r["Tariftyp"])
         if m:
-            out[(r["Versicherer"].lstrip("0"), r["Tarif"])] = m
+            out[(r["Versicherer"].lstrip("0"), r["Tarif"].lower())] = m
     return out
 
 
 def praxis_model(insurer, tariff, name, prev):
     # Tarifcodes wurden 2027 teils umbenannt: "Santé (HMO)" hiess 2026 "HMO",
     # "Hausarztmodell 1 (NetMed 1)" hiess "Hausarztmodell 1".
-    candidates = [tariff]
-    m = re.match(r"^(.*?)\s*\((.*)\)\s*$", tariff)
+    # klein geschrieben: Swica schreibt denselben Tarif 2026 "CASA", 2027 "Casa"
+    candidates = [tariff.lower()]
+    m = re.match(r"^(.*?)\s*\((.*)\)\s*$", tariff.lower())
     if m:
         candidates += [m.group(2), m.group(1)]
     for c in candidates:

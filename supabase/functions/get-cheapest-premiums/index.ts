@@ -23,9 +23,11 @@ type Row = {
 
 // Einige Tarifcodes wurden zwischen den Jahren umbenannt, z.B. "Santé (HMO)"
 // hiess vorher "HMO". Gleiche Logik wie scripts/build_kk_pages.py.
+// Klein geschrieben, Swica schreibt denselben Tarif 2026 "CASA" und 2027 "Casa".
 function tariffCandidates(tariff: string): string[] {
-  const m = tariff.match(/^(.*?)\s*\((.*)\)\s*$/);
-  return m ? [tariff, m[2], m[1]] : [tariff];
+  const t = tariff.toLowerCase();
+  const m = t.match(/^(.*?)\s*\((.*)\)\s*$/);
+  return m ? [t, m[2], m[1]] : [t];
 }
 
 Deno.serve(async (req: Request) => {
@@ -96,7 +98,7 @@ Deno.serve(async (req: Request) => {
     }
 
     const prevByTariff = new Map<string, number>();
-    for (const p of (prev || []) as Row[]) prevByTariff.set(`${p.insurer_id}|${p.tariff}`, Number(p.premium));
+    for (const p of (prev || []) as Row[]) prevByTariff.set(`${p.insurer_id}|${p.tariff.toLowerCase()}`, Number(p.premium));
 
     const offers = ((cur || []) as Row[]).map(p => {
       let before: number | null = null;

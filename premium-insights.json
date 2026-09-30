@@ -17,6 +17,23 @@
   "source_url": "https://www.srf.ch/news/schweiz/erneuter-anstieg-krankenkassenpraemien-steigen-2027-um-5-prozent"
  },
  "national_change_standard_pct": 4.62,
+ "vorjahressieger": {
+  "2026-2027": {
+   "regions": 36,
+   "winner_change": 7.741538212753925,
+   "market_change": 5.44489680154176,
+   "still_first": 8,
+   "out_of_top5": 9
+  },
+  "2025-2026": {
+   "regions": 42,
+   "winner_change": 8.488122280764511,
+   "market_change": 4.7795983025403235,
+   "still_first": 14,
+   "out_of_top5": 7
+  },
+  "model_switch_median": 871.1999999999999
+ },
  "cantons": {
   "AG": {
    "avg_standard": 603.31,
