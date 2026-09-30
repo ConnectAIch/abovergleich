@@ -10,7 +10,8 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 //   GET ?stop=<token>    meldet ab, leitet auf abovergleich.com zurück
 //
 // Secrets: RESEND_API_KEY, optional WECKER_FROM
-// (Standard «abovergleich.com <hello@handyabo.com>», Domain bei Resend verifiziert).
+// (Standard «abovergleich.com <wecker@abovergleich.com>», Domain bei Resend verifiziert;
+// Antworten gehen an hello@handyabo.com, das Postfach hinter der öffentlichen Kontaktadresse).
 
 const SITE = 'https://abovergleich.com';
 const SELF = 'https://zexpmaegqsayleaohiip.supabase.co/functions/v1/wecker';
@@ -45,7 +46,7 @@ async function sendMail(to: string, subject: string, html: string, stopUrl?: str
     method: 'POST',
     headers: { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      from: Deno.env.get('WECKER_FROM') || 'abovergleich.com <hello@handyabo.com>',
+      from: Deno.env.get('WECKER_FROM') || 'abovergleich.com <wecker@abovergleich.com>',
       reply_to: 'hello@handyabo.com',
       to: [to], subject, html, headers,
     }),

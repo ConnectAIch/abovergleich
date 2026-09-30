@@ -42,7 +42,7 @@ async function sendMail(to: string, subject: string, html: string, stopUrl: stri
     method: 'POST',
     headers: { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      from: Deno.env.get('WECKER_FROM') || 'abovergleich.com <hello@handyabo.com>',
+      from: Deno.env.get('WECKER_FROM') || 'abovergleich.com <wecker@abovergleich.com>',
       reply_to: 'hello@handyabo.com',
       to: [to], subject, html,
       headers: { 'List-Unsubscribe': `<${stopUrl}>`, 'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click' },
