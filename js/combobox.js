@@ -92,6 +92,11 @@
       let left = Math.min(r.left, window.innerWidth - w - 8);
       panel.style.width = w + 'px';
       panel.style.left = Math.max(8, left) + 'px';
+      // Liste nie höher als der freie Platz, sonst ragt sie bei offener
+      // Tastatur aus dem Bild
+      const search = panel.querySelector('.cbx-search');
+      const room = Math.max(window.innerHeight - r.bottom, r.top) - 20 - (search ? search.offsetHeight : 0);
+      list.style.maxHeight = Math.max(120, Math.min(264, room)) + 'px';
       const below = window.innerHeight - r.bottom;
       const h = panel.offsetHeight;
       panel.style.top = (below < h + 12 && r.top > h + 12 ? r.top - h - 6 : r.bottom + 6) + 'px';
@@ -117,9 +122,13 @@
       place();
       btn.setAttribute('aria-expanded', 'true');
       openCombo = api;
-      (input || btn).focus();
+      // Auf dem Handy nicht ins Suchfeld springen: die Tastatur würde die
+      // halbe Liste verdecken. Wer suchen will, tippt ins Feld.
+      if (input && !window.matchMedia('(pointer: coarse)').matches) input.focus(); else btn.focus();
       setTimeout(() => document.addEventListener('mousedown', outside), 0);
-      window.addEventListener('resize', close);
+      // Nicht schliessen: auf Android löst schon das Aufgehen der Tastatur ein
+      // resize aus, die Liste ging dann sofort wieder zu. Nur neu platzieren.
+      window.addEventListener('resize', place);
       window.addEventListener('scroll', onScroll, true);
     }
 
@@ -129,7 +138,7 @@
       panel = list = input = null;
       btn.setAttribute('aria-expanded', 'false');
       document.removeEventListener('mousedown', outside);
-      window.removeEventListener('resize', close);
+      window.removeEventListener('resize', place);
       window.removeEventListener('scroll', onScroll, true);
       if (openCombo === api) openCombo = null;
     }
