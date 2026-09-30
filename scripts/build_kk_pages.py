@@ -38,6 +38,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 from import_premiums import build_rows, load_env, read_csv  # noqa: E402
 from premium_analysis import INSURER_NAMES  # noqa: E402
+import kv_verzeichnis  # noqa: E402
 
 YEAR = 2027
 PREV = YEAR - 1
@@ -225,7 +226,7 @@ def ranking(rows, canton, region, franchise, prev_idx, standard_only=False, n=10
     for r in sorted(best.values(), key=lambda x: x["premium"])[:n]:
         before = tariff_match(prev_idx, r, franchise)
         out.append({
-            "insurer": r["insurer_name"], "model": r["model_type"],
+            "insurer_id": r["insurer_id"], "insurer": r["insurer_name"], "model": r["model_type"],
             "tariff": r["tariff_name"], "premium": r["premium"],
             "change": (r["premium"] / before - 1) * 100 if before else None,
         })
@@ -419,6 +420,8 @@ def page(path, title, description, body, jsonld):
     <div class="footer-note">Unabh&auml;ngiger Vergleich f&uuml;r die Schweiz. Pr&auml;mien: Bundesamt f&uuml;r Gesundheit (BAG).</div>
     <div class="footer-links">
       <a href="/krankenkasse/">Kantone</a>
+      <a href="/kasse/">Kassen</a>
+      <a href="/krankenkasse-kuendigen/">K&uuml;ndigen</a>
       <a href="/krankenkassenpraemien-{YEAR}/">Pr&auml;mien {YEAR}</a>
       <a href="/methode/">Methode</a>
       <a href="/impressum/">Impressum</a>
@@ -466,7 +469,7 @@ def rank_table(rows, show_model=True):
         cls = "kk-up" if (r["change"] or 0) > 0 else "kk-down"
         sub = f'<span class="sub">{MODEL_LABEL[r["model"]]} · {e(r["tariff"])}</span>' if show_model else ""
         body.append(
-            f'<tr><td>{n}</td><td><strong>{e(r["insurer"])}</strong>{sub}</td>'
+            f'<tr><td>{n}</td><td><strong>{kasse_link(r["insurer_id"], r["insurer"])}</strong>{sub}</td>'
             f'<td class="num">CHF {chf(r["premium"])}</td>'
             f'<td class="num {cls if r["change"] is not None else ""}">{pct(r["change"])}</td></tr>')
     return f'<div class="kk-table-wrap"><table class="kk-table"><thead>{head}</thead><tbody>{"".join(body)}</tbody></table></div>'
@@ -752,7 +755,7 @@ def insights_block(cantons, insurers, nat, top3_prev, top3_cur):
         f'<a href="/krankenkasse/{slug}/" style="color:var(--accent-dark);">{e(name)}</a>'
         for name, slug in sorted(CANTONS.values()))
     trs = "".join(
-        f'<tr style="border-bottom:1px solid var(--border);"><td style="padding:10px 12px;font-weight:600;">{e(INSURER_NAMES[str(i)])}</td>'
+        f'<tr style="border-bottom:1px solid var(--border);"><td style="padding:10px 12px;font-weight:600;">{kasse_link(i)}</td>'
         f'<td style="text-align:center;padding:10px 12px;">{top3_prev.get(i, 0)} / 26</td>'
         f'<td style="text-align:center;padding:10px 12px;">{top3_cur.get(i, 0)} / 26</td></tr>' for i in cons)
 
@@ -793,10 +796,336 @@ def insights_block(cantons, insurers, nat, top3_prev, top3_cur):
       </table></div>
     </div>
 
-    <div style="font-size:12px;color:var(--muted);text-align:center;">Quelle: BAG · Erwachsene, Franchise 300, mit Unfall · <a href="/krankenkassenpraemien-{YEAR}/" style="color:var(--accent-dark);">Ganze Auswertung {YEAR}</a></div>
+    <div style="font-size:12px;color:var(--muted);text-align:center;">Quelle: BAG · Erwachsene, Franchise 300, mit Unfall · <a href="/krankenkassenpraemien-{YEAR}/" style="color:var(--accent-dark);">Ganze Auswertung {YEAR}</a> · <a href="/kasse/" style="color:var(--accent-dark);">Alle Kassen</a> · <a href="/krankenkasse-kuendigen/" style="color:var(--accent-dark);">Kündigen bis {DEADLINE}</a></div>
   </div>
 </section>
 <!-- INSIGHTS:END -->"""
+
+
+
+# ── Kassenseiten und Kündigung ─────────────────────────────────────────────
+
+KASSE_SLUG = {}   # wird in main() gefüllt: BAG-Nummer -> Slug
+
+
+def slugify(name):
+    s = name.lower()
+    for a, b in (("ä", "ae"), ("ö", "oe"), ("ü", "ue"), ("è", "e"), ("é", "e"), ("’", ""), ("'", "")):
+        s = s.replace(a, b)
+    return re.sub(r"[^a-z0-9]+", "-", s).strip("-")
+
+
+def kasse_link(i, text=None):
+    text = e(text or INSURER_NAMES[str(i)])
+    return f'<a href="/kasse/{KASSE_SLUG[i]}/">{text}</a>' if i in KASSE_SLUG else text
+
+
+def people(n):
+    if n >= 1_000_000:
+        return f"{n / 1_000_000:.1f}".replace(".", ",") + " Mio."
+    return chf(round(n, -3), 0)
+
+
+def address_lines(kv, i):
+    d = kv.get(i, {})
+    return [d.get("name") or INSURER_NAMES[str(i)]] + d.get("address", [])
+
+
+def kasse_page(i, cur, by_canton_cur, prev_idx, insurers, ic, top3_cur, kv):
+    name = INSURER_NAMES[str(i)]
+    path = f"/kasse/{KASSE_SLUG[i]}/"
+    own = [r for r in cur if r["insurer_id"] == i]
+    cants = sorted({r["canton"] for r in own} & set(CANTONS), key=lambda c: CANTONS[c][0])
+    info = insurers.get(i)
+
+    rows, first_in = [], []
+    for c in cants:
+        main = main_region(by_canton_cur[c], c)
+        rk = ranking(by_canton_cur[c], c, main, 2500, prev_idx, n=999)
+        pos = next((n for n, x in enumerate(rk, 1) if x["insurer_id"] == i), None)
+        v = ic.get((c, i))
+        chg = sum(x for _, x in v) / len(v) * 100 if v else None
+        lvl = sum(p for p, _ in v) / len(v) if v else None
+        if pos == 1:
+            first_in.append(c)
+        best = rk[pos - 1] if pos else None
+        rows.append(
+            f'<tr><td><a href="/krankenkasse/{CANTONS[c][1]}/">{e(CANTONS[c][0])}</a></td>'
+            f'<td class="num">{"CHF " + chf(lvl, 0) if lvl else "–"}</td>'
+            f'<td class="num {"kk-up" if (chg or 0) > 0 else "kk-down"}">{pct(chg) if chg is not None else "–"}</td>'
+            f'<td>{("CHF " + chf(best["premium"])) if best else "–"}'
+            f'{("<span class=sub>" + MODEL_LABEL[best["model"]] + " · " + e(best["tariff"]) + "</span>") if best else ""}</td>'
+            f'<td class="num">{f"{pos} / {len(rk)}" if pos else "–"}</td></tr>')
+
+    # Modellwechsel innerhalb der Kasse: Standard gegen günstigstes anderes Modell
+    by_reg = defaultdict(list)
+    for r in own:
+        if r["franchise"] == 2500:
+            by_reg[(r["canton"], r["region"])].append(r)
+    gaps = []
+    for rs in by_reg.values():
+        std = [r["premium"] for r in rs if r["model_type"] == "standard"]
+        oth = [r["premium"] for r in rs if r["model_type"] != "standard"]
+        if std and oth:
+            gaps.append((min(std) - min(oth)) * 12)
+    gap = st.median(gaps) if gaps else None
+
+    models = defaultdict(set)
+    for r in own:
+        if r["model_type"] != "standard":
+            models[r["model_type"]].add(r["tariff_name"])
+    model_html = "".join(f"<li><strong>{MODEL_LABEL[m]}:</strong> {e(', '.join(sorted(t)))}</li>"
+                         for m, t in sorted(models.items(), key=lambda x: MODEL_LABEL[x[0]]))
+
+    chg = info["change_pct"] if info else None
+    rel = ""
+    if chg is not None:
+        rel = ("weniger als" if chg < BAG_OFFICIAL["change_pct"] else "mehr als")
+    t3 = top3_cur.get(i, 0)
+    group = (kv.get(i) or {}).get("group")
+    group_name = group.split(" (")[0] if group else None
+    siblings = [j for j in KASSE_SLUG if j != i and ((kv.get(j) or {}).get("group") or "").split(" (")[0] == group_name] if group_name else []
+
+    title = f"{name} Prämien {YEAR}: Erhöhung je Kanton und günstigere Modelle"
+    desc = (f"{name} {YEAR}: Standardprämie im Schnitt {pct(chg)} gegenüber {PREV}. "
+            f"Alle Kantone, alle Modelle, Vergleich mit den anderen Kassen und Kündigungsadresse. Offizielle BAG-Daten.") if chg is not None else \
+           (f"{name} {YEAR}: Prämien in allen Kantonen, Modelle und Vergleich mit den anderen Kassen. Offizielle BAG-Daten.")
+
+    p = [crumbs_html([("Krankenkassen-Vergleich", "/"), ("Kassen", "/kasse/"), (name, path)])]
+    p.append(f'<div class="article-badge">Prämien {YEAR}</div>')
+    p.append(f"<h1>{e(name)} Prämien {YEAR}</h1>")
+    p.append(f'<div class="article-meta">Offizielle Prämien des BAG · {len(cants)} {"Kanton" if len(cants) == 1 else "Kantone"}'
+             f'{" · rund " + people(info["bestand"]) + " Versicherte" if info and info["bestand"] >= 1000 else ""}</div>')
+    if chg is not None:
+        p.append(f'<p class="kk-lead">{e(name)} erhöht die Prämie im Standardmodell {YEAR} im Schnitt um <strong>{pct(chg)}</strong> '
+                 f'(Erwachsene, Franchise 300, gewichtet nach Versicherten je Kanton). Das ist {rel} die {BAG_OFFICIAL["change_pct"]:.1f}&#8239;%, '
+                 f'um die laut BAG die mittlere Prämie über alle Kassen steigt.</p>')
+    facts = []
+    if chg is not None:
+        facts.append((pct(chg), f"Standardprämie {YEAR} gegenüber {PREV}"))
+    facts.append((f"{t3} von 26", "Kantonen, in denen die Kasse zu den 3 günstigsten im Standardmodell gehört"))
+    if gap and gap > 0:
+        facts.append((f"CHF {chf(gap, 0)}", f"pro Jahr spart im Median, wer bei {e(name)} vom Standard- ins günstigste andere Modell wechselt"))
+    p.append('<div class="kk-facts">' + "".join(
+        f'<div class="kk-fact"><div class="kk-fact-val">{v}</div><div class="kk-fact-label">{l}</div></div>' for v, l in facts) + "</div>")
+    p.append(f'<a class="kk-cta" href="/?kasse={i}#kk-rechner">Mit deiner {e(name)}-Rechnung vergleichen &rarr;</a>')
+
+    p.append(f"<h2>{e(name)} {YEAR} in jedem Kanton</h2>")
+    p.append(f"<p>Ø Standard und Veränderung: Standardmodell, Franchise 300, mit Unfall, Mittel über die Prämienregionen. "
+             f"Günstigster Tarif und Rang: Franchise 2'500, mit Unfall, alle Modelle, Hauptregion des Kantons, Rang unter allen Kassen.</p>")
+    p.append(f'<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Kanton</th><th class="num">Ø Standard</th>'
+             f'<th class="num">vs. {PREV}</th><th>Günstigster Tarif</th><th class="num">Rang</th></tr></thead>'
+             f'<tbody>{"".join(rows)}</tbody></table></div>')
+    if first_in:
+        p.append(f"<p>Am günstigsten von allen Kassen ist {e(name)} {YEAR} in: "
+                 + ", ".join(f'<a href="/krankenkasse/{CANTONS[c][1]}/">{e(CANTONS[c][0])}</a>' for c in first_in) + ".</p>")
+
+    if model_html:
+        p.append(f"<h2>Modelle von {e(name)}</h2>")
+        p.append(f"<p>Neben dem Standardmodell mit freier Arztwahl bietet {e(name)} {YEAR} diese Tarife an "
+                 f"(nicht jeder in jedem Kanton). Die Leistungen sind in allen Modellen gleich, nur die erste Anlaufstelle unterscheidet sich.</p>")
+        p.append(f"<ul>{model_html}</ul>")
+
+    if siblings:
+        p.append(f"<h2>Gruppe {e(group_name)}</h2>")
+        p.append(f"<p>{e(name)} gehört zur Gruppe {e(group_name)}. Weitere Kassen der Gruppe mit eigenen Prämien: "
+                 + ", ".join(kasse_link(j) for j in sorted(siblings, key=lambda j: INSURER_NAMES[str(j)])) + ".</p>")
+
+    addr = address_lines(kv, i)
+    p.append(f"<h2>{e(name)} kündigen</h2>")
+    p.append(f"<p>Die Kündigung der Grundversicherung muss bis am <strong>{DEADLINE}</strong> bei {e(name)} eingetroffen sein, "
+             f"der Poststempel zählt nicht. Adresse laut BAG-Verzeichnis der zugelassenen Krankenversicherer:</p>")
+    p.append(f'<blockquote>{"<br>".join(e(l) for l in addr)}</blockquote>')
+    p.append(f'<p><a href="/krankenkasse-kuendigen/?kasse={i}">Kündigungsbrief an {e(name)} erstellen</a>, fertig zum Ausdrucken.</p>')
+
+    qa = []
+    if chg is not None:
+        qa.append((f"Wie stark steigen die Prämien von {name} {YEAR}?",
+                   f"Die Standardprämie für Erwachsene mit Franchise 300 steigt bei {name} im Schnitt um {pct(chg)}, gewichtet nach "
+                   f"Versicherten je Kanton. Laut BAG steigt die mittlere Prämie aller Kassen um {BAG_OFFICIAL['change_pct']:.1f} Prozent."))
+    qa.append((f"Ist {name} günstig?",
+               f"{name} gehört {YEAR} in {t3} von 26 Kantonen zu den drei günstigsten Kassen im Standardmodell"
+               + (f" und ist in {len(first_in)} {'Kanton' if len(first_in) == 1 else 'Kantonen'} die günstigste Kasse überhaupt (Franchise 2'500)." if first_in else ".")
+               + " Wie günstig es für dich ist, hängt von Wohnort, Franchise und Modell ab."))
+    qa.append((f"Bis wann kann ich {name} kündigen?",
+               f"Die Kündigung muss bis am {DEADLINE} bei {name} eingetroffen sein, dann wechselst du auf den 1. Januar {YEAR}. "
+               f"Adresse: {', '.join(addr)}."))
+    p.append('<div class="kk-faq"><h2>Häufige Fragen</h2>' + "".join(f"<h3>{e(q)}</h3><p>{e(a)}</p>" for q, a in qa) + "</div>")
+    p.append(f'<p class="kk-note">Quelle: Bundesamt für Gesundheit (BAG), Prämien {YEAR} und {PREV}; Versichertenbestand {YEAR - 2}. '
+             f'Angaben ohne Gewähr. <a href="/kasse/">Alle Kassen</a> · <a href="/krankenkassenpraemien-{YEAR}/#methode">Methode</a></p>')
+    return path, page(path, title, desc, "\n".join(p),
+                      [breadcrumb([("Krankenkassen-Vergleich", "/"), ("Kassen", "/kasse/"), (name, path)]), faq(qa)])
+
+
+def kasse_hub(insurers, top3_cur):
+    path = "/kasse/"
+    ids = sorted(KASSE_SLUG, key=lambda i: INSURER_NAMES[str(i)].lower())
+    rows = "".join(
+        f'<tr><td>{kasse_link(i)}</td>'
+        f'<td class="num">{people(insurers[i]["bestand"]) if i in insurers and insurers[i]["bestand"] >= 1000 else "–"}</td>'
+        f'<td class="num {"kk-up" if i in insurers and insurers[i]["change_pct"] > 0 else ""}">{pct(insurers[i]["change_pct"]) if i in insurers else "–"}</td>'
+        f'<td class="num">{top3_cur.get(i, 0)}</td></tr>' for i in ids)
+    body = [
+        crumbs_html([("Krankenkassen-Vergleich", "/"), ("Kassen", path)]),
+        f'<div class="article-badge">Prämien {YEAR}</div>',
+        f"<h1>Alle Krankenkassen: Prämien {YEAR} im Vergleich</h1>",
+        f'<div class="article-meta">{len(ids)} Kassen mit Grundversicherung · Offizielle BAG-Daten</div>',
+        f'<p class="kk-lead">Wie stark jede Kasse {YEAR} aufschlägt und wo sie zu den günstigsten gehört. '
+        f'Ein Klick auf die Kasse zeigt alle Kantone, Modelle und die Kündigungsadresse.</p>',
+        f'<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Kasse</th><th class="num">Versicherte</th>'
+        f'<th class="num">vs. {PREV}</th><th class="num">Top 3 in Kantonen</th></tr></thead><tbody>{rows}</tbody></table></div>',
+        f'<p class="kk-note">Veränderung: Standardmodell, Franchise 300, gewichtet nach Versicherten je Kanton. '
+        f'Top 3: in wie vielen der 26 Kantone die Kasse zu den drei günstigsten im Standardmodell gehört. '
+        f'Versicherte: Durchschnittsbestand {YEAR - 2} laut BAG.</p>',
+    ]
+    return path, page(path, f"Alle Krankenkassen {YEAR}: Prämienerhöhung je Kasse im Vergleich",
+                      f"Alle {len(ids)} Krankenkassen mit Grundversicherung {YEAR}: Prämienveränderung, Versicherte und wo sie günstig sind. Offizielle BAG-Daten.",
+                      "\n".join(body), [breadcrumb([("Krankenkassen-Vergleich", "/"), ("Kassen", path)])])
+
+
+KUENDIGEN_CSS = """
+  .kd-form { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:16px 0; }
+  .kd-form label { display:block; font-size:12px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; margin-bottom:4px; }
+  .kd-form input, .kd-form select, .kd-form textarea { width:100%; box-sizing:border-box; padding:10px 12px; border:1px solid var(--border2); border-radius:8px; font:inherit; font-size:15px; background:var(--surface); color:var(--text); }
+  .kd-form .full { grid-column:1 / -1; }
+  .kd-check { display:flex; gap:8px; align-items:flex-start; font-size:14px; color:var(--text2); }
+  .kd-check input { width:auto; margin-top:4px; }
+  #kd-brief { background:#fff; color:#111; border:1px solid var(--border2); border-radius:8px; padding:32px 36px; font-family:Arial,Helvetica,sans-serif; font-size:14px; line-height:1.55; white-space:pre-wrap; margin:12px 0; }
+  .kd-actions { display:flex; gap:10px; flex-wrap:wrap; }
+  .kd-actions button { background:var(--accent); color:var(--text); border:none; border-radius:10px; padding:12px 18px; font-weight:700; cursor:pointer; font-family:inherit; }
+  .kd-actions button.sec { background:var(--surface2); }
+  .kd-days { font-family:'Plus Jakarta Sans',sans-serif; font-size:28px; font-weight:800; }
+  @media (max-width:640px) { .kd-form { grid-template-columns:1fr; } #kd-brief { padding:20px; } }
+  @media print {
+    body * { visibility:hidden; }
+    #kd-brief, #kd-brief * { visibility:visible; }
+    #kd-brief { position:absolute; left:0; top:0; width:100%; border:none; padding:0; margin:0; font-size:12pt; }
+  }
+"""
+
+
+def kuendigen_page(kv):
+    path = "/krankenkasse-kuendigen/"
+    ids = sorted(KASSE_SLUG, key=lambda i: INSURER_NAMES[str(i)].lower())
+    data = [{"id": i, "name": INSURER_NAMES[str(i)], "address": address_lines(kv, i)} for i in ids]
+    end = f"31. Dezember {PREV}"
+    deadline_iso = f"{PREV}-11-30"
+    addr_rows = "".join(f'<tr><td>{kasse_link(i)}</td><td>{e(", ".join(address_lines(kv, i)))}</td></tr>' for i in ids)
+    qa = [
+        (f"Bis wann muss ich die Krankenkasse kündigen?",
+         f"Die Kündigung der Grundversicherung muss bis am {DEADLINE} bei der Kasse eingetroffen sein. "
+         f"Massgebend ist das Datum, an dem die Kasse den Brief erhält, nicht der Poststempel. Der Wechsel gilt ab 1. Januar {YEAR}."),
+        ("Muss ich per Einschreiben kündigen?",
+         "Nicht zwingend, aber empfohlen. Mit dem Einschreiben kannst du beweisen, dass die Kündigung rechtzeitig angekommen ist."),
+        ("Kann die neue Krankenkasse mich ablehnen?",
+         "Nein. In der Grundversicherung muss jede Kasse in ihrem Tätigkeitsgebiet alle Personen aufnehmen, ohne Gesundheitsfragen. "
+         "Bei Zusatzversicherungen ist das anders."),
+        ("Was passiert mit meiner Zusatzversicherung?",
+         "Nichts, wenn du sie nicht selbst kündigst. Die Zusatzversicherung kann bei der bisherigen Kasse bleiben, auch wenn du "
+         "die Grundversicherung wechselst. Für sie gelten eigene Fristen im Vertrag."),
+        ("Kann ich auch auf Ende Juni wechseln?",
+         "Nur im Standardmodell mit Franchise 300. Dann muss die Kündigung bis 31. März eintreffen, der Wechsel gilt ab 1. Juli."),
+    ]
+    body = f"""{crumbs_html([("Krankenkassen-Vergleich", "/"), ("Krankenkasse kündigen", path)])}
+<div class="article-badge">Frist {DEADLINE}</div>
+<h1>Krankenkasse kündigen: bis {DEADLINE.replace(' ' + str(PREV), '')}, mit Vorlage</h1>
+<div class="article-meta">Grundversicherung auf den 1. Januar {YEAR} wechseln · Brief in 2 Minuten</div>
+<p class="kk-lead">Die Kündigung der Grundversicherung muss bis am <strong>{DEADLINE}</strong> bei deiner Kasse <strong>eingetroffen</strong> sein. Der Poststempel zählt nicht. <span id="kd-left"></span></p>
+<a class="kk-cta" href="/#kk-rechner">Zuerst vergleichen: lohnt sich der Wechsel? &rarr;</a>
+
+<h2>So wechselst du in vier Schritten</h2>
+<ol>
+<li><strong>Neue Kasse wählen</strong> und dort für den 1. Januar {YEAR} anmelden. Sie muss dich ohne Gesundheitsfragen aufnehmen.</li>
+<li><strong>Bisherige Kasse kündigen</strong>, mit dem Brief unten. Unterschreiben nicht vergessen.</li>
+<li><strong>Per Einschreiben schicken</strong>, spätestens eine Woche vor dem {DEADLINE}.</li>
+<li><strong>Bestätigung abwarten.</strong> Die neue Kasse bestätigt dir und der alten Kasse schriftlich, dass du bei ihr versichert bist. Bis dahin bleibt die alte Versicherung bestehen, du bist also nie ohne Schutz.</li>
+</ol>
+<p>Wichtig: Wer bis 31. Dezember noch offene Prämien oder Kostenbeteiligungen bei der bisherigen Kasse hat, kann nicht wechseln. Offene Rechnungen vorher bezahlen.</p>
+
+<h2 id="vorlage">Kündigungsbrief erstellen</h2>
+<p>Der Brief entsteht nur in deinem Browser. Wir speichern und versenden nichts.</p>
+<div class="kd-form">
+  <div class="full"><label for="kd-kasse">Deine bisherige Kasse</label><select id="kd-kasse"></select></div>
+  <div><label for="kd-name">Vorname und Name</label><input id="kd-name" autocomplete="name"></div>
+  <div><label for="kd-nr">Versicherten-Nr. <span style="text-transform:none;font-weight:400;">(optional)</span></label><input id="kd-nr"></div>
+  <div><label for="kd-street">Strasse und Nr.</label><input id="kd-street" autocomplete="street-address"></div>
+  <div><label for="kd-city">PLZ und Ort</label><input id="kd-city" autocomplete="address-level2" placeholder="8004 Zürich"></div>
+  <div class="full"><label for="kd-more">Weitere versicherte Personen im selben Brief <span style="text-transform:none;font-weight:400;">(optional, eine pro Zeile, mit Geburtsdatum)</span></label><textarea id="kd-more" rows="2" placeholder="Anna Muster, 12.03.2015"></textarea></div>
+  <label class="kd-check full"><input type="checkbox" id="kd-zusatz" checked> Zusatzversicherungen behalten (nur die Grundversicherung kündigen)</label>
+</div>
+<div id="kd-brief"></div>
+<div class="kd-actions"><button id="kd-print">Drucken oder als PDF speichern</button><button id="kd-copy" class="sec">Text kopieren</button></div>
+
+<h2>Sonderfälle</h2>
+<ul>
+<li><strong>Nur das Modell oder die Franchise ändern, bei derselben Kasse:</strong> geht ebenfalls auf den 1. Januar. Die Frist steht in den Bedingungen deiner Kasse; sicher bist du, wenn du bis {DEADLINE} meldest.</li>
+<li><strong>Kündigung auf Ende Juni:</strong> nur im Standardmodell mit Franchise 300, Eingang bis 31. März.</li>
+<li><strong>Umzug ins Ausland oder Tod:</strong> die Versicherung endet ohne Frist mit dem Wegzug beziehungsweise dem Todestag.</li>
+</ul>
+
+<h2>Adressen aller Krankenkassen</h2>
+<p>Laut BAG-Verzeichnis der zugelassenen Krankenversicherer. Manche Kassen nennen auf ihrer Website zusätzlich eine eigene Adresse für Kündigungen, beide sind gültig.</p>
+<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Kasse</th><th>Adresse</th></tr></thead><tbody>{addr_rows}</tbody></table></div>
+
+<div class="kk-faq"><h2>Häufige Fragen</h2>{"".join(f"<h3>{e(q)}</h3><p>{e(a)}</p>" for q, a in qa)}</div>
+<p class="kk-note">Quellen: Bundesamt für Gesundheit (<a href="https://www.bag.admin.ch/de/praemien-und-kosten-antworten-auf-haeufige-fragen">Fragen zu Prämien und Wechsel</a>), <a href="https://www.bag.admin.ch/de/verzeichnisse-der-zugelassenen-kranken-und-rueckversicherer">Verzeichnis der zugelassenen Krankenversicherer</a>. Angaben ohne Gewähr.</p>
+
+<script>
+(function () {{
+  var KASSEN = {json.dumps(data, ensure_ascii=False)};
+  var END = {json.dumps(end)}, DEADLINE = new Date({json.dumps(deadline_iso)} + 'T23:59:59');
+  var $ = function (id) {{ return document.getElementById(id); }};
+  var sel = $('kd-kasse');
+  sel.add(new Option('Bitte wählen', ''));
+  KASSEN.forEach(function (k) {{ sel.add(new Option(k.name, k.id)); }});
+  var q = new URLSearchParams(location.search).get('kasse');
+  if (q) sel.value = q;
+
+  var days = Math.floor((DEADLINE - new Date()) / 86400000);
+  if (days >= 0) $('kd-left').textContent = days === 0 ? 'Heute ist der letzte Tag.' : 'Noch ' + days + ' Tage.';
+
+  function today() {{
+    return new Date().toLocaleDateString('de-CH', {{ day: 'numeric', month: 'long', year: 'numeric' }});
+  }}
+  function render() {{
+    var k = KASSEN.find(function (x) {{ return String(x.id) === sel.value; }});
+    var name = $('kd-name').value.trim() || 'Vorname Name';
+    var street = $('kd-street').value.trim() || 'Strasse Nr.';
+    var city = $('kd-city').value.trim() || 'PLZ Ort';
+    var ort = city.replace(/^\\d{{4}}\\s*/, '') || 'Ort';
+    var more = $('kd-more').value.split('\\n').map(function (s) {{ return s.trim(); }}).filter(Boolean);
+    var lines = [name, street, city, '', ''];
+    lines = lines.concat(k ? k.address : ['Name der Krankenkasse', 'Adresse']);
+    lines.push('', '', ort + ', ' + today(), '', '');
+    lines.push('Kündigung der obligatorischen Krankenpflegeversicherung (Grundversicherung)');
+    if ($('kd-nr').value.trim()) lines.push('Versicherten-Nr. ' + $('kd-nr').value.trim());
+    lines.push('', 'Sehr geehrte Damen und Herren', '');
+    lines.push((more.length ? 'Hiermit kündige ich die obligatorische Krankenpflegeversicherung nach KVG für mich und die folgenden Personen' :
+      'Hiermit kündige ich meine obligatorische Krankenpflegeversicherung nach KVG') + ' fristgerecht auf den ' + END + (more.length ? ':' : '.'));
+    more.forEach(function (m) {{ lines.push('- ' + m); }});
+    if ($('kd-zusatz').checked) lines.push('', 'Die Zusatzversicherungen sind von dieser Kündigung nicht betroffen und laufen weiter.');
+    lines.push('', 'Bitte bestätigen Sie mir den Eingang der Kündigung schriftlich.', '', 'Freundliche Grüsse', '', '', '', name);
+    $('kd-brief').textContent = lines.join('\\n');
+  }}
+  ['kd-kasse', 'kd-name', 'kd-nr', 'kd-street', 'kd-city', 'kd-more', 'kd-zusatz'].forEach(function (id) {{
+    $(id).addEventListener('input', render); $(id).addEventListener('change', render);
+  }});
+  $('kd-print').onclick = function () {{ render(); window.print(); }};
+  $('kd-copy').onclick = function () {{
+    render();
+    var t = $('kd-brief').textContent;
+    (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(
+      function () {{ $('kd-copy').textContent = 'Kopiert'; }},
+      function () {{ $('kd-copy').textContent = 'Bitte markieren und kopieren'; }});
+  }};
+  render();
+}})();
+</script>"""
+    html_out = page(path, f"Krankenkasse kündigen {PREV}: Frist {DEADLINE.replace(' ' + str(PREV), '')}, Vorlage und Adressen",
+                    f"Grundversicherung kündigen: bis {DEADLINE} muss die Kündigung bei der Kasse sein. Kostenlose Vorlage, Adressen aller Kassen, Schritt für Schritt.",
+                    body, [breadcrumb([("Krankenkassen-Vergleich", "/"), ("Krankenkasse kündigen", path)]), faq(qa)])
+    return path, html_out.replace("</style>", KUENDIGEN_CSS + "</style>", 1)
+
 
 
 def write_sitemap(paths):
@@ -834,6 +1163,8 @@ abovergleich.com hilft beim Sparen auf der Grundversicherung. Die Leistungen sin
 - [Krankenkassen-Vergleich {YEAR}]({SITE}/): Prämienrechner nach PLZ, Jahrgang, Franchise und Unfalldeckung. Vergleich mit der eigenen Kasse inklusive Veränderung zum Vorjahr.
 - [Krankenkassenprämien {YEAR}]({SITE}/krankenkassenpraemien-{YEAR}/): Auswertung, wie stark jede Kasse und jeder Kanton aufschlägt. BAG: +{BAG_OFFICIAL['change_pct']:.1f}% mittlere Prämie; Standardmodell nach unserer Auswertung {nat:+.1f}%.
 - [Günstigste Krankenkasse nach Kanton]({SITE}/krankenkasse/): Übersicht aller 26 Kantone.
+- [Alle Krankenkassen {YEAR}]({SITE}/kasse/): Prämienveränderung je Kasse, Seite pro Kasse mit Kantonen, Modellen und Kündigungsadresse.
+- [Krankenkasse kündigen]({SITE}/krankenkasse-kuendigen/): Frist {DEADLINE}, Vorlage im Browser, Adressen aller Kassen laut BAG.
 - [Hausrat & Haftpflicht]({SITE}/hausratversicherung/): Bedarfsrechner und Anbieter-Vergleich.
 - [Unsere Methode]({SITE}/methode/): Wie wir vergleichen und warum wir keine Telefonnummern verlangen.
 
@@ -880,6 +1211,9 @@ def main():
             REGION_GEMEINDEN[(c, reg)] = gem
     prev_idx = index_rows(prev)
     cantons, insurers, nat = analyse(cur, prev, bestand)
+    kv = kv_verzeichnis.load()
+    for i in sorted({r["insurer_id"] for r in cur}):
+        KASSE_SLUG[i] = slugify(INSURER_NAMES[str(i)])
 
     by_canton_cur, by_canton_prev = defaultdict(list), defaultdict(list)
     for r in cur:
@@ -911,7 +1245,14 @@ def main():
         best = min((r for r in by_canton_cur[c] if r["region"] == reg and r["franchise"] == 300), key=lambda r: r["premium"])
         model_counts[best["model_type"]] += 1
 
-    for fn in (lambda: hub_page(cantons, cheapest), lambda: report_page(cantons, insurers, nat, model_counts, jojo)):
+    top3_cur = top3_counts(cur, by_canton_cur)
+    for i in KASSE_SLUG:
+        path, content = kasse_page(i, cur, by_canton_cur, prev_idx, insurers, ic, top3_cur, kv)
+        write(path, content)
+        paths.append(path)
+
+    for fn in (lambda: hub_page(cantons, cheapest), lambda: report_page(cantons, insurers, nat, model_counts, jojo),
+               lambda: kasse_hub(insurers, top3_cur), lambda: kuendigen_page(kv)):
         path, content = fn()
         write(path, content)
         paths.insert(0, path)
