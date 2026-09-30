@@ -347,7 +347,6 @@
   .kk-row-meta .kk-save { font-size: 13px; }
   .kk-own-bill { font-size: 13px; color: var(--text2); margin-top: 2px; }
   .kk-optional { text-transform: none; letter-spacing: 0; font-weight: 400; }
-  .kk-hint { font-size: 12px; color: var(--muted); margin-top: 10px; line-height: 1.5; }
   .kk-upload { margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px dashed var(--border2); display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
   .kk-upload[hidden] { display: none; }
   .kk-upload-btn { background: var(--surface); border: 1px solid var(--border2); border-radius: 10px; padding: 10px 14px; font: 600 14px 'Plus Jakarta Sans', sans-serif; color: var(--text); cursor: pointer; }
@@ -355,8 +354,6 @@
   .kk-upload-btn:disabled { opacity: .6; cursor: wait; }
   .kk-upload-status { font-size: 13px; color: var(--text2); }
   .kk-upload-status.err { color: var(--red); }
-  .kk-upload-note { flex-basis: 100%; font-size: 11px; color: var(--muted); line-height: 1.5; }
-  .kk-upload-note a { color: var(--muted); }
   .kk-own {
     background: var(--surface); border: 1px solid var(--border2);
     border-radius: 12px; padding: 18px 18px 14px; margin-bottom: 16px;
@@ -511,13 +508,8 @@
   }
   .kk-model-tip:hover .tip-text,
   .kk-model-tip.active .tip-text { display: block; }
-  .kk-model-legend {
-    display: flex; flex-wrap: wrap; gap: 8px 16px;
-    margin-top: 16px; padding: 14px 16px;
-    background: rgba(0,0,0,0.02); border-radius: 10px;
-    font-size: 12px; color: var(--muted); line-height: 1.6;
-  }
-  .kk-model-legend span { font-weight: 600; color: var(--text); }
+  label .kk-model-tip, .kk-list-note .kk-model-tip, .kk-upload .kk-model-tip { margin-left: 4px; vertical-align: 1px; }
+  .kk-model-tip, .kk-model-tip .tip-text { text-transform: none; letter-spacing: normal; white-space: normal; }
   .kk-price-cta { display: flex; align-items: center; gap: 10px; }
   .kk-price {
     font-family: 'Plus Jakarta Sans', sans-serif;
@@ -690,8 +682,8 @@
       <div class="kk-upload" id="kk-upload" hidden>
         <button type="button" class="kk-upload-btn" id="kk-upload-btn">&#128247; Rechnung oder Police hochladen</button>
         <input type="file" id="kk-upload-file" accept="image/*,application/pdf" hidden>
-        <span class="kk-upload-status" id="kk-upload-status">Schneller: Foto oder PDF deiner Rechnung, wir füllen alles aus. Oder unten selbst eingeben.</span>
-        <div class="kk-upload-note">Das Dokument geht zur Texterkennung an unseren KI-Dienst und wird nicht gespeichert. Bankdaten lesen wir nicht aus. <a href="/datenschutz/">Datenschutz</a></div>
+        <span class="kk-upload-status" id="kk-upload-status">Schneller: Foto oder PDF deiner Rechnung, wir füllen alles aus.</span>
+        <span class="kk-model-tip" data-tip aria-label="Info">i<span class="tip-text">Das Dokument geht zur Texterkennung an unseren KI-Dienst und wird nicht gespeichert. Bankdaten lesen wir nicht aus. Mehr unter Datenschutz.</span></span>
       </div>
       <div class="kk-fields">
         <div class="kk-field">
@@ -699,11 +691,11 @@
           <input type="text" id="kk-plz" placeholder="z.B. 8001" maxlength="4" inputmode="numeric">
         </div>
         <div class="kk-field">
-          <label for="kk-year">Jahrgang</label>
+          <label for="kk-year">Jahrgang <span class="kk-model-tip" data-tip aria-label="Info">i<span class="tip-text">Bestimmt die Altersklasse: Kinder bis 18, junge Erwachsene 19 bis 25, Erwachsene ab 26.</span></span></label>
           <input type="number" id="kk-year" placeholder="z.B. 1990" min="1930" max="2010">
         </div>
         <div class="kk-field">
-          <label for="kk-franchise">Franchise</label>
+          <label for="kk-franchise">Franchise <span class="kk-model-tip" data-tip aria-label="Info">i<span class="tip-text">So viel zahlst du pro Jahr selbst, bevor die Kasse übernimmt. Mit CHF 2'500 statt 300 sparst du fast immer CHF 1'540 Prämie im Jahr. Lohnt sich, solange deine Arztkosten unter etwa CHF 2'000 bleiben.</span></span></label>
           <select id="kk-franchise">
             <option value="300">CHF 300</option>
             <option value="500">CHF 500</option>
@@ -714,7 +706,7 @@
           </select>
         </div>
         <div class="kk-field">
-          <label for="kk-accident">Unfalldeckung</label>
+          <label for="kk-accident">Unfalldeckung <span class="kk-model-tip" data-tip aria-label="Info">i<span class="tip-text">Angestellt mit mindestens 8 Stunden pro Woche? Dann bist du über den Arbeitgeber gegen Unfall versichert und wählst «Ohne Unfall».</span></span></label>
           <select id="kk-accident">
             <option value="true">Mit Unfall</option>
             <option value="false" selected>Ohne Unfall</option>
@@ -725,14 +717,13 @@
           <select id="kk-current"><option value="">Keine Angabe</option></select>
         </div>
         <div class="kk-field">
-          <label for="kk-paid">Du zahlst heute <span class="kk-optional">CHF/Mt.</span></label>
+          <label for="kk-paid">Du zahlst heute <span class="kk-optional">CHF/Mt.</span> <span class="kk-model-tip" data-tip aria-label="Info">i<span class="tip-text">Der Betrag der Grundversicherung von deiner Rechnung, ohne Zusatzversicherung. Damit erkennen wir deinen Tarif und rechnen deine echte Ersparnis.</span></span></label>
           <input type="text" id="kk-paid" placeholder="z.B. 371.85" inputmode="decimal">
         </div>
         <div class="kk-field kk-field-btn">
           <button class="kk-btn" onclick="checkKK()">Prämien prüfen</button>
         </div>
       </div>
-      <div class="kk-hint">Angestellt mit mindestens 8 Stunden pro Woche? Dann bist du über den Arbeitgeber gegen Unfall versichert und wählst «Ohne Unfall». Mit dem Betrag der Grundversicherung von deiner Rechnung erkennen wir deinen Tarif.</div>
 
       <div class="kk-result" id="kk-result" style="display:none;">
         <div class="kk-result-header">
@@ -749,14 +740,6 @@
         </div>
         <div id="kk-results-list"></div>
         <div id="kk-own"></div>
-        <div class="kk-model-legend" id="kk-model-legend" style="display:none;">
-          <div><span>Standard</span> = Freie Arztwahl</div>
-          <div><span>Hausarzt</span> = Immer zuerst zum Hausarzt</div>
-          <div><span>HMO</span> = Behandlung im Gesundheitszentrum</div>
-          <div><span>Telmed</span> = Zuerst telefonische Beratung</div>
-          <div><span>Alternativ</span> = Hausarzt, Telmed oder Apotheke nach Wahl</div>
-          <div style="flex-basis:100%;font-size:11px;color:var(--muted);margin-top:4px;">Die Leistungen der Grundversicherung sind bei allen Modellen gesetzlich identisch. Nur der Zugangsweg unterscheidet sich.</div>
-        </div>
         <div style="font-size:12px;color:var(--muted);margin-top:16px;text-align:center;">Quelle: BAG Priminfo <span class="calc-year">2027</span> · Alle Angaben ohne Gewähr</div>
 
         <!-- Wechsel-Wecker CTA (inside results) -->
@@ -1397,7 +1380,7 @@ async function checkKK() {
       const key = (modelType || '').toLowerCase();
       const text = modelExplain[key];
       if (!text) return '';
-      return ` <span class="kk-model-tip" onclick="this.classList.toggle('active')" aria-label="Info">i<span class="tip-text">${text}</span></span>`;
+      return ` <span class="kk-model-tip" data-tip aria-label="Info">i<span class="tip-text">${text}</span></span>`;
     }
 
     const modelNames = { hmo: 'HMO', telmed: 'Telmed', family_doctor: 'Hausarzt', standard: 'Standard', diverse: 'Alternativ', apotheke: 'Apotheke' };
@@ -1582,7 +1565,7 @@ async function checkKK() {
       if (ranked.length > 3) {
         html += `<button type="button" class="kk-more-btn" id="kk-more-btn">${expanded ? 'Weniger anzeigen' : `Weitere Kassen anzeigen (${Math.min(ranked.length, 10) - 3})`}</button>`;
       }
-      html += `<div class="kk-list-note">Pro Kasse der günstigste Tarif · Monatsprämie laut BAG, vor Abzug der Umweltabgabe</div>`;
+      html += `<div class="kk-list-note">Pro Kasse der günstigste Tarif, Monatsprämie laut BAG <span class="kk-model-tip" data-tip aria-label="Info">i<span class="tip-text">Auf deiner Rechnung steht die Prämie minus Umweltabgabe (${data.year}: CHF ${fmt(refund)} im Monat). Die Leistungen sind bei allen Kassen und Modellen gesetzlich gleich, nur der Zugangsweg unterscheidet sich.</span></span></div>`;
       listEl.innerHTML = html;
       const more = document.getElementById('kk-more-btn');
       if (more) more.onclick = () => { expanded = !expanded; renderFiltered(filter); };
@@ -1608,10 +1591,6 @@ async function checkKK() {
     // Initial render
     renderFiltered('alle');
 
-    // Show model legend when results are displayed
-    const legendEl = document.getElementById('kk-model-legend');
-    if (legendEl) legendEl.style.display = '';
-
     // Wechsel-Wecker nur zeigen, wenn der Versand eingerichtet ist
     const weckerCta = document.getElementById('wecker-cta');
     if (weckerCta && window._weckerEnabled) weckerCta.style.display = '';
@@ -1620,6 +1599,36 @@ async function checkKK() {
     listEl.innerHTML = '';
   }
 }
+</script>
+<script>
+// i-Symbole: Hover am Rechner, Tippen auf dem Handy. Ein Klick darf nicht das
+// Feld dahinter öffnen (die Symbole sitzen in <label>), und der Text wird so
+// verschoben, dass er nicht aus dem Bildschirm ragt.
+(function () {
+  function fit(tip) {
+    const t = tip.querySelector('.tip-text');
+    if (!t) return;
+    t.style.transform = 'translateX(-50%)';
+    const r = t.getBoundingClientRect();
+    let dx = 0;
+    if (r.right > window.innerWidth - 8) dx = window.innerWidth - 8 - r.right;
+    if (r.left + dx < 8) dx = 8 - r.left;
+    if (dx) t.style.transform = `translateX(calc(-50% + ${dx}px))`;
+  }
+  document.addEventListener('click', e => {
+    const tip = e.target.closest('[data-tip]');
+    document.querySelectorAll('[data-tip].active').forEach(x => { if (x !== tip) x.classList.remove('active'); });
+    if (!tip) return;
+    e.preventDefault();
+    e.stopPropagation();
+    tip.classList.toggle('active');
+    fit(tip);
+  }, true);
+  document.addEventListener('mouseover', e => {
+    const tip = e.target.closest('[data-tip]');
+    if (tip) fit(tip);
+  });
+})();
 </script>
 <!-- Vercel Analytics + Klick-Tracking (abovergleich.com) -->
 <script>
