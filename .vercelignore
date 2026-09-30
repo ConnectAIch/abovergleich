@@ -1,0 +1,5 @@
+# Arbeitsdateien, nicht Teil der Website. Ohne Build-Schritt liefert Vercel
+# sonst das ganze Repo aus, auch Pitches mit Namen von Journalisten.
+docs/
+scripts/
+supabase/
