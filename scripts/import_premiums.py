@@ -83,17 +83,29 @@ def norm_subgroup(v):
     return "" if v in ("E1", "J1") else v
 
 
+def read_csv(path):
+    """BAG-CSVs kommen je nach Jahr als UTF-8 oder Latin-1, mit Komma oder Semikolon."""
+    for enc in ("utf-8-sig", "latin-1"):
+        try:
+            with open(path, encoding=enc) as f:
+                text = f.read()
+            break
+        except UnicodeDecodeError:
+            continue
+    first = text.split("\n", 1)[0]
+    return csv.DictReader(text.splitlines(), delimiter=";" if ";" in first else ",")
+
+
 def previous_models(year):
     """(Versicherer, Tarif) -> model_type aus dem Vorjahres-CSV."""
     prev = DATA_DIR / f"praemien_{year - 1}.csv"
     out = {}
     if not prev.exists():
         return out
-    with open(prev, encoding="utf-8-sig") as f:
-        for r in csv.DictReader(f):
-            m = MODEL_BY_TYPE.get(r["Tariftyp"])
-            if m:
-                out[(r["Versicherer"].lstrip("0"), r["Tarif"])] = m
+    for r in read_csv(prev):
+        m = MODEL_BY_TYPE.get(r["Tariftyp"])
+        if m:
+            out[(r["Versicherer"].lstrip("0"), r["Tarif"])] = m
     return out
 
 
@@ -116,39 +128,38 @@ def build_rows(year, insurer_names):
     path = DATA_DIR / f"praemien_{year}.csv"
     prev = previous_models(year)
     rows, unknown = [], Counter()
-    with open(path, encoding="utf-8-sig") as f:
-        for r in csv.DictReader(f):
-            if int(r["Geschäftsjahr"]) != year:
-                sys.exit(f"{path} enthält Geschäftsjahr {r['Geschäftsjahr']}, erwartet {year}")
-            ins = r["Versicherer"].lstrip("0")
-            ttype = r["Tariftyp"]
-            if ttype == "PRAXIS":
-                model = praxis_model(ins, r["Tarif"], r["Tarifbezeichnung"], prev)
-            else:
-                model = MODEL_BY_TYPE.get(ttype)
-            if model is None:
-                unknown[ttype] += 1
-                continue
-            name = insurer_names.get(int(ins))
-            if name is None:
-                unknown[f"Versicherer {ins}"] += 1
-                continue
-            rows.append({
-                "insurer_id": int(ins),
-                "insurer_name": name,
-                "canton": r["Kanton"],
-                "year": year,
-                "region": norm_region(r["Region"]),
-                "age_class": AGE_CLASS[r["Altersklasse"]],
-                "accident_included": norm_accident(r["Unfalleinschluss"]),
-                "tariff": r["Tarif"],
-                "tariff_type": ttype,
-                "age_subgroup": norm_subgroup(r["Altersuntergruppe"]),
-                "franchise": norm_franchise(r["Franchise"]),
-                "premium": float(r["Prämie"]),
-                "tariff_name": r["Tarifbezeichnung"],
-                "model_type": model,
-            })
+    for r in read_csv(path):
+        if int(r["Geschäftsjahr"]) != year:
+            sys.exit(f"{path} enthält Geschäftsjahr {r['Geschäftsjahr']}, erwartet {year}")
+        ins = r["Versicherer"].lstrip("0")
+        ttype = r["Tariftyp"]
+        if ttype == "PRAXIS":
+            model = praxis_model(ins, r["Tarif"], r["Tarifbezeichnung"], prev)
+        else:
+            model = MODEL_BY_TYPE.get(ttype)
+        if model is None:
+            unknown[ttype] += 1
+            continue
+        name = insurer_names.get(int(ins))
+        if name is None:
+            unknown[f"Versicherer {ins}"] += 1
+            continue
+        rows.append({
+            "insurer_id": int(ins),
+            "insurer_name": name,
+            "canton": r["Kanton"],
+            "year": year,
+            "region": norm_region(r["Region"]),
+            "age_class": AGE_CLASS[r["Altersklasse"]],
+            "accident_included": norm_accident(r["Unfalleinschluss"]),
+            "tariff": r["Tarif"],
+            "tariff_type": ttype,
+            "age_subgroup": norm_subgroup(r["Altersuntergruppe"]),
+            "franchise": norm_franchise(r["Franchise"]),
+            "premium": float(r["Prämie"]),
+            "tariff_name": r["Tarifbezeichnung"],
+            "model_type": model,
+        })
     if unknown:
         sys.exit(f"Nicht zuordenbar, bitte Mapping ergänzen: {dict(unknown)}")
     return rows
