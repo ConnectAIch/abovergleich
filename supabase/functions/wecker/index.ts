@@ -50,6 +50,8 @@ async function sendMail(to: string, subject: string, html: string, stopUrl?: str
       to: [to], subject, html, headers,
     }),
   });
+  // Resends Fehlertext enthält keinen Schlüssel, nur den Grund (Domain, Absender, Limit)
+  if (!res.ok) console.error('resend', res.status, (await res.text()).slice(0, 300));
   return res.ok;
 }
 
