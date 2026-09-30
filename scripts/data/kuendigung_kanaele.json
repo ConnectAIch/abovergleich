@@ -568,7 +568,7 @@
    "cancel_email": null,
    "email_accepted": "ja",
    "sender_must_be_on_file": false,
-   "online_channel": "mySWICA (Kundenportal, laut FAQ als Kuendigungskanal genannt; keine Direkt-URL erhoben)",
+   "online_channel": "mySWICA",
    "requirements": "Schriftliche Kuendigung; Eingang spaetestens am letzten Arbeitstag im November bis 17 Uhr; SWICA verlangt zusaetzlich die Aufnahmebestaetigung der neuen Krankenversicherung. (Standardversicherung mit CHF 300 Franchise auch per 30. Juni, Eingang bis letzter Arbeitstag im Maerz bis 17 Uhr.)",
    "evidence": "\"schriftliche Kuendigung per Post, per E-Mail oder in mySWICA\"",
    "sources": [

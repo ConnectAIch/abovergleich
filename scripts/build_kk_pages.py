@@ -1024,6 +1024,23 @@ KUENDIGEN_CSS = """
   .kd-actions button { background:var(--accent); color:var(--text); border:none; border-radius:10px; padding:12px 18px; font-weight:700; cursor:pointer; font-family:inherit; }
   .kd-actions button.sec { background:var(--surface2); }
   .kd-days { font-family:'Plus Jakarta Sans',sans-serif; font-size:28px; font-weight:800; }
+  .kd-hint { font-size:12px; color:var(--muted); margin-top:4px; }
+  .kd-sign { margin:8px 0 4px; }
+  .kd-sign label { display:block; font-size:12px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; margin-bottom:4px; }
+  #kd-pad { display:block; width:100%; height:140px; touch-action:none; background:#fff; border:1px dashed var(--border2); border-radius:8px; cursor:crosshair; }
+  .kd-sign-row { display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--muted); margin-top:6px; }
+  .kd-link { background:none; border:none; padding:0; font:inherit; font-weight:600; color:var(--accent-dark); cursor:pointer; }
+  .kd-link:disabled { color:var(--muted); cursor:default; opacity:.6; }
+  .kd-sig-img { display:block; height:52px; width:auto; margin:2px 0; }
+  .kd-kanal { background:var(--surface); border:1px solid var(--border2); border-left:4px solid var(--accent); border-radius:10px; padding:14px 16px; font-size:14px; line-height:1.6; margin:12px 0; }
+  .kd-kanal:empty { display:none; }
+  .kd-kanal a { color:var(--accent-dark); font-weight:600; }
+  .kd-src { font-size:12px; color:var(--muted); margin-top:6px; }
+  .kd-src a { color:var(--muted) !important; font-weight:400 !important; }
+  .kd-actions button[hidden] { display:none; }
+  .kd-actions button:disabled { opacity:.6; cursor:default; }
+  .kd-msg { font-size:13px; color:var(--text2); margin-top:8px; min-height:1em; }
+  .kd-preview-label { font-size:12px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; margin-top:18px; }
   @media (max-width:640px) { .kd-form { grid-template-columns:1fr; } #kd-brief { padding:20px; } }
   @media print {
     body * { visibility:hidden; }
@@ -1036,16 +1053,46 @@ KUENDIGEN_CSS = """
 def kuendigen_page(kv):
     path = "/krankenkasse-kuendigen/"
     ids = sorted(KASSE_SLUG, key=lambda i: INSURER_NAMES[str(i)].lower())
-    data = [{"id": i, "name": INSURER_NAMES[str(i)], "address": address_lines(kv, i)} for i in ids]
+    # Kündigungswege je Kasse, recherchiert auf den Seiten der Kassen selbst
+    kan_doc = json.loads((DATA / "kuendigung_kanaele.json").read_text(encoding="utf-8"))
+    kan = {x["id"]: x for x in kan_doc["kassen"]}
+
+    def weg(i):
+        x = kan.get(i, {})
+        ok = x.get("email_accepted") == "ja"
+        return {
+            "mail": x.get("cancel_email") if ok else None,
+            "own": bool(x.get("sender_must_be_on_file")) if ok else False,
+            # Mail erlaubt, aber keine Adresse: dann bleibt das Kundenportal (Swica)
+            "portal": x.get("online_channel") if ok and not x.get("cancel_email") else None,
+            "post_only": x.get("email_accepted") == "nein",
+            "src": (x.get("sources") or [None])[0],
+        }
+
+    stand = ".".join(str(int(t)) for t in reversed(kan_doc["stand"].split("-")))
+    data = [{"id": i, "name": INSURER_NAMES[str(i)], "address": address_lines(kv, i), **weg(i)} for i in ids]
     end = f"31. Dezember {PREV}"
     deadline_iso = f"{PREV}-11-30"
-    addr_rows = "".join(f'<tr><td>{kasse_link(i)}</td><td>{e(", ".join(address_lines(kv, i)))}</td></tr>' for i in ids)
+    kd_data = json.dumps({"kassen": data, "end": end, "deadline": deadline_iso, "deadline_text": DEADLINE,
+                          "stand": stand}, ensure_ascii=False).replace("</", "<\\/")
+
+    def weg_cell(i):
+        w = weg(i)
+        if w["mail"]:
+            return e(w["mail"]) + (" *" if w["own"] else "")
+        if w["portal"]:
+            return e(w["portal"])
+        return "Post"
+    addr_rows = "".join(f'<tr><td>{kasse_link(i)}</td><td>{e(", ".join(address_lines(kv, i)))}</td><td>{weg_cell(i)}</td></tr>' for i in ids)
+    n_mail = sum(1 for i in ids if weg(i)["mail"] or weg(i)["portal"])
     qa = [
         (f"Bis wann muss ich die Krankenkasse kündigen?",
          f"Die Kündigung der Grundversicherung muss bis am {DEADLINE} bei der Kasse eingetroffen sein. "
          f"Massgebend ist das Datum, an dem die Kasse den Brief erhält, nicht der Poststempel. Der Wechsel gilt ab 1. Januar {YEAR}."),
         ("Muss ich per Einschreiben kündigen?",
-         "Nicht zwingend, aber empfohlen. Mit dem Einschreiben kannst du beweisen, dass die Kündigung rechtzeitig angekommen ist."),
+         "Nein. Das Gesetz schreibt keine Form vor, entscheidend ist, dass die Kündigung rechtzeitig ankommt. "
+         f"{n_mail} von {len(ids)} Kassen nehmen sie laut eigener Website auch per Mail an, die Tabelle unten zeigt welche. "
+         "Per Post ist das Einschreiben der sicherste Beweis, per Mail die Eingangsbestätigung der Kasse."),
         ("Kann die neue Krankenkasse mich ablehnen?",
          "Nein. In der Grundversicherung muss jede Kasse in ihrem Tätigkeitsgebiet alle Personen aufnehmen, ohne Gesundheitsfragen. "
          "Bei Zusatzversicherungen ist das anders."),
@@ -1066,24 +1113,32 @@ def kuendigen_page(kv):
 <ol>
 <li><strong>Neue Kasse wählen</strong> und dort für den 1. Januar {YEAR} anmelden. Sie muss dich ohne Gesundheitsfragen aufnehmen.</li>
 <li><strong>Bisherige Kasse kündigen</strong>, mit dem Brief unten. Unterschreiben nicht vergessen.</li>
-<li><strong>Per Einschreiben schicken</strong>, spätestens eine Woche vor dem {DEADLINE}.</li>
+<li><strong>Abschicken:</strong> per Mail, wenn deine Kasse das annimmt (steht beim Brief), sonst per Einschreiben, spätestens eine Woche vor dem {DEADLINE}.</li>
 <li><strong>Bestätigung abwarten.</strong> Die neue Kasse bestätigt dir und der alten Kasse schriftlich, dass du bei ihr versichert bist. Bis dahin bleibt die alte Versicherung bestehen, du bist also nie ohne Schutz.</li>
 </ol>
 <p>Wichtig: Wer bis 31. Dezember noch offene Prämien oder Kostenbeteiligungen bei der bisherigen Kasse hat, kann nicht wechseln. Offene Rechnungen vorher bezahlen.</p>
 
 <h2 id="vorlage">Kündigungsbrief erstellen</h2>
-<p>Der Brief entsteht nur in deinem Browser. Wir speichern und versenden nichts.</p>
+<p>Der Brief und das PDF entstehen nur in deinem Browser. Wir speichern und versenden nichts, abschicken tust du selbst.</p>
 <div class="kd-form">
   <div class="full"><label for="kd-kasse">Deine bisherige Kasse</label><select id="kd-kasse"></select></div>
   <div><label for="kd-name">Vorname und Name</label><input id="kd-name" autocomplete="name"></div>
-  <div><label for="kd-nr">Versicherten-Nr. <span style="text-transform:none;font-weight:400;">(optional)</span></label><input id="kd-nr"></div>
+  <div><label for="kd-nr">Versicherten-Nr. <span style="text-transform:none;font-weight:400;">(empfohlen)</span></label><input id="kd-nr"></div>
   <div><label for="kd-street">Strasse und Nr.</label><input id="kd-street" autocomplete="street-address"></div>
   <div><label for="kd-city">PLZ und Ort</label><input id="kd-city" autocomplete="address-level2" placeholder="8004 Zürich"></div>
-  <div class="full"><label for="kd-more">Weitere versicherte Personen im selben Brief <span style="text-transform:none;font-weight:400;">(optional, eine pro Zeile, mit Geburtsdatum)</span></label><textarea id="kd-more" rows="2" placeholder="Anna Muster, 12.03.2015"></textarea></div>
+  <div class="full"><label for="kd-more">Kinder im selben Brief <span style="text-transform:none;font-weight:400;">(optional, eine Person pro Zeile, mit Geburtsdatum)</span></label><textarea id="kd-more" rows="2" placeholder="Anna Muster, 12.03.2015"></textarea><div class="kd-hint">Erwachsene kündigen je selbst, mit eigenem Brief und eigener Unterschrift. Das verlangen mehrere Kassen.</div></div>
   <label class="kd-check full"><input type="checkbox" id="kd-zusatz" checked> Zusatzversicherungen behalten (nur die Grundversicherung kündigen)</label>
 </div>
+<div class="kd-sign">
+  <label for="kd-pad">Unterschrift</label>
+  <canvas id="kd-pad" aria-label="Hier unterschreiben"></canvas>
+  <div class="kd-sign-row"><span id="kd-pad-hint"></span><button type="button" id="kd-pad-clear" class="kd-link">Neu zeichnen</button></div>
+</div>
+<div id="kd-kanal" class="kd-kanal"></div>
+<div class="kd-actions"><button id="kd-pdf">PDF herunterladen</button><button id="kd-mail" class="sec" hidden>Mail vorbereiten</button><button id="kd-share" class="sec" hidden>PDF teilen</button><button id="kd-copy" class="sec">Text kopieren</button></div>
+<div id="kd-msg" class="kd-msg" role="status"></div>
+<div class="kd-preview-label">Vorschau</div>
 <div id="kd-brief"></div>
-<div class="kd-actions"><button id="kd-print">Drucken oder als PDF speichern</button><button id="kd-copy" class="sec">Text kopieren</button></div>
 
 <h2>Sonderfälle</h2>
 <ul>
@@ -1093,73 +1148,16 @@ def kuendigen_page(kv):
 </ul>
 
 <h2>Adressen aller Krankenkassen</h2>
-<p>Laut BAG-Verzeichnis der zugelassenen Krankenversicherer. Manche Kassen nennen auf ihrer Website zusätzlich eine eigene Adresse für Kündigungen, beide sind gültig.</p>
-<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Kasse</th><th>Adresse</th></tr></thead><tbody>{addr_rows}</tbody></table></div>
+<p>Adressen laut BAG-Verzeichnis der zugelassenen Krankenversicherer. Manche Kassen nennen auf ihrer Website zusätzlich eine eigene Adresse für Kündigungen, beide sind gültig. Die Spalte «Kündigung» zeigt, ob die Kasse auf ihrer Website ausdrücklich eine Kündigung der Grundversicherung per Mail annimmt (Stand {stand}). «Post» heisst: sie sagt nichts dazu oder verlangt einen Brief.</p>
+<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Kasse</th><th>Adresse</th><th>Kündigung</th></tr></thead><tbody>{addr_rows}</tbody></table></div>
+<p class="kk-note">* Nur von der Mail-Adresse, die die Kasse von dir kennt.</p>
 
 <div class="kk-faq"><h2>Häufige Fragen</h2>{"".join(f"<h3>{e(q)}</h3><p>{e(a)}</p>" for q, a in qa)}</div>
 <p class="kk-note">Quellen: Bundesamt für Gesundheit (<a href="https://www.bag.admin.ch/de/praemien-und-kosten-antworten-auf-haeufige-fragen">Fragen zu Prämien und Wechsel</a>), <a href="https://www.bag.admin.ch/de/verzeichnisse-der-zugelassenen-kranken-und-rueckversicherer">Verzeichnis der zugelassenen Krankenversicherer</a>. Angaben ohne Gewähr.</p>
 
+<script id="kd-data" type="application/json">{kd_data}</script>
 <script src="/js/combobox.js"></script>
-<script>
-(function () {{
-  var KASSEN = {json.dumps(data, ensure_ascii=False)};
-  var END = {json.dumps(end)}, DEADLINE = new Date({json.dumps(deadline_iso)} + 'T23:59:59');
-  var $ = function (id) {{ return document.getElementById(id); }};
-  var sel = $('kd-kasse');
-  sel.add(new Option('Bitte wählen', ''));
-  KASSEN.forEach(function (k) {{ sel.add(new Option(k.name, k.id)); }});
-  var q = new URLSearchParams(location.search).get('kasse');
-  if (q) sel.value = q;
-  // Aus dem Rechner (hochgeladene Rechnung), nur für dieses Browserfenster gespeichert
-  try {{
-    var pf = JSON.parse(sessionStorage.getItem('kd-prefill') || 'null');
-    if (pf) {{
-      if (!q && pf.kasse) sel.value = String(pf.kasse);
-      ['name', 'street', 'city', 'nr'].forEach(function (k) {{ if (pf[k] && !$('kd-' + k).value) $('kd-' + k).value = pf[k]; }});
-    }}
-  }} catch (e) {{}}
-
-  if (window.Combobox) Combobox.enhance(sel, {{ search: true, placeholder: 'Kasse suchen…' }});
-  var days = Math.floor((DEADLINE - new Date()) / 86400000);
-  if (days >= 0) $('kd-left').textContent = days === 0 ? 'Heute ist der letzte Tag.' : 'Noch ' + days + ' Tage.';
-
-  function today() {{
-    return new Date().toLocaleDateString('de-CH', {{ day: 'numeric', month: 'long', year: 'numeric' }});
-  }}
-  function render() {{
-    var k = KASSEN.find(function (x) {{ return String(x.id) === sel.value; }});
-    var name = $('kd-name').value.trim() || 'Vorname Name';
-    var street = $('kd-street').value.trim() || 'Strasse Nr.';
-    var city = $('kd-city').value.trim() || 'PLZ Ort';
-    var ort = city.replace(/^\\d{{4}}\\s*/, '') || 'Ort';
-    var more = $('kd-more').value.split('\\n').map(function (s) {{ return s.trim(); }}).filter(Boolean);
-    var lines = [name, street, city, '', ''];
-    lines = lines.concat(k ? k.address : ['Name der Krankenkasse', 'Adresse']);
-    lines.push('', '', ort + ', ' + today(), '', '');
-    lines.push('Kündigung der obligatorischen Krankenpflegeversicherung (Grundversicherung)');
-    if ($('kd-nr').value.trim()) lines.push('Versicherten-Nr. ' + $('kd-nr').value.trim());
-    lines.push('', 'Sehr geehrte Damen und Herren', '');
-    lines.push((more.length ? 'Hiermit kündige ich die obligatorische Krankenpflegeversicherung nach KVG für mich und die folgenden Personen' :
-      'Hiermit kündige ich meine obligatorische Krankenpflegeversicherung nach KVG') + ' fristgerecht auf den ' + END + (more.length ? ':' : '.'));
-    more.forEach(function (m) {{ lines.push('- ' + m); }});
-    if ($('kd-zusatz').checked) lines.push('', 'Die Zusatzversicherungen sind von dieser Kündigung nicht betroffen und laufen weiter.');
-    lines.push('', 'Bitte bestätigen Sie mir den Eingang der Kündigung schriftlich.', '', 'Freundliche Grüsse', '', '', '', name);
-    $('kd-brief').textContent = lines.join('\\n');
-  }}
-  ['kd-kasse', 'kd-name', 'kd-nr', 'kd-street', 'kd-city', 'kd-more', 'kd-zusatz'].forEach(function (id) {{
-    $(id).addEventListener('input', render); $(id).addEventListener('change', render);
-  }});
-  $('kd-print').onclick = function () {{ render(); window.print(); }};
-  $('kd-copy').onclick = function () {{
-    render();
-    var t = $('kd-brief').textContent;
-    (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(
-      function () {{ $('kd-copy').textContent = 'Kopiert'; }},
-      function () {{ $('kd-copy').textContent = 'Bitte markieren und kopieren'; }});
-  }};
-  render();
-}})();
-</script>"""
+<script src="/js/kuendigung.js"></script>"""
     html_out = page(path, f"Krankenkasse kündigen {PREV}: Frist {DEADLINE.replace(' ' + str(PREV), '')}, Vorlage und Adressen",
                     f"Grundversicherung kündigen: bis {DEADLINE} muss die Kündigung bei der Kasse sein. Kostenlose Vorlage, Adressen aller Kassen, Schritt für Schritt.",
                     body, [breadcrumb([("Krankenkassen-Vergleich", "/"), ("Krankenkasse kündigen", path)]), faq(qa)])
@@ -1240,7 +1238,7 @@ def bust_assets():
     Ändert sich die Datei, ändert sich die URL, und Browser laden sie neu."""
     import hashlib
     assets = {}
-    for rel in ("styles/shared.css", "js/combobox.js"):
+    for rel in ("styles/shared.css", "js/combobox.js", "js/kuendigung.js"):
         f = ROOT / rel
         if f.exists():
             assets["/" + rel] = hashlib.md5(f.read_bytes()).hexdigest()[:8]
