@@ -37,6 +37,9 @@ anpassen. Erzeugt die 26 Kantonsseiten unter `/krankenkasse/`, die Auswertung
 als eigene URL stehen. Die Namen der Kassen kommen aus `INSURER_NAMES` in
 `premium_analysis.py` (BAG-Verzeichnis der zugelassenen Krankenversicherer).
 
+Nach dem Deploy: `python3 indexnow.py` meldet alle Sitemap-URLs an Bing und
+Co.; in der Google Search Console die Sitemap neu einreichen.
+
 ### 4. In die Datenbank laden und Rechner umschalten
 
 Am besten vor Schritt 3, dann stimmen Rechner und Seiten ab demselben Deploy.
