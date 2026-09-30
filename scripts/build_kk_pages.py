@@ -1375,7 +1375,8 @@ def write_sitemap(paths):
     today = date.today().isoformat()
     static = [("/", "1.0"), ("/hausratversicherung/", "0.9"), ("/methode/", "0.6"),
               ("/blog/beste-franchise-schweiz/", "0.7"), ("/blog/hmo-telmed-hausarzt-erklaert/", "0.7"),
-              ("/blog/unfallversicherung-schweiz-ausland/", "0.7"), ("/blog/provisionen-zusatzversicherung/", "0.7")]
+              ("/blog/unfallversicherung-schweiz-ausland/", "0.7"), ("/blog/provisionen-zusatzversicherung/", "0.7"),
+              ("/blog/krankenkasse-mit-26/", "0.7")]
     items = [(p, pr) for p, pr in static] + [(p, "0.8") for p in paths]
     body = "\n".join(f"  <url>\n    <loc>{SITE}{p}</loc>\n    <lastmod>{today}</lastmod>\n    <priority>{pr}</priority>\n  </url>"
                      for p, pr in items)
@@ -1421,6 +1422,7 @@ abovergleich.com hilft beim Sparen auf der Grundversicherung. Die Leistungen sin
 - [Welche Franchise ist die beste?]({SITE}/blog/beste-franchise-schweiz/)
 - [Unfallversicherung Schweiz & Ausland]({SITE}/blog/unfallversicherung-schweiz-ausland/)
 - [Warum dein Berater dir die Zusatzversicherung verkaufen will]({SITE}/blog/provisionen-zusatzversicherung/)
+- [Krankenkasse mit 26: Warum die Prämie so stark steigt]({SITE}/blog/krankenkasse-mit-26/)
 - [Krankenkassen-Rating: Welche Kasse ist dauerhaft günstig?]({SITE}/krankenkassen-rating/)
 
 ## Schwesterseite

@@ -344,6 +344,9 @@
   .kk-more-btn { display: block; width: 100%; margin: 2px 0 6px; padding: 10px; border: 1px dashed var(--border2); border-radius: 10px; background: none; font: 600 13px 'Plus Jakarta Sans', sans-serif; color: var(--accent-dark); cursor: pointer; }
   .kk-more-btn:hover { border-color: var(--accent-dark); background: var(--accent-bg); }
   .kk-list-note { font-size: 12px; color: var(--muted); margin-top: 6px; }
+  .kk-hint26 { font-size: 13px; line-height: 1.55; color: var(--text2); background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent-dark); border-radius: 0 10px 10px 0; padding: 10px 14px; margin: 12px 0 4px; }
+  .kk-hint26.soon { border-left-color: var(--orange); }
+  .kk-hint26 a { color: var(--accent-dark); font-weight: 600; }
   .kk-row-meta .kk-save { font-size: 13px; }
   .kk-own-bill { font-size: 13px; color: var(--text2); margin-top: 2px; }
   .kk-optional { text-transform: none; letter-spacing: 0; font-weight: 400; }
@@ -1596,6 +1599,20 @@ async function checkKK() {
     }
 
     let expanded = false;
+    // Junge Erwachsene: Ab dem Jahr, in dem sie 26 werden, gilt die
+    // Erwachsenenprämie (nach Geburtsjahr, Art. 91 KVV). Kein zweiter Preis
+    // im Rechner, nur der Hinweis, dann neu zu vergleichen.
+    function hint26() {
+      if (!/^Junge/.test(data.age_class || '')) return '';
+      const born = parseInt(document.getElementById('kk-year').value);
+      const from = born + 26;
+      const soon = from === data.year + 1;
+      return `<div class="kk-hint26${soon ? ' soon' : ''}"><strong>${soon ? `Ab 1. Januar ${from} zahlst du die Erwachsenenprämie.` : `Mit 26 wird es deutlich teurer.`}</strong> `
+        + `Im selben Tarif steigt die Prämie dann je nach Kasse und Franchise um ein Viertel bis zwei Drittel. `
+        + `${soon ? `Vergleiche im Herbst ${data.year} neu, die günstigste Kasse für Junge ist oft nicht die günstigste für Erwachsene.` : `Vergleiche im Jahr, bevor du 26 wirst, neu.`} `
+        + `<a href="/blog/krankenkasse-mit-26/">Mehr dazu &rarr;</a></div>`;
+    }
+
     function renderFiltered(filter) {
       const pool = filter === 'alle' ? offers : offers.filter(p => p.model_type === filter);
       const ranked = bestPerInsurer(pool);
@@ -1612,6 +1629,7 @@ async function checkKK() {
       if (ranked.length > 3) {
         html += `<button type="button" class="kk-more-btn" id="kk-more-btn">${expanded ? 'Weniger anzeigen' : `Weitere Kassen anzeigen (${Math.min(ranked.length, 10) - 3})`}</button>`;
       }
+      html += hint26();
       html += `<div class="kk-list-note">Pro Kasse der günstigste Tarif, Monatsprämie laut BAG <span class="kk-model-tip" data-tip aria-label="Info">i<span class="tip-text">Auf deiner Rechnung steht die Prämie minus Umweltabgabe (${data.year}: CHF ${fmt(refund)} im Monat). Die Leistungen sind bei allen Kassen und Modellen gesetzlich gleich, nur der Zugangsweg unterscheidet sich.</span></span></div>`;
       listEl.innerHTML = html;
       const more = document.getElementById('kk-more-btn');
