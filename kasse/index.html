@@ -43,6 +43,21 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/styles/shared.css?v=5ded8e51">
 <style>
+  .kk-rating { background:var(--surface); border:1px solid var(--border2); border-radius:14px; padding:20px 22px; margin:20px 0; }
+  .kk-rating-head { display:flex; justify-content:space-between; gap:16px; align-items:flex-start; margin-bottom:12px; }
+  .kk-rating-label { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); }
+  .kk-rating-sub { font-size:13px; color:var(--muted); margin-top:4px; }
+  .kk-rating-note { font-family:'Plus Jakarta Sans',sans-serif; font-size:40px; font-weight:800; line-height:1; color:var(--text); white-space:nowrap; }
+  .kk-rating-note span { font-size:16px; color:var(--muted); font-weight:600; }
+  .kk-rrow { display:grid; grid-template-columns:120px 1fr 36px; gap:10px; align-items:center; font-size:14px; padding:4px 0; }
+  .kk-bar { display:block; height:8px; background:var(--surface2); border-radius:4px; overflow:hidden; }
+  .kk-bar span { display:block; height:100%; background:var(--accent); border-radius:4px; }
+  .kk-rnote { font-size:13px; color:var(--muted); margin:12px 0 8px; }
+  .kk-rating > a { color:var(--accent-dark); font-weight:600; font-size:14px; }
+  .kk-rtable td, .kk-rtable th { white-space:nowrap; padding-left:8px; padding-right:8px; font-size:14px; }
+  .kk-rtable td:nth-child(n+4), .kk-rtable th:nth-child(n+4) { color:var(--muted); }
+  .kk-cantonlinks { display:flex; flex-wrap:wrap; gap:6px 14px; font-size:14px; margin-bottom:12px; }
+  .kk-cantonlinks a { color:var(--accent-dark); }
   .kk-page { max-width: 820px; }
   .kk-lead { font-size: 18px !important; }
   .kk-facts { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:28px 0 8px; }
@@ -97,6 +112,7 @@
       <a href="/kasse/">Kassen</a>
       <a href="/krankenkasse-kuendigen/">K&uuml;ndigen</a>
       <a href="/krankenkassenpraemien-2027/">Pr&auml;mien 2027</a>
+      <a href="/krankenkassen-rating/">Rating</a>
       <a href="/methode/">Methode</a>
       <a href="/impressum/">Impressum</a>
       <a href="/datenschutz/">Datenschutz</a>

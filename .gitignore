@@ -10,3 +10,5 @@ node_modules/
 
 # Supabase CLI
 supabase/.temp/
+scripts/data/*.xlsx
+!scripts/data/kv_verzeichnis_*.xlsx

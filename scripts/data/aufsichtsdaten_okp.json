@@ -1,0 +1,2103 @@
+{
+"quelle": "BAG, Aufsichtsdaten OKP 1996-2024 (aufsichtsdaten-okp-1996-2024.xlsx, Stand 09.10.2025), Tabelle T 5.01",
+"url": "https://www.bag.admin.ch/de/aufsichtsdaten-krankenversicherer",
+"markt_verwaltung": {
+"2018": 168.3,
+"2019": 172.6,
+"2020": 184.1,
+"2021": 197.7,
+"2022": 193.5,
+"2023": 192.8,
+"2024": 193.0
+},
+"kassen": {
+"8": {
+"2018": {
+"verwaltung": 117.8,
+"reserven": 911,
+"praemie": 3670,
+"bestand": 842321
+},
+"2019": {
+"verwaltung": 138.3,
+"reserven": 1132,
+"praemie": 3698,
+"bestand": 861449
+},
+"2020": {
+"verwaltung": 133.7,
+"reserven": 1461,
+"praemie": 3719,
+"bestand": 860639
+},
+"2021": {
+"verwaltung": 165.1,
+"reserven": 1473,
+"praemie": 3645,
+"bestand": 860968
+},
+"2022": {
+"verwaltung": 167.8,
+"reserven": 1040,
+"praemie": 3564,
+"bestand": 892916
+},
+"2023": {
+"verwaltung": 154.4,
+"reserven": 498,
+"praemie": 3769,
+"bestand": 1501294
+},
+"2024": {
+"verwaltung": 156.3,
+"reserven": 464,
+"praemie": 4055,
+"bestand": 1537730
+}
+},
+"32": {
+"2018": {
+"verwaltung": 159.9,
+"reserven": 1554,
+"praemie": 3631,
+"bestand": 40666
+},
+"2019": {
+"verwaltung": 181.7,
+"reserven": 2056,
+"praemie": 3674,
+"bestand": 40205
+},
+"2020": {
+"verwaltung": 194.1,
+"reserven": 2285,
+"praemie": 3672,
+"bestand": 39704
+},
+"2021": {
+"verwaltung": 212.6,
+"reserven": 2356,
+"praemie": 3665,
+"bestand": 37663
+},
+"2022": {
+"verwaltung": 210.3,
+"reserven": 1727,
+"praemie": 3548,
+"bestand": 42211
+},
+"2023": {
+"verwaltung": 170.8,
+"reserven": 680,
+"praemie": 3447,
+"bestand": 69514
+},
+"2024": {
+"verwaltung": 160.4,
+"reserven": 304,
+"praemie": 3639,
+"bestand": 88204
+}
+},
+"57": {
+"2018": {
+"verwaltung": 258.7,
+"reserven": 989,
+"praemie": 4397,
+"bestand": 11232
+},
+"2019": {
+"verwaltung": 257.2,
+"reserven": 687,
+"praemie": 4446,
+"bestand": 12760
+},
+"2020": {
+"verwaltung": 264.3,
+"reserven": 623,
+"praemie": 4562,
+"bestand": 14134
+},
+"2021": {
+"verwaltung": 261.7,
+"reserven": 239,
+"praemie": 4437,
+"bestand": 17046
+},
+"2022": {
+"verwaltung": 296.0,
+"reserven": -70,
+"praemie": 4445,
+"bestand": 15070
+},
+"2023": {
+"verwaltung": 277.8,
+"reserven": -303,
+"praemie": 4491,
+"bestand": 15965
+}
+},
+"62": {
+"2018": {
+"verwaltung": 157.2,
+"reserven": 1045,
+"praemie": 4013,
+"bestand": 120502
+},
+"2019": {
+"verwaltung": 168.6,
+"reserven": 1621,
+"praemie": 4145,
+"bestand": 110647
+},
+"2020": {
+"verwaltung": 242.4,
+"reserven": 1785,
+"praemie": 4152,
+"bestand": 101670
+},
+"2021": {
+"verwaltung": 223.8,
+"reserven": 2032,
+"praemie": 4250,
+"bestand": 90454
+},
+"2022": {
+"verwaltung": 275.9,
+"reserven": 1487,
+"praemie": 4169,
+"bestand": 88719
+},
+"2023": {
+"verwaltung": 237.4,
+"reserven": 620,
+"praemie": 3694,
+"bestand": 136588
+},
+"2024": {
+"verwaltung": 179.4,
+"reserven": 250,
+"praemie": 3678,
+"bestand": 166132
+}
+},
+"134": {
+"2018": {
+"verwaltung": 189.9,
+"reserven": 2119,
+"praemie": 3330,
+"bestand": 4086
+},
+"2019": {
+"verwaltung": 204.2,
+"reserven": 2316,
+"praemie": 3370,
+"bestand": 4243
+},
+"2020": {
+"verwaltung": 221.7,
+"reserven": 2348,
+"praemie": 3329,
+"bestand": 4467
+},
+"2021": {
+"verwaltung": 249.4,
+"reserven": 2547,
+"praemie": 3474,
+"bestand": 4393
+},
+"2022": {
+"verwaltung": 248.1,
+"reserven": 2561,
+"praemie": 3405,
+"bestand": 4454
+},
+"2023": {
+"verwaltung": 239.6,
+"reserven": 2062,
+"praemie": 3346,
+"bestand": 5541
+},
+"2024": {
+"verwaltung": 238.2,
+"reserven": 4295,
+"praemie": 3362,
+"bestand": 8473
+}
+},
+"182": {
+"2018": {
+"verwaltung": 137.5,
+"reserven": 502,
+"praemie": 3373,
+"bestand": 70515
+},
+"2019": {
+"verwaltung": 141.3,
+"reserven": 590,
+"praemie": 3440,
+"bestand": 73499
+},
+"2020": {
+"verwaltung": 163.7,
+"reserven": 647,
+"praemie": 3421,
+"bestand": 73516
+},
+"2021": {
+"verwaltung": 180.9,
+"reserven": 505,
+"praemie": 3435,
+"bestand": 80977
+},
+"2022": {
+"verwaltung": 252.9,
+"reserven": 97,
+"praemie": 3493,
+"bestand": 83826
+},
+"2023": {
+"verwaltung": 167.4,
+"reserven": -279,
+"praemie": 3539,
+"bestand": 141958
+}
+},
+"194": {
+"2018": {
+"verwaltung": 99.7,
+"reserven": 715,
+"praemie": 3545,
+"bestand": 22631
+},
+"2019": {
+"verwaltung": 128.0,
+"reserven": 1180,
+"praemie": 3661,
+"bestand": 20648
+},
+"2020": {
+"verwaltung": 99.6,
+"reserven": 1671,
+"praemie": 3687,
+"bestand": 19475
+},
+"2021": {
+"verwaltung": 108.1,
+"reserven": 1990,
+"praemie": 3709,
+"bestand": 18827
+},
+"2022": {
+"verwaltung": 155.1,
+"reserven": 2028,
+"praemie": 3659,
+"bestand": 18380
+},
+"2023": {
+"verwaltung": 129.6,
+"reserven": 1813,
+"praemie": 3666,
+"bestand": 18858
+},
+"2024": {
+"verwaltung": 103.5,
+"reserven": 848,
+"praemie": 3849,
+"bestand": 31773
+}
+},
+"246": {
+"2018": {
+"verwaltung": 168.5,
+"reserven": 680,
+"praemie": 3663,
+"bestand": 7460
+},
+"2019": {
+"verwaltung": 202.0,
+"reserven": 952,
+"praemie": 3830,
+"bestand": 6675
+},
+"2020": {
+"verwaltung": 216.0,
+"reserven": 1316,
+"praemie": 3922,
+"bestand": 5932
+},
+"2021": {
+"verwaltung": 218.3,
+"reserven": 1394,
+"praemie": 3818,
+"bestand": 5859
+},
+"2022": {
+"verwaltung": 266.6,
+"reserven": 1313,
+"praemie": 3708,
+"bestand": 5967
+},
+"2023": {
+"verwaltung": 174.4,
+"reserven": 895,
+"praemie": 3286,
+"bestand": 9577
+},
+"2024": {
+"verwaltung": 163.9,
+"reserven": 477,
+"praemie": 3577,
+"bestand": 11451
+}
+},
+"290": {
+"2018": {
+"verwaltung": 158.6,
+"reserven": 1687,
+"praemie": 3464,
+"bestand": 590221
+},
+"2019": {
+"verwaltung": 167.2,
+"reserven": 1734,
+"praemie": 3459,
+"bestand": 604586
+},
+"2020": {
+"verwaltung": 170.3,
+"reserven": 1760,
+"praemie": 3468,
+"bestand": 609391
+},
+"2021": {
+"verwaltung": 175.4,
+"reserven": 1629,
+"praemie": 3531,
+"bestand": 602993
+},
+"2022": {
+"verwaltung": 173.5,
+"reserven": 1456,
+"praemie": 3528,
+"bestand": 596612
+},
+"2023": {
+"verwaltung": 169.9,
+"reserven": 1374,
+"praemie": 3656,
+"bestand": 599412
+},
+"2024": {
+"verwaltung": 165.2,
+"reserven": 1182,
+"praemie": 3837,
+"bestand": 672886
+}
+},
+"312": {
+"2018": {
+"verwaltung": 134.8,
+"reserven": 759,
+"praemie": 3737,
+"bestand": 184571
+},
+"2019": {
+"verwaltung": 142.9,
+"reserven": 1120,
+"praemie": 3873,
+"bestand": 175924
+},
+"2020": {
+"verwaltung": 165.7,
+"reserven": 1290,
+"praemie": 3803,
+"bestand": 181990
+},
+"2021": {
+"verwaltung": 182.5,
+"reserven": 1243,
+"praemie": 3763,
+"bestand": 195470
+},
+"2022": {
+"verwaltung": 192.7,
+"reserven": 752,
+"praemie": 3790,
+"bestand": 193285
+},
+"2023": {
+"verwaltung": 252.9,
+"reserven": 736,
+"praemie": 4217,
+"bestand": 152028
+},
+"2024": {
+"verwaltung": 284.8,
+"reserven": 878,
+"praemie": 4531,
+"bestand": 150974
+}
+},
+"343": {
+"2018": {
+"verwaltung": 153.0,
+"reserven": 652,
+"praemie": 4183,
+"bestand": 188806
+},
+"2019": {
+"verwaltung": 164.2,
+"reserven": 1034,
+"praemie": 4240,
+"bestand": 173100
+},
+"2020": {
+"verwaltung": 219.8,
+"reserven": 933,
+"praemie": 4122,
+"bestand": 179410
+},
+"2021": {
+"verwaltung": 234.3,
+"reserven": 848,
+"praemie": 4183,
+"bestand": 177341
+},
+"2022": {
+"verwaltung": 239.7,
+"reserven": 552,
+"praemie": 4201,
+"bestand": 175813
+},
+"2023": {
+"verwaltung": 214.2,
+"reserven": 517,
+"praemie": 4382,
+"bestand": 156325
+},
+"2024": {
+"verwaltung": 196.9,
+"reserven": 481,
+"praemie": 4719,
+"bestand": 179944
+}
+},
+"360": {
+"2018": {
+"verwaltung": 104.5,
+"reserven": 1522,
+"praemie": 3468,
+"bestand": 20584
+},
+"2019": {
+"verwaltung": 99.1,
+"reserven": 1766,
+"praemie": 3506,
+"bestand": 20141
+},
+"2020": {
+"verwaltung": 104.6,
+"reserven": 2333,
+"praemie": 3594,
+"bestand": 19284
+},
+"2021": {
+"verwaltung": 105.3,
+"reserven": 2587,
+"praemie": 3585,
+"bestand": 18901
+},
+"2022": {
+"verwaltung": 105.3,
+"reserven": 2297,
+"praemie": 3515,
+"bestand": 18971
+},
+"2023": {
+"verwaltung": 126.7,
+"reserven": 1763,
+"praemie": 3553,
+"bestand": 23233
+},
+"2024": {
+"verwaltung": 95.2,
+"reserven": 1796,
+"praemie": 3729,
+"bestand": 25585
+}
+},
+"376": {
+"2018": {
+"verwaltung": 208.9,
+"reserven": 635,
+"praemie": 3956,
+"bestand": 384277
+},
+"2019": {
+"verwaltung": 224.5,
+"reserven": 814,
+"praemie": 4030,
+"bestand": 381534
+},
+"2020": {
+"verwaltung": 274.1,
+"reserven": 1116,
+"praemie": 4219,
+"bestand": 355848
+},
+"2021": {
+"verwaltung": 330.0,
+"reserven": 1408,
+"praemie": 4216,
+"bestand": 342659
+},
+"2022": {
+"verwaltung": 255.3,
+"reserven": 980,
+"praemie": 4062,
+"bestand": 357095
+},
+"2023": {
+"verwaltung": 183.6,
+"reserven": 608,
+"praemie": 3863,
+"bestand": 556753
+},
+"2024": {
+"verwaltung": 189.7,
+"reserven": 486,
+"praemie": 4287,
+"bestand": 546003
+}
+},
+"455": {
+"2018": {
+"verwaltung": 172.1,
+"reserven": 852,
+"praemie": 3450,
+"bestand": 153014
+},
+"2019": {
+"verwaltung": 184.5,
+"reserven": 1230,
+"praemie": 3514,
+"bestand": 150184
+},
+"2020": {
+"verwaltung": 216.1,
+"reserven": 1554,
+"praemie": 3511,
+"bestand": 148579
+},
+"2021": {
+"verwaltung": 203.4,
+"reserven": 1627,
+"praemie": 3503,
+"bestand": 149564
+},
+"2022": {
+"verwaltung": 251.5,
+"reserven": 1008,
+"praemie": 3290,
+"bestand": 170904
+},
+"2023": {
+"verwaltung": 217.4,
+"reserven": 735,
+"praemie": 3507,
+"bestand": 174496
+},
+"2024": {
+"verwaltung": 217.8,
+"reserven": 821,
+"praemie": 3808,
+"bestand": 175385
+}
+},
+"509": {
+"2018": {
+"verwaltung": 250.8,
+"reserven": 1072,
+"praemie": 4178,
+"bestand": 154119
+},
+"2019": {
+"verwaltung": 238.5,
+"reserven": 1297,
+"praemie": 4120,
+"bestand": 155174
+},
+"2020": {
+"verwaltung": 237.5,
+"reserven": 1379,
+"praemie": 4118,
+"bestand": 152408
+},
+"2021": {
+"verwaltung": 245.3,
+"reserven": 1531,
+"praemie": 4226,
+"bestand": 144498
+},
+"2022": {
+"verwaltung": 270.1,
+"reserven": 1000,
+"praemie": 4076,
+"bestand": 149902
+},
+"2023": {
+"verwaltung": 246.2,
+"reserven": 613,
+"praemie": 4068,
+"bestand": 177465
+},
+"2024": {
+"verwaltung": 228.2,
+"reserven": 572,
+"praemie": 4413,
+"bestand": 211968
+}
+},
+"558": {
+"2018": {
+"verwaltung": 148.2,
+"reserven": 431,
+"praemie": 2990,
+"bestand": 12964
+},
+"2019": {
+"verwaltung": 133.3,
+"reserven": 826,
+"praemie": 3255,
+"bestand": 10916
+},
+"2020": {
+"verwaltung": 182.5,
+"reserven": 1324,
+"praemie": 3304,
+"bestand": 9326
+},
+"2021": {
+"verwaltung": 230.2,
+"reserven": 1708,
+"praemie": 3278,
+"bestand": 8758
+}
+},
+"762": {
+"2018": {
+"verwaltung": 235.3,
+"reserven": 1368,
+"praemie": 3599,
+"bestand": 13256
+},
+"2019": {
+"verwaltung": 202.7,
+"reserven": 1222,
+"praemie": 3366,
+"bestand": 16235
+},
+"2020": {
+"verwaltung": 188.3,
+"reserven": 1173,
+"praemie": 3315,
+"bestand": 17472
+},
+"2021": {
+"verwaltung": 191.0,
+"reserven": 1182,
+"praemie": 3354,
+"bestand": 16790
+},
+"2022": {
+"verwaltung": 233.2,
+"reserven": 1122,
+"praemie": 3433,
+"bestand": 13454
+},
+"2023": {
+"verwaltung": 228.6,
+"reserven": 1152,
+"praemie": 3518,
+"bestand": 12934
+}
+},
+"774": {
+"2018": {
+"verwaltung": 144.6,
+"reserven": 576,
+"praemie": 4077,
+"bestand": 178223
+},
+"2019": {
+"verwaltung": 154.1,
+"reserven": 956,
+"praemie": 4165,
+"bestand": 160875
+},
+"2020": {
+"verwaltung": 200.6,
+"reserven": 1065,
+"praemie": 4150,
+"bestand": 154936
+},
+"2021": {
+"verwaltung": 213.6,
+"reserven": 978,
+"praemie": 4204,
+"bestand": 150464
+},
+"2022": {
+"verwaltung": 234.2,
+"reserven": 702,
+"praemie": 4192,
+"bestand": 145509
+},
+"2023": {
+"verwaltung": 232.6,
+"reserven": 212,
+"praemie": 4353,
+"bestand": 197492
+},
+"2024": {
+"verwaltung": 176.1,
+"reserven": 281,
+"praemie": 4894,
+"bestand": 161977
+}
+},
+"780": {
+"2018": {
+"verwaltung": 233.4,
+"reserven": 928,
+"praemie": 3168,
+"bestand": 7600
+},
+"2019": {
+"verwaltung": 274.3,
+"reserven": 1451,
+"praemie": 3116,
+"bestand": 7691
+},
+"2020": {
+"verwaltung": 255.4,
+"reserven": 1449,
+"praemie": 3082,
+"bestand": 7838
+},
+"2021": {
+"verwaltung": 281.0,
+"reserven": 1448,
+"praemie": 3008,
+"bestand": 8133
+},
+"2022": {
+"verwaltung": 276.8,
+"reserven": 1174,
+"praemie": 3065,
+"bestand": 8708
+},
+"2023": {
+"verwaltung": 282.4,
+"reserven": 664,
+"praemie": 3121,
+"bestand": 9549
+},
+"2024": {
+"verwaltung": 295.0,
+"reserven": 434,
+"praemie": 3388,
+"bestand": 9829
+}
+},
+"820": {
+"2018": {
+"verwaltung": 137.6,
+"reserven": 2066,
+"praemie": 3053,
+"bestand": 2544
+},
+"2019": {
+"verwaltung": 141.0,
+"reserven": 2210,
+"praemie": 3114,
+"bestand": 2563
+},
+"2020": {
+"verwaltung": 161.4,
+"reserven": 2354,
+"praemie": 3182,
+"bestand": 2633
+},
+"2021": {
+"verwaltung": 174.9,
+"reserven": 2520,
+"praemie": 3272,
+"bestand": 2606
+},
+"2022": {
+"verwaltung": 186.5,
+"reserven": 2157,
+"praemie": 3276,
+"bestand": 2559
+},
+"2023": {
+"verwaltung": 174.0,
+"reserven": 1703,
+"praemie": 3282,
+"bestand": 2570
+},
+"2024": {
+"verwaltung": 198.0,
+"reserven": 1619,
+"praemie": 3516,
+"bestand": 2568
+}
+},
+"829": {
+"2018": {
+"verwaltung": 226.6,
+"reserven": 1884,
+"praemie": 3783,
+"bestand": 5995
+},
+"2019": {
+"verwaltung": 244.0,
+"reserven": 2554,
+"praemie": 3784,
+"bestand": 5655
+},
+"2020": {
+"verwaltung": 265.9,
+"reserven": 2754,
+"praemie": 3751,
+"bestand": 5519
+},
+"2021": {
+"verwaltung": 221.8,
+"reserven": 2406,
+"praemie": 3445,
+"bestand": 6712
+},
+"2022": {
+"verwaltung": 172.3,
+"reserven": 1431,
+"praemie": 3077,
+"bestand": 9024
+},
+"2023": {
+"verwaltung": 101.2,
+"reserven": 84,
+"praemie": 2708,
+"bestand": 26156
+},
+"2024": {
+"verwaltung": 205.6,
+"reserven": 226,
+"praemie": 3519,
+"bestand": 12662
+}
+},
+"881": {
+"2018": {
+"verwaltung": 332.3,
+"reserven": 998,
+"praemie": 3828,
+"bestand": 82718
+},
+"2019": {
+"verwaltung": 322.4,
+"reserven": 1201,
+"praemie": 3893,
+"bestand": 82098
+},
+"2020": {
+"verwaltung": 293.3,
+"reserven": 1359,
+"praemie": 3867,
+"bestand": 85484
+},
+"2021": {
+"verwaltung": 296.4,
+"reserven": 1209,
+"praemie": 3846,
+"bestand": 85592
+},
+"2022": {
+"verwaltung": 222.6,
+"reserven": 939,
+"praemie": 3808,
+"bestand": 86595
+},
+"2023": {
+"verwaltung": 185.9,
+"reserven": 572,
+"praemie": 3833,
+"bestand": 96136
+},
+"2024": {
+"verwaltung": 161.0,
+"reserven": 415,
+"praemie": 3874,
+"bestand": 120968
+}
+},
+"901": {
+"2018": {
+"verwaltung": 134.3,
+"reserven": 2343,
+"praemie": 2801,
+"bestand": 3793
+},
+"2019": {
+"verwaltung": 145.9,
+"reserven": 2843,
+"praemie": 2894,
+"bestand": 3670
+},
+"2020": {
+"verwaltung": 153.5,
+"reserven": 2984,
+"praemie": 2980,
+"bestand": 3690
+},
+"2021": {
+"verwaltung": 162.9,
+"reserven": 3142,
+"praemie": 3057,
+"bestand": 3599
+},
+"2022": {
+"verwaltung": 179.2,
+"reserven": 2616,
+"praemie": 3062,
+"bestand": 3457
+},
+"2023": {
+"verwaltung": 173.9,
+"reserven": 2283,
+"praemie": 3141,
+"bestand": 3420
+},
+"2024": {
+"verwaltung": 196.0,
+"reserven": 2322,
+"praemie": 3320,
+"bestand": 3604
+}
+},
+"923": {
+"2018": {
+"verwaltung": 115.0,
+"reserven": 911,
+"praemie": 2982,
+"bestand": 29352
+},
+"2019": {
+"verwaltung": 142.7,
+"reserven": 1117,
+"praemie": 3253,
+"bestand": 25727
+},
+"2020": {
+"verwaltung": 168.7,
+"reserven": 1452,
+"praemie": 3423,
+"bestand": 20306
+},
+"2021": {
+"verwaltung": 177.5,
+"reserven": 1536,
+"praemie": 3434,
+"bestand": 18324
+},
+"2022": {
+"verwaltung": 185.6,
+"reserven": 1210,
+"praemie": 3509,
+"bestand": 16889
+},
+"2023": {
+"verwaltung": 288.0,
+"reserven": 1437,
+"praemie": 3918,
+"bestand": 13520
+},
+"2024": {
+"verwaltung": 217.9,
+"reserven": 1383,
+"praemie": 4067,
+"bestand": 13416
+}
+},
+"941": {
+"2018": {
+"verwaltung": 106.0,
+"reserven": 1040,
+"praemie": 3149,
+"bestand": 37796
+},
+"2019": {
+"verwaltung": 108.8,
+"reserven": 1299,
+"praemie": 3387,
+"bestand": 37220
+},
+"2020": {
+"verwaltung": 118.7,
+"reserven": 1521,
+"praemie": 3387,
+"bestand": 37528
+},
+"2021": {
+"verwaltung": 118.0,
+"reserven": 1788,
+"praemie": 3486,
+"bestand": 36906
+},
+"2022": {
+"verwaltung": 120.8,
+"reserven": 1552,
+"praemie": 3406,
+"bestand": 37301
+},
+"2023": {
+"verwaltung": 135.8,
+"reserven": 1454,
+"praemie": 3479,
+"bestand": 37733
+},
+"2024": {
+"verwaltung": 128.8,
+"reserven": 1429,
+"praemie": 3622,
+"bestand": 41457
+}
+},
+"966": {
+"2018": {
+"verwaltung": 173.0,
+"reserven": 2237,
+"praemie": 3157,
+"bestand": 3214
+},
+"2019": {
+"verwaltung": 220.4,
+"reserven": 2332,
+"praemie": 3161,
+"bestand": 3323
+},
+"2020": {
+"verwaltung": 237.3,
+"reserven": 2360,
+"praemie": 3207,
+"bestand": 3477
+},
+"2021": {
+"verwaltung": 211.3,
+"reserven": 2283,
+"praemie": 3281,
+"bestand": 3537
+},
+"2022": {
+"verwaltung": 208.4,
+"reserven": 2154,
+"praemie": 3292,
+"bestand": 3510
+},
+"2023": {
+"verwaltung": 190.9,
+"reserven": 1621,
+"praemie": 3300,
+"bestand": 3922
+},
+"2024": {
+"verwaltung": 215.3,
+"reserven": 1459,
+"praemie": 3585,
+"bestand": 4175
+}
+},
+"994": {
+"2018": {
+"verwaltung": 198.8,
+"reserven": 1010,
+"praemie": 3513,
+"bestand": 366353
+},
+"2019": {
+"verwaltung": 186.6,
+"reserven": 1192,
+"praemie": 3541,
+"bestand": 379578
+},
+"2020": {
+"verwaltung": 178.6,
+"reserven": 1068,
+"praemie": 3440,
+"bestand": 414004
+},
+"2021": {
+"verwaltung": 162.1,
+"reserven": 995,
+"praemie": 3474,
+"bestand": 430483
+}
+},
+"1040": {
+"2018": {
+"verwaltung": 99.9,
+"reserven": 2038,
+"praemie": 2666,
+"bestand": 5146
+},
+"2019": {
+"verwaltung": 110.7,
+"reserven": 2030,
+"praemie": 2869,
+"bestand": 5159
+},
+"2020": {
+"verwaltung": 136.8,
+"reserven": 2507,
+"praemie": 3202,
+"bestand": 4533
+},
+"2021": {
+"verwaltung": 154.3,
+"reserven": 2968,
+"praemie": 3275,
+"bestand": 4294
+},
+"2022": {
+"verwaltung": 222.2,
+"reserven": 3076,
+"praemie": 3236,
+"bestand": 4149
+},
+"2023": {
+"verwaltung": 189.1,
+"reserven": 3281,
+"praemie": 3168,
+"bestand": 4271
+},
+"2024": {
+"verwaltung": 151.5,
+"reserven": 2598,
+"praemie": 3178,
+"bestand": 4895
+}
+},
+"1113": {
+"2018": {
+"verwaltung": 184.2,
+"reserven": 1100,
+"praemie": 3701,
+"bestand": 4727
+},
+"2019": {
+"verwaltung": 229.2,
+"reserven": 1565,
+"praemie": 3811,
+"bestand": 4202
+},
+"2020": {
+"verwaltung": 203.1,
+"reserven": 2057,
+"praemie": 3663,
+"bestand": 4281
+},
+"2021": {
+"verwaltung": 234.6,
+"reserven": 1838,
+"praemie": 3630,
+"bestand": 4328
+},
+"2022": {
+"verwaltung": 233.6,
+"reserven": 1179,
+"praemie": 3531,
+"bestand": 4729
+},
+"2023": {
+"verwaltung": 231.3,
+"reserven": 641,
+"praemie": 3533,
+"bestand": 6519
+},
+"2024": {
+"verwaltung": 249.1,
+"reserven": 607,
+"praemie": 3914,
+"bestand": 5855
+}
+},
+"1142": {
+"2018": {
+"verwaltung": 515.2,
+"reserven": 34852,
+"praemie": 5078,
+"bestand": 599
+},
+"2019": {
+"verwaltung": 573.4,
+"reserven": 39408,
+"praemie": 5113,
+"bestand": 571
+},
+"2020": {
+"verwaltung": 666.2,
+"reserven": 42816,
+"praemie": 5114,
+"bestand": 540
+},
+"2021": {
+"verwaltung": 848.8,
+"reserven": 49876,
+"praemie": 5134,
+"bestand": 490
+},
+"2022": {
+"verwaltung": 949.4,
+"reserven": 54076,
+"praemie": 5057,
+"bestand": 425
+},
+"2023": {
+"verwaltung": 1619.4,
+"reserven": 74470,
+"praemie": 4814,
+"bestand": 324
+}
+},
+"1318": {
+"2018": {
+"verwaltung": 169.7,
+"reserven": 2240,
+"praemie": 3393,
+"bestand": 10762
+},
+"2019": {
+"verwaltung": 181.2,
+"reserven": 2514,
+"praemie": 3496,
+"bestand": 10890
+},
+"2020": {
+"verwaltung": 183.1,
+"reserven": 2531,
+"praemie": 3553,
+"bestand": 11196
+},
+"2021": {
+"verwaltung": 205.2,
+"reserven": 2767,
+"praemie": 3615,
+"bestand": 11058
+},
+"2022": {
+"verwaltung": 207.5,
+"reserven": 2804,
+"praemie": 3621,
+"bestand": 10682
+},
+"2023": {
+"verwaltung": 190.3,
+"reserven": 2173,
+"praemie": 3615,
+"bestand": 13073
+},
+"2024": {
+"verwaltung": 168.4,
+"reserven": 1099,
+"praemie": 3640,
+"bestand": 21198
+}
+},
+"1322": {
+"2018": {
+"verwaltung": 256.2,
+"reserven": 927,
+"praemie": 3798,
+"bestand": 5551
+},
+"2019": {
+"verwaltung": 279.1,
+"reserven": 1702,
+"praemie": 4054,
+"bestand": 4450
+},
+"2020": {
+"verwaltung": 379.8,
+"reserven": 2371,
+"praemie": 4192,
+"bestand": 3710
+},
+"2021": {
+"verwaltung": 402.0,
+"reserven": 2896,
+"praemie": 4190,
+"bestand": 3339
+},
+"2022": {
+"verwaltung": 462.4,
+"reserven": 3039,
+"praemie": 4183,
+"bestand": 3062
+},
+"2023": {
+"verwaltung": 502.0,
+"reserven": 3154,
+"praemie": 4223,
+"bestand": 2827
+},
+"2024": {
+"verwaltung": 513.9,
+"reserven": 3220,
+"praemie": 4351,
+"bestand": 2796
+}
+},
+"1331": {
+"2018": {
+"verwaltung": 162.3,
+"reserven": 1216,
+"praemie": 3384,
+"bestand": 1153
+},
+"2019": {
+"verwaltung": 191.8,
+"reserven": 1925,
+"praemie": 3449,
+"bestand": 1097
+},
+"2020": {
+"verwaltung": 355.7,
+"reserven": 2180,
+"praemie": 3591,
+"bestand": 1042
+},
+"2021": {
+"verwaltung": 323.4,
+"reserven": 2245,
+"praemie": 3595,
+"bestand": 995
+},
+"2022": {
+"verwaltung": 410.7,
+"reserven": 2282,
+"praemie": 3575,
+"bestand": 963
+},
+"2023": {
+"verwaltung": 269.2,
+"reserven": 1317,
+"praemie": 3542,
+"bestand": 1390
+}
+},
+"1362": {
+"2018": {
+"verwaltung": 138.5,
+"reserven": 1424,
+"praemie": 2915,
+"bestand": 1263
+},
+"2019": {
+"verwaltung": 130.6,
+"reserven": 847,
+"praemie": 3023,
+"bestand": 1441
+},
+"2020": {
+"verwaltung": 177.7,
+"reserven": 1153,
+"praemie": 3639,
+"bestand": 1126
+}
+},
+"1384": {
+"2018": {
+"verwaltung": 145.1,
+"reserven": 777,
+"praemie": 3650,
+"bestand": 713570
+},
+"2019": {
+"verwaltung": 151.8,
+"reserven": 850,
+"praemie": 3738,
+"bestand": 729163
+},
+"2020": {
+"verwaltung": 162.3,
+"reserven": 1003,
+"praemie": 3766,
+"bestand": 738955
+},
+"2021": {
+"verwaltung": 179.3,
+"reserven": 972,
+"praemie": 3753,
+"bestand": 749090
+},
+"2022": {
+"verwaltung": 187.4,
+"reserven": 634,
+"praemie": 3772,
+"bestand": 754833
+},
+"2023": {
+"verwaltung": 204.9,
+"reserven": 514,
+"praemie": 4089,
+"bestand": 727810
+},
+"2024": {
+"verwaltung": 205.0,
+"reserven": 595,
+"praemie": 4415,
+"bestand": 813080
+}
+},
+"1386": {
+"2018": {
+"verwaltung": 248.8,
+"reserven": 1776,
+"praemie": 4219,
+"bestand": 11434
+},
+"2019": {
+"verwaltung": 198.0,
+"reserven": 2051,
+"praemie": 4295,
+"bestand": 10803
+},
+"2020": {
+"verwaltung": 291.6,
+"reserven": 2410,
+"praemie": 4474,
+"bestand": 9160
+},
+"2021": {
+"verwaltung": 180.4,
+"reserven": 1395,
+"praemie": 4064,
+"bestand": 14407
+},
+"2022": {
+"verwaltung": 163.6,
+"reserven": 1270,
+"praemie": 4086,
+"bestand": 15200
+},
+"2023": {
+"verwaltung": 215.7,
+"reserven": 1336,
+"praemie": 4297,
+"bestand": 14192
+},
+"2024": {
+"verwaltung": 235.5,
+"reserven": 1738,
+"praemie": 4700,
+"bestand": 12887
+}
+},
+"1401": {
+"2018": {
+"verwaltung": 210.4,
+"reserven": 1336,
+"praemie": 3436,
+"bestand": 8891
+},
+"2019": {
+"verwaltung": 222.8,
+"reserven": 1434,
+"praemie": 3338,
+"bestand": 9203
+},
+"2020": {
+"verwaltung": 216.0,
+"reserven": 1440,
+"praemie": 3334,
+"bestand": 9660
+},
+"2021": {
+"verwaltung": 214.9,
+"reserven": 1427,
+"praemie": 3477,
+"bestand": 9505
+},
+"2022": {
+"verwaltung": 206.8,
+"reserven": 959,
+"praemie": 3184,
+"bestand": 10321
+},
+"2023": {
+"verwaltung": 224.1,
+"reserven": 885,
+"praemie": 3502,
+"bestand": 10360
+},
+"2024": {
+"verwaltung": 191.4,
+"reserven": 806,
+"praemie": 3772,
+"bestand": 12224
+}
+},
+"1479": {
+"2018": {
+"verwaltung": 179.3,
+"reserven": 537,
+"praemie": 4540,
+"bestand": 326221
+},
+"2019": {
+"verwaltung": 192.5,
+"reserven": 951,
+"praemie": 4617,
+"bestand": 300055
+},
+"2020": {
+"verwaltung": 236.3,
+"reserven": 1042,
+"praemie": 4456,
+"bestand": 299242
+},
+"2021": {
+"verwaltung": 260.9,
+"reserven": 919,
+"praemie": 4466,
+"bestand": 307317
+},
+"2022": {
+"verwaltung": 261.7,
+"reserven": 580,
+"praemie": 4420,
+"bestand": 314841
+},
+"2023": {
+"verwaltung": 230.0,
+"reserven": 473,
+"praemie": 4632,
+"bestand": 296991
+},
+"2024": {
+"verwaltung": 203.8,
+"reserven": 421,
+"praemie": 4928,
+"bestand": 334760
+}
+},
+"1507": {
+"2018": {
+"verwaltung": 165.1,
+"reserven": 1082,
+"praemie": 3740,
+"bestand": 9754
+},
+"2019": {
+"verwaltung": 178.1,
+"reserven": 1708,
+"praemie": 3942,
+"bestand": 8014
+},
+"2020": {
+"verwaltung": 205.5,
+"reserven": 2247,
+"praemie": 3963,
+"bestand": 7361
+},
+"2021": {
+"verwaltung": 224.8,
+"reserven": 2383,
+"praemie": 3964,
+"bestand": 7190
+},
+"2022": {
+"verwaltung": 244.7,
+"reserven": 1423,
+"praemie": 3798,
+"bestand": 9237
+},
+"2023": {
+"verwaltung": 210.0,
+"reserven": 1141,
+"praemie": 3898,
+"bestand": 10341
+},
+"2024": {
+"verwaltung": 192.1,
+"reserven": 1130,
+"praemie": 4401,
+"bestand": 11050
+}
+},
+"1509": {
+"2018": {
+"verwaltung": 207.0,
+"reserven": 1094,
+"praemie": 3995,
+"bestand": 475159
+},
+"2019": {
+"verwaltung": 210.8,
+"reserven": 1164,
+"praemie": 3874,
+"bestand": 506720
+},
+"2020": {
+"verwaltung": 200.6,
+"reserven": 1186,
+"praemie": 3858,
+"bestand": 524840
+},
+"2021": {
+"verwaltung": 211.5,
+"reserven": 1172,
+"praemie": 3896,
+"bestand": 537987
+},
+"2022": {
+"verwaltung": 214.7,
+"reserven": 847,
+"praemie": 3902,
+"bestand": 591254
+},
+"2023": {
+"verwaltung": 224.7,
+"reserven": 650,
+"praemie": 4030,
+"bestand": 594850
+},
+"2024": {
+"verwaltung": 223.6,
+"reserven": 668,
+"praemie": 4334,
+"bestand": 639302
+}
+},
+"1529": {
+"2018": {
+"verwaltung": 182.4,
+"reserven": 1068,
+"praemie": 4066,
+"bestand": 178585
+},
+"2019": {
+"verwaltung": 188.9,
+"reserven": 1391,
+"praemie": 4220,
+"bestand": 173667
+},
+"2020": {
+"verwaltung": 193.9,
+"reserven": 1733,
+"praemie": 4342,
+"bestand": 165078
+},
+"2021": {
+"verwaltung": 169.4,
+"reserven": 1661,
+"praemie": 4274,
+"bestand": 166740
+}
+},
+"1535": {
+"2018": {
+"verwaltung": 161.4,
+"reserven": 384,
+"praemie": 4090,
+"bestand": 234123
+},
+"2019": {
+"verwaltung": 171.9,
+"reserven": 690,
+"praemie": 4168,
+"bestand": 219998
+},
+"2020": {
+"verwaltung": 212.7,
+"reserven": 713,
+"praemie": 4041,
+"bestand": 215232
+},
+"2021": {
+"verwaltung": 214.8,
+"reserven": 737,
+"praemie": 4134,
+"bestand": 204598
+},
+"2022": {
+"verwaltung": 240.0,
+"reserven": 502,
+"praemie": 4103,
+"bestand": 197058
+},
+"2023": {
+"verwaltung": 217.1,
+"reserven": 251,
+"praemie": 4212,
+"bestand": 202217
+},
+"2024": {
+"verwaltung": 189.8,
+"reserven": 250,
+"praemie": 4708,
+"bestand": 200097
+}
+},
+"1542": {
+"2018": {
+"verwaltung": 145.7,
+"reserven": 675,
+"praemie": 3423,
+"bestand": 1000912
+},
+"2019": {
+"verwaltung": 151.6,
+"reserven": 775,
+"praemie": 3527,
+"bestand": 1015658
+},
+"2020": {
+"verwaltung": 171.5,
+"reserven": 827,
+"praemie": 3664,
+"bestand": 985644
+},
+"2021": {
+"verwaltung": 209.7,
+"reserven": 801,
+"praemie": 3722,
+"bestand": 937286
+},
+"2022": {
+"verwaltung": 204.0,
+"reserven": 408,
+"praemie": 3778,
+"bestand": 902319
+},
+"2023": {
+"verwaltung": 217.6,
+"reserven": 288,
+"praemie": 4082,
+"bestand": 804064
+},
+"2024": {
+"verwaltung": 262.3,
+"reserven": 421,
+"praemie": 4632,
+"bestand": 682061
+}
+},
+"1555": {
+"2018": {
+"verwaltung": 134.0,
+"reserven": 2170,
+"praemie": 3749,
+"bestand": 485245
+},
+"2019": {
+"verwaltung": 128.6,
+"reserven": 2420,
+"praemie": 3697,
+"bestand": 493226
+},
+"2020": {
+"verwaltung": 140.6,
+"reserven": 2479,
+"praemie": 3657,
+"bestand": 493623
+},
+"2021": {
+"verwaltung": 160.7,
+"reserven": 2509,
+"praemie": 3717,
+"bestand": 484761
+},
+"2022": {
+"verwaltung": 161.9,
+"reserven": 2063,
+"praemie": 3687,
+"bestand": 492036
+},
+"2023": {
+"verwaltung": 200.1,
+"reserven": 2027,
+"praemie": 3842,
+"bestand": 498455
+},
+"2024": {
+"verwaltung": 212.1,
+"reserven": 2140,
+"praemie": 4044,
+"bestand": 509645
+}
+},
+"1560": {
+"2018": {
+"verwaltung": 140.3,
+"reserven": 1318,
+"praemie": 3054,
+"bestand": 135831
+},
+"2019": {
+"verwaltung": 139.1,
+"reserven": 1415,
+"praemie": 2992,
+"bestand": 146840
+},
+"2020": {
+"verwaltung": 134.5,
+"reserven": 1484,
+"praemie": 3071,
+"bestand": 154954
+},
+"2021": {
+"verwaltung": 144.2,
+"reserven": 1669,
+"praemie": 3196,
+"bestand": 146677
+},
+"2022": {
+"verwaltung": 147.8,
+"reserven": 1362,
+"praemie": 3218,
+"bestand": 143877
+},
+"2023": {
+"verwaltung": 153.5,
+"reserven": 1421,
+"praemie": 3432,
+"bestand": 136911
+},
+"2024": {
+"verwaltung": 159.4,
+"reserven": 1408,
+"praemie": 3567,
+"bestand": 151415
+}
+},
+"1562": {
+"2018": {
+"verwaltung": 260.5,
+"reserven": 1097,
+"praemie": 4130,
+"bestand": 751737
+},
+"2019": {
+"verwaltung": 238.2,
+"reserven": 1333,
+"praemie": 4120,
+"bestand": 795082
+},
+"2020": {
+"verwaltung": 226.1,
+"reserven": 1278,
+"praemie": 3978,
+"bestand": 876591
+},
+"2021": {
+"verwaltung": 230.1,
+"reserven": 1079,
+"praemie": 3944,
+"bestand": 932899
+},
+"2022": {
+"verwaltung": 176.2,
+"reserven": 469,
+"praemie": 3780,
+"bestand": 1412757
+},
+"2023": {
+"verwaltung": 178.1,
+"reserven": 447,
+"praemie": 4158,
+"bestand": 1305105
+},
+"2024": {
+"verwaltung": 178.1,
+"reserven": 601,
+"praemie": 4474,
+"bestand": 1290207
+}
+},
+"1568": {
+"2018": {
+"verwaltung": 117.0,
+"reserven": 1121,
+"praemie": 3691,
+"bestand": 80985
+},
+"2019": {
+"verwaltung": 118.2,
+"reserven": 1014,
+"praemie": 3898,
+"bestand": 80431
+},
+"2020": {
+"verwaltung": 139.1,
+"reserven": 1222,
+"praemie": 3978,
+"bestand": 74798
+},
+"2021": {
+"verwaltung": 149.0,
+"reserven": 1220,
+"praemie": 4030,
+"bestand": 71874
+},
+"2022": {
+"verwaltung": 156.0,
+"reserven": 898,
+"praemie": 4117,
+"bestand": 72996
+},
+"2023": {
+"verwaltung": 197.5,
+"reserven": 909,
+"praemie": 4347,
+"bestand": 76696
+},
+"2024": {
+"verwaltung": 205.9,
+"reserven": 854,
+"praemie": 4780,
+"bestand": 89262
+}
+},
+"1569": {
+"2018": {
+"verwaltung": 149.1,
+"reserven": 470,
+"praemie": 3313,
+"bestand": 253965
+},
+"2019": {
+"verwaltung": 150.5,
+"reserven": 561,
+"praemie": 3345,
+"bestand": 261297
+},
+"2020": {
+"verwaltung": 152.8,
+"reserven": 601,
+"praemie": 3395,
+"bestand": 278000
+},
+"2021": {
+"verwaltung": 132.4,
+"reserven": 323,
+"praemie": 3311,
+"bestand": 339983
+},
+"2022": {
+"verwaltung": 139.5,
+"reserven": 147,
+"praemie": 3497,
+"bestand": 642795
+}
+},
+"1570": {
+"2018": {
+"verwaltung": 146.7,
+"reserven": 1904,
+"praemie": 3823,
+"bestand": 46116
+},
+"2019": {
+"verwaltung": 133.5,
+"reserven": 1612,
+"praemie": 3903,
+"bestand": 52876
+},
+"2020": {
+"verwaltung": 157.2,
+"reserven": 1626,
+"praemie": 4010,
+"bestand": 56313
+},
+"2021": {
+"verwaltung": 154.9,
+"reserven": 1470,
+"praemie": 4058,
+"bestand": 58472
+},
+"2022": {
+"verwaltung": 161.6,
+"reserven": 1007,
+"praemie": 4138,
+"bestand": 60606
+},
+"2023": {
+"verwaltung": 197.4,
+"reserven": 957,
+"praemie": 4476,
+"bestand": 60211
+},
+"2024": {
+"verwaltung": 223.6,
+"reserven": 1539,
+"praemie": 5025,
+"bestand": 48098
+}
+},
+"1575": {
+"2018": {
+"verwaltung": 125.3,
+"reserven": 293,
+"praemie": 3159,
+"bestand": 70493
+},
+"2019": {
+"verwaltung": 117.4,
+"reserven": 527,
+"praemie": 3264,
+"bestand": 66778
+},
+"2020": {
+"verwaltung": 136.4,
+"reserven": 605,
+"praemie": 3323,
+"bestand": 61084
+},
+"2021": {
+"verwaltung": 162.9,
+"reserven": 661,
+"praemie": 3454,
+"bestand": 51738
+}
+},
+"1577": {
+"2018": {
+"verwaltung": 122.9,
+"reserven": 327,
+"praemie": 2731,
+"bestand": 107744
+},
+"2019": {
+"verwaltung": 128.4,
+"reserven": 346,
+"praemie": 2853,
+"bestand": 102440
+},
+"2020": {
+"verwaltung": 134.4,
+"reserven": 443,
+"praemie": 2986,
+"bestand": 85180
+},
+"2021": {
+"verwaltung": 121.7,
+"reserven": 186,
+"praemie": 3043,
+"bestand": 90242
+}
+}
+}
+}

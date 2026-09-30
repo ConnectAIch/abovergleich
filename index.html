@@ -509,6 +509,13 @@
   .kk-model-tip:hover .tip-text,
   .kk-model-tip.active .tip-text { display: block; }
   label .kk-model-tip, .kk-list-note .kk-model-tip, .kk-upload .kk-model-tip { margin-left: 4px; vertical-align: 1px; }
+  .kk-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .kk-chip { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 999px; line-height: 1.6; text-decoration: none; white-space: nowrap; }
+  .kk-chip-note { background: var(--surface2); color: var(--text2); }
+  .kk-chip-note:hover { background: var(--border2); }
+  .kk-chip-good { background: rgba(22,163,74,0.1); color: var(--green); }
+  .kk-chip-new { background: rgba(234,88,12,0.1); color: var(--orange); }
+  .kk-chip .kk-model-tip { width: 13px; height: 13px; font-size: 8px; }
   .kk-model-tip, .kk-model-tip .tip-text { text-transform: none; letter-spacing: normal; white-space: normal; }
   .kk-price-cta { display: flex; align-items: center; gap: 10px; }
   .kk-price {
@@ -663,6 +670,7 @@
     <a href="https://handyabo.com/internet/" class="nav-link">Internet</a>
     <a href="https://handyabo.com/" class="nav-link">Handy-Abo</a>
     <a href="/krankenkassenpraemien-2027/" class="nav-link">Prämien 2027</a>
+    <a href="/krankenkassen-rating/" class="nav-link">Rating</a>
     <a href="/methode/" class="nav-link">Unsere Methode</a>
   </div>
   <button class="nav-burger" id="nav-burger" onclick="toggleNav()" aria-label="Menü">
@@ -809,7 +817,7 @@
       </table></div>
     </div>
 
-    <div style="font-size:12px;color:var(--muted);text-align:center;">Quelle: BAG · Erwachsene, Franchise 300, mit Unfall · <a href="/krankenkassenpraemien-2027/" style="color:var(--accent-dark);">Ganze Auswertung 2027</a> · <a href="/kasse/" style="color:var(--accent-dark);">Alle Kassen</a> · <a href="/krankenkasse-kuendigen/" style="color:var(--accent-dark);">Kündigen bis 30. November 2026</a></div>
+    <div style="font-size:12px;color:var(--muted);text-align:center;">Quelle: BAG · Erwachsene, Franchise 300, mit Unfall · <a href="/krankenkassenpraemien-2027/" style="color:var(--accent-dark);">Ganze Auswertung 2027</a> · <a href="/krankenkassen-rating/" style="color:var(--accent-dark);">Preistreue-Rating</a> · <a href="/kasse/" style="color:var(--accent-dark);">Alle Kassen</a> · <a href="/krankenkasse-kuendigen/" style="color:var(--accent-dark);">Kündigen bis 30. November 2026</a></div>
   </div>
 </section>
 <!-- INSIGHTS:END -->
@@ -1010,7 +1018,7 @@
 <footer>
   <div class="footer-inner">
     <div class="footer-logo">abo<span>vergleich</span>.com</div>
-    <div class="footer-note">Unabhängiger Abo-Vergleich für die Schweiz. Wir verdienen eine Provision bei Vertragsabschluss über unsere Links. Für dich entstehen keine zusätzlichen Kosten.</div>
+    <div class="footer-note">Unabhängiger Vergleich für die Schweiz. Von Krankenkassen nehmen wir keine Provisionen.</div>
     <div class="footer-links">
       <a href="/methode/">Methode</a>
       <a href="/impressum/">Impressum</a>
@@ -1279,6 +1287,12 @@ function applyInvoice(r) {
   };
 })();
 
+// Preistreue-Rating je Region (scripts/build_rating.py). Lädt im Hintergrund,
+// fehlt es, zeigt der Rechner einfach keine Abzeichen.
+let RATING_DATA = null;
+const ratingLoad = fetch("/rating-daten.json?v=120f3b84").then(r => r.ok ? r.json() : null)
+  .then(d => { RATING_DATA = d; }).catch(() => {});
+
 async function checkKK() {
   const plz = document.getElementById('kk-plz').value.trim();
   const year = document.getElementById('kk-year').value.trim();
@@ -1309,6 +1323,7 @@ async function checkKK() {
     });
 
     const data = await res.json();
+    await ratingLoad;
 
     if (data.error) {
       subEl.textContent = data.error;
@@ -1515,6 +1530,28 @@ async function checkKK() {
       };
     }
 
+    // Abzeichen je Angebot: Note der Kasse in dieser Region, «dauerhaft günstig»
+    // (in mindestens 60 % der Jahre seit 2020 unter den 5 günstigsten, bei
+    // dieser Franchise) und ein Hinweis, wenn es den Tarif erst kurz gibt.
+    function ratingChips(p) {
+      const R = RATING_DATA;
+      if (!R) return '';
+      const chips = [];
+      const v = (R.regionen[`${data.canton}|${data.region}`] || {})[p.insurer_id];
+      if (v && v[0] != null) {
+        chips.push(`<a class="kk-chip kk-chip-note" href="/krankenkassen-rating/">Preistreue ${v[0].toFixed(1).replace('.', ',')}</a>`);
+        const t = v[1][R.franchisen.indexOf(Number(data.franchise))];
+        if (t && t[1] >= 5 && t[0] / t[1] >= 0.6) {
+          chips.push(`<span class="kk-chip kk-chip-good">Dauerhaft günstig <span class="kk-model-tip" data-tip aria-label="Info">i<span class="tip-text">In deiner Region in ${t[0]} von ${t[1]} Jahren seit ${R.von} unter den ${R.top} günstigsten Kassen, bei dieser Franchise.</span></span></span>`);
+        }
+      }
+      const since = (R.seit[p.insurer_id] || {})[String(p.tariff || '').toLowerCase()];
+      if (since && p.model_type !== 'standard') {
+        chips.push(`<span class="kk-chip kk-chip-new">Tarif seit ${since} <span class="kk-model-tip" data-tip aria-label="Info">i<span class="tip-text">Diesen Tarif gibt es erst seit ${since}, neu oder umbenannt. Neue Sparmodelle starten oft mit viel Rabatt und verlieren ihn in den Folgejahren.</span></span></span>`);
+      }
+      return chips.length ? `<div class="kk-chips">${chips.join('')}</div>` : '';
+    }
+
     function renderRow(p, rank, opts = {}) {
       const isOwn = currentId && p.insurer_id === currentId;
       // Andere Kasse: «Wechseln» führt in den Ablauf auf der Kündigungsseite
@@ -1545,6 +1582,7 @@ async function checkKK() {
           <div>
             <div class="kk-insurer">${p.insurer_name}${isOwn ? '<span class="kk-tag">Deine Kasse</span>' : ''}</div>
             <div class="kk-model">${tariffLabel(p)}${modelTip(p.model_type)}</div>
+            ${ratingChips(p)}
           </div>
         </div>
         <div class="kk-price-cta">

@@ -342,6 +342,21 @@ def e(s):
 
 
 PAGE_CSS = """
+  .kk-rating { background:var(--surface); border:1px solid var(--border2); border-radius:14px; padding:20px 22px; margin:20px 0; }
+  .kk-rating-head { display:flex; justify-content:space-between; gap:16px; align-items:flex-start; margin-bottom:12px; }
+  .kk-rating-label { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); }
+  .kk-rating-sub { font-size:13px; color:var(--muted); margin-top:4px; }
+  .kk-rating-note { font-family:'Plus Jakarta Sans',sans-serif; font-size:40px; font-weight:800; line-height:1; color:var(--text); white-space:nowrap; }
+  .kk-rating-note span { font-size:16px; color:var(--muted); font-weight:600; }
+  .kk-rrow { display:grid; grid-template-columns:120px 1fr 36px; gap:10px; align-items:center; font-size:14px; padding:4px 0; }
+  .kk-bar { display:block; height:8px; background:var(--surface2); border-radius:4px; overflow:hidden; }
+  .kk-bar span { display:block; height:100%; background:var(--accent); border-radius:4px; }
+  .kk-rnote { font-size:13px; color:var(--muted); margin:12px 0 8px; }
+  .kk-rating > a { color:var(--accent-dark); font-weight:600; font-size:14px; }
+  .kk-rtable td, .kk-rtable th { white-space:nowrap; padding-left:8px; padding-right:8px; font-size:14px; }
+  .kk-rtable td:nth-child(n+4), .kk-rtable th:nth-child(n+4) { color:var(--muted); }
+  .kk-cantonlinks { display:flex; flex-wrap:wrap; gap:6px 14px; font-size:14px; margin-bottom:12px; }
+  .kk-cantonlinks a { color:var(--accent-dark); }
   .kk-page { max-width: 820px; }
   .kk-lead { font-size: 18px !important; }
   .kk-facts { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:28px 0 8px; }
@@ -428,6 +443,7 @@ def page(path, title, description, body, jsonld):
       <a href="/kasse/">Kassen</a>
       <a href="/krankenkasse-kuendigen/">K&uuml;ndigen</a>
       <a href="/krankenkassenpraemien-{YEAR}/">Pr&auml;mien {YEAR}</a>
+      <a href="/krankenkassen-rating/">Rating</a>
       <a href="/methode/">Methode</a>
       <a href="/impressum/">Impressum</a>
       <a href="/datenschutz/">Datenschutz</a>
@@ -555,6 +571,8 @@ def canton_page(c, cur, prev_idx, cantons, insurers_c, regions):
             if gem:
                 parts.append(f'<details class="kk-gemeinden"><summary>Gemeinden in {region_label(reg, len(regs))} ({len(gem)})</summary>'
                              f'<p>{e(", ".join(gem))}</p></details>')
+
+    parts.append(rating_canton_block(c, main))
 
     ranked = sorted(insurers_c, key=lambda x: x["change"])
     if len(ranked) >= 4:
@@ -825,11 +843,189 @@ def insights_block(cantons, insurers, nat, top3_prev, top3_cur, ins_prev, nat_pr
       </table></div>
     </div>
 
-    <div style="font-size:12px;color:var(--muted);text-align:center;">Quelle: BAG · Erwachsene, Franchise 300, mit Unfall · <a href="/krankenkassenpraemien-{YEAR}/" style="color:var(--accent-dark);">Ganze Auswertung {YEAR}</a> · <a href="/kasse/" style="color:var(--accent-dark);">Alle Kassen</a> · <a href="/krankenkasse-kuendigen/" style="color:var(--accent-dark);">Kündigen bis {DEADLINE}</a></div>
+    <div style="font-size:12px;color:var(--muted);text-align:center;">Quelle: BAG · Erwachsene, Franchise 300, mit Unfall · <a href="/krankenkassenpraemien-{YEAR}/" style="color:var(--accent-dark);">Ganze Auswertung {YEAR}</a> · <a href="/krankenkassen-rating/" style="color:var(--accent-dark);">Preistreue-Rating</a> · <a href="/kasse/" style="color:var(--accent-dark);">Alle Kassen</a> · <a href="/krankenkasse-kuendigen/" style="color:var(--accent-dark);">Kündigen bis {DEADLINE}</a></div>
   </div>
 </section>
 <!-- INSIGHTS:END -->"""
 
+
+
+# ── Preistreue-Rating ──────────────────────────────────────────────────────
+
+RATING = None   # wird in main() aus build_rating.compute() gefüllt
+RATING_PATH = "/krankenkassen-rating/"
+
+
+def note_fmt(v):
+    return f"{v:.1f}".replace(".", ",") if v is not None else "–"
+
+
+def bar(v):
+    w = 0 if v is None else max(2, v * 10)
+    return f'<span class="kk-bar"><span style="width:{w:.0f}%"></span></span>'
+
+
+def rating_canton_block(c, main):
+    """Die 5 Kassen mit der besten Note in der Hauptregion des Kantons."""
+    if not RATING:
+        return ""
+    reg = RATING["regions"].get(f"{c}|{main}", {})
+    best = sorted(((i, v) for i, v in reg.items() if v["note"] is not None), key=lambda x: -x[1]["note"])[:5]
+    if not best:
+        return ""
+    n_years = len(RATING["years"])
+    rows = "".join(
+        f'<tr><td>{kasse_link(i)}</td><td class="num"><strong>{note_fmt(v["note"])}</strong></td>'
+        f'<td class="num">{v["top5"][-1][0]} von {v["top5"][-1][1]}</td></tr>' for i, v in best)
+    return (f"<h2>Dauerhaft günstig im Kanton {e(CANTONS[c][0])}</h2>"
+            f"<p>Nicht nur dieses Jahr günstig, sondern über die Jahre: die fünf Kassen mit der besten Note im "
+            f"<a href=\"{RATING_PATH}\">Preistreue-Rating</a>, gerechnet für die Hauptregion des Kantons. "
+            f"Die letzte Spalte zeigt, in wie vielen Jahren seit {RATING['years'][0]} die Kasse hier unter den 5 günstigsten war (Franchise 2'500).</p>"
+            f'<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Kasse</th><th class="num">Note</th>'
+            f'<th class="num">Jahre unter den 5 günstigsten</th></tr></thead><tbody>{rows}</tbody></table></div>')
+
+
+def rating_kasse_card(i):
+    if not RATING or i not in RATING["national"]:
+        return ""
+    n = RATING["national"][i]
+    rows = "".join(f'<div class="kk-rrow"><span>{e(RATING["labels"][k])}</span>{bar(n["parts"][k])}'
+                   f'<span class="num">{note_fmt(n["parts"][k])}</span></div>' for k in RATING["weights"])
+    adm = RATING["verwaltung"]["kassen"].get(str(i), {})
+    mk = RATING["verwaltung"]["markt_verwaltung"]
+    last = max(adm, default=None)
+    first = min(adm, default=None)
+    adm_html = ""
+    if last:
+        v, m = adm[last]["verwaltung"], mk[last]
+        adm_html = (f'<p class="kk-rnote">Verwaltungskosten {last}: <strong>CHF {v:.0f}</strong> pro versicherte Person '
+                    f'(Schnitt aller Kassen CHF {m:.0f})'
+                    + (f', {first}: CHF {adm[first]["verwaltung"]:.0f}' if first != last else "") + '. Quelle: BAG, Aufsichtsdaten.</p>')
+    hint = " Regionalkasse: die Note stützt sich auf wenige Regionen." if n["regional"] else ""
+    return (f'<div class="kk-rating"><div class="kk-rating-head"><div><div class="kk-rating-label">Preistreue-Rating {YEAR}</div>'
+            f'<div class="kk-rating-sub">Ist {e(n["name"])} dauerhaft günstig? Aus den BAG-Prämien seit {RATING["years"][0]}.{hint}</div></div>'
+            f'<div class="kk-rating-note">{note_fmt(n["note"])}<span>/10</span></div></div>{rows}{adm_html}'
+            f'<a href="{RATING_PATH}">So rechnen wir &rarr;</a></div>')
+
+
+def rating_page(r):
+    path = RATING_PATH
+    nat = r["national"]
+    big = sorted((i for i in nat if not nat[i]["regional"] and nat[i]["note"] is not None), key=lambda i: -nat[i]["note"])
+    small = sorted((i for i in nat if nat[i]["regional"] and nat[i]["note"] is not None), key=lambda i: -nat[i]["note"])
+    keys = list(r["weights"])
+    y0 = r["years"][0]
+
+    def table(ids, rank=True):
+        short = {"preis": "Preis", "konstanz": "Konstanz", "treue": "Treue", "rabatt": "Rabatt",
+                 "tarife": "Tarife", "solvenz": "Reserven"}
+        head = "".join(f'<th class="num" title="{e(r["labels"][k])}">{short[k]}</th>' for k in keys)
+        body = "".join(
+            f'<tr>{"<td>" + str(n + 1) + "</td>" if rank else ""}<td>{kasse_link(i)}</td>'
+            f'<td class="num"><strong>{note_fmt(nat[i]["note"])}</strong></td>'
+            + "".join(f'<td class="num">{note_fmt(nat[i]["parts"][k])}</td>' for k in keys) + "</tr>"
+            for n, i in enumerate(ids))
+        return (f'<div class="kk-table-wrap"><table class="kk-table kk-rtable"><thead><tr>{"<th>#</th>" if rank else ""}<th>Kasse</th>'
+                f'<th class="num">Note</th>{head}</tr></thead><tbody>{body}</tbody></table></div>')
+
+    top = [nat[i] for i in big[:3]]
+    koh = r["kohorten"][0] if r["kohorten"] else None
+    alte = r["alte_modelle"]
+    # Verwaltungskosten: grössere Kassen, erstes und letztes Jahr
+    adm, mk = r["verwaltung"]["kassen"], r["verwaltung"]["markt_verwaltung"]
+    ay = sorted(mk)
+    a0, a1 = ay[0], ay[-1]
+    adm_rows = []
+    for i in big:
+        d = adm.get(str(i), {})
+        if a1 in d and a0 in d:
+            adm_rows.append((d[a1]["verwaltung"], i, d[a0]["verwaltung"]))
+    adm_rows.sort()
+    adm_html = "".join(
+        f'<tr><td>{kasse_link(i)}</td><td class="num">CHF {v0:.0f}</td><td class="num"><strong>CHF {v1:.0f}</strong></td>'
+        f'<td class="num">{pct((v1 / v0 - 1) * 100, sign=True)}</td></tr>' for v1, i, v0 in adm_rows)
+    cantons = "".join(f'<a href="/krankenkasse/{slug}/">{e(nm)}</a>' for nm, slug in sorted(CANTONS.values()))
+
+    method = [
+        ("preis", "Preis heute", "Position des günstigsten Tarifs der Kasse unter allen Kassen der Prämienregion, "
+         f"{YEAR}. Unter den günstigsten 10 % = 10 Punkte, ab 80 % = 0."),
+        ("konstanz", "Konstanz", f"In wie vielen Jahren seit {y0} war die Kasse in der Region unter den 5 günstigsten? "
+         "Ab 40 % der Jahre = 10 Punkte."),
+        ("treue", "Treue", "Wie stark stieg der günstigste Tarif der Kasse, wenn man in ihm blieb, verglichen mit dem Median "
+         "aller Tarife der Region? Mittel über alle Jahre. 0,5 Punkte pro Jahr unter dem Markt = 10, 1,5 Punkte darüber = 0."),
+        ("rabatt", "Rabatt-Treue", f"Behalten neue Modelle ihren Rabatt gegenüber dem Standardmodell derselben Kasse? "
+         "Gemessen an denselben Tarifen vom Startjahr bis heute. Kein Verlust = 10, 1,5 Punkte Verlust pro Jahr = 0. "
+         "Kassen ohne neue Modelle seit 2021 werden hier nicht bewertet."),
+        ("tarife", "Tarif-Bestand", "Anteil der Tarife, die im Folgejahr unter gleichem Tarifcode weiterlaufen. "
+         "100 % = 10 Punkte, 80 % = 0. Wer Tarife streicht oder umbenennt, zwingt Versicherte zum Wechseln."),
+        ("solvenz", "Finanzpolster", "Solvenzquote laut BAG per 1. Januar 2026: vorhandene Reserven im Verhältnis zur "
+         "gesetzlichen Mindesthöhe. 200 % = 10 Punkte, 100 % = 0. Knappe Reserven gehen oft höheren Aufschlägen voraus."),
+    ]
+    meth_rows = "".join(f'<tr><td><strong>{e(t)}</strong></td><td class="num">{int(r["weights"][k] * 100)} %</td><td>{e(d)}</td></tr>'
+                        for k, t, d in method)
+    qa = [
+        ("Welche Krankenkasse ist dauerhaft günstig?",
+         f"Laut unserem Preistreue-Rating {YEAR} schneiden {top[0]['name']}, {top[1]['name']} und {top[2]['name']} am besten ab. "
+         "Sie sind heute günstig und waren es auch in den Jahren davor. Welche Kasse in deiner Region vorne liegt, zeigt die Seite deines Kantons."),
+        ("Warum ist die günstigste Kasse von heute oft nicht die beste Wahl?",
+         "Manche Kassen sind ein Jahr günstig und schlagen danach überdurchschnittlich auf. Neue Sparmodelle starten mit viel Rabatt "
+         "und verlieren ihn in den Folgejahren. Wer nicht jedes Jahr wechseln will, fährt mit einer konstant günstigen Kasse besser."),
+        ("Fliessen Kundenbewertungen ins Rating ein?",
+         "Nein. Das Rating stützt sich nur auf harte Zahlen des Bundesamts für Gesundheit: Prämien seit "
+         f"{y0}, Solvenzquoten und Aufsichtsdaten. Jede Zahl lässt sich nachrechnen."),
+        ("Bezahlen Kassen für eine gute Note?",
+         "Nein. abovergleich.com nimmt keine Provisionen von Krankenkassen. Die Note entsteht aus einer festen Formel, die hier offengelegt ist."),
+    ]
+    body = f"""{crumbs_html([("Krankenkassen-Vergleich", "/"), ("Rating", path)])}
+<div class="article-badge">Preistreue-Rating {YEAR}</div>
+<h1>Krankenkassen-Rating {YEAR}: Welche Kasse ist dauerhaft günstig?</h1>
+<div class="article-meta">Aus den BAG-Prämien {y0} bis {YEAR} · nur harte Zahlen, keine Bewertungen</div>
+<p class="kk-lead">Die günstigste Kasse von heute ist nicht automatisch eine gute Wahl. Manche sind ein Jahr günstig und schlagen danach kräftig auf, andere streichen Tarife und zwingen dich zum Wechseln. Unser Rating zeigt, welche Kassen <strong>über die Jahre</strong> günstig bleiben.</p>
+<div class="kk-facts">
+  <div class="kk-fact"><div class="kk-fact-val">{e(top[0]['name'])}</div><div class="kk-fact-label">beste Note {YEAR}: {note_fmt(top[0]['note'])} von 10</div></div>
+  <div class="kk-fact"><div class="kk-fact-val">{len(r['years'])} Jahre</div><div class="kk-fact-label">Prämiendaten des BAG, {y0} bis {YEAR}, in jeder Prämienregion</div></div>
+  {f'<div class="kk-fact"><div class="kk-fact-val">{str(koh["start"]).replace(".", ",")} % &rarr; {str(koh["heute"]).replace(".", ",")} %</div><div class="kk-fact-label">Rabatt der {koh["jahr"]} eingeführten Sparmodelle gegenüber Standard, damals und heute</div></div>' if koh else ''}
+</div>
+<a class="kk-cta" href="/#kk-rechner">Die Note deiner Kasse im Rechner sehen &rarr;</a>
+
+<h2>Das Rating {YEAR}</h2>
+<p>Note von 0 bis 10, gewichtet aus sechs Teilnoten. Kassen mit mindestens 50'000 Versicherten, über alle Prämienregionen gerechnet. In deiner Region kann die Reihenfolge anders aussehen, siehe unten.</p>
+{table(big)}
+
+<h2>Regionalkassen</h2>
+<p>Kleinere Kassen, die nur in einem Teil der Schweiz tätig sind. Ihre Noten stützen sich auf wenige Regionen und sind deshalb separat aufgeführt.</p>
+{table(small, rank=False)}
+
+<h2>Das Rating in deiner Region</h2>
+<p>Preise und Konstanz unterscheiden sich stark zwischen den Regionen. Eine Kasse, die im Aargau vorne liegt, kann in Genf teuer sein. Auf jeder Kantonsseite steht, welche Kassen dort dauerhaft günstig sind:</p>
+<div class="kk-cantonlinks">{cantons}</div>
+
+<h2>Die Sparmodell-Falle</h2>
+<p>Neue Sparmodelle dürfen ohne Kostenzahlen aus fünf Jahren bis zu 20 % unter dem Standardmodell starten (Art. 101 KVV). Danach muss der Rabatt aus echten Kosten belegt sein. In den Daten sieht man, was das heisst:</p>
+<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Neue Modelle ab</th><th class="num">Rabatt im Startjahr</th><th class="num">Rabatt {YEAR}</th><th class="num">Tarife × Regionen</th></tr></thead><tbody>
+{"".join(f'<tr><td>{k["jahr"]}</td><td class="num">{str(k["start"]).replace(".", ",")} %</td><td class="num">{str(k["heute"]).replace(".", ",")} %</td><td class="num">{k["tarife"]}</td></tr>' for k in r["kohorten"])}
+<tr><td>Modelle, die es {y0} schon gab</td><td class="num">{str(alte["start"]).replace(".", ",")} %</td><td class="num">{str(alte["heute"]).replace(".", ",")} %</td><td class="num"></td></tr>
+</tbody></table></div>
+<p>Rabatt gegenüber dem Standardmodell derselben Kasse, Franchise 2'500, Median. Dieselben Tarife vom Startjahr bis {YEAR} verfolgt. Wer in ein neues Modell wechselt und bleibt, zahlt also Jahr für Jahr etwas mehr als beim Standard. Die Teilnote «Rabatt-Treue» misst, wie stark das bei jeder Kasse passiert.</p>
+
+<h2>Verwaltungskosten: wer viel für sich selbst ausgibt</h2>
+<p>Das BAG veröffentlicht für jede Kasse, was sie pro versicherte Person für die Verwaltung der Grundversicherung ausgibt: Löhne, Informatik, Werbung und Provisionen. Wofür genau, weist es nicht aus. Die Zahl fliesst nicht in die Note ein, weil sie schon im Preis steckt, aber sie zeigt, wo Prämiengeld hängen bleibt. Schnitt aller Kassen {a1}: <strong>CHF {mk[a1]:.0f}</strong>.</p>
+<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Kasse</th><th class="num">{a0}</th><th class="num">{a1}</th><th class="num">Veränderung</th></tr></thead><tbody>{adm_html}</tbody></table></div>
+
+<h2>So rechnen wir</h2>
+<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Teilnote</th><th class="num">Gewicht</th><th>Was sie misst</th></tr></thead><tbody>{meth_rows}</tbody></table></div>
+<p>Grundlage sind die Prämien aller Kassen {y0} bis {YEAR} für Erwachsene mit Unfalldeckung, Franchise 300 und 2'500. Tarife, die eine Kasse umbenennt, verfolgen wir über den Namen weiter. Fehlt eine Teilnote, verteilt sich ihr Gewicht auf die übrigen. Die Formel gilt für alle Kassen gleich, und keine Kasse bezahlt uns etwas.</p>
+
+<div class="kk-faq"><h2>Häufige Fragen</h2>{"".join(f"<h3>{e(q)}</h3><p>{e(a)}</p>" for q, a in qa)}</div>
+<p class="kk-note">Quellen: BAG, Prämien der obligatorischen Krankenversicherung {y0} bis {YEAR} (opendata.swiss); BAG über priminfo.admin.ch, Solvenzquoten per 1.1.2026; BAG, Aufsichtsdaten OKP; KVV Art. 101. Angaben ohne Gewähr.</p>"""
+    jsonld = [breadcrumb([("Krankenkassen-Vergleich", "/"), ("Rating", path)]), faq(qa),
+              {"@context": "https://schema.org", "@type": "Article", "headline": f"Krankenkassen-Rating {YEAR}: Welche Kasse ist dauerhaft günstig?",
+               "datePublished": f"{YEAR - 1}-10-01", "dateModified": date.today().isoformat(),
+               "author": {"@type": "Organization", "name": "abovergleich.com"},
+               "publisher": {"@type": "Organization", "name": "abovergleich.com", "url": SITE}, "mainEntityOfPage": f"{SITE}{path}"}]
+    return path, page(path, f"Krankenkassen-Rating {YEAR}: Welche Kasse ist dauerhaft günstig?",
+                      f"Preistreue-Rating aller Krankenkassen aus den BAG-Prämien {y0} bis {YEAR}: Preis, Konstanz, Treue, Tarife und Reserven. "
+                      f"{top[0]['name']} schneidet am besten ab.", body, jsonld)
 
 
 # ── Kassenseiten und Kündigung ─────────────────────────────────────────────
@@ -938,6 +1134,7 @@ def kasse_page(i, cur, by_canton_cur, prev_idx, insurers, ic, top3_cur, kv):
     p.append('<div class="kk-facts">' + "".join(
         f'<div class="kk-fact"><div class="kk-fact-val">{v}</div><div class="kk-fact-label">{l}</div></div>' for v, l in facts) + "</div>")
     p.append(f'<a class="kk-cta" href="/?kasse={i}#kk-rechner">Mit deiner {e(name)}-Rechnung vergleichen &rarr;</a>')
+    p.append(rating_kasse_card(i))
 
     p.append(f"<h2>{e(name)} {YEAR} in jedem Kanton</h2>")
     p.append(f"<p>Ø Standard und Veränderung: Standardmodell, Franchise 300, mit Unfall, Mittel über die Prämienregionen. "
@@ -1178,7 +1375,7 @@ def write_sitemap(paths):
     today = date.today().isoformat()
     static = [("/", "1.0"), ("/hausratversicherung/", "0.9"), ("/methode/", "0.6"),
               ("/blog/beste-franchise-schweiz/", "0.7"), ("/blog/hmo-telmed-hausarzt-erklaert/", "0.7"),
-              ("/blog/unfallversicherung-schweiz-ausland/", "0.7")]
+              ("/blog/unfallversicherung-schweiz-ausland/", "0.7"), ("/blog/provisionen-zusatzversicherung/", "0.7")]
     items = [(p, pr) for p, pr in static] + [(p, "0.8") for p in paths]
     body = "\n".join(f"  <url>\n    <loc>{SITE}{p}</loc>\n    <lastmod>{today}</lastmod>\n    <priority>{pr}</priority>\n  </url>"
                      for p, pr in items)
@@ -1223,6 +1420,8 @@ abovergleich.com hilft beim Sparen auf der Grundversicherung. Die Leistungen sin
 - [HMO, Telmed oder Hausarzt? Alle Modelle erklärt]({SITE}/blog/hmo-telmed-hausarzt-erklaert/)
 - [Welche Franchise ist die beste?]({SITE}/blog/beste-franchise-schweiz/)
 - [Unfallversicherung Schweiz & Ausland]({SITE}/blog/unfallversicherung-schweiz-ausland/)
+- [Warum dein Berater dir die Zusatzversicherung verkaufen will]({SITE}/blog/provisionen-zusatzversicherung/)
+- [Krankenkassen-Rating: Welche Kasse ist dauerhaft günstig?]({SITE}/krankenkassen-rating/)
 
 ## Schwesterseite
 
@@ -1247,7 +1446,7 @@ def bust_assets():
     Ändert sich die Datei, ändert sich die URL, und Browser laden sie neu."""
     import hashlib
     assets = {}
-    for rel in ("styles/shared.css", "js/combobox.js", "js/kuendigung.js"):
+    for rel in ("styles/shared.css", "js/combobox.js", "js/kuendigung.js", "rating-daten.json"):
         f = ROOT / rel
         if f.exists():
             assets["/" + rel] = hashlib.md5(f.read_bytes()).hexdigest()[:8]
@@ -1294,6 +1493,12 @@ def main():
         if (c, reg, i) in s_prev:
             ic[(c, i)].append((p, p / s_prev[(c, reg, i)] - 1))
 
+    global RATING
+    import build_rating
+    RATING = build_rating.compute()
+    (ROOT / "rating-daten.json").write_text(json.dumps(build_rating.client_json(RATING), ensure_ascii=False,
+                                                       separators=(",", ":")), encoding="utf-8")
+
     paths, cheapest = [], {}
     for c in CANTONS:
         ins_c = [{"name": INSURER_NAMES[str(i)], "premium": sum(p for p, _ in v) / len(v),
@@ -1318,7 +1523,7 @@ def main():
         paths.append(path)
 
     for fn in (lambda: hub_page(cantons, cheapest), lambda: report_page(cantons, insurers, nat, model_counts, jojo),
-               lambda: kasse_hub(insurers, top3_cur), lambda: kuendigen_page(kv)):
+               lambda: kasse_hub(insurers, top3_cur), lambda: kuendigen_page(kv), lambda: rating_page(RATING)):
         path, content = fn()
         write(path, content)
         paths.insert(0, path)
