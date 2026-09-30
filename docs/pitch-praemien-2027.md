@@ -1,64 +1,75 @@
-# Pitch: Krankenkassenprämien 2027, Vorjahressieger
+# Pitch: Krankenkasse 2027, «Nicht die billigste, sondern die treueste»
 
-Pressetext: `docs/Pressetext-Praemien-2027.md`. Absender hello@handyabo.com.
+Pressetext: [Pressetext-Preistreue-2027.md](Pressetext-Preistreue-2027.md). Absender hello@handyabo.com.
+Ersetzt den unverschickten Vorjahressieger-Pitch vom 30.09. Die Vorjahressieger stecken als
+Takeaway 2 weiter drin, der Aufhänger ist jetzt das Rating plus die Sparmodell-Falle.
 
-**Timing:** Die Prämien sind seit 29.09. publik, die Redaktionen schreiben diese
-Woche ihre Wechsel-Stücke. Lehre aus dem 31.08. (Dschungelkompass bei Blick):
-wer zuerst liefert, wird zitiert. Heute oder morgen früh raus, nicht später.
+**Warum dieser Winkel:** Beim Roaming hat Blick den Service-Winkel genommen («wir helfen dir,
+keine Überraschung zu erleben»), die reine Preiserhöhung hatte null Pickup. Hier dasselbe:
+Wir helfen, nicht jedes Jahr wechseln zu müssen. Positiv gerahmt, die preistreuen Kassen
+im Titel, die Falle im Text.
 
-## Vor dem Versand prüfen
+**Timing:** Die Redaktionen schreiben ihre Wechsel-Stücke jetzt. Lehre aus dem 31.08.
+(Dschungelkompass bei Blick): Wer zuerst liefert, wird zitiert. Spätestens 02.10. raus.
 
-- [ ] Die drei Tabellenzeilen und das Swica-Beispiel auf priminfo.admin.ch nachrechnen
-      (Erwachsene, Franchise 2'500, ohne Unfall, PLZ aus der jeweiligen Region).
-      Blick gleicht jede Zahl mit der Live-Quelle ab.
-- [ ] Swica «Favorit Start» steht auf swica.ch als Modell (geprüft 30.09., Rabatt bis 23 %).
-- [ ] Auswertungsseite live und Anker #vorjahressieger funktioniert.
-- [x] Zitate: «Redaktion abovergleich.com» (entschieden 30.09.2026). Moritz Schmid
-      bleibt Telecom, nicht für Krankenkassen.
+## Vor dem Versand prüfen (Blick rechnet jede Zahl nach)
+
+- [ ] Helsana Flexmed: auf priminfo.admin.ch für eine Region Flexmed und Standard 2026 und 2027
+      nachrechnen (Erwachsene, Franchise 2'500, ohne Unfall). Unsere Werte sind Mediane über alle
+      Regionen: Rabatt 21,7 % (2024) auf 16,1 % (2027), Anstieg +8,5 % gegen Standard +4,6 %.
+- [ ] Vorjahressieger: eines der Beispiele gegenrechnen
+      (Appenzell Innerrhoden, Vivao Sympany, +21,9 %, von Platz 1 auf Platz 9).
+- [ ] Rating-Seite, Kantonsseiten und Anker #vorjahressieger live.
+- [x] Zitate: «Redaktion abovergleich.com».
+- [ ] In jeder Mail um einen **Link** bitten. Bei handyabo gab es trotz 5 Nennungen im Blick
+      keinen Link, und ohne Links bleiben unsere Seiten unindexiert.
 
 ## 1. Blick, Bernadette Hogg (warm, kennt uns vom Roaming-Check)
 
-**Betreff:** Prämien 2027: Die Billigste vom letzten Jahr schlägt am stärksten auf
+**Betreff:** Krankenkasse 2027: Nicht die billigste nehmen, sondern die treueste
 
 Hallo Frau Hogg
 
-diesmal nicht Handy, sondern Krankenkasse, von unserer Schwesterseite abovergleich.com.
+nach dem Roaming-Check diesmal Krankenkasse, von unserer Schwesterseite abovergleich.com.
 
-Wir haben die BAG-Prämien 2025 bis 2027 für alle Regionen durchgerechnet. Das Muster
-ist deutlich: Wer letztes Jahr zur günstigsten Kasse gewechselt hat, bekommt 2027 den
-grösseren Aufschlag. Der günstigste Tarif von 2026 steigt im Schnitt um 7,7 Prozent,
-der Markt um 5,4 Prozent. In nur 8 von 36 Regionen ist er noch die Nummer 1. Im Jahr
-davor war es genauso.
+Alle schreiben jetzt «Wechseln lohnt sich». Wir haben die BAG-Prämien von 2020 bis 2027 in
+jeder Region durchgerechnet und gesehen, dass die günstigste Kasse oft die ist, die danach
+kräftig aufschlägt:
 
-Drei Beispiele, alle BAG-Daten, Franchise 2'500:
-- Appenzell Innerrhoden, Vivao Sympany: +21,9 %, von Platz 1 auf Platz 9
-- Schaffhausen, Helsana BeneFit PLUS: +12,6 %, von Platz 1 auf Platz 8
-- Swica bietet neu «Favorit Start» an; das bisherige «Favorit Telmed» steigt in
-  Schaffhausen um 14 %. Wer bleibt, zahlt CHF 1'114 im Jahr mehr, bei derselben Kasse.
+- Neue Sparmodelle starten mit bis zu 20 % Rabatt und verlieren ihn Jahr für Jahr. Die 2021
+  eingeführten lagen 18,4 % unter Standard, heute 13,2 %. Beispiel Helsana Flexmed: 2027
+  +8,5 %, das Standardmodell derselben Kasse +4,6 %.
+- Der günstigste Tarif von 2026 steigt 2027 um 7,7 %, der Markt um 5,4 %.
+- Es geht auch anders: In unserem Preistreue-Rating liegen Concordia, Agrisano und KPT vorne.
+  Sie sind günstig und waren es auch in den Jahren davor.
 
-Und für die Leserinnen und Leser: Wer bei der eigenen Kasse vom Standard- ins günstigste
-andere Modell wechselt, spart im Median CHF 871 im Jahr.
+Für Ihre Leserinnen und Leser gibt es pro Kanton die dauerhaft günstigsten Kassen, und wer im
+Standardmodell ist, spart mit einem Modellwechsel bei der eigenen Kasse im Median CHF 871 im
+Jahr, ohne Kündigung.
 
-Die ganze Auswertung mit allen Kantonen und Kassen:
-https://abovergleich.com/krankenkassenpraemien-2027/#vorjahressieger
+Rating und Methodik: https://abovergleich.com/krankenkassen-rating/
 
-Pressetext und Zitate im Anhang. Wenn Sie Zahlen für eine bestimmte Region oder Kasse
-brauchen, rechnen wir das gern nach, auch kurzfristig.
+Wenn Sie uns nennen, wäre ein Link auf das Rating toll, dann können Leser ihre Region selbst
+prüfen. Zahlen für einzelne Kantone oder Kassen rechnen wir gern nach, auch kurzfristig.
 
 Freundliche Grüsse
 Redaktion abovergleich.com / handyabo.com
 
 ## 2. Tages-Anzeiger, Jon Mettler (warm)
 
-**Betreff:** Krankenkasse 2027: Vorjahressieger steigen stärker als der Markt
+**Betreff:** Krankenkasse 2027: Welche Kassen im Kanton Bern dauerhaft günstig sind
 
-Gleicher Kern wie oben, Einstieg über die Kantone (Bern-Büro):
-Kanton Bern +4,3 % im Standardmodell, günstigste Kasse je Region unter
-https://abovergleich.com/krankenkasse/bern/ . Angebot: Auswertung für einzelne
-Kantone der Tamedia-Regionalzeitungen (BZ, Bund, BaZ).
+Gleicher Kern, Einstieg regional: die dauerhaft günstigsten Kassen im Kanton Bern unter
+https://abovergleich.com/krankenkasse/bern/ . Angebot: dieselbe Liste für die Kantone der
+Tamedia-Regionalzeitungen (BZ, Bund, BaZ).
 
-## 3. Danach, gleicher Text, gestaffelt
+## 3. Danach, gleicher Kern, je zwei Sätze Einstieg anpassen
 
-20 Minuten (Monostori), watson (liebt Zahlen-Stories), K-Tipp und saldo
-(Service-Winkel «Modell wechseln statt Kasse wechseln»), SRF Espresso.
-Nicht als Massenmail, je zwei Sätze Einstieg anpassen.
+- **20 Minuten:** Einstieg über den 26er-Sprung (+48 % im selben Tarif, bis +68 % je nach Kasse),
+  junge Leserschaft. Link: https://abovergleich.com/blog/krankenkasse-mit-26/
+- **K-Tipp, saldo, Beobachter:** Service «Kündigung bis 30.11., diese Kassen nehmen sie per Mail
+  an», plus Vorlage mit Unterschrift. Link: https://abovergleich.com/krankenkasse-kuendigen/
+- **watson:** Zahlen-Story Sparmodell-Falle (Tabelle der Jahrgänge auf der Rating-Seite).
+- **SRF Espresso:** Modell wechseln statt Kasse wechseln.
+
+Nicht als Massenmail. Zweiter Versand mit dem Kündigungs-Winkel 03. bis 10.11.
