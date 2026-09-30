@@ -14,11 +14,15 @@ im Titel, die Falle im Text.
 
 ## Vor dem Versand prüfen (Blick rechnet jede Zahl nach)
 
-- [ ] Helsana Flexmed: auf priminfo.admin.ch für eine Region Flexmed und Standard 2026 und 2027
-      nachrechnen (Erwachsene, Franchise 2'500, ohne Unfall). Unsere Werte sind Mediane über alle
-      Regionen: Rabatt 21,7 % (2024) auf 16,1 % (2027), Anstieg +8,5 % gegen Standard +4,6 %.
-- [ ] Vorjahressieger: eines der Beispiele gegenrechnen
-      (Appenzell Innerrhoden, Vivao Sympany, +21,9 %, von Platz 1 auf Platz 9).
+- [x] Helsana Flexmed, geprüft 30.09. auf priminfo: PLZ 6003 Luzern, Jahrgang 1985, Franchise 2'500,
+      ohne Unfall. Flexmed 2027 CHF 348.30, Standard 418.30, deckt sich mit unseren BAG-Daten.
+      2026 (319.70 / 403.40) aus der BAG-Datei; der Verlauf auf priminfo (Standard F300 mit Unfall,
+      2024 bis 2027) stimmt Franken für Franken mit unseren Daten überein. Luzern liegt nahe am
+      Median aller Regionen (21,1 % auf 16,7 % Rabatt, gegen 21,7 % auf 16,1 %). NICHT Zürich als
+      Beispiel nehmen, dort schrumpft der Rabatt kaum (19,2 % auf 18,5 %).
+- [x] Vorjahressieger, geprüft 30.09. auf priminfo: 9050 Appenzell, Vivao Sympany callmed 24 und
+      casamed hmo 2027 CHF 263.10, Platz 9 hinter KPT 231.00, ÖKK, Assura, Helsana, CSS, Sanitas,
+      Concordia, Agrisano. 2026: 215.90 (Platz 1), +21,9 %.
 - [ ] Rating-Seite, Kantonsseiten und Anker #vorjahressieger live.
 - [x] Zitate: «Redaktion abovergleich.com».
 - [ ] In jeder Mail um einen **Link** bitten. Bei handyabo gab es trotz 5 Nennungen im Blick
@@ -37,9 +41,10 @@ jeder Region durchgerechnet und gesehen, dass die günstigste Kasse oft die ist,
 kräftig aufschlägt:
 
 - Neue Sparmodelle starten mit bis zu 20 % Rabatt und verlieren ihn Jahr für Jahr. Die 2021
-  eingeführten lagen 18,4 % unter Standard, heute 13,2 %. Beispiel Helsana Flexmed: 2027
-  +8,5 %, das Standardmodell derselben Kasse +4,6 %.
-- Der günstigste Tarif von 2026 steigt 2027 um 7,7 %, der Markt um 5,4 %.
+  eingeführten lagen 18,4 % unter Standard, heute 13,2 %. Beispiel Helsana Flexmed in Luzern:
+  2027 CHF 348.30 statt 319.70 (+8,9 %), das Standardmodell derselben Kasse +3,7 %.
+- Der günstigste Tarif von 2026 steigt 2027 um 7,7 %, der Markt um 5,4 %. In Appenzell etwa
+  war Vivao Sympany die Billigste und liegt nach +21,9 % nur noch auf Platz 9.
 - Es geht auch anders: In unserem Preistreue-Rating liegen Concordia, Agrisano und KPT vorne.
   Sie sind günstig und waren es auch in den Jahren davor.
 
