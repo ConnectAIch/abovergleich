@@ -1,177 +1,320 @@
 {
-  "generated": "1775289180.915873",
-  "data_year": 2026,
-  "previous_year": 2025,
-  "years": [
-    2025,
-    2026
+ "generated": "2026-09-30",
+ "data_year": 2027,
+ "previous_year": 2026,
+ "bag_official": {
+  "change_pct": 5.0,
+  "adult_mean": 487.6,
+  "adult_delta": 22.8,
+  "max_canton": [
+   "JU",
+   6.6
   ],
-  "premium_changes": {
-    "period": "2025→2026",
-    "average_change": 3.7,
-    "below_average": [
-      {
-        "name": "Visana",
-        "prev": 562.8,
-        "curr": 538.48,
-        "change_pct": -4.3,
-        "vs_avg": -8.0
-      },
-      {
-        "name": "Rhenusana",
-        "prev": 534.27,
-        "curr": 536.67,
-        "change_pct": 0.4,
-        "vs_avg": -3.3
-      },
-      {
-        "name": "KPT",
-        "prev": 570.73,
-        "curr": 575.63,
-        "change_pct": 0.9,
-        "vs_avg": -2.8
-      }
-    ],
-    "above_average": [
-      {
-        "name": "EGK",
-        "prev": 448.5,
-        "curr": 470.9,
-        "change_pct": 5.0,
-        "vs_avg": 1.3
-      },
-      {
-        "name": "Galenos",
-        "prev": 546.4,
-        "curr": 576.48,
-        "change_pct": 5.5,
-        "vs_avg": 1.8
-      },
-      {
-        "name": "Wincare",
-        "prev": 555.02,
-        "curr": 587.65,
-        "change_pct": 5.9,
-        "vs_avg": 2.2
-      },
-      {
-        "name": "Vivao Sympany",
-        "prev": 530.0,
-        "curr": 570.2,
-        "change_pct": 7.6,
-        "vs_avg": 3.9
-      },
-      {
-        "name": "Aquilana",
-        "prev": 520.55,
-        "curr": 573.89,
-        "change_pct": 10.2,
-        "vs_avg": 6.5
-      }
-    ]
+  "min_canton": [
+   "GL",
+   3.0
+  ],
+  "source_url": "https://www.srf.ch/news/schweiz/erneuter-anstieg-krankenkassenpraemien-steigen-2027-um-5-prozent"
+ },
+ "national_change_standard_pct": 4.62,
+ "cantons": {
+  "AG": {
+   "avg_standard": 603.31,
+   "change_pct": 5.74
   },
-  "consistency_ranking": [
-    {
-      "name": "KPT",
-      "total_top3_appearances": 45,
-      "per_year": {
-        "2025": 20,
-        "2026": 25
-      },
-      "consistency_score": 86.5
-    },
-    {
-      "name": "Helsana",
-      "total_top3_appearances": 19,
-      "per_year": {
-        "2025": 9,
-        "2026": 10
-      },
-      "consistency_score": 36.5
-    },
-    {
-      "name": "ÖKK",
-      "total_top3_appearances": 16,
-      "per_year": {
-        "2025": 9,
-        "2026": 7
-      },
-      "consistency_score": 30.8
-    },
-    {
-      "name": "Atupri",
-      "total_top3_appearances": 12,
-      "per_year": {
-        "2025": 6,
-        "2026": 6
-      },
-      "consistency_score": 23.1
-    },
-    {
-      "name": "Sanitas",
-      "total_top3_appearances": 10,
-      "per_year": {
-        "2025": 5,
-        "2026": 5
-      },
-      "consistency_score": 19.2
-    },
-    {
-      "name": "Swica",
-      "total_top3_appearances": 9,
-      "per_year": {
-        "2025": 6,
-        "2026": 3
-      },
-      "consistency_score": 17.3
-    },
-    {
-      "name": "Progrès",
-      "total_top3_appearances": 8,
-      "per_year": {
-        "2025": 3,
-        "2026": 5
-      },
-      "consistency_score": 15.4
-    },
-    {
-      "name": "Assura",
-      "total_top3_appearances": 8,
-      "per_year": {
-        "2025": 4,
-        "2026": 4
-      },
-      "consistency_score": 15.4
-    },
-    {
-      "name": "Wincare",
-      "total_top3_appearances": 7,
-      "per_year": {
-        "2025": 4,
-        "2026": 3
-      },
-      "consistency_score": 13.5
-    },
-    {
-      "name": "Groupe Mutuel",
-      "total_top3_appearances": 5,
-      "per_year": {
-        "2025": 2,
-        "2026": 3
-      },
-      "consistency_score": 9.6
-    }
-  ],
-  "model_trends": {
-    "2025": {
-      "diverse": 19,
-      "hmo": 4,
-      "hausarzt": 3
-    },
-    "2026": {
-      "diverse": 21,
-      "hausarzt": 4,
-      "hmo": 1
-    }
+  "AI": {
+   "avg_standard": 460.37,
+   "change_pct": 4.73
+  },
+  "AR": {
+   "avg_standard": 551.72,
+   "change_pct": 3.56
+  },
+  "BE": {
+   "avg_standard": 637.16,
+   "change_pct": 4.28
+  },
+  "BL": {
+   "avg_standard": 678.62,
+   "change_pct": 4.1
+  },
+  "BS": {
+   "avg_standard": 725.1,
+   "change_pct": 4.49
+  },
+  "FR": {
+   "avg_standard": 614.18,
+   "change_pct": 5.05
+  },
+  "GE": {
+   "avg_standard": 762.29,
+   "change_pct": 4.42
+  },
+  "GL": {
+   "avg_standard": 547.81,
+   "change_pct": 2.83
+  },
+  "GR": {
+   "avg_standard": 532.37,
+   "change_pct": 3.56
+  },
+  "JU": {
+   "avg_standard": 708.71,
+   "change_pct": 5.84
+  },
+  "LU": {
+   "avg_standard": 555.42,
+   "change_pct": 4.61
+  },
+  "NE": {
+   "avg_standard": 722.14,
+   "change_pct": 5.58
+  },
+  "NW": {
+   "avg_standard": 517.73,
+   "change_pct": 4.92
+  },
+  "OW": {
+   "avg_standard": 509.44,
+   "change_pct": 4.09
+  },
+  "SG": {
+   "avg_standard": 563.8,
+   "change_pct": 4.26
+  },
+  "SH": {
+   "avg_standard": 598.44,
+   "change_pct": 5.55
+  },
+  "SO": {
+   "avg_standard": 633.61,
+   "change_pct": 5.67
+  },
+  "SZ": {
+   "avg_standard": 537.99,
+   "change_pct": 4.65
+  },
+  "TG": {
+   "avg_standard": 565.32,
+   "change_pct": 4.08
+  },
+  "TI": {
+   "avg_standard": 743.6,
+   "change_pct": 3.61
+  },
+  "UR": {
+   "avg_standard": 505.98,
+   "change_pct": 4.37
+  },
+  "VD": {
+   "avg_standard": 700.29,
+   "change_pct": 3.27
+  },
+  "VS": {
+   "avg_standard": 583.47,
+   "change_pct": 5.05
+  },
+  "ZG": {
+   "avg_standard": 434.4,
+   "change_pct": 4.18
+  },
+  "ZH": {
+   "avg_standard": 622.52,
+   "change_pct": 5.38
   }
+ },
+ "insurers": {
+  "134": {
+   "name": "Einsiedler Krankenkasse",
+   "change_pct": 3.48,
+   "bestand": 11696,
+   "cantons": 9
+  },
+  "1542": {
+   "name": "Assura",
+   "change_pct": 4.61,
+   "bestand": 712843,
+   "cantons": 26
+  },
+  "8": {
+   "name": "CSS",
+   "change_pct": 7.69,
+   "bestand": 1466758,
+   "cantons": 26
+  },
+  "780": {
+   "name": "Glarner",
+   "change_pct": -0.1,
+   "bestand": 5450,
+   "cantons": 3
+  },
+  "1040": {
+   "name": "KK Visperterminen",
+   "change_pct": 5.0,
+   "bestand": 5326,
+   "cantons": 1
+  },
+  "1555": {
+   "name": "Visana",
+   "change_pct": 4.28,
+   "bestand": 552570,
+   "cantons": 26
+  },
+  "1560": {
+   "name": "Agrisano",
+   "change_pct": 4.92,
+   "bestand": 190439,
+   "cantons": 26
+  },
+  "1562": {
+   "name": "Helsana",
+   "change_pct": 5.18,
+   "bestand": 1396260,
+   "cantons": 27
+  },
+  "923": {
+   "name": "SLKK",
+   "change_pct": 3.57,
+   "bestand": 14700,
+   "cantons": 21
+  },
+  "32": {
+   "name": "Aquilana",
+   "change_pct": 4.07,
+   "bestand": 64678,
+   "cantons": 26
+  },
+  "1568": {
+   "name": "sana24",
+   "change_pct": 3.89,
+   "bestand": 90727,
+   "cantons": 26
+  },
+  "290": {
+   "name": "Concordia",
+   "change_pct": 2.8,
+   "bestand": 712174,
+   "cantons": 26
+  },
+  "1318": {
+   "name": "KK Wädenswil",
+   "change_pct": 3.99,
+   "bestand": 20052,
+   "cantons": 4
+  },
+  "1322": {
+   "name": "Birchmeier",
+   "change_pct": 6.51,
+   "bestand": 7362,
+   "cantons": 1
+  },
+  "941": {
+   "name": "sodalis",
+   "change_pct": 5.49,
+   "bestand": 53900,
+   "cantons": 2
+  },
+  "820": {
+   "name": "curaulta",
+   "change_pct": 5.02,
+   "bestand": 5678,
+   "cantons": 1
+  },
+  "312": {
+   "name": "Atupri",
+   "change_pct": 3.99,
+   "bestand": 173855,
+   "cantons": 27
+  },
+  "194": {
+   "name": "Sumiswalder",
+   "change_pct": 5.05,
+   "bestand": 32747,
+   "cantons": 21
+  },
+  "966": {
+   "name": "vita surselva",
+   "change_pct": 5.88,
+   "bestand": 4330,
+   "cantons": 26
+  },
+  "455": {
+   "name": "ÖKK",
+   "change_pct": 3.42,
+   "bestand": 210929,
+   "cantons": 27
+  },
+  "1479": {
+   "name": "Mutuel",
+   "change_pct": 3.2,
+   "bestand": 459864,
+   "cantons": 27
+  },
+  "343": {
+   "name": "Avenir",
+   "change_pct": 3.96,
+   "bestand": 323996,
+   "cantons": 26
+  },
+  "1509": {
+   "name": "Sanitas",
+   "change_pct": 3.31,
+   "bestand": 642973,
+   "cantons": 26
+  },
+  "360": {
+   "name": "KK Luzerner Hinterland",
+   "change_pct": 4.99,
+   "bestand": 23776,
+   "cantons": 10
+  },
+  "1384": {
+   "name": "Swica",
+   "change_pct": 3.58,
+   "bestand": 819187,
+   "cantons": 27
+  },
+  "1386": {
+   "name": "Galenos",
+   "change_pct": 2.87,
+   "bestand": 56370,
+   "cantons": 26
+  },
+  "881": {
+   "name": "EGK",
+   "change_pct": 3.45,
+   "bestand": 95250,
+   "cantons": 26
+  },
+  "246": {
+   "name": "KK Steffisburg",
+   "change_pct": 4.06,
+   "bestand": 11780,
+   "cantons": 11
+  },
+  "376": {
+   "name": "KPT",
+   "change_pct": 2.71,
+   "bestand": 459540,
+   "cantons": 28
+  },
+  "1401": {
+   "name": "rhenusana",
+   "change_pct": 4.07,
+   "bestand": 12281,
+   "cantons": 26
+  },
+  "509": {
+   "name": "Vivao Sympany",
+   "change_pct": 6.6,
+   "bestand": 226160,
+   "cantons": 28
+  },
+  "1535": {
+   "name": "Philos",
+   "change_pct": 3.39,
+   "bestand": 181100,
+   "cantons": 26
+  }
+ }
 }

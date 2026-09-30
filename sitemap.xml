@@ -1,50 +1,174 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- generiert von scripts/build_kk_pages.py -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Homepage -->
   <url>
     <loc>https://abovergleich.com/</loc>
-    <lastmod>2026-04-05</lastmod>
-    <changefreq>weekly</changefreq>
+    <lastmod>2026-09-30</lastmod>
     <priority>1.0</priority>
   </url>
-
-  <!-- Hausratversicherung -->
   <url>
     <loc>https://abovergleich.com/hausratversicherung/</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-09-30</lastmod>
     <priority>0.9</priority>
   </url>
-
-  <!-- Methode / Transparenz -->
   <url>
     <loc>https://abovergleich.com/methode/</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-09-30</lastmod>
     <priority>0.6</priority>
   </url>
-
-  <!-- Blog: Beste Franchise -->
   <url>
     <loc>https://abovergleich.com/blog/beste-franchise-schweiz/</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <lastmod>2026-09-30</lastmod>
+    <priority>0.7</priority>
   </url>
-
-  <!-- Blog: HMO / Telmed / Hausarzt -->
   <url>
     <loc>https://abovergleich.com/blog/hmo-telmed-hausarzt-erklaert/</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <lastmod>2026-09-30</lastmod>
+    <priority>0.7</priority>
   </url>
-
-  <!-- Blog: Unfallversicherung Ausland -->
   <url>
     <loc>https://abovergleich.com/blog/unfallversicherung-schweiz-ausland/</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-09-30</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/krankenkassenpraemien-2027/</loc>
+    <lastmod>2026-09-30</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/krankenkasse/</loc>
+    <lastmod>2026-09-30</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/krankenkasse/aargau/</loc>
+    <lastmod>2026-09-30</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/krankenkasse/appenzell-innerrhoden/</loc>
+    <lastmod>2026-09-30</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/krankenkasse/appenzell-ausserrhoden/</loc>
+    <lastmod>2026-09-30</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/krankenkasse/bern/</loc>
+    <lastmod>2026-09-30</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/krankenkasse/basel-landschaft/</loc>
+    <lastmod>2026-09-30</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/krankenkasse/basel-stadt/</loc>
+    <lastmod>2026-09-30</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/krankenkasse/freiburg/</loc>
+    <lastmod>2026-09-30</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/krankenkasse/genf/</loc>
+    <lastmod>2026-09-30</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/krankenkasse/glarus/</loc>
+    <lastmod>2026-09-30</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/krankenkasse/graubuenden/</loc>
+    <lastmod>2026-09-30</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/krankenkasse/jura/</loc>
+    <lastmod>2026-09-30</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/krankenkasse/luzern/</loc>
+    <lastmod>2026-09-30</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/krankenkasse/neuenburg/</loc>
+    <lastmod>2026-09-30</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/krankenkasse/nidwalden/</loc>
+    <lastmod>2026-09-30</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/krankenkasse/obwalden/</loc>
+    <lastmod>2026-09-30</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/krankenkasse/st-gallen/</loc>
+    <lastmod>2026-09-30</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/krankenkasse/schaffhausen/</loc>
+    <lastmod>2026-09-30</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/krankenkasse/solothurn/</loc>
+    <lastmod>2026-09-30</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/krankenkasse/schwyz/</loc>
+    <lastmod>2026-09-30</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/krankenkasse/thurgau/</loc>
+    <lastmod>2026-09-30</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/krankenkasse/tessin/</loc>
+    <lastmod>2026-09-30</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/krankenkasse/uri/</loc>
+    <lastmod>2026-09-30</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/krankenkasse/waadt/</loc>
+    <lastmod>2026-09-30</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/krankenkasse/wallis/</loc>
+    <lastmod>2026-09-30</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/krankenkasse/zug/</loc>
+    <lastmod>2026-09-30</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/krankenkasse/zuerich/</loc>
+    <lastmod>2026-09-30</lastmod>
     <priority>0.8</priority>
   </url>
 </urlset>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200">
+  <rect width="1200" height="1200" fill="#fafaf9"/>
+  <g transform="translate(0,285)">
+  <rect width="1200" height="630" fill="#fafaf9"/>
+  <rect x="0" y="0" width="1200" height="12" fill="#fed001"/>
+  <text x="90" y="150" font-family="-apple-system,Helvetica Neue,Arial,sans-serif" font-weight="800" font-size="40" fill="#1c1917">abo<tspan fill="#a68600">vergleich</tspan>.com</text>
+  <text x="90" y="300" font-family="-apple-system,Helvetica Neue,Arial,sans-serif" font-weight="800" font-size="84" fill="#1c1917">Krankenkassen-Vergleich</text>
+  <text x="90" y="400" font-family="-apple-system,Helvetica Neue,Arial,sans-serif" font-weight="800" font-size="84" fill="#a68600">Prämien 2027</text>
+  <text x="90" y="490" font-family="-apple-system,Helvetica Neue,Arial,sans-serif" font-weight="400" font-size="34" fill="#78716c">Offizielle BAG-Daten · alle Kassen · alle 26 Kantone</text>
+  <rect x="90" y="530" width="330" height="56" rx="12" fill="#fed001"/>
+  <text x="255" y="568" text-anchor="middle" font-family="-apple-system,Helvetica Neue,Arial,sans-serif" font-weight="700" font-size="26" fill="#1c1917">Jetzt vergleichen</text>
+  </g>
+</svg>

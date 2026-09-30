@@ -18,23 +18,28 @@ python3 premium_analysis.py --download 2027
 
 Die CSV wird nach `scripts/data/praemien_YYYY.csv` gespeichert.
 
-### 2. Analyse starten
+### 2. Versichertenbestand laden
+
+Gewichtet die Durchschnitte. Liegt im selben BAG-Ordner wie die Prämien:
+`Versichertenbestand_CH.csv` nach `scripts/data/versichertenbestand_YYYY.csv`.
+
+### 3. Seiten erzeugen
 
 ```bash
-# Vollständiger Report (Terminal-Output)
-python3 premium_analysis.py --report
-
-# Report + JSON für Website generieren
-python3 premium_analysis.py --export
+python3 build_kk_pages.py
 ```
 
-Generiert `premium-insights.json` im Projekt-Root.
-
-### 3. Website aktualisieren
-
-Die Insights-Sektion in `index.html` muss manuell mit den neuen Zahlen aktualisiert werden (oder automatisiert via das JSON).
+`YEAR`, `DEADLINE` und `BAG_OFFICIAL` (Medienmitteilung des BAG) oben im Script
+anpassen. Erzeugt die 26 Kantonsseiten unter `/krankenkasse/`, die Auswertung
+`/krankenkassenpraemien-YYYY/`, den Insights-Block der Startseite (zwischen den
+`INSIGHTS`-Markern), die Kassenzahl auf Startseite und Methode, `llms.txt`,
+`premium-insights.json` und `sitemap.xml`. Die Auswertung des Vorjahres bleibt
+als eigene URL stehen. Die Namen der Kassen kommen aus `INSURER_NAMES` in
+`premium_analysis.py` (BAG-Verzeichnis der zugelassenen Krankenversicherer).
 
 ### 4. In die Datenbank laden und Rechner umschalten
+
+Am besten vor Schritt 3, dann stimmen Rechner und Seiten ab demselben Deploy.
 
 ```bash
 python3 import_premiums.py 2027 --dry-run   # zählen, Mapping prüfen
