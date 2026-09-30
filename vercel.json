@@ -1,8 +1,14 @@
 {
+  "trailingSlash": true,
   "redirects": [
     {
       "source": "/:path(.*)",
-      "has": [{ "type": "host", "value": "www.abovergleich.com" }],
+      "has": [
+        {
+          "type": "host",
+          "value": "www.abovergleich.com"
+        }
+      ],
       "destination": "https://abovergleich.com/:path",
       "permanent": true
     }

@@ -1,10 +1,7 @@
 User-agent: *
 Allow: /
 
-# Sitemap
-Sitemap: https://abovergleich.com/sitemap.xml
+# Impressum, Datenschutz und Kontakt tragen <meta name="robots" content="noindex">.
+# Nicht per Disallow sperren, sonst kann Google das noindex gar nicht lesen.
 
-# Legal pages (noindex via meta tag, but also block here)
-Disallow: /datenschutz/
-Disallow: /impressum/
-Disallow: /kontakt/
+Sitemap: https://abovergleich.com/sitemap.xml
