@@ -1,0 +1,668 @@
+{
+ "stand": "2026-09-30",
+ "zweck": "Kuendigungswege der Grundversicherung je Kasse, nur aus den Seiten der Kasse selbst. email_accepted: ja = Kasse nennt E-Mail ausdruecklich fuer die Grundversicherung; nein = verlangt ausdruecklich Post/Einschreiben; unklar = sagt nichts. sender_must_be_on_file: E-Mail zaehlt nur vom Absender, den die Kasse vom Kunden kennt.",
+ "kassen": [
+  {
+   "id": 1560,
+   "name": "Agrisano",
+   "web": "agrisano.ch",
+   "bag_address": "Agrisano Krankenkasse AG, Laurstrasse 10, 5201 Brugg AG",
+   "cancel_postal_address": "Agrisano Krankenkasse AG, Laurstrasse 10, 5201 Brugg",
+   "cancel_email": null,
+   "email_accepted": "unklar",
+   "sender_must_be_on_file": false,
+   "online_channel": null,
+   "requirements": "Kuendigung 'mit rechtsgültiger Unterschrift versehen', Eingang bis 30. November. AVB KVG (Ausgabe 2019) Art. 5 Abs. 2: Kuendigung hat schriftlich zu erfolgen. Saeumige Versicherte mit Ausstaenden vom Kuendigungsrecht ausgenommen.",
+   "evidence": null,
+   "sources": [
+    "https://www.agrisano.ch/de/angebot/krankenkasse-grundversicherung/kuendigungsfristen",
+    "https://www.agrisano.ch/fileadmin/agrisanoch/03_Services/Krankenkasse/AVB_Agrisano_Krankenkasse_AG_neu_d.pdf",
+    "https://www.agrisano.ch/de/kontakt/hauptsitz",
+    "https://www.agrisano.ch/de/services/formulare",
+    "https://www.agrisano.ch/de/kontakt"
+   ],
+   "notes": "Agrisano nennt keinen Kanal fuer die OKP-Kuendigung und sagt weder ja noch nein zu E-Mail. Die Forderung nach 'rechtsgültiger Unterschrift' spricht eher fuer einen Brief mit Originalunterschrift; ob ein eingescannter unterschriebener Brief per E-Mail genuegt, bleibt offen. Die Formularseite sagt allgemein, alle Formulare koennten ausgedruckt und per Post oder gut eingescannt per E-Mail gesendet werden. Es gibt dort aber kein KVG-Kuendigungsformular, und der Satz bezieht sich nicht ausdruecklich auf Kuendigungen. Die allgemeine E-Mail der Krankenkasse ist info@agrisano.ch (Seite Hauptsitz), ohne Bezug zu Kuendigungen. Agrisano verweist grundsaetzlich an regionale Geschaeftsstellen als Ansprechpartner (je Kanton, nicht einzeln geprueft). Ein Kundenportal existiert (portal.agrisano.ch), eine Kuendigungsfunktion wird aber nicht genannt."
+  },
+  {
+   "id": 32,
+   "name": "Aquilana",
+   "web": "aquilana.ch",
+   "bag_address": "Aquilana Versicherungen, Bruggerstrasse 46, 5401 Baden",
+   "cancel_postal_address": "Aquilana Versicherungen, Bruggerstrasse 46, 5401 Baden",
+   "cancel_email": "kuendigungen@aquilana.ch",
+   "email_accepted": "ja",
+   "sender_must_be_on_file": false,
+   "online_channel": "https://calculator.aquilana.ch/cancellation-wizard",
+   "requirements": "Eingang bei Aquilana bis spätestens 30. November (Eingangsdatum massgebend). Wechsel nur möglich, wenn bis zum Austrittstermin keine Zahlungsausstände (Prämien, Kostenbeteiligungen) bestehen. Für die Online-Kündigung bei Versichererwechsel innerhalb der Schweiz: 'Keine schriftliche Kündigung erforderlich'. Agenturen, Vermittler, Sozialämter und Beistandschaften können unterschriebene Kündigungsschreiben online hochladen.",
+   "evidence": "\"Kündigung online, per E-Mail an kuendigungen@aquilana.ch oder schriftlich per Post möglich\"",
+   "sources": [
+    "https://www.aquilana.ch/service/kundenbereich/kuendigung"
+   ],
+   "notes": "Einziger Versicherer dieser Gruppe, der E-Mail ausdrücklich zulässt, und zwar unter 'Kündigungsfristen Grundversicherungen nach KVG'. Link 'Jetzt Grundversicherung kündigen' führt auf calculator.aquilana.ch/cancellation-wizard (Linkziel aus dem Seitenquelltext; die Wizard-Seite selbst wurde nicht geöffnet). Allgemeiner Kundendienst: kundendienst@aquilana.ch, allgemein info@aquilana.ch. Auf der Seite ist ein Merkblatt Kündigungstermine 2026 verlinkt (/content/downloads/Broschüren/merkblatt_kuendigungstermin_2026.pdf, nicht geöffnet)."
+  },
+  {
+   "id": 1542,
+   "name": "Assura",
+   "web": "assura.ch",
+   "bag_address": "Assura-Basis SA, Avenue C.-F. Ramuz 70, 1009 Pully",
+   "cancel_postal_address": "Assura, Case postale 61, 1009 Pully (Kundendienst-Adresse auf assura.ch; fuer Zusatzversicherungs-Kuendigungen nennt Assura 'Postfach 533, 1009 Pully'; BAG-Adresse ggf. abweichend)",
+   "cancel_email": null,
+   "email_accepted": "unklar",
+   "sender_must_be_on_file": false,
+   "online_channel": null,
+   "requirements": "Allgemeine FAQ-Anleitung zur Grundversicherung: 'Senden Sie Ihrem bisherigen Versicherer einen eingeschriebenen Brief'. Assuras KVG-Kuendigungsmuster ist mit EINSCHREIBEN ueberschrieben und verlangt die Unterschrift jeder betroffenen volljaehrigen Person oder des gesetzlichen Vertreters sowie Police-Nr., Name, Geburtsdatum.",
+   "evidence": null,
+   "sources": [
+    "https://www.assura.ch/de/haufig-fragen",
+    "https://www.assura.ch/de/leitfaeden/zu-assura-wechseln",
+    "https://www.assura.ch/de/kontakt-beendigung",
+    "https://cms-assets.assura.ch/2020/01/15/5e1f829f606802020-01-Lettre-rsiliation-LAMal_D.pdf",
+    "https://static.assura.ch/blue/cockpit-assets/2025/09/29/CGA_LAMal_2026_DE_PDF_uid_68da853e119b3.pdf"
+   ],
+   "notes": "Assura bietet E-Mail (kuendigung-widerruf.zusatzversicherungen@assura.ch), SMS und Onlineformular ausdruecklich NUR fuer Zusatzversicherungen (VVG) an. Fuer die Grundversicherung bei Assura selbst gibt es keine Kanalaussage; die AVB KVG 2026 regeln nur Mitteilungen VON Assura (Post/E-Mail/Kundenbereich). Die Anleitung mit Einschreiben und das Muster sind fuer die Kuendigung beim bisherigen Versicherer geschrieben, also generisch. Dass Assura fuer VVG eine separate E-Mail-Adresse fuehrt und fuer KVG nicht, spricht eher gegen E-Mail, ist aber keine ausdrueckliche Ablehnung. Die Seite /de/faq/meine-versicherung-verwalten lieferte leer (JS)."
+  },
+  {
+   "id": 312,
+   "name": "Atupri",
+   "web": "atupri.ch",
+   "bag_address": "Atupri Gesundheitsversicherung AG, Laupenstrasse 18, 3008 Bern",
+   "cancel_postal_address": "Atupri Gesundheitsversicherung AG, Laupenstrasse 18, 3008 Bern (Service Center Mittelland); weitere Service Center: Avenue Benjamin Constant 1, 1003 Lausanne und The Circle 66, 8058 Zürich Flughafen",
+   "cancel_email": "info@atupri.ch",
+   "email_accepted": "ja",
+   "sender_must_be_on_file": false,
+   "online_channel": "https://myatupri.atupri.ch/?lng=de",
+   "requirements": "Angeben: vollstaendiger Name, Versichertennummer, gewuenschtes Kuendigungsdatum, zu kuendigende Versicherungen (Grund freiwillig). Eingang bis letzter Arbeitstag vor dem 30. November. Kuendigung nur gueltig, wenn per 31.12. eine neue Grundversicherung besteht. Optionales Kuendigungsformular (PDF), per Post oder E-Mail.",
+   "evidence": "\"Sie können Ihre Kündigung per Post, E-Mail oder im myAtupri Kundenportal einreichen.\" (Atupri, Versicherung kündigen)",
+   "sources": [
+    "https://atupri.ch/de/service-support/online-dienste/versicherung-kuendigen",
+    "https://atupri.ch/de/kontakt",
+    "https://atupri.ch/assets/f/253863/x/e951d6a187/kuendigung-okp.pdf"
+   ],
+   "notes": "Die E-Mail-Verlinkung auf der Kuendigungsseite zeigt auf info@atupri.ch. Keine spezielle Kuendigungs-Postadresse; die Kontaktseite nennt drei Service Center mit identischer Firma. Das verlinkte PDF 'Kündigung OKP' ist eine Vorlage fuer die Kuendigung beim Vorversicherer (Wechsel zu Atupri) und enthaelt keine Atupri-Empfaengeradresse. Unterschrift nur ausdruecklich verlangt, wenn Atupri die Kuendigung per Vollmacht fuer einen uebernimmt. Die Seite war per curl nicht erreichbar (TLS-Timeout), wurde mit Python urllib geladen."
+  },
+  {
+   "id": 343,
+   "name": "Avenir",
+   "web": "groupemutuel.ch",
+   "bag_address": "Avenir Krankenversicherung AG, Rue des Cèdres 5, 1919 Martigny",
+   "cancel_postal_address": "Groupe Mutuel, Rue des Cèdres 5, Case postale, 1919 Martigny",
+   "cancel_email": "kunden@groupemutuel.ch",
+   "email_accepted": "ja",
+   "sender_must_be_on_file": true,
+   "online_channel": "https://assures.groupemutuel.ch",
+   "requirements": "Brief mit Datum und Unterschrift, oder E-Mail, oder Kundenportal. Bei E-Mail muss die Absenderadresse Groupe Mutuel bekannt und von ihr geprueft sein (DSG), sonst vorher Personendaten aktualisieren. Jede volljaehrige versicherte Person muss selbst kuendigen (ausser Vollmacht). Wirksam nur, wenn die Versicherungsbestaetigung des neuen Versicherers eingeht und alle Praemien/Kostenbeteiligungen bezahlt sind. Eingang bis letzter Arbeitstag November. Soziale Netzwerke ausgeschlossen.",
+   "evidence": "\"Wenn Sie per E-Mail kündigen, vergewissern Sie sich bitte\" (Groupe Mutuel FAQ Kündigung)",
+   "sources": [
+    "https://www.groupemutuel.ch/de/Privatkunden/Ihre-Bedurfnisse/Ihre-Bedurfnisse-im-Bereich-Gesundheit/versicherung-wechseln.html",
+    "https://www.groupemutuel.ch/de/Privatkunden/Kundendienst/Antworten-auf-haufige-Fragen/Kuendigung.html",
+    "https://www.groupemutuel.ch/de/Privatkunden/Kundendienst.html"
+   ],
+   "notes": "Die Seite 'Versicherung wechseln' nennt als Wege explizit: Kundenportal, E-Mail (kunden@groupemutuel.ch), Brief mit Unterschrift und Datum. Groupe Mutuel behandelt Avenir, Mutuel, Philos (und AMB) als eine Gruppe mit einem gemeinsamen Prozess; auf den gelesenen Seiten keine markenspezifischen Kuendigungsadressen oder -E-Mails. Postadresse aus dem Seitenfuss (Rue des Cèdres 5, Case postale, 1919 Martigny), keine eigene Kuendigungsadresse genannt. Portal-Login: assures.groupemutuel.ch. Ausserdem allgemeines Online-Formular 'Allgemeine Anfrage Versicherungsvertrag' (/de/Privatkunden/Ihre-Anfragen-online/form-allgemeine-anfrage-versicherungsvertrag.html), nicht ausdruecklich als Kuendigungskanal beschrieben."
+  },
+  {
+   "id": 1322,
+   "name": "Birchmeier",
+   "web": "kkbirchmeier.ch",
+   "bag_address": "Krankenkasse Birchmeier, Hauptstrasse 22, 5444 Künten",
+   "cancel_postal_address": "Krankenkasse Birchmeier, Hauptstrasse 22, 5444 Künten",
+   "cancel_email": null,
+   "email_accepted": "unklar",
+   "sender_must_be_on_file": false,
+   "online_channel": null,
+   "requirements": "AVB KVG: Wechsel bei Praemienmitteilung mit einmonatiger Kuendigungsfrist (Art. 7 Abs. 2 KVG). Keine Formvorschrift fuer die Kuendigung gefunden. Die 'Kuendigungsvorlage' steht unter 'Antragsformulare - Neumitglieder', ist also zum Kuendigen des bisherigen Versicherers gedacht (EINSCHREIBEN, Unterschrift je Person).",
+   "evidence": "\"Das ausgefüllte und unterzeichnete Formular senden Sie uns bitte per Post oder E-Mail\"",
+   "sources": [
+    "https://www.kkbirchmeier.ch/Downloads",
+    "https://www.kkbirchmeier.ch/?content=contact&spr=de",
+    "https://www.kkbirchmeier.ch/index.cfm?action=act_getfile&doc_id=100290&",
+    "https://www.kkbirchmeier.ch/index.cfm?action=act_getfile&doc_id=100109&",
+    "https://www.kkbirchmeier.ch/Versicherungen",
+    "https://birchmeier.bbtp.ch/docuploader/de/sunet/create/"
+   ],
+   "notes": "Positives, aber indirektes Signal: Auf der Downloads-Seite heisst es zu den Formularen allgemein, unterzeichnete Formulare gingen per Post oder E-Mail (info@kkbirchmeier.ch). Eine Kuendigung bei Birchmeier selbst ist damit nicht ausdruecklich gemeint. Allgemeiner Kontakt: info@kkbirchmeier.ch (verschleiert, dekodiert; auch als mailto auf der Kontaktseite), Tel. 056 485 60 40. leistungen@kkbirchmeier.ch ist fuer Leistungen. Der 'Dokument-Uploader' (birchmeier.bbtp.ch/docuploader) ist nur fuer Rechnungen. Kundenportal: birchmeier.bbtp.ch/portal (Kuendigungsfunktion nicht erkennbar). Regional: laut AVB Art. 102 'ausschliesslich im Kanton Aargau taetig'."
+  },
+  {
+   "id": 290,
+   "name": "Concordia",
+   "web": "concordia.ch",
+   "bag_address": "CONCORDIA Schweiz. Kranken- und Unfallversicherung AG, Bundesplatz 15, 6002 Luzern",
+   "cancel_postal_address": "CONCORDIA Schweizerische Kranken- und Unfallversicherung AG, Bundesplatz 15, 6002 Luzern",
+   "cancel_email": "info@concordia.ch",
+   "email_accepted": "ja",
+   "sender_must_be_on_file": false,
+   "online_channel": null,
+   "requirements": "Reglement OKP 2026 Art. 8.3: Kuendigungen nur gueltig, wenn schriftlich oder in einer anderen Form, die den Nachweis durch Text ermoeglicht; frist- und termingerecht. Webseite: Einreichung spaetestens 30. November (einmonatige Frist auf Ende Jahr).",
+   "evidence": "\"in einer anderen Form, die den Nachweis durch Text ermoeglicht\"",
+   "sources": [
+    "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/grundversicherung/2.01_Reglement_OKP_de.pdf",
+    "https://www.concordia.ch/de/versicherungen/grundversicherung.html",
+    "https://www.concordia.ch/de/kontakt.html",
+    "https://www.concordia.ch/de/impressum.html",
+    "https://www.concordia.ch/de/service/myconcordia/faq.html"
+   ],
+   "notes": "VORSICHT bei der Einordnung: 'ja' stuetzt sich auf die Textform-Klausel im KVG-Reglement 2026, nicht auf eine Webseite, die E-Mail woertlich nennt. 'Nachweis durch Text' umfasst nach Schweizer Verstaendnis E-Mail (Visana erklaert denselben Begriff als 'z.B. E-Mail'). Das Reglement sagt zudem, CONCORDIA koenne auf concordia.ch Vorgaben zu diesen Formen machen; solche Vorgaben wurden nicht gefunden. info@concordia.ch ist die allgemeine Adresse aus Kontakt/Impressum, nicht ausdruecklich als Kuendigungsadresse bezeichnet. Keine Kuendigungsfunktion in myCONCORDIA gefunden (FAQ betrifft nur Kuendigung des Portal-Accounts)."
+  },
+  {
+   "id": 8,
+   "name": "CSS",
+   "web": "css.ch",
+   "bag_address": "CSS Kranken-Versicherung AG, Tribschenstrasse 21, Postfach 2568, 6002 Luzern",
+   "cancel_postal_address": "CSS Kranken-Versicherung AG, Tribschenstrasse 21, Postfach 2568, 6002 Luzern (BAG-Adresse; css.ch nennt auf den Kuendigungsseiten keine eigene Kuendigungsadresse)",
+   "cancel_email": null,
+   "email_accepted": "unklar",
+   "sender_must_be_on_file": false,
+   "online_channel": null,
+   "requirements": "Kuendigung bis letzter Arbeitstag im November innerhalb der Oeffnungszeiten; 'Wir empfehlen die Kuendigung per Einschreiben'; im Betreff und im Schreiben klar angeben, fuer welche Versicherung die Kuendigung gilt; bei Post zaehlt Eingangsdatum, nicht Poststempel. Fuer die Grundversicherung heisst es: 'Digitale oder telefonische Meldungen muessen innerhalb der Oeffnungszeiten erfolgen' (Kanal nicht naeher bestimmt).",
+   "evidence": null,
+   "sources": [
+    "https://www.css.ch/de/privatkunden/richtig-versichert/gut-zu-wissen/versicherungstipps/krankenkasse-kuendigen.html",
+    "https://www.css.ch/en/private-customers/properly-insured/good-to-know/insurance-tips/cancel-health-insurance.html",
+    "https://www.css.ch/de/privatkunden/richtig-versichert/gut-zu-wissen/krankenkasse-wechseln.html",
+    "https://www.css.ch/de/privatkunden/richtig-versichert/gut-zu-wissen/vvg-revision.html",
+    "https://www.css.ch/en/private-customers/quick-easy/do-it-yourself/adjust-insurance/basic-insurance.html",
+    "https://www.css.ch/en/private-customers/quick-easy/contact.html"
+   ],
+   "notes": "Widerspruechliche Signale. Die Grundversicherungs-Seite erwaehnt 'digitale oder telefonische Meldungen' fuer die Grundversicherung, nennt aber weder E-Mail-Adresse noch Portalfunktion. Die Aussage 'Kuendigungen ... koennen auch per E-Mail oder ueber das Kundenportal myCSS mitgeteilt werden' steht auf der VVG-Revisionsseite und gilt ausdruecklich nur fuer Zusatzversicherungen (VVG). Auf der Wechselseite schreibt CSS allgemein: 'Nicht alle Krankenkassen akzeptieren eine Kuendigung per E-Mail, weil Ihre Unterschrift wichtig ist.' Keine KVG-AVB mit Formvorschrift gefunden (nur VVG-AVB mit Textform-Klausel). Kontaktseite nennt keine E-Mail, nur Kontaktformular und Tel. 0844 277 277. Drittseiten (kuendigung.org) nennen info@css.ch und 'Kundenbetreuung, Postfach 2550, 6002 Luzern', beides auf css.ch nicht bestaetigt."
+  },
+  {
+   "id": 820,
+   "name": "curaulta",
+   "web": "curaulta.ch",
+   "bag_address": "curaulta, Postfach 22, 7144 Vella",
+   "cancel_postal_address": "curaulta, Geschaeftsstelle Vella, Postfach 22, Palius 33C, 7144 Vella ODER Geschaeftsstelle Vals, Postfach 18, Valéstrasse 146E, 7132 Vals (zwei Geschaeftsstellen, keine spezielle Kuendigungsadresse genannt)",
+   "cancel_email": null,
+   "email_accepted": "unklar",
+   "sender_must_be_on_file": false,
+   "online_channel": null,
+   "requirements": "AVB KVG (gescanntes PDF, noch im Layout der Vorgaengerin Lumneziana) Art. 5 Abs. 2: bei Mitteilung der neuen Praemie einmonatige Kuendigungsfrist auf Ende des Vormonats. Keine Formvorschrift fuer die Kuendigung, keine Kuendigungsvorlage gefunden.",
+   "evidence": null,
+   "sources": [
+    "https://www.curaulta.ch/kontakt",
+    "https://www.curaulta.ch/info-center/wichtige-dokumente",
+    "https://www.curaulta.ch/versicherungen/standardversicherung",
+    "https://www.curaulta.ch/files/dokumente/AVB_Grundversicherung%20KVG.pdf",
+    "https://www.curaulta.ch/"
+   ],
+   "notes": "Allgemeiner Kontakt (nicht als Kuendigungskanal genannt): vella@curaulta.ch (Tel. 081 931 35 35) und vals@curaulta.ch (Tel. 081 935 11 44). Das Kontaktformular auf /kontakt hat das Anliegen 'Zustellung Dokumente an curaulta' mit Datei-Upload (pdf/doc), wird aber nicht ausdruecklich fuer Kuendigungen genannt. curaulta ist der Zusammenschluss von 'Cassa da malsauns Lumneziana' und 'sanavals Gesundheitskasse'. Die AVB-Fusszeile nennt noch info@lumneziana.ch, das ist veraltet. Regional: Grundversicherung laut Website nur fuer Einwohner des Kantons Graubuenden. Die Domain curaulta.ch ist korrekt."
+  },
+  {
+   "id": 881,
+   "name": "EGK",
+   "web": "egk.ch",
+   "bag_address": "EGK Grundversicherungen AG, Birspark 1, 4242 Laufen",
+   "cancel_postal_address": "EGK-Gesundheitskasse, Birspark 1, 4242 Laufen (allgemeine Adresse aus Seitenfuss/Kontakt; keine eigene Kündigungsadresse genannt)",
+   "cancel_email": null,
+   "email_accepted": "unklar",
+   "sender_must_be_on_file": false,
+   "online_channel": null,
+   "requirements": "AVB/KVG (Ausgabe 1.1.2019, weiterhin die verlinkte Fassung): Versicherung endet 'durch fristgerechte, rechtsgültige, schriftliche Kündigung' (Art. 4 Ziff. 3.1). Art. 5 Ziff. 4: Kündigung nur gültig, wenn schriftlich sowie frist- und termingerecht; massgebend ist Eingang am letzten Arbeitstag vor Fristablauf, Poststempel nicht massgebend. Art. 5 Ziff. 5: ungültig bei ausstehenden Prämien/Kostenbeteiligungen. FAQ auf der Grundversicherungs-Seite: 'Nach erfolgter schriftlicher Kündigung' müssen alle Prämien und Kostenbeteiligungen beglichen sein.",
+   "evidence": null,
+   "sources": [
+    "https://egk.ch/de/versicherungen/grund-und-zusatzversicherung",
+    "https://egk.ch/de/ihre-egk/ueber-uns/kontakt",
+    "https://www.egk.ch/de/navigation/footer/versicherungsbedingungen",
+    "https://www.egk.ch/egk-2026/dokumente/downloads/de/versicherungsbedingungen-avb-kvg-de.pdf",
+    "https://www.egk.ch/de/services/kundenportal-app/myegk"
+   ],
+   "notes": "Keine Kündigungsseite, kein Kündigungsformular und keine Aussage zu E-Mail gefunden (Sitemap mit 447 URLs durchsucht, kein Treffer zu Kündigung/Austritt). Allgemeine Kontakt-E-Mail (nur allgemeiner Kontakt, nicht für Kündigungen genannt): info@egk.ch. Die Kontaktseite nennt Telefon, E-Mail, Live-Chat und Kontaktformular für allgemeine Anliegen. myEGK-Portalseite erwähnt keine Kündigungsfunktion. Achtung: Wortlaut 'rechtsgültige, schriftliche Kündigung' spricht eher für unterschriebenen Brief, schliesst E-Mail aber nicht ausdrücklich aus."
+  },
+  {
+   "id": 134,
+   "name": "Einsiedler Krankenkasse",
+   "web": "kkeinsiedeln.ch",
+   "bag_address": "Einsiedler Krankenkasse, Kronenstrasse 19, Postfach 57, 8840 Einsiedeln",
+   "cancel_postal_address": "Einsiedler Krankenkasse, Kronenstrasse 19, Postfach 57, 8840 Einsiedeln (allgemeine Postadresse; keine eigene Kuendigungsadresse genannt)",
+   "cancel_email": null,
+   "email_accepted": "unklar",
+   "sender_must_be_on_file": false,
+   "online_channel": null,
+   "requirements": "Website und KVG-Versicherungsbedingungen nennen keine Formvorschrift fuer die Kuendigung. AVB Art. 5: Wechsel bei Praemienmitteilung mit einmonatiger Kuendigungsfrist auf Ende des Monats vor Gueltigkeit der neuen Praemie. Keine Kuendigungsvorlage, kein Hinweis auf Einschreiben oder Unterschrift gefunden.",
+   "evidence": null,
+   "sources": [
+    "https://kkeinsiedeln.ch/faq/",
+    "https://kkeinsiedeln.ch/kontakt/",
+    "https://kkeinsiedeln.ch/avb-allgemeine-versicherungsbedingungen/",
+    "https://kkeinsiedeln.ch/wp-content/uploads/2026/06/Versicherungsbedingungen-KVG-1.pdf"
+   ],
+   "notes": "Allgemeiner Kontakt (NICHT als Kuendigungskanal genannt): info@kkeinsiedeln.ch (Kontaktseite: 'Allgemeine Anfragen'), Tel. 055 418 07 47. Das Kontaktformular hat kein Thema 'Kuendigung' (nur Adressaenderung, Unfalleinschluss, Bestellungen, Sponsoring, Anderes). Kundenportal kkeinsiedeln.bbtp.ch/portal existiert, eine Kuendigungsfunktion ist von aussen nicht erkennbar. Taetigkeitsgebiet laut FAQ: Kanton Schwyz und angrenzende Kantone. Statuten-PDF 2026 liefert keinen extrahierbaren Text. Die frueher verlinkte AGB Online-Kundenportal (wp-content/uploads/2021/01) ist nicht mehr abrufbar."
+  },
+  {
+   "id": 1386,
+   "name": "Galenos",
+   "web": "galenos.ch",
+   "bag_address": "Galenos AG, Binzmühlestrasse 95, 8050 Zürich",
+   "cancel_postal_address": "Visana Services AG, Agentur Galenos, Rautistrasse 60, 8048 Zürich (allgemeine Adresse; das Kündigungsformular nennt keine Empfängeradresse)",
+   "cancel_email": null,
+   "email_accepted": "unklar",
+   "sender_must_be_on_file": false,
+   "online_channel": null,
+   "requirements": "FAQ: gesetzliche Rahmenbedingungen einhalten, 'schriftliche, fristgerechte Kündigung, keine Ausstände'. AVB OKP (Visana AG, sana24 AG, Galenos AG, gültig ab 1.1.2024): Kündigung muss dem Versicherer spätestens am letzten Arbeitstag vor Beginn der Kündigungsfrist zukommen. Eigenes Kündigungsformular (VSC-786, Stand 12.2020, in der Kundenzone) ist mit 'Einschreiben (R)' vorgedruckt und verlangt pro Person Versicherungsnummer und Unterschrift.",
+   "evidence": null,
+   "sources": [
+    "https://www.galenos.ch/de/haeufige-fragen/",
+    "https://www.galenos.ch/de/fuer-private/kundenzone/",
+    "https://www.galenos.ch/wp-content/uploads/2017/06/VSC-786_Kuendigung-Galenos_d.pdf",
+    "https://www.galenos.ch/wp-content/uploads/2020/09/AVB_Obligatorische_Krankenpflegeversicherung_KVG_de.pdf",
+    "https://www.galenos.ch/de/kontakt/",
+    "https://www.galenos.ch/de/impressum/"
+   ],
+   "notes": "Galenos gehört zur Visana-Gruppe, die AVB OKP sind gemeinsam mit Visana/sana24. Keine Aussage, ob E-Mail akzeptiert wird. Das Formular sieht Einschreiben vor, eine ausdrückliche Pflicht dazu steht aber nirgends. Allgemeine Kontakt-E-Mail (nur allgemeiner Kontakt): galenos@visana.ch; Kontaktseite nennt zusätzlich zuerich@visana.ch (Generalagentur Zürich). In der Kundenzone heisst es für einen anderen Talon (Adressänderung o.ä.) 'senden diesen per E-Mail an galenos@visana.ch', das bezieht sich nicht auf Kündigungen. Andere Formulare verweisen auf Visana Services AG, Weltpoststrasse 19, 3000 Bern 1 bzw. Galenos, Militärstrasse 36, 8021 Zürich, nicht für Kündigungen. Ein weiteres PDF (Galenos_Web_Kuendigungsformular_d.pdf, 2017) ist eine Vorlage zur Kündigung beim bisherigen Versicherer beim Wechsel zu Galenos."
+  },
+  {
+   "id": 780,
+   "name": "Glarner",
+   "web": "glkv.ch",
+   "bag_address": "Genossenschaft Glarner Krankenversicherung, Abläsch 8, Postfach, 8762 Schwanden",
+   "cancel_postal_address": "Glarner Krankenversicherung, Abläsch 8, Postfach 43, 8762 Schwanden (Hauptsitz; keine eigene Kündigungsadresse genannt)",
+   "cancel_email": null,
+   "email_accepted": "unklar",
+   "sender_must_be_on_file": false,
+   "online_channel": null,
+   "requirements": "Versicherungsbedingungen 2026, Art. 5.1: Wechsel 'durch schriftliche Mitteilung' mit 3 Monaten Frist auf Semesterende; bei Mitteilung der neuen Prämie einmonatige Frist. Art. 18.2: Wahlfranchise nur auf Ende Kalenderjahr.",
+   "evidence": null,
+   "sources": [
+    "https://www.glkv.ch/ueber-glkv/kontakt/kontakt.html/83",
+    "https://www.glkv.ch/online-schalter/publikationen/avb.html/59",
+    "https://www.glkv.ch/public/upload/assets/1357/AVB%20GLKV_2026.pdf?fp=1",
+    "https://www.glkv.ch/online-schalter/publikationen/faq-fragen-und-antworten.html/60",
+    "https://www.glkv.ch/online-schalter/kommunikation/myglarner.html/89"
+   ],
+   "notes": "Allgemeine Kontakt-E-Mail (nur allgemeiner Kontakt): info@glkv.ch; Agentur Näfels: Haus zur Beuge, Im Dorf 30, 8752 Näfels. Die FAQ-Seite zeigt auch im Browser nur die Überschrift, ohne Fragen und Antworten. Der Online-Schalter hat Formulare für Franchise, Modellwechsel, Vollmacht und Wegzug ins Ausland, aber keinen für Kündigung/Kassenwechsel. Die myGlarner-App nennt keine Kündigungsfunktion. Die Website antwortete zwischendurch mit 'Too Many Requests' (Rate Limit), daher nicht jede Online-Schalter-Seite im Volltext geprüft."
+  },
+  {
+   "id": 1562,
+   "name": "Helsana",
+   "web": "helsana.ch",
+   "bag_address": "Helsana Versicherungen AG, Postfach, 8081 Zürich",
+   "cancel_postal_address": "Helsana Versicherungen AG, IDPH Kuendigungen D-CH, Postfach, 8081 Zuerich",
+   "cancel_email": "kuendigungen@helsana.ch",
+   "email_accepted": "ja",
+   "sender_must_be_on_file": false,
+   "online_channel": "myHelsana Kundenportal: unterschriebenes Kuendigungsschreiben als Foto/PDF per Nachricht hochladen (laut Kuendigungsseite, keine Direkt-URL erhoben)",
+   "requirements": "Unterschrift aller erwachsenen Personen; alle betroffenen Produkte klar nennen; keine offenen Praemienrechnungen; Nachversicherungsbestaetigung muss direkt vom neuen Versicherer kommen; Eingang spaetestens am letzten Arbeitstag im November waehrend der Oeffnungszeiten (BASIS-Modell zusaetzlich per 30. Juni, Eingang bis letzter Arbeitstag im Maerz).",
+   "evidence": "\"senden Sie uns das Kuendigungsschreiben unterschrieben per E-Mail an kuendigungen@helsana.ch (Foto/PDF)\"",
+   "sources": [
+    "https://www.helsana.ch/de/private/services/versicherung/kuendigen.html",
+    "https://www.helsana.ch/en/individuals/services/insurance/cancel.html"
+   ],
+   "notes": "Die englische Seite nennt stattdessen cancellation@helsana.ch. Fuer DE-Nutzer kuendigungen@helsana.ch verwenden. Das Postfach hat den Zusatz 'D-CH', also Deutschschweiz; fuer FR/IT gibt es vermutlich eigene Postfaecher (nicht geprueft). Signierter Scan/Foto per Mail ist ausdruecklich der vorgesehene Weg."
+  },
+  {
+   "id": 360,
+   "name": "KK Luzerner Hinterland",
+   "web": "kklh.ch",
+   "bag_address": "Krankenkasse Luzerner Hinterland, Luzernstrasse 19, 6144 Zell LU",
+   "cancel_postal_address": "Krankenkasse Luzerner Hinterland, Luzernstr. 19, 6144 Zell LU",
+   "cancel_email": null,
+   "email_accepted": "unklar",
+   "sender_must_be_on_file": false,
+   "online_channel": null,
+   "requirements": "Seite 'Kuendigungsfristen': Die KVG-Kuendigung muss bis am letzten Arbeitstag im November beim aktuellen Versicherer sein. Versand per Einschreiben oder A-Post Plus empfohlen (Empfehlung, keine Pflicht). Keine Formvorschrift in den AVB Grundversicherung gefunden.",
+   "evidence": "\"Wir empfehlen, die Kündigung per eingeschrieben oder per A-Post Plus (günstigere Variante) zu versenden.\"",
+   "sources": [
+    "https://www.kklh.ch/kundenservice/downloads/kuendigungsfristen/",
+    "https://www.kklh.ch/ueber-uns/kontakt/",
+    "https://www.kklh.ch/kundenservice/downloads/",
+    "https://www.kklh.ch/kundenservice/policeaenderung/",
+    "https://www.kklh.ch/files/Files/Dokumente/PDF_s/AVB_s/AVB_Grundversicherung.pdf"
+   ],
+   "notes": "Die Kuendigungsseite erwaehnt E-Mail weder als moeglich noch als ausgeschlossen, sie empfiehlt nur Post (Einschreiben/A-Post Plus). Allgemeiner Kontakt (nicht als Kuendigungskanal genannt): info@kklh.ch (auf der Website verschleiert, als 'info@ kklh.ch' angezeigt), Tel. 041 989 70 00, Kontaktformular /ueber-uns/kontaktformular-standart/. Die Seite 'Policeaenderung' verweist fuer Aenderungen auf Telefon oder Kontaktformular, nicht spezifisch auf Kuendigungen. Taetigkeitsgebiet auf den gelesenen Seiten nicht konkret genannt."
+  },
+  {
+   "id": 246,
+   "name": "KK Steffisburg",
+   "web": "kkst.ch",
+   "bag_address": "Genossenschaft Krankenkasse Steffisburg, Unterdorfstrasse 37, Postfach, 3612 Steffisburg",
+   "cancel_postal_address": "Krankenkasse Steffisburg, Unterdorfstrasse 37, Postfach 138, 3612 Steffisburg",
+   "cancel_email": null,
+   "email_accepted": "unklar",
+   "sender_must_be_on_file": false,
+   "online_channel": null,
+   "requirements": "AVB KVG 2026 Art. 7: Beendigung 'ausschliesslich durch schriftliche Mitteilung'. Die Kuendigung muss der KKSt spaetestens am letzten Arbeitstag vor Beginn der Kuendigungsfrist zukommen. Eigene Vorlage 'Kuendigungsschreiben' (kuendigung.pdf) ist mit 'Einschreiben' betitelt und hat pro Person Spalten fuer Vers.-Nr., Name, Geburtsdatum und Unterschrift.",
+   "evidence": "\"Die Beendigung des Versichertenverhältnisses erfolgt ausschliesslich durch schriftliche Mitteilung.\"",
+   "sources": [
+    "https://www.kkst.ch/ueber-uns/kontakt",
+    "https://www.kkst.ch/kundenservice/formulare",
+    "https://www.kkst.ch/download/pictures/e0/ssxykxoncdz00rtk08h9u9su6u6awd/kuendigung.pdf",
+    "https://www.kkst.ch/kundenservice/grundversicherung",
+    "https://www.kkst.ch/download/pictures/5e/tuigijptaa4n93oze3xbd1xap6ffwl/avb_kvg_2026.pdf",
+    "https://www.kkst.ch/kundenservice/vertragsaenderungen"
+   ],
+   "notes": "'Schriftlich' ohne Angabe, ob E-Mail mit unterschriebenem PDF genuegt; die eigene Vorlage (Einschreiben, Unterschriftsspalte) deutet klar auf Brief hin, eine ausdrueckliche Absage an E-Mail gibt es aber nicht. Die E-Mail-Adressen sind auf der Website verschleiert (Base64/URL-kodiert) und wurden dekodiert: info@kkst.ch (Kundendienst: Versichertenkarte, Praemienrechnung, Versicherungsdeckung, allgemeine Mutationen), service@kkst.ch (Allgemeine Anfragen), leistungen@kkst.ch (Leistungsabteilung). Allgemeiner Kontakt, nicht als Kuendigungskanal genannt. Tel. +41 33 439 40 20. Taetigkeitsgebiet KVG laut AVB: BE, AG, GL, NW, OW, SO, SZ, UR, VS, ZG, ZH. Kundenportal: kkst.bbtp.ch/portal (Kuendigungsfunktion von aussen nicht erkennbar)."
+  },
+  {
+   "id": 1040,
+   "name": "KK Visperterminen",
+   "web": "kkv.ch",
+   "bag_address": "Verein Krankenkasse Visperterminen, Dorfstrasse 66, 3932 Visperterminen",
+   "cancel_postal_address": "KKV Krankenkasse, Dorfstrasse 66, 3932 Visperterminen",
+   "cancel_email": null,
+   "email_accepted": "unklar",
+   "sender_must_be_on_file": false,
+   "online_channel": null,
+   "requirements": "AVB KVG (Ausgabe 1.1.2018, gescanntes PDF) B6: bei Mitteilung der neuen Praemie einmonatige Kuendigungsfrist auf Ende des Vormonats. F4: 'Alle Mitteilungen sind an die KKV zu richten.' Keine Formvorschrift fuer die Kuendigung, keine Kuendigungsvorlage gefunden.",
+   "evidence": null,
+   "sources": [
+    "https://www.kkv.ch/ueber-uns-2/kontakt/",
+    "https://www.kkv.ch/services-2/downloads/versicherungsbedingungen/",
+    "https://www.kkv.ch/wp-content/uploads/2019/02/AVB-Grundversicherung.pdf",
+    "https://www.kkv.ch/services-2/downloads/antragsformulare/",
+    "https://www.kkv.ch/wp-content/uploads/2019/09/AGB-Kundenportal.pdf"
+   ],
+   "notes": "Allgemeiner Kontakt (nicht als Kuendigungskanal genannt): info@kkv.ch, Tel. 027 948 00 50. vad@kkv.ch nur fuer vertrauensaerztliche Angelegenheiten. Die AVB-Fusszeile nennt noch kkv@visperterminen.ch, das ist veraltet. Suche in der WordPress-Suche der Website nach 'Kuendigung'/'kuendigen': keine Treffer. Kundenportal: kkv.bbtp.ch/portal (Kuendigungsfunktion von aussen nicht erkennbar). Taetigkeitsgebiet laut AVB B1 vorhanden, auf den gelesenen Seiten aber nicht konkret genannt. Die Domain kkv.ch ist korrekt."
+  },
+  {
+   "id": 1318,
+   "name": "KK Wädenswil",
+   "web": "kkwaedenswil.ch",
+   "bag_address": "Stiftung Krankenkasse Wädenswil, Industriestrasse 15, 8820 Wädenswil",
+   "cancel_postal_address": "Krankenkasse Wädenswil, Industriestrasse 15, 8820 Wädenswil",
+   "cancel_email": null,
+   "email_accepted": "unklar",
+   "sender_must_be_on_file": false,
+   "online_channel": null,
+   "requirements": "AVB OKP (Ausgabe 2019) Art. 3: 'Mitteilungen sind an den im Versicherungsausweis angegebenen Absender zu richten.' Keine Formvorschrift fuer die Kuendigung gefunden. Die verlinkte Kuendigungsvorlage (Einschreiben, Versicherungs-Nr., Unterschrift aller volljaehrigen Personen) ist fuer Neukunden gedacht, die ihren bisherigen Versicherer kuendigen, nicht fuer die Kuendigung bei der KK Waedenswil selbst.",
+   "evidence": null,
+   "sources": [
+    "https://www.kkwaedenswil.ch/kontakt",
+    "https://www.kkwaedenswil.ch/versicherungen/online-schalter",
+    "https://www.kkwaedenswil.ch/versicherungen/grundversicherung",
+    "https://www.kkwaedenswil.ch/versicherungen/grundversicherung/standardmodell",
+    "https://www.kkwaedenswil.ch/home/kk/files/dokumente/Kuendigungsvorlage.pdf",
+    "https://www.kkwaedenswil.ch/home/kk/files/dokumente/AVB_Obligatorische_Krankenpflegeversicherung_Ausgabe_2019.pdf"
+   ],
+   "notes": "Allgemeiner Kontakt (nicht als Kuendigungskanal genannt): info@kkwaedenswil.ch (auf der Website als 'info@ ! kkwaedenswil.ch' verschleiert), Tel. 043 477 71 71. Allgemeines Kontaktformular mit Freitext auf /kontakt. vad.kkwaedenswil@hin.ch nur fuer den Vertrauensarzt. Der Menuepunkt 'MY KKW' zeigt auf einen Platzhalter-Link (#ext-link-my-kkw-tbd), ein Kundenportal ist nicht erkennbar. Der Online-Schalter enthaelt nur PDF-Formulare, keine Kuendigung. Regional: Grundversicherung nur fuer die Kantone Zuerich, Aargau, Schwyz und Zug."
+  },
+  {
+   "id": 376,
+   "name": "KPT",
+   "web": "kpt.ch",
+   "bag_address": "KPT Krankenkasse AG, Wankdorfallee 3, Postfach, 3001 Bern",
+   "cancel_postal_address": "KPT, Postfach, 3001 Bern",
+   "cancel_email": null,
+   "email_accepted": "unklar",
+   "sender_must_be_on_file": false,
+   "online_channel": null,
+   "requirements": "Eingang bis letzter Arbeitstag im November waehrend der Oeffnungszeiten (bis 16:00 Uhr). Einschreiben empfohlen. Eingangsdatum zaehlt, nicht Poststempel. Keine offenen Rechnungen per 31.12.",
+   "evidence": null,
+   "sources": [
+    "https://www.kpt.ch/de/wissen/krankenkasse-wechseln",
+    "https://www.kpt.ch/de/magazin/fragen-antworten-zur-grundversicherung",
+    "https://www.kpt.ch/de/kunden-services",
+    "https://www.kpt.ch/de/kunden-services/versicherung-anpassen/grundversicherung-wechseln",
+    "https://www.kpt.ch/en/about-us/impressum",
+    "https://www.kpt.ch/en/customer-services/customer-portal",
+    "https://www.kpt.ch/documents/1acc4b13-5310-4e40-ba11-c77ae69faa34/KVG_de_09.2024.pdf"
+   ],
+   "notes": "KPT sagt nirgends selbst, welche Kanaele es fuer die Kuendigung bei KPT akzeptiert. Der KPT-Ratgeber (allgemein fuer alle Kassen) sagt, man muesse schriftlich kuendigen, eine E-Mail reiche oft nicht, am besten Brief/Einschreiben, und ob E-Mail oder Portal geht, solle man bei der eigenen Kasse erfragen. Das ist kein Beleg fuer KPTs eigene Praxis. Allgemeine E-Mail info@kpt.ch steht im Impressum, aber ohne Bezug zu Kuendigungen, daher cancel_email = null. Die KPTnet-Portalseite nennt keine Kuendigungsfunktion (Belege, Daten aendern, Dokumente, Berater kontaktieren, Versichertenkarte). Die KVG-Vollzugsbestimmungen (09.2024) regeln keine Form fuer die OKP-Kuendigung. Die Kontaktseite kpt.ch/de/kontakt wird per JavaScript gerendert und war nicht lesbar. Postfach-Adresse von kunden-services ('Per Post an: KPT, Postfach, 3001 Bern', dort fuer Belege) und Impressum."
+  },
+  {
+   "id": 1479,
+   "name": "Mutuel",
+   "web": "groupemutuel.ch",
+   "bag_address": "Mutuel Krankenversicherung AG, Rue des Cèdres 5, 1919 Martigny",
+   "cancel_postal_address": "Groupe Mutuel, Rue des Cèdres 5, Case postale, 1919 Martigny",
+   "cancel_email": "kunden@groupemutuel.ch",
+   "email_accepted": "ja",
+   "sender_must_be_on_file": true,
+   "online_channel": "https://assures.groupemutuel.ch",
+   "requirements": "Wie Avenir (gemeinsamer Groupe-Mutuel-Prozess): Brief mit Datum und Unterschrift, E-Mail von bei GM hinterlegter und gepruefter Adresse, oder Kundenportal. Jede volljaehrige Person kuendigt selbst. Bestaetigung des neuen Versicherers + alle Rechnungen bezahlt. Eingang bis letzter Arbeitstag November.",
+   "evidence": "\"Wenn Sie per E-Mail kündigen, vergewissern Sie sich bitte\" (Groupe Mutuel FAQ Kündigung)",
+   "sources": [
+    "https://www.groupemutuel.ch/de/Privatkunden/Ihre-Bedurfnisse/Ihre-Bedurfnisse-im-Bereich-Gesundheit/versicherung-wechseln.html",
+    "https://www.groupemutuel.ch/de/Privatkunden/Kundendienst/Antworten-auf-haufige-Fragen/Kuendigung.html",
+    "https://www.groupemutuel.ch/de/Privatkunden/Kundendienst.html"
+   ],
+   "notes": "Keine markenspezifische Adresse oder E-Mail gefunden; die Groupe-Mutuel-Seiten sprechen fuer alle Kassen der Gruppe. Kassenwechsel innerhalb der Gruppe (Philos/Avenir/Mutuel/AMB) laeuft ueber dieselben Kanaele (Portal, kunden@groupemutuel.ch, Brief)."
+  },
+  {
+   "id": 1535,
+   "name": "Philos",
+   "web": "groupemutuel.ch",
+   "bag_address": "Philos Krankenversicherung AG, Rue des Cèdres 5, 1919 Martigny",
+   "cancel_postal_address": "Groupe Mutuel, Rue des Cèdres 5, Case postale, 1919 Martigny",
+   "cancel_email": "kunden@groupemutuel.ch",
+   "email_accepted": "ja",
+   "sender_must_be_on_file": true,
+   "online_channel": "https://assures.groupemutuel.ch",
+   "requirements": "Wie Avenir (gemeinsamer Groupe-Mutuel-Prozess): Brief mit Datum und Unterschrift, E-Mail von bei GM hinterlegter und gepruefter Adresse, oder Kundenportal. Jede volljaehrige Person kuendigt selbst. Bestaetigung des neuen Versicherers + alle Rechnungen bezahlt. Eingang bis letzter Arbeitstag November.",
+   "evidence": "\"Wenn Sie per E-Mail kündigen, vergewissern Sie sich bitte\" (Groupe Mutuel FAQ Kündigung)",
+   "sources": [
+    "https://www.groupemutuel.ch/de/Privatkunden/Ihre-Bedurfnisse/Ihre-Bedurfnisse-im-Bereich-Gesundheit/versicherung-wechseln.html",
+    "https://www.groupemutuel.ch/de/Privatkunden/Kundendienst/Antworten-auf-haufige-Fragen/Kuendigung.html",
+    "https://www.groupemutuel.ch/de/Privatkunden/Kundendienst.html"
+   ],
+   "notes": "Keine markenspezifische Adresse oder E-Mail gefunden; gemeinsamer Prozess der Groupe Mutuel."
+  },
+  {
+   "id": 1401,
+   "name": "rhenusana",
+   "web": "rhenusana.ch",
+   "bag_address": "rhenusana, Widnauerstrasse 6, 9435 Heerbrugg",
+   "cancel_postal_address": "rhenusana, Widnauerstrasse 6, 9435 Heerbrugg (allgemeine Adresse; keine eigene Kündigungsadresse genannt)",
+   "cancel_email": null,
+   "email_accepted": "unklar",
+   "sender_must_be_on_file": false,
+   "online_channel": null,
+   "requirements": "AVB Grundversicherung (Ausgabe 01.19): Wechsel auf Semesterende mit 3 Monaten Frist, bei Prämienänderung einmonatige Frist auf Ende des Monats vor Gültigkeit der neuen Prämie; kein Wechsel bei Prämien- oder Kostenbeteiligungsverzug. Zur Form (schriftlich, E-Mail, Einschreiben) steht dort nichts.",
+   "evidence": null,
+   "sources": [
+    "https://rhenusana.ch/grundversicherung/",
+    "https://rhenusana.ch/rhenusana/kontakt/",
+    "https://rhenusana.ch/online-schalter/",
+    "https://rhenusana.ch/downloads/",
+    "https://rhenusana.ch/wp-content/uploads/2022/11/KVG_KRANKENPFLEGEgrund_BAG_01_19.pdf",
+    "https://rhenusana.bbtp.ch/docuploader/de/sunet/create/"
+   ],
+   "notes": "Keine Kündigungsseite, kein Kündigungsformular, keine Aussage zur Form gefunden. Allgemeine Kontakt-E-Mail (nur allgemeiner Kontakt): info@rhenusana.ch; sie steht nicht sichtbar auf der Kontaktseite, sondern in deren strukturierten Daten sowie auf der Hilfeseite des Dokument-Uploaders (dort nur für Fragen zur Rechnungsübermittlung). Der Dokument-Uploader ist ausschliesslich für Rechnungen. Geschäftsstellen auch in Oberriet (Staatsstrasse 169) und Mels (ehem. Krankenkasse Stoffel, seit 1.1.2024 übernommen)."
+  },
+  {
+   "id": 1568,
+   "name": "sana24",
+   "web": "visana.ch",
+   "bag_address": "sana24 AG, Weltpoststrasse 19, Postfach, 3000 Bern 16",
+   "cancel_postal_address": "sana24 AG, Weltpoststrasse 19, 3000 Bern 16",
+   "cancel_email": null,
+   "email_accepted": "unklar",
+   "sender_must_be_on_file": false,
+   "online_channel": null,
+   "requirements": "Gleiche AVB KVG wie Visana (Visana AG, sana24 AG, Galenos AG): Kuendigung schriftlich, Eingang spaetestens am letzten Arbeitstag vor Beginn der Kuendigungsfrist.",
+   "evidence": null,
+   "sources": [
+    "https://www.visana.ch/ueber-visana/rechtliches/informationspflicht-art-45",
+    "https://www.visana.ch/dam/jcr:d624a2be-75c6-41c2-913b-74b5594ef00c/avb-obligatorische-krankenpflegeversicherung-kvg-de.pdf",
+    "https://www.sana24.ch"
+   ],
+   "notes": "sana24.ch leitet per 301 auf visana.ch um, es gibt keine eigene sana24-Kuendigungsseite. sana24 AG ist eine eigene KVG-Gesellschaft der Visana-Gruppe mit derselben Adresse wie Visana AG. Kanal-Informationen wie bei Visana (siehe dort): fuer die Grundversicherung keine ausdrueckliche E-Mail-Zusage gefunden. Im Kuendigungsschreiben 'sana24 AG' als Empfaenger nennen, nicht Visana AG."
+  },
+  {
+   "id": 1509,
+   "name": "Sanitas",
+   "web": "sanitas.com",
+   "bag_address": "Sanitas Grundversicherungen AG, Jägergasse 3, Postfach 2010, 8021 Zürich",
+   "cancel_postal_address": "Sanitas Grundversicherungen AG, Jaegergasse 3, 8004 Zuerich (Impressum; keine eigene Kuendigungsadresse auf der Kuendigungsseite)",
+   "cancel_email": "info@sanitas.com",
+   "email_accepted": "ja",
+   "sender_must_be_on_file": false,
+   "online_channel": "Sanitas Portal (Kundenportal, laut Kuendigungsseite; keine Direkt-URL erhoben)",
+   "requirements": "Schriftliche Kuendigung; Eingangsdatum zaehlt, nicht Poststempel; Frist letzter Arbeitstag im November (Basic mit CHF 300 Franchise auch per 30. Juni). Kuendigung der Grundversicherung nur zulaessig, wenn alle Rechnungen bezahlt sind. Auf der Wechselseite: alle erwachsenen Personen im Vertrag muessen handschriftlich unterschreiben.",
+   "evidence": "\"Sie koennen uns Ihre Kuendigung per Post, E-Mail oder ueber das Sanitas Portal zusenden.\"",
+   "sources": [
+    "https://www.sanitas.com/de/privatkunden/services/schnell-erledigt/kuendigen.html",
+    "https://www.sanitas.com/de/privatkunden/zu-sanitas-wechseln.html",
+    "https://www.sanitas.com/en/about-sanitas/important-legal-information/publication-details.html",
+    "https://www.sanitas.com/en/private-customers/services/contact.html"
+   ],
+   "notes": "Sanitas empfiehlt sogar E-Mail an info@sanitas.com ('Am besten, Sie schicken uns Ihre schriftliche Kuendigung an info@sanitas.com'). Die Hinweise zur handschriftlichen Unterschrift aller Erwachsenen stehen auf der Wechselseite (Kuendigung beim bisherigen Versicherer), daher PDF mit eigenhaendiger Unterschrift beilegen. Sanitas Grundversicherungen AG ist die KVG-Gesellschaft (BAG 1509), gleiche Adresse wie die Gruppengesellschaften."
+  },
+  {
+   "id": 923,
+   "name": "SLKK",
+   "web": "slkk.ch",
+   "bag_address": "Genossenschaft KRANKENKASSE SLKK, Hofwiesenstrasse 370, Postfach 5652, 8050 Zürich",
+   "cancel_postal_address": "Krankenkasse SLKK, Hofwiesenstrasse 370, 8050 Zürich (Postadresse gemäss AVB KVG und Website; keine eigene Kündigungsadresse genannt)",
+   "cancel_email": null,
+   "email_accepted": "unklar",
+   "sender_must_be_on_file": false,
+   "online_channel": null,
+   "requirements": "AVB KVG (in Kraft ab 01.01.2025), Art. 5: Wechsel auf Semesterende mit 3 Monaten Frist, bei Prämienmitteilung einmonatige Frist. Zur Form der Kündigung bei der SLKK selbst steht dort nichts.",
+   "evidence": null,
+   "sources": [
+    "https://slkk.ch/",
+    "https://slkk.ch/de/download-center/",
+    "https://media.slkk.ch/filer_public/53/12/5312bedb-ab3f-4007-b4e6-f5b2af63eb72/2025-09-09-slkk-39-grund-vers-avb-kvg.pdf",
+    "https://media.slkk.ch/filer_public/22/fe/22feaf20-77fe-48f5-b8e0-7ac6fb55154a/2025-08-27-slkk-62-kundigungsformular-okp-vvg-angehorige.pdf",
+    "https://slkk.ch/de/aktuelles/so-vermeiden-sie-doppelversicherungen-und-sparen-pramie/"
+   ],
+   "notes": "Allgemeine Kontakt-E-Mail (nur allgemeiner Kontakt): info@slkk.ch, steht auch in den AVB KVG unter 'Postadresse/Versicherungen'. Das Kündigungsformular im Download-Center ist eine Vorlage für Neukunden zur Kündigung beim BISHERIGEN Versicherer (Kopf 'Einschreiben (Ihre bisherige Krankenkasse)', Unterschrift aller Personen ab 18). Es sagt, die unterschriebene Kündigung entweder eingeschrieben direkt an die bisherige Kasse oder mit dem Antrag per E-Mail an info@slkk.ch zu senden. Das betrifft also Kündigungen anderer Kassen, die über die SLKK laufen, nicht die Kündigung bei der SLKK. Keine Kündigungsseite für die eigene OKP gefunden."
+  },
+  {
+   "id": 941,
+   "name": "sodalis",
+   "web": "sodalis.ch",
+   "bag_address": "sodalis gesundheitsgruppe, Balfrinstrasse 15, 3930 Visp",
+   "cancel_postal_address": "sodalis, Balfrinstrasse 15, 3930 Visp (Postanschrift Hauptsitz; keine eigene Kündigungsadresse genannt)",
+   "cancel_email": null,
+   "email_accepted": "nein",
+   "sender_must_be_on_file": false,
+   "online_channel": null,
+   "requirements": "FAQ 'Kann ich meine Versicherung jederzeit kündigen?': Kündigungsschreiben als eingeschriebener Brief, Eingang bis spätestens 30. November bzw. letzter Arbeitstag im November. Seite 'Zu sodalis wechseln': Kündigung muss bis 30. November zu gewöhnlicher Geschäftszeit eingegangen sein; Kündigungsschreiben ausgefüllt und unterschrieben. AVB KVG 2026 regelt die Form nicht.",
+   "evidence": "\"muss das Kündigungsschreiben als eingeschriebener Brief bis spätestens 30. November\"",
+   "sources": [
+    "https://www.sodalis.ch/de/fuer-private/versicherungen/versicherung-verstehen/kann-ich-meine-versicherung-jederzeit-kuendigen--91",
+    "https://www.sodalis.ch/de/fuer-private/kontakt-beratung/policen-verwalten/versicherungsprodukt-kuendigen",
+    "https://www.sodalis.ch/de/allgemein/kontakt/uebersicht",
+    "https://www.sodalis.ch/de/fuer-private/zu-sodalis-wechseln",
+    "https://www.sodalis.ch/writable/media/1787921127-AVB_KVG_2026.pdf"
+   ],
+   "notes": "'nein' stützt sich auf die FAQ-Formulierung (eingeschriebener Brief), die AVB schreiben die Form nicht vor. Das Online-Formular 'Versicherungsprodukt kündigen' bietet nur Zusatzprodukte zur Auswahl (Sana/Sana Plus, UTI, Moneta, Spitalversicherung, Denta, KTI, Ospita, PRS), keine Grundversicherung, daher kein Online-Kanal für die OKP. Allgemeine Kontakt-E-Mail (nur allgemeiner Kontakt): info@sodalis.ch; die Kontaktseite lädt ein, Anliegen 'über das Kontaktformular, per E-Mail oder per Postweg' zu schicken, ohne Bezug zu Kündigungen."
+  },
+  {
+   "id": 194,
+   "name": "Sumiswalder",
+   "web": "sumiswalder.ch",
+   "bag_address": "Sumiswalder Krankenkasse, Spitalstrasse 47, 3454 Sumiswald",
+   "cancel_postal_address": "Sumiswalder Krankenkasse, Spitalstrasse 47, 3454 Sumiswald (Hauptsitz; Agentur: Schlossstrasse 1, 3550 Langnau i.E.; keine eigene Kuendigungsadresse genannt)",
+   "cancel_email": null,
+   "email_accepted": "unklar",
+   "sender_must_be_on_file": false,
+   "online_channel": null,
+   "requirements": "KVG-Versicherungsbedingungen Art. 6: Kuendigung bei Praemienerhoehung bis einen Monat vor Anwendung der neuen Praemien. Keine Formvorschrift fuer die KVG-Kuendigung gefunden. FAQ: Modellwechsel oder Aufloesung eines ManagedCare-Modells 'schriftlich per E-Mail oder auf dem Postweg'.",
+   "evidence": "\"Ein Modellwechsel oder eine Auflösung muss schriftlich per E-Mail oder auf dem Postweg erfolgen.\"",
+   "sources": [
+    "https://sumiswalder.ch/ueber-uns/kontakt/",
+    "https://sumiswalder.ch/privatkunden/eoffice/haeufige-fragen/",
+    "https://sumiswalder.ch/privatkunden/eoffice/downloads/",
+    "https://sumiswalder.ch/20/wp-content/uploads/PDF/Reglemente/Grundversicherung-KVG-Versicherungsbedingungen.pdf",
+    "https://sumiswalder.ch/sumiswalder-info-2021-11-teilrevision-versicherungsvertragsgesetz-vvg/",
+    "https://sumiswalder.ch/privatkunden/eoffice/kundenportal/"
+   ],
+   "notes": "Starkes, aber nicht eindeutiges Signal: E-Mail ist ausdruecklich erlaubt fuer Modellwechsel/Aufloesung eines ManagedCare-Modells innerhalb der Grundversicherung (FAQ), und laut Kundeninfo 2021-11 fuer Kuendigungen von VVG-Zusatzversicherungen. Dieselbe Kundeninfo sagt aber ausdruecklich, die Grundversicherung (KVG) sei von dieser VVG-Neuerung 'nicht betroffen'. Fuer den Versichererwechsel in der Grundversicherung ist E-Mail daher nicht ausdruecklich bestaetigt. Allgemeiner Kontakt: info@sumiswalder.ch (Kontaktseite), Tel. 034 432 30 60; portal@sumiswalder.ch nur fuer Portalfragen. Evidence-Zitat betrifft Modellwechsel, nicht Versichererwechsel. Taetigkeitsgebiet laut AVB: BE, LU, SO, AG, FR, ZH, BL, BS, SH, AR, AI, SG, GR, TG, VS, UR, SZ, OW, NW, GL, ZG."
+  },
+  {
+   "id": 1384,
+   "name": "Swica",
+   "web": "swica.ch",
+   "bag_address": "SWICA Krankenversicherung AG, Römerstrasse 37, 8401 Winterthur",
+   "cancel_postal_address": "SWICA Krankenversicherung AG, Roemerstrasse 37, 8400 Winterthur (Impressum-Adresse; keine eigene Kuendigungsadresse publiziert)",
+   "cancel_email": null,
+   "email_accepted": "ja",
+   "sender_must_be_on_file": false,
+   "online_channel": "mySWICA (Kundenportal, laut FAQ als Kuendigungskanal genannt; keine Direkt-URL erhoben)",
+   "requirements": "Schriftliche Kuendigung; Eingang spaetestens am letzten Arbeitstag im November bis 17 Uhr; SWICA verlangt zusaetzlich die Aufnahmebestaetigung der neuen Krankenversicherung. (Standardversicherung mit CHF 300 Franchise auch per 30. Juni, Eingang bis letzter Arbeitstag im Maerz bis 17 Uhr.)",
+   "evidence": "\"schriftliche Kuendigung per Post, per E-Mail oder in mySWICA\"",
+   "sources": [
+    "https://www.swica.ch/de/private/services/faq",
+    "https://www.swica.ch/de/private/kontakt",
+    "https://www.swica.ch/de/ueber-swica/kontakt",
+    "https://www.swica.ch/en/about-swica/portrait/overview/data-privacy/publishing-details",
+    "https://dam.swica.ch/image/upload/v1775121993/129_d_Kuendigungsblatt_nqgxft.pdf"
+   ],
+   "notes": "E-Mail ist ausdruecklich erlaubt, SWICA nennt aber auf FAQ, Kontakt- und Impressumsseite KEINE E-Mail-Adresse (nur Kontaktformular, Tel. +41 58 800 99 33, datenschutz@swica.ch fuer Datenschutz). Das Kuendigungsblatt 129d ist ein Wechsel-Formular zur Kuendigung beim BISHERIGEN Versicherer (wird an SWICA geschickt, SWICA leitet weiter), kein Formular zur Kuendigung bei SWICA; es sieht Einschreiben und Unterschriften vor. BAG-Adresse kann leicht abweichen (Roemerstrasse 38, 8401 Winterthur), bitte gegen BAG-Liste abgleichen."
+  },
+  {
+   "id": 1555,
+   "name": "Visana",
+   "web": "visana.ch",
+   "bag_address": "Visana AG, Weltpoststrasse 19, Postfach, 3000 Bern 16",
+   "cancel_postal_address": "Visana AG, Weltpoststrasse 19, 3000 Bern 16 (Kontaktseite nennt Visana Services AG, gleiche Adresse)",
+   "cancel_email": null,
+   "email_accepted": "unklar",
+   "sender_must_be_on_file": false,
+   "online_channel": null,
+   "requirements": "FAQ/AVB KVG: Kuendigung nur gueltig, wenn schriftlich und fristgerecht; muss spaetestens am letzten Arbeitstag vor Beginn der Kuendigungsfrist eintreffen. Seite 'Versicherungsdaten & Kuendigungsfristen': Grundversicherung bis 30.11. '(Eingang auf dem Postweg bis zum letzten Arbeitstag der Kuendigungsfrist.)'",
+   "evidence": null,
+   "sources": [
+    "https://www.visana.ch/privatpersonen/kampagnen/wichtige-versicherungsdaten",
+    "https://www.visana.ch/privatpersonen/services-und-kontakt",
+    "https://www.visana.ch/privatpersonen/services-und-kontakt/kontakt/kontaktformulare",
+    "https://www.visana.ch/faq",
+    "https://www.visana.ch/en/individuals/services-and-contact/services/checklists-and-directories/faqs",
+    "https://www.visana.ch/dam/jcr:d624a2be-75c6-41c2-913b-74b5594ef00c/avb-obligatorische-krankenpflegeversicherung-kvg-de.pdf",
+    "https://www.visana.ch/dam/jcr:cfd7f191-ed7f-41b8-8b9a-dcbec3984286/merkblatt-kundeninformation-vvg.pdf",
+    "https://www.visana.ch/ueber-visana/rechtliches/informationspflicht-art-45"
+   ],
+   "notes": "Das Merkblatt 'Kundeninformation VVG' (Visana Versicherungen AG, gilt fuer Zusatzversicherungen) erlaubt Kuendigung per 'Nachweis durch Text' via E-Mail, MyVisana oder Kontaktformular ohne eigenhaendige Unterschrift, aber nur von einer persoenlichen, bei Visana hinterlegten E-Mail-Adresse und je erwachsene Person einzeln. Das gilt NICHT ausdruecklich fuer die Grundversicherung (Visana AG); die AVB KVG enthalten keine Formvorschrift, die Fristenseite spricht von 'Eingang auf dem Postweg'. Kontaktseite nennt kundenservice-center@visana.ch als allgemeine Adresse, ohne Bezug zu Kuendigungen. Kein Kuendigungsformular unter den Kontaktformularen. Das Visana-Kuendigungsschreiben-PDF (kuendigungsschreiben-krankenversicherung.pdf) liess sich nicht laden (404)."
+  },
+  {
+   "id": 966,
+   "name": "vita surselva",
+   "web": "vitasurselva.ch",
+   "bag_address": "vita surselva, Bahnhofstrasse 33, Postfach 217, 7130 Ilanz",
+   "cancel_postal_address": "vita surselva, Bahnhofstrasse 33, 7130 Ilanz (allgemeine Adresse; keine eigene Kündigungsadresse genannt)",
+   "cancel_email": null,
+   "email_accepted": "unklar",
+   "sender_must_be_on_file": false,
+   "online_channel": null,
+   "requirements": "Seite 'Prämienmitteilung' (Stand Prämienrunde 2026): Fristen für Änderungen 'Posteingang bis 28. November 2025' für Kündigung der Versicherung. Das Wort 'Posteingang' deutet auf Postweg hin, ein ausdrückliches E-Mail-Verbot ist es nicht. AVB KVG (Ausgabe 01.01.2019): Wechsel mit dreimonatiger Frist auf Semesterende, bei Prämienänderung einmonatige Frist; Form nicht geregelt.",
+   "evidence": null,
+   "sources": [
+    "https://www.vitasurselva.ch/home/praemienmitteilung/",
+    "https://www.vitasurselva.ch/kontakt/",
+    "https://www.vitasurselva.ch/faq/",
+    "https://www.vitasurselva.ch/gesetz-reglement/krankenversicherung/",
+    "https://www.vitasurselva.ch/fileadmin/user_upload/customers/vitasurselva/Reglemente/AVB/Krankenversicherung/Allgemeine_Bedingungen_KVG.pdf",
+    "https://www.vitasurselva.ch/ueber-uns/datenschutz/"
+   ],
+   "notes": "Die Kontaktseite nennt nur Adresse, Telefon +41 81 925 61 60, Fax +41 81 925 61 73 und ein Kontaktformular, keine E-Mail. Einzige gefundene E-Mail: info@vitasurselva.ch in der Datenschutzerklärung (dort für Datenschutzanliegen; nur als allgemeiner Kontakt zu werten). Die Prämienmitteilungs-Seite ist noch auf die Runde 2025/2026 datiert (Frist 28.11.2025); für 2026/2027 ist eine neue Frist zu erwarten, aber noch nicht publiziert gewesen."
+  },
+  {
+   "id": 509,
+   "name": "Vivao Sympany",
+   "web": "sympany.ch",
+   "bag_address": "Vivao Sympany AG, Peter Merian-Weg 4, 4002 Basel",
+   "cancel_postal_address": "Sympany, Peter Merian-Weg 4, 4002 Basel",
+   "cancel_email": "kuendigungen@sympany.ch",
+   "email_accepted": "ja",
+   "sender_must_be_on_file": true,
+   "online_channel": "https://my.sympany.ch",
+   "requirements": "Post: unterschriebenes Kuendigungsschreiben, am besten eingeschrieben. E-Mail: von der bei Sympany hinterlegten E-Mail-Adresse senden (automatische Empfangsbestaetigung). mySympany: Grundversicherung direkt kuendbar. Jede volljaehrige Person kuendigt selbst, voller Name und Kundennummer angeben. Eingang an Werktagen bis 17:00 Uhr, Stichtag 30. November 2026, 17:00. Keine offenen Rechnungen per 31.12.",
+   "evidence": "\"Per E-Mail: Bitte schicken Sie Ihre Kündigung an E-Mail.\" (Sympany, Bei Sympany kündigen)",
+   "sources": [
+    "https://www.sympany.ch/de/privatkunden/wissenswertes/einmaleins/krankenkasse-kuendigen.html",
+    "https://www.sympany.ch/en/individuals/worth-to-know/basics/cancel-health-insurance.html",
+    "https://www.sympany.ch/dam/jcr:a8a048f0-e732-4c72-8810-9196621d5b36/Kuendigungsformular_d.pdf"
+   ],
+   "notes": "Die E-Mail-Adresse ist im HTML verschleiert (data-href-mailto, Zeichencode +37). Entschluesselt ergibt sie kuendigungen@sympany.ch; die Struktur ist konsistent, sie wurde aber nicht im Klartext auf der Seite gesehen. Vor der Veroeffentlichung sollte man sie im Browser gegenpruefen. Das Sympany-Kuendigungsformular (PDF, Vermerk 'Einschreiben') ist fuer den Wechsel zu Sympany gedacht, nicht fuer die Kuendigung bei Sympany. Vivao Sympany AG ist der KVG-Traeger der Marke Sympany."
+  },
+  {
+   "id": 455,
+   "name": "ÖKK",
+   "web": "oekk.ch",
+   "bag_address": "ÖKK Kranken- und Unfallversicherungen AG, Bahnhofstrasse 13, 7302 Landquart",
+   "cancel_postal_address": "ÖKK, Bahnhofstrasse 13, Postfach, 7302 Landquart",
+   "cancel_email": "info@oekk.ch",
+   "email_accepted": "ja",
+   "sender_must_be_on_file": false,
+   "online_channel": null,
+   "requirements": "Laut Grundversicherungs-Seite gueltig nur, wenn schriftlich sowie frist- und termingerecht; Eingang bis letzter Arbeitstag November zu Geschaeftszeiten; Einschreiben zu Beweiszwecken empfohlen. Kuendigung ueber zustaendige Agentur oder ausgefuelltes Formular per E-Mail an info@oekk.ch. Das Formular sieht Unterschriften aller aufgefuehrten Familienmitglieder vor.",
+   "evidence": "\"senden Sie das ausgefüllte Formular an: info@oekk.ch\" (ÖKK, Abschnitt 'Kündigung bei ÖKK')",
+   "sources": [
+    "https://www.oekk.ch/de/themen-wissen/grundversicherung-wechseln",
+    "https://www.oekk.ch/de/themen-wissen/krankenkasse-kuendigen",
+    "https://www.oekk.ch/uploads/files/02_Dokumente/01_PK/02_Service/3032_jahresendbrief_kuendigung_d_formular.pdf"
+   ],
+   "notes": "Beide ÖKK-Seiten enthalten den Block 'Kündigung bei ÖKK': Agentur kontaktieren oder ausgefuelltes Formular an info@oekk.ch senden. Auf der Grundversicherungs-Seite ist der mailto-Link fehlerhaft ('www.info@oekk.ch'), der angezeigte Text lautet info@oekk.ch. Gleichzeitig sagt dieselbe Seite 'schriftlich' und empfiehlt Einschreiben, daher gibt es eine Spannung zwischen 'schriftlich' und dem E-Mail-Angebot. Fuer Zusatzversicherungen sagt ÖKK ausdruecklich, die Kuendigung koenne schriftlich oder in anderer digitaler Textform, etwa per Mail, erfolgen. Das verlinkte Formular 3032 ist eigentlich fuer den Wechsel zu ÖKK gedacht (Adressierung an 'Aktueller Versicherer', Vermerk A-Post Plus, Feld 'wird von ÖKK ausgefüllt'). privatkunden@oekk.ch plus Landquarter Postadresse sind fuer Neukunden genannt, wenn ÖKK die Kuendigung beim Vorversicherer uebernimmt. Portal myÖKK (myoekk.ch) existiert, aber keine Kuendigungsfunktion genannt."
+  }
+ ]
+}
