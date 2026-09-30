@@ -388,6 +388,8 @@ def page(path, title, description, body, jsonld):
 <meta name="description" content="{e(description)}">
 <link rel="canonical" href="{url}">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="alternate icon" href="/favicon.ico">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="article">
 <meta property="og:url" content="{url}">
