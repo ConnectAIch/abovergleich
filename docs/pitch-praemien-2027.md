@@ -13,8 +13,8 @@ wer zuerst liefert, wird zitiert. Heute oder morgen früh raus, nicht später.
       Blick gleicht jede Zahl mit der Live-Quelle ab.
 - [ ] Swica «Favorit Start» steht auf swica.ch als Modell (geprüft 30.09., Rabatt bis 23 %).
 - [ ] Auswertungsseite live und Anker #vorjahressieger funktioniert.
-- [ ] Zitat-Absender entscheiden: «Redaktion abovergleich.com» oder Moritz Schmid.
-      Moritz ist als Telecom-Experte eingeführt, für Krankenkassen passt die Rolle so nicht.
+- [x] Zitate: «Redaktion abovergleich.com» (entschieden 30.09.2026). Moritz Schmid
+      bleibt Telecom, nicht für Krankenkassen.
 
 ## 1. Blick, Bernadette Hogg (warm, kennt uns vom Roaming-Check)
 
