@@ -1072,6 +1072,7 @@ def kuendigen_page(kv):
 <div class="kk-faq"><h2>Häufige Fragen</h2>{"".join(f"<h3>{e(q)}</h3><p>{e(a)}</p>" for q, a in qa)}</div>
 <p class="kk-note">Quellen: Bundesamt für Gesundheit (<a href="https://www.bag.admin.ch/de/praemien-und-kosten-antworten-auf-haeufige-fragen">Fragen zu Prämien und Wechsel</a>), <a href="https://www.bag.admin.ch/de/verzeichnisse-der-zugelassenen-kranken-und-rueckversicherer">Verzeichnis der zugelassenen Krankenversicherer</a>. Angaben ohne Gewähr.</p>
 
+<script src="/js/combobox.js"></script>
 <script>
 (function () {{
   var KASSEN = {json.dumps(data, ensure_ascii=False)};
@@ -1091,6 +1092,7 @@ def kuendigen_page(kv):
     }}
   }} catch (e) {{}}
 
+  if (window.Combobox) Combobox.enhance(sel, {{ search: true, placeholder: 'Kasse suchen…' }});
   var days = Math.floor((DEADLINE - new Date()) / 86400000);
   if (days >= 0) $('kd-left').textContent = days === 0 ? 'Heute ist der letzte Tag.' : 'Noch ' + days + ' Tage.';
 
@@ -1206,6 +1208,26 @@ abovergleich.com hilft beim Sparen auf der Grundversicherung. Die Leistungen sin
 """, encoding="utf-8")
 
 
+def bust_assets():
+    """Hängt an geteilte CSS/JS-Dateien eine Prüfsumme (?v=…), auf allen Seiten.
+    Ändert sich die Datei, ändert sich die URL, und Browser laden sie neu."""
+    import hashlib
+    assets = {}
+    for rel in ("styles/shared.css", "js/combobox.js"):
+        f = ROOT / rel
+        if f.exists():
+            assets["/" + rel] = hashlib.md5(f.read_bytes()).hexdigest()[:8]
+    for page_file in ROOT.glob("**/index.html"):
+        if any(part in ("scripts", "supabase", "docs", "node_modules") for part in page_file.parts):
+            continue
+        t = page_file.read_text(encoding="utf-8")
+        new = t
+        for url, h in assets.items():
+            new = re.sub(re.escape(url) + r'(\?v=[0-9a-f]+)?"', f'{url}?v={h}"', new)
+        if new != t:
+            page_file.write_text(new, encoding="utf-8")
+
+
 def write(path, content):
     target = ROOT / path.strip("/") / "index.html"
     target.parent.mkdir(parents=True, exist_ok=True)
@@ -1296,6 +1318,7 @@ def main():
     }, ensure_ascii=False, indent=1), encoding="utf-8")
 
     write_sitemap(paths)
+    bust_assets()
     print(f"✓ {len(paths)} Seiten, national {nat:+.2f}% (Standard F300), "
           f"Kantone {min(v['change_pct'] for v in cantons.values()):+.1f} bis {max(v['change_pct'] for v in cantons.values()):+.1f}%")
 

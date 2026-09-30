@@ -344,3 +344,47 @@ footer > div { max-width: 1000px; }
   .footer-inner { flex-direction: column; text-align: center; }
   .footer-note { max-width: 100%; }
 }
+
+/* ── COMBOBOX (js/combobox.js), Stil wie TreuFlow ── */
+.cbx { position: relative; }
+.cbx-trigger {
+  width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  background: var(--surface); border: 1px solid var(--border2); border-radius: 10px;
+  padding: 12px 14px; font: 15px 'Inter', sans-serif; color: var(--text);
+  cursor: pointer; text-align: left; transition: border-color .2s, box-shadow .2s;
+}
+.cbx-trigger:hover { border-color: var(--accent-dark); }
+.cbx-trigger:focus-visible, .cbx-trigger[aria-expanded="true"] {
+  outline: none; border-color: var(--accent-dark); box-shadow: 0 0 0 3px var(--accent-bg2);
+}
+.cbx-value { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cbx-placeholder { color: var(--muted); }
+.cbx-chev { width: 12px; height: 12px; flex-shrink: 0; color: var(--muted); }
+.cbx-panel {
+  position: fixed; z-index: 1000; background: var(--surface);
+  border: 1px solid var(--border2); border-radius: 12px; padding: 6px;
+  box-shadow: 0 8px 28px rgba(20,30,40,.16); text-align: left;
+}
+.cbx-search {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 4px;
+  background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 0 10px;
+}
+.cbx-search:focus-within { border-color: var(--accent-dark); box-shadow: 0 0 0 3px var(--accent-bg2); }
+.cbx-search svg { width: 14px; height: 14px; flex-shrink: 0; color: var(--muted); }
+.cbx-search input {
+  border: 0; background: transparent; outline: 0; height: 38px; width: 100%;
+  font: 14px 'Inter', sans-serif; color: var(--text);
+}
+.cbx-list { max-height: 264px; overflow-y: auto; }
+.cbx-row {
+  display: flex; align-items: center; gap: 10px; width: 100%;
+  padding: 8px 10px; border: 0; border-radius: 6px; background: none;
+  font: 500 14px 'Inter', sans-serif; color: var(--text); text-align: left; cursor: pointer;
+}
+.cbx-row.active { background: var(--surface2); }
+.cbx-row.selected { background: var(--accent-bg); }
+.cbx-text { min-width: 0; flex: 1; }
+.cbx-main { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cbx-sub { display: block; font-weight: 400; font-size: 12px; color: var(--muted); }
+.cbx-check { width: 14px; height: 14px; flex-shrink: 0; color: var(--accent-dark); }
+.cbx-empty { padding: 12px 8px; text-align: center; font-size: 13px; color: var(--muted); }

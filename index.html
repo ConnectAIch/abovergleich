@@ -124,7 +124,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles/shared.css">
+<link rel="stylesheet" href="/styles/shared.css?v=5ded8e51">
 
 <style>
   /* HERO */
@@ -329,12 +329,22 @@
   }
   .kk-fields {
     display: grid;
-    grid-template-columns: 100px 100px 1fr 1fr;
+    grid-template-columns: minmax(110px, .8fr) minmax(120px, .8fr) 1fr 1fr;
     gap: 12px;
     align-items: end;
   }
   .kk-field-insurer { grid-column: 1 / 3; }
-  .kk-own-match { margin-top: 10px; font-size: 13px; color: var(--text2); line-height: 1.5; }
+  .kk-field-btn .kk-btn { width: 100%; padding-top: 13px; padding-bottom: 13px; }
+  .kk-own-match { margin-top: 8px; font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .kk-own { margin-top: 16px; }
+  .kk-own-head { align-items: flex-start; }
+  .kk-own-facts { font-size: 13px; color: var(--text2); margin-top: 8px; line-height: 1.5; }
+  .kk-own-facts .kk-more { color: var(--red); font-weight: 600; }
+  .kk-own-save a { color: var(--accent-dark); font-weight: 600; white-space: nowrap; }
+  .kk-more-btn { display: block; width: 100%; margin: 2px 0 6px; padding: 10px; border: 1px dashed var(--border2); border-radius: 10px; background: none; font: 600 13px 'Plus Jakarta Sans', sans-serif; color: var(--accent-dark); cursor: pointer; }
+  .kk-more-btn:hover { border-color: var(--accent-dark); background: var(--accent-bg); }
+  .kk-list-note { font-size: 12px; color: var(--muted); margin-top: 6px; }
+  .kk-row-meta .kk-save { font-size: 13px; }
   .kk-own-bill { font-size: 13px; color: var(--text2); margin-top: 2px; }
   .kk-optional { text-transform: none; letter-spacing: 0; font-weight: 400; }
   .kk-hint { font-size: 12px; color: var(--muted); margin-top: 10px; line-height: 1.5; }
@@ -589,89 +599,16 @@
     line-height: 1.7; max-width: 280px; margin: 0 auto;
   }
 
-  /* AUTH MODAL */
-  .auth-overlay {
-    position: fixed; inset: 0; z-index: 1000;
-    background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
-    display: none; align-items: center; justify-content: center;
-    padding: 20px;
-  }
-  .auth-overlay.open { display: flex; }
-  .auth-modal {
-    background: var(--surface); border-radius: 20px;
-    padding: 40px; max-width: 420px; width: 100%;
-    box-shadow: var(--shadow-lg); position: relative;
-  }
-  .auth-close {
-    position: absolute; top: 16px; right: 16px;
-    background: none; border: none; cursor: pointer;
-    font-size: 20px; color: var(--muted); line-height: 1;
-  }
-  .auth-close:hover { color: var(--text); }
-  .auth-title {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 24px; font-weight: 800;
-    letter-spacing: -.5px; margin-bottom: 8px;
-  }
-  .auth-subtitle {
-    font-size: 15px; color: var(--muted); line-height: 1.6;
-    margin-bottom: 28px;
-  }
-  .auth-field { margin-bottom: 16px; }
-  .auth-field label {
-    display: block; font-size: 12px; font-weight: 600;
-    color: var(--muted); margin-bottom: 6px;
-    text-transform: uppercase; letter-spacing: .05em;
-  }
-  .auth-field input, .auth-field select {
-    width: 100%; background: var(--surface2);
-    border: 1px solid var(--border2); border-radius: 10px;
-    padding: 12px 14px; font-size: 15px;
-    font-family: 'Inter', sans-serif; color: var(--text);
-    outline: none; transition: border .2s;
-  }
-  .auth-field input:focus, .auth-field select:focus {
-    border-color: var(--accent-dark);
-  }
-  .auth-btn {
-    width: 100%; background: var(--accent); color: var(--text);
-    border: none; border-radius: 10px; padding: 14px;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-weight: 700; font-size: 15px;
-    cursor: pointer; transition: all .2s;
-    margin-top: 8px;
-  }
-  .auth-btn:hover { background: var(--accent-hover); }
-  .auth-btn:disabled { opacity: .5; cursor: not-allowed; }
-  .auth-divider {
-    text-align: center; color: var(--muted); font-size: 13px;
-    margin: 16px 0; position: relative;
-  }
-  .auth-divider::before, .auth-divider::after {
-    content: ''; position: absolute; top: 50%;
-    width: calc(50% - 20px); height: 1px;
-    background: var(--border2);
-  }
-  .auth-divider::before { left: 0; }
-  .auth-divider::after { right: 0; }
-  .auth-msg {
-    padding: 12px 16px; border-radius: 10px;
-    font-size: 14px; line-height: 1.5;
-    margin-bottom: 16px; display: none;
-  }
-  .auth-msg.success { display: block; background: #ecfdf5; color: #065f46; }
-  .auth-msg.error { display: block; background: #fef2f2; color: #991b1b; }
-  .auth-switch {
-    text-align: center; margin-top: 16px;
-    font-size: 14px; color: var(--muted);
-  }
-  .auth-switch a {
-    color: var(--accent-dark); font-weight: 600;
-    cursor: pointer;
-  }
-  .auth-switch a:hover { text-decoration: underline; }
-
   /* WECKER CTA */
+  .wecker-form { display: flex; gap: 8px; max-width: 420px; margin: 0 auto; }
+  .wecker-form input { flex: 1; min-width: 0; padding: 12px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.08); color: var(--dark-text); font: 15px 'Inter', sans-serif; }
+  .wecker-form input::placeholder { color: var(--dark-muted); }
+  .wecker-msg { font-size: 14px; margin-top: 12px; color: var(--accent); min-height: 1em; }
+  .wecker-msg.err { color: #fca5a5; }
+  .wecker-fine { font-size: 12px; color: var(--dark-muted); margin-top: 10px; line-height: 1.5; }
+  .wecker-fine a { color: var(--dark-muted); }
+  .wecker-banner { max-width: 700px; margin: 0 auto 16px; padding: 12px 16px; border-radius: 10px; background: var(--green-bg); color: var(--text2); font-size: 14px; text-align: left; }
+  @media (max-width: 480px) { .wecker-form { flex-direction: column; } }
   .wecker-cta {
     margin-top: 20px; padding: 24px;
     background: linear-gradient(135deg, var(--dark) 0%, #2a2520 100%);
@@ -702,49 +639,6 @@
     box-shadow: 0 4px 12px rgba(254,208,1,0.35);
   }
 
-  /* KUENDIGUNG CAPTURE MODAL */
-  .capture-steps { display: flex; gap: 8px; margin-bottom: 24px; }
-  .capture-step {
-    flex: 1; height: 4px; border-radius: 4px;
-    background: var(--border2); transition: background .3s;
-  }
-  .capture-step.active { background: var(--accent); }
-  .capture-step.done { background: var(--accent-dark); }
-  .capture-view { display: none; }
-  .capture-view.active { display: block; }
-  .capture-insurer-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
-    max-height: 320px; overflow-y: auto; padding-right: 4px;
-  }
-  .capture-insurer-btn {
-    padding: 12px 14px; border-radius: 10px;
-    border: 1px solid var(--border2); background: var(--surface);
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 14px; font-weight: 600; color: var(--text);
-    cursor: pointer; transition: all .2s; text-align: left;
-  }
-  .capture-insurer-btn:hover { border-color: var(--accent-dark); background: var(--accent-bg); }
-  .capture-insurer-btn.selected {
-    border-color: var(--accent-dark); background: var(--accent-bg2);
-    box-shadow: 0 0 0 2px var(--accent);
-  }
-  .capture-skip {
-    display: block; margin: 16px auto 0; background: none; border: none;
-    font-size: 13px; color: var(--muted); cursor: pointer;
-    font-family: 'Inter', sans-serif; text-decoration: underline;
-  }
-  .capture-skip:hover { color: var(--text); }
-  .capture-success { text-align: center; }
-  .capture-success-icon { font-size: 48px; margin-bottom: 16px; }
-  .capture-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  @media (max-width: 480px) {
-    .capture-insurer-grid { grid-template-columns: 1fr; }
-    .capture-row { grid-template-columns: 1fr; }
-  }
-
-  @media (max-width: 768px) {
-    .auth-modal { padding: 28px; }
-  }
 
   /* RESPONSIVE (page-specific) */
   @media (max-width: 768px) {
@@ -789,7 +683,7 @@
 <!-- HERO with KK Calculator -->
 <section class="hero" id="kk-rechner">
   <div class="hero-bg"></div>
-  <div class="hero-content" style="max-width:700px;">
+  <div class="hero-content" style="max-width:880px;">
     <div class="hero-badge">Offizielle BAG-Prämien <span class="calc-year">2027</span> · alle Kassen</div>
     <h1>Krankenkassen-Vergleich <span class="calc-year">2027</span>:<br>zahlst du zu <em>viel?</em></h1>
     <p class="hero-sub">Gleiche Leistung, tieferer Preis. Die Grundversicherung ist bei allen Kassen gesetzlich identisch. Vergleiche jetzt in 60 Sekunden.</p>
@@ -830,7 +724,7 @@
         </div>
         <div class="kk-field kk-field-insurer">
           <label for="kk-current">Deine Kasse heute <span class="kk-optional">optional</span></label>
-          <select id="kk-current"><option value="">Weiss nicht / keine Angabe</option></select>
+          <select id="kk-current"><option value="">Keine Angabe</option></select>
         </div>
         <div class="kk-field">
           <label for="kk-paid">Du zahlst heute <span class="kk-optional">CHF/Mt.</span></label>
@@ -847,10 +741,6 @@
           <div class="kk-result-title">Günstigste Grundversicherungen</div>
           <div class="kk-result-sub" id="kk-result-sub"></div>
         </div>
-        <div id="kk-own"></div>
-        <div class="kk-result-note">
-          Die Leistung der Grundversicherung ist bei allen Kassen <strong>gesetzlich identisch</strong>. Du zahlst nur für den Namen.
-        </div>
         <div class="kk-filters" id="kk-filters" style="display:none;">
           <button class="kk-filter-chip active" data-filter="alle">Alle</button>
           <button class="kk-filter-chip" data-filter="standard">Standard</button>
@@ -860,6 +750,7 @@
           <button class="kk-filter-chip" data-filter="diverse">Alternativ</button>
         </div>
         <div id="kk-results-list"></div>
+        <div id="kk-own"></div>
         <div class="kk-model-legend" id="kk-model-legend" style="display:none;">
           <div><span>Standard</span> = Freie Arztwahl</div>
           <div><span>Hausarzt</span> = Immer zuerst zum Hausarzt</div>
@@ -872,9 +763,14 @@
 
         <!-- Wechsel-Wecker CTA (inside results) -->
         <div class="wecker-cta" id="wecker-cta" style="display:none;">
-          <h3>⏰ Wechsel-Wecker aktivieren</h3>
-          <p>Wir prüfen jedes Jahr im Herbst automatisch, ob du zu viel zahlst und schicken dir eine E-Mail mit deinem persönlichen Sparpotenzial.</p>
-          <button class="wecker-btn" onclick="openCapture()">Kostenlos erinnern lassen →</button>
+          <h3>⏰ Wechsel-Wecker</h3>
+          <p>Jedes Jahr Ende September, wenn die neuen Prämien da sind, schicken wir dir diesen Vergleich per E-Mail. Mit deinen Angaben von oben, rechtzeitig vor dem 30. November.</p>
+          <form class="wecker-form" id="wecker-form" novalidate>
+            <input type="email" id="wecker-email" placeholder="deine@email.ch" autocomplete="email" required>
+            <button type="submit" class="wecker-btn">Erinnern</button>
+          </form>
+          <div class="wecker-msg" id="wecker-msg"></div>
+          <div class="wecker-fine">Kostenlos, einmal im Jahr, jederzeit abbestellbar. Du bekommst zuerst eine Mail zum Bestätigen. <a href="/datenschutz/">Datenschutz</a></div>
         </div>
       </div>
     </div>
@@ -1130,91 +1026,6 @@
   </div>
 </section>
 
-<!-- CAPTURE MODAL (Kündigung + Lead Capture) -->
-<div class="auth-overlay" id="capture-overlay" onclick="if(event.target===this)closeCapture()">
-  <div class="auth-modal" style="max-width:480px;">
-    <button class="auth-close" onclick="closeCapture()">&times;</button>
-
-    <!-- Progress Steps -->
-    <div class="capture-steps">
-      <div class="capture-step active" id="cap-step-1"></div>
-      <div class="capture-step" id="cap-step-2"></div>
-      <div class="capture-step" id="cap-step-3"></div>
-    </div>
-
-    <!-- Step 1: Current Insurer -->
-    <div class="capture-view active" id="cap-view-1">
-      <div class="auth-title">Bei welcher Kasse bist du aktuell?</div>
-      <div class="auth-subtitle">Wir erstellen dir ein fertiges Kündigungsschreiben. Kostenlos.</div>
-      <div class="capture-insurer-grid" id="cap-insurer-grid"></div>
-      <button class="capture-skip" onclick="skipCapture()">Nein danke, direkt weiter →</button>
-    </div>
-
-    <!-- Step 2: Name & Address -->
-    <div class="capture-view" id="cap-view-2">
-      <div class="auth-title">Deine Daten für das Schreiben</div>
-      <div class="auth-subtitle">Diese Angaben erscheinen auf dem Kündigungsbrief.</div>
-      <div class="auth-msg" id="cap-msg-2"></div>
-      <div class="auth-field">
-        <label for="cap-name">Vor- und Nachname</label>
-        <input type="text" id="cap-name" placeholder="Max Muster">
-      </div>
-      <div class="auth-field">
-        <label for="cap-street">Strasse & Nr.</label>
-        <input type="text" id="cap-street" placeholder="Musterstrasse 1">
-      </div>
-      <div class="capture-row">
-        <div class="auth-field">
-          <label for="cap-plz">PLZ</label>
-          <input type="text" id="cap-plz" placeholder="8001" maxlength="4">
-        </div>
-        <div class="auth-field">
-          <label for="cap-city">Ort</label>
-          <input type="text" id="cap-city" placeholder="Zürich">
-        </div>
-      </div>
-      <button class="auth-btn" onclick="captureStep3()">Weiter →</button>
-    </div>
-
-    <!-- Step 3: Email + Wecker -->
-    <div class="capture-view" id="cap-view-3">
-      <div class="auth-title">Fast fertig!</div>
-      <div class="auth-subtitle">Wohin sollen wir das Kündigungsschreiben senden?</div>
-      <div class="auth-msg" id="cap-msg-3"></div>
-      <div class="auth-field">
-        <label for="cap-email">E-Mail</label>
-        <input type="email" id="cap-email" placeholder="deine@email.ch">
-      </div>
-      <div class="wecker-toggle" style="margin-bottom:16px;">
-        <div>
-          <div class="wecker-toggle-label">⏰ Wechsel-Wecker</div>
-          <div class="wecker-toggle-sub">Nächstes Jahr wieder erinnern</div>
-        </div>
-        <label class="toggle-switch">
-          <input type="checkbox" id="cap-wecker" checked>
-          <span class="toggle-slider"></span>
-        </label>
-      </div>
-      <button class="auth-btn" id="cap-submit" onclick="submitCapture()">Kündigungsschreiben senden →</button>
-      <div style="margin-top:12px;font-size:11px;color:var(--muted);text-align:center;line-height:1.5;">
-        Kostenlos. Kein Abo. Wir senden dir das PDF per E-Mail.
-      </div>
-    </div>
-
-    <!-- Step 4: Success -->
-    <div class="capture-view" id="cap-view-4">
-      <div class="capture-success">
-        <div class="capture-success-icon">✅</div>
-        <div class="auth-title">Kündigungsschreiben unterwegs!</div>
-        <div class="auth-subtitle">Check deine Inbox. Du bekommst gleich eine E-Mail mit dem PDF. Drucke es aus, unterschreibe es und sende es per Einschreiben.</div>
-        <a class="auth-btn" id="cap-redirect-btn" style="margin-top:16px;display:inline-block;text-align:center;text-decoration:none;cursor:pointer;" onclick="this.href=captureState.targetAffiliateLink||'#'" target="_blank" rel="noopener">Jetzt bei der neuen Kasse anmelden &rarr;</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
 <!-- FOOTER -->
 <footer>
   <div class="footer-inner">
@@ -1230,6 +1041,7 @@
 </footer>
 
 
+<script src="/js/combobox.js?v=a39525a8"></script>
 <script>
 const SUPABASE_URL = 'https://zexpmaegqsayleaohiip.supabase.co';
 
@@ -1299,234 +1111,6 @@ const SwissValidation = {
   }
 };
 
-// Auto-fill city when PLZ is typed (for capture form and profile)
-function attachPLZAutoCity(plzId, cityId) {
-  const plzEl = document.getElementById(plzId);
-  const cityEl = document.getElementById(cityId);
-  if (!plzEl || !cityEl) return;
-  let debounce;
-  plzEl.addEventListener('input', function() {
-    clearTimeout(debounce);
-    SwissValidation.clearFieldError(plzEl);
-    const v = plzEl.value.trim();
-    if (v.length === 4) {
-      debounce = setTimeout(async () => {
-        if (!SwissValidation.isValidPLZ(v)) {
-          SwissValidation.showFieldError(plzEl, 'Ungültige Schweizer PLZ');
-          return;
-        }
-        const city = await SwissValidation.lookupCity(v);
-        if (city && !cityEl.value.trim()) cityEl.value = city;
-      }, 300);
-    }
-  });
-}
-
-// Attach PLZ → City autofill on page load
-document.addEventListener('DOMContentLoaded', () => {
-  attachPLZAutoCity('cap-plz', 'cap-city');
-});
-
-// CAPTURE MODAL (Kündigung Flow)
-const KUENDIGUNG_API = SUPABASE_URL + '/functions/v1/generate-kuendigung';
-
-const captureInsurers = [
-  'Aquilana','Assura','Atupri','Concordia','CSS','EGK',
-  'Galenos','Groupe Mutuel','Helsana','KPT','ÖKK',
-  'Rhenusana','Sanitas','Swica','Sympany','Visana'
-];
-
-// Map display names to keys used by Edge Function
-const insurerKeyMap = {
-  'ÖKK': 'OeKK',
-  'Progrès': 'Progres'
-};
-
-let captureState = {
-  currentInsurer: null,
-  targetInsurerName: null,
-  targetAffiliateLink: null,
-  step: 1
-};
-
-function populateCaptureInsurers() {
-  const grid = document.getElementById('cap-insurer-grid');
-  grid.innerHTML = captureInsurers.map(name =>
-    `<button class="capture-insurer-btn" onclick="selectCaptureInsurer('${name}', this)">${name}</button>`
-  ).join('');
-}
-populateCaptureInsurers();
-
-function openCapture(insurerName, affiliateLink) {
-  captureState = {
-    currentInsurer: null,
-    targetInsurerName: insurerName,
-    targetAffiliateLink: affiliateLink,
-    step: 1
-  };
-  // Kasse aus dem Rechner übernehmen, dann entfällt Schritt 1
-  const cur = document.getElementById('kk-current');
-  const curName = cur && cur.value ? cur.selectedOptions[0].textContent : '';
-  const brand = { 'Avenir (Groupe Mutuel)': 'Groupe Mutuel', 'Mutuel (Groupe Mutuel)': 'Groupe Mutuel',
-    'Philos (Groupe Mutuel)': 'Groupe Mutuel', 'sana24 (Visana)': 'Visana', 'Vivao Sympany': 'Sympany',
-    'rhenusana': 'Rhenusana' }[curName] || curName;
-  if (captureInsurers.includes(brand)) {
-    captureState.currentInsurer = brand;
-    showCaptureStep(2);
-  } else {
-    showCaptureStep(1);
-  }
-  // Pre-fill PLZ from calculator
-  const calcPlz = document.getElementById('kk-plz').value;
-  if (calcPlz) document.getElementById('cap-plz').value = calcPlz;
-  document.getElementById('capture-overlay').classList.add('open');
-}
-
-function closeCapture() {
-  document.getElementById('capture-overlay').classList.remove('open');
-}
-
-function skipCapture() {
-  closeCapture();
-  if (captureState.targetAffiliateLink) {
-    window.open(captureState.targetAffiliateLink, '_blank');
-  }
-}
-
-function showCaptureStep(step) {
-  captureState.step = step;
-  for (let i = 1; i <= 4; i++) {
-    const view = document.getElementById('cap-view-' + i);
-    view.classList.toggle('active', i === step);
-  }
-  for (let i = 1; i <= 3; i++) {
-    const s = document.getElementById('cap-step-' + i);
-    s.classList.toggle('active', i === step);
-    s.classList.toggle('done', i < step);
-  }
-}
-
-function selectCaptureInsurer(name, btn) {
-  document.querySelectorAll('.capture-insurer-btn').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
-  captureState.currentInsurer = name;
-  setTimeout(() => showCaptureStep(2), 300);
-}
-
-function captureStep3() {
-  const nameEl = document.getElementById('cap-name');
-  const streetEl = document.getElementById('cap-street');
-  const plzEl = document.getElementById('cap-plz');
-  const cityEl = document.getElementById('cap-city');
-  const msg = document.getElementById('cap-msg-2');
-  const container = document.getElementById('cap-view-2');
-
-  const name = nameEl.value.trim();
-  const street = streetEl.value.trim();
-  const plz = plzEl.value.trim();
-  const city = cityEl.value.trim();
-
-  SwissValidation.clearAllErrors(container);
-  let hasError = false;
-
-  if (!name) {
-    SwissValidation.showFieldError(nameEl, 'Bitte Name eingeben.');
-    hasError = true;
-  } else if (!SwissValidation.isValidFullName(name)) {
-    SwissValidation.showFieldError(nameEl, 'Bitte Vor- und Nachname eingeben.');
-    hasError = true;
-  }
-
-  if (!street) {
-    SwissValidation.showFieldError(streetEl, 'Bitte Strasse eingeben.');
-    hasError = true;
-  } else if (!SwissValidation.isValidStreet(street)) {
-    SwissValidation.showFieldError(streetEl, 'Bitte Strasse mit Hausnummer (z.B. Bahnhofstrasse 1).');
-    hasError = true;
-  }
-
-  if (!plz) {
-    SwissValidation.showFieldError(plzEl, 'Bitte PLZ eingeben.');
-    hasError = true;
-  } else if (!SwissValidation.isValidPLZ(plz)) {
-    SwissValidation.showFieldError(plzEl, 'Ungültige Schweizer PLZ (1000–9699).');
-    hasError = true;
-  }
-
-  if (!city) {
-    SwissValidation.showFieldError(cityEl, 'Bitte Ort eingeben.');
-    hasError = true;
-  }
-
-  if (hasError) {
-    msg.className = 'auth-msg error';
-    msg.textContent = 'Bitte korrigiere die markierten Felder.';
-    return;
-  }
-
-  msg.className = 'auth-msg';
-  msg.textContent = '';
-  showCaptureStep(3);
-}
-
-async function submitCapture() {
-  const email = document.getElementById('cap-email').value.trim();
-  const msg = document.getElementById('cap-msg-3');
-  const btn = document.getElementById('cap-submit');
-
-  if (!email || !SwissValidation.isValidEmail(email)) {
-    msg.className = 'auth-msg error';
-    msg.textContent = 'Bitte gib eine gültige E-Mail-Adresse ein (z.B. name@beispiel.ch).';
-    return;
-  }
-
-  btn.disabled = true;
-  btn.textContent = 'Wird erstellt...';
-
-  const insurerKey = insurerKeyMap[captureState.currentInsurer] || captureState.currentInsurer;
-
-  try {
-    const res = await fetch(KUENDIGUNG_API, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email,
-        name: document.getElementById('cap-name').value.trim(),
-        street: document.getElementById('cap-street').value.trim(),
-        plz_city: document.getElementById('cap-plz').value.trim() + ' ' + document.getElementById('cap-city').value.trim(),
-        current_insurer: insurerKey,
-        target_insurer_name: captureState.targetInsurerName,
-        wecker_active: document.getElementById('cap-wecker').checked
-      })
-    });
-
-    const data = await res.json();
-
-    if (data.success) {
-      if (data.affiliate_link) captureState.targetAffiliateLink = data.affiliate_link;
-      showCaptureStep(4);
-    } else {
-      msg.className = 'auth-msg error';
-      msg.textContent = data.error || 'Etwas ist schiefgelaufen. Bitte versuche es erneut.';
-    }
-  } catch (err) {
-    msg.className = 'auth-msg error';
-    msg.textContent = 'Verbindungsfehler. Bitte versuche es erneut.';
-  }
-
-  btn.disabled = false;
-  btn.textContent = 'Kündigungsschreiben senden →';
-}
-
-function redirectToInsurer() {
-  if (captureState.targetAffiliateLink) {
-    const btn = document.getElementById('cap-redirect-btn');
-    if (btn) btn.href = captureState.targetAffiliateLink;
-  }
-}
-
-// Init auth on page load
-
 // Inject data year from premium-insights.json into .data-year / .data-year-prev spans
 fetch('/premium-insights.json').then(r => r.json()).then(d => {
   if (d.data_year) document.querySelectorAll('.data-year').forEach(el => el.textContent = d.data_year);
@@ -1567,6 +1151,11 @@ const KK_INSURERS = [
   const fromLink = new URLSearchParams(location.search).get('kasse');
   if (fromLink && [...sel.options].some(o => o.value === fromLink)) sel.value = fromLink;
   sel.addEventListener('change', () => { try { localStorage.setItem('kk-current', sel.value); } catch (e) {} });
+  const groups = { 343: 'groupe mutuel', 1479: 'groupe mutuel', 1535: 'groupe mutuel', 1568: 'visana gruppe',
+    1386: 'visana gruppe', 1555: 'visana gruppe', 509: 'sympany', 455: 'oekk okk', 1318: 'waedenswil' };
+  Combobox.enhance(sel, { search: true, placeholder: 'Kasse suchen…', keywords: v => groups[v] || '' });
+  Combobox.enhance(document.getElementById('kk-franchise'));
+  Combobox.enhance(document.getElementById('kk-accident'));
   const paid = document.getElementById('kk-paid');
   try { const v = localStorage.getItem('kk-paid'); if (v) paid.value = v; } catch (e) {}
   paid.addEventListener('change', () => { try { localStorage.setItem('kk-paid', paid.value); } catch (e) {} });
@@ -1576,6 +1165,41 @@ const KK_INSURERS = [
 // Adresse (Edge Function read-invoice). Knopf erscheint nur, wenn der Dienst
 // eingerichtet ist.
 const INVOICE_API = SUPABASE_URL + '/functions/v1/read-invoice';
+const WECKER_API = SUPABASE_URL + '/functions/v1/wecker';
+
+(async function initWecker() {
+  // Rückmeldung nach dem Klick auf den Link in der Mail
+  const state = new URLSearchParams(location.search).get('wecker');
+  const texts = { bestaetigt: 'Dein Wechsel-Wecker ist bestätigt. Wir melden uns, sobald die neuen Prämien da sind.',
+    abgemeldet: 'Du bist vom Wechsel-Wecker abgemeldet. Wir schicken dir keine Mails mehr.',
+    ungueltig: 'Dieser Link ist nicht mehr gültig. Melde dich einfach nochmals an.' };
+  if (texts[state]) {
+    const b = document.createElement('div');
+    b.className = 'wecker-banner'; b.textContent = texts[state];
+    const calc = document.getElementById('kk-calc');
+    calc.parentNode.insertBefore(b, calc);
+  }
+  try { window._weckerEnabled = (await (await fetch(WECKER_API)).json()).enabled; } catch (e) {}
+  const form = document.getElementById('wecker-form');
+  if (!form) return;
+  form.addEventListener('submit', async ev => {
+    ev.preventDefault();
+    const msg = document.getElementById('wecker-msg');
+    const say = (t, err) => { msg.textContent = t; msg.classList.toggle('err', !!err); };
+    const v = id => document.getElementById(id).value;
+    const btn = form.querySelector('button'); btn.disabled = true; say('');
+    try {
+      const res = await fetch(WECKER_API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
+        email: v('wecker-email'), plz: v('kk-plz'), jahrgang: v('kk-year'), franchise: v('kk-franchise'),
+        accident_included: v('kk-accident') === 'true', current_insurer_id: v('kk-current') || null,
+        paid_monthly: parseFloat((v('kk-paid') || '').replace(',', '.')) || null }) });
+      const r = await res.json();
+      if (!res.ok || r.error) throw new Error(r.error || 'Anmeldung nicht möglich.');
+      say(r.already ? 'Du bist schon angemeldet. Wir haben deine Angaben aktualisiert.' : 'Fast geschafft: Bitte bestätige die Mail, die wir dir eben geschickt haben.');
+      form.reset();
+    } catch (e) { say(e.message, true); } finally { btn.disabled = false; }
+  });
+})();
 
 function insurerIdFromName(name) {
   const n = (name || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -1634,12 +1258,12 @@ function applyInvoice(r) {
   }
   if (r.franchise && [...$('kk-franchise').options].some(o => o.value === String(r.franchise))) $('kk-franchise').value = String(r.franchise);
   if (r.accident_included !== null && r.accident_included !== undefined) $('kk-accident').value = String(r.accident_included);
+  ['kk-franchise', 'kk-accident'].forEach(id => $(id).dispatchEvent(new Event('change')));
   if (r.postal_code && /^\d{4}$/.test(r.postal_code)) $('kk-plz').value = r.postal_code;
   // Für die Kündigung: nur in diesem Browserfenster merken
   const prefill = { name: r.policyholder_name || person?.name || '', street: r.street || '',
     city: [r.postal_code, r.city].filter(Boolean).join(' '), nr: r.insured_number || '', kasse: id };
   try { sessionStorage.setItem('kd-prefill', JSON.stringify(prefill)); } catch (e) {}
-  if ($('cap-name')) { $('cap-name').value = prefill.name; $('cap-street').value = prefill.street; $('cap-plz').value = r.postal_code || ''; $('cap-city').value = r.city || ''; }
   return notes;
 }
 
@@ -1839,55 +1463,45 @@ async function checkKK() {
       const el = document.getElementById('kk-own');
       if (!currentId) { el.innerHTML = ''; return; }
       if (!ownPick) {
-        el.innerHTML = `<div class="kk-own"><div class="kk-own-title">${currentSelect.selectedOptions[0].textContent}</div>
+        el.innerHTML = `<div class="kk-own"><div class="kk-own-label">Deine Kasse</div><div class="kk-own-title">${currentSelect.selectedOptions[0].textContent}</div>
           <div class="kk-own-delta">Bietet an deinem Wohnort keine Grundversicherung für dieses Profil an.</div>
           ${matchNote ? `<div class="kk-own-match">${matchNote}</div>` : ''}</div>`;
         bindMatch(el);
         return;
       }
       const best = offers[0];
-      const bestSame = offers.find(p => p.model_type === ownPick.model_type);
       const saveAll = (ownPick.premium - best.premium) * 12;
-      const saveSame = bestSame ? (ownPick.premium - bestSame.premium) * 12 : 0;
       // Was auf der Rechnung steht: BAG-Prämie minus Umweltabgabe des Jahres
       const bill = ownPick.premium - refund;
       const billPrev = ownPick.premium_prev ? ownPick.premium_prev - refundPrev : null;
-      const billLine = refund ? `Auf deiner Rechnung ${data.year}: <strong>CHF ${fmt(bill)}</strong> (nach Abzug Umweltabgabe CHF ${fmt(refund)})` : '';
-      const delta = billPrev
-        ? `${data.prev_year} auf der Rechnung: CHF ${fmt(billPrev)} · ${signed((bill / billPrev - 1) * 100)}%, ${bill >= billPrev ? '+' : '−'}CHF ${fmt0(Math.abs(bill - billPrev) * 12)} pro Jahr`
-        : `Tarif neu im Angebot ${data.year}`;
-      let save;
-      if (saveAll < 12) {
-        save = 'Du bist bereits bei der günstigsten Kasse. Ein Wechsel lohnt sich nicht.';
-      } else {
-        save = `Mit <strong>${best.insurer_name}</strong> (${tariffLabel(best)}) sparst du <strong>CHF ${fmt0(saveAll)} pro Jahr</strong>.`;
-        if (ownPick.model_type !== best.model_type) {
-          save += saveSame >= 12
-            ? `<br>Willst du beim Modell ${modelNames[ownPick.model_type]} bleiben: <strong>${bestSame.insurer_name}</strong> spart dir <strong>CHF ${fmt0(saveSame)}</strong> pro Jahr.`
-            : `<br>Im Modell ${modelNames[ownPick.model_type]} bist du bereits am günstigsten.`;
-        }
-      }
-      const guessNote = ownGuessed
-        ? `<div class="kk-own-match">Angenommen: Standardmodell. Gib oben ein, was du heute zahlst, oder wähle deinen Tarif, sonst stimmt die Ersparnis nicht.</div>`
-        : '';
+      const facts = [];
+      if (refund) facts.push(`Rechnung ${data.year}: <strong>CHF ${fmt(bill)}</strong>`);
+      facts.push(billPrev
+        ? `${data.prev_year}: CHF ${fmt(billPrev)} <span class="${bill >= billPrev ? 'kk-more' : 'kk-save'}">(${bill >= billPrev ? '+' : '−'}CHF ${fmt0(Math.abs(bill - billPrev) * 12)}/Jahr)</span>`
+        : `Tarif neu ${data.year}`);
+      const picked = !ownGuessed && ownChoices.length === 1 && paid ? ' · aus deiner Rechnung' : '';
+      const hint = matchOther || (!ownGuessed ? '' : 'Annahme: Standardmodell. Trag oben ein, was du heute zahlst.');
+      const noMatch = matchNote.startsWith('Kein Tarif') ? matchNote : '';
+      const save = saveAll < 12
+        ? 'Du bist schon bei der günstigsten Kasse.'
+        : `<strong>CHF ${fmt0(saveAll)} pro Jahr</strong> sparst du mit ${best.insurer_name}. <a href="/krankenkasse-kuendigen/?kasse=${currentId}">Kündigungsbrief erstellen &rarr;</a>`;
       const tariffs = ownChoices.map((p, i) => `<div class="kk-own-tariff${p === ownPick ? ' selected' : ''}" data-i="${i}">
           <span>${tariffLabel(p)}</span><span>CHF ${fmt(p.premium)}</span></div>`).join('');
-      const pickerOpen = ownGuessed || ownChoices.length < ownOffers.length;
-      const pickerLabel = ownChoices.length < ownOffers.length ? 'Welcher Tarif steht auf deiner Police?' : 'Anderes Modell? Wähle deinen Tarif';
+      const narrowed = ownChoices.length < ownOffers.length;
+      const pickerLabel = narrowed ? `Passt zu ${ownChoices.length} Tarifen. Welcher steht auf deiner Police?` : 'Anderes Modell? Tarif wählen';
       el.innerHTML = `<div class="kk-own">
-        <div class="kk-own-label">Deine Kasse ${data.year}</div>
         <div class="kk-own-head">
-          <div><div class="kk-own-title">${ownPick.insurer_name}</div><div class="kk-own-delta">${tariffLabel(ownPick)}</div></div>
-          <div style="text-align:right;"><div class="kk-own-price">CHF ${fmt(ownPick.premium)}</div><div class="kk-own-bill">${billLine}</div><div class="kk-own-delta">${delta}</div></div>
+          <div><div class="kk-own-label">Deine Kasse ${data.year}</div><div class="kk-own-title">${ownPick.insurer_name}</div><div class="kk-own-delta">${tariffLabel(ownPick)}${picked}</div></div>
+          <div class="kk-own-price">CHF ${fmt(ownPick.premium)}</div>
         </div>
-        ${matchNote ? `<div class="kk-own-match">${matchNote}</div>` : guessNote}
-        <div class="kk-own-save">${save}${saveAll >= 12 ? `<br><a href="/krankenkasse-kuendigen/?kasse=${currentId}" style="color:var(--accent-dark);font-weight:600;">Kündigungsbrief an ${ownPick.insurer_name} erstellen &rarr;</a>` : ''}</div>
-        ${ownChoices.length > 1 ? `<details class="kk-own-tariffs"${pickerOpen ? ' open' : ''}><summary>${pickerLabel} (${ownChoices.length})</summary>${tariffs}</details>` : ''}
+        <div class="kk-own-facts">${facts.join(' · ')}</div>
+        ${matchOther ? `<div class="kk-own-match">${matchNote}</div>` : noMatch ? `<div class="kk-own-match">${noMatch}</div>` : hint ? `<div class="kk-own-match">${hint}</div>` : ''}
+        <div class="kk-own-save">${save}</div>
+        ${ownChoices.length > 1 ? `<details class="kk-own-tariffs"${ownGuessed || narrowed ? ' open' : ''}><summary>${pickerLabel}</summary>${tariffs}</details>` : ''}
       </div>`;
       el.querySelectorAll('.kk-own-tariff').forEach(t => t.onclick = () => {
         ownPick = ownChoices[parseInt(t.dataset.i)];
         ownGuessed = false;
-        if (matchNote.startsWith('Dein Betrag passt zu') && !matchOther) matchNote = 'Tarif gewählt.';
         renderOwn();
         const d = el.querySelector('.kk-own-tariffs'); if (d) d.open = true;
         renderFiltered(document.querySelector('.kk-filter-chip.active').dataset.filter);
@@ -1902,6 +1516,7 @@ async function checkKK() {
       btn.onclick = () => {
         document.getElementById('kk-franchise').value = String(matchOther.franchise);
         document.getElementById('kk-accident').value = String(matchOther.accident_included);
+        ['kk-franchise', 'kk-accident'].forEach(id => document.getElementById(id).dispatchEvent(new Event('change')));
         checkKK();
       };
     }
@@ -1909,7 +1524,7 @@ async function checkKK() {
     function renderRow(p, rank, opts = {}) {
       const link = affiliateLink(p.insurer_name);
       const cta = link
-        ? `<button onclick="openCapture('${p.insurer_name.replace(/'/g, "\\'")}', '${link}')" class="kk-link">Zur Kasse ${arrowSvg}</button>`
+        ? `<a href="${link}" target="_blank" rel="noopener sponsored" class="kk-link">Zur Kasse ${arrowSvg}</a>`
         : '';
       const isOwn = currentId && p.insurer_id === currentId;
       let meta = changeText(p);
@@ -1938,6 +1553,7 @@ async function checkKK() {
       </div>`;
     }
 
+    let expanded = false;
     function renderFiltered(filter) {
       const pool = filter === 'alle' ? offers : offers.filter(p => p.model_type === filter);
       const ranked = bestPerInsurer(pool);
@@ -1945,14 +1561,19 @@ async function checkKK() {
         listEl.innerHTML = '<div style="color:var(--muted);font-size:14px;">Keine Prämien für dieses Modell gefunden.</div>';
         return;
       }
-      const top = ranked.slice(0, 8);
+      const top = ranked.slice(0, expanded ? 10 : 3);
       let html = top.map((p, i) => renderRow(p, i + 1, { best: i === 0 })).join('');
       const ownIdx = currentId ? ranked.findIndex(p => p.insurer_id === currentId) : -1;
       if (ownIdx >= top.length) {
         html += '<div class="kk-gap">···</div>' + renderRow(ranked[ownIdx], ownIdx + 1);
       }
-      html += `<div style="font-size:12px;color:var(--muted);margin-top:8px;">Pro Kasse der günstigste Tarif${filter === 'alle' ? '' : ' im Modell ' + (modelNames[filter] || filter)} · ${ranked.length} Kassen an deinem Wohnort · Prämie pro Monat laut BAG${refund ? `, auf der Rechnung ziehen alle Kassen noch CHF ${fmt(refund)} Umweltabgabe ab` : ''}</div>`;
+      if (ranked.length > 3) {
+        html += `<button type="button" class="kk-more-btn" id="kk-more-btn">${expanded ? 'Weniger anzeigen' : `Weitere Kassen anzeigen (${Math.min(ranked.length, 10) - 3})`}</button>`;
+      }
+      html += `<div class="kk-list-note">Pro Kasse der günstigste Tarif · Monatsprämie laut BAG, vor Abzug der Umweltabgabe</div>`;
       listEl.innerHTML = html;
+      const more = document.getElementById('kk-more-btn');
+      if (more) more.onclick = () => { expanded = !expanded; renderFiltered(filter); };
     }
 
     renderOwn();
@@ -1964,6 +1585,7 @@ async function checkKK() {
       chip.onclick = () => {
         chips.forEach(c => c.classList.remove('active'));
         chip.classList.add('active');
+        expanded = false;
         renderFiltered(chip.dataset.filter);
       };
     });
@@ -1978,11 +1600,9 @@ async function checkKK() {
     const legendEl = document.getElementById('kk-model-legend');
     if (legendEl) legendEl.style.display = '';
 
-    // Show Wechsel-Wecker CTA for non-logged-in users
+    // Wechsel-Wecker nur zeigen, wenn der Versand eingerichtet ist
     const weckerCta = document.getElementById('wecker-cta');
-    if (weckerCta) {
-      weckerCta.style.display = '';
-    }
+    if (weckerCta && window._weckerEnabled) weckerCta.style.display = '';
   } catch (err) {
     subEl.textContent = 'Fehler beim Laden der Prämien. Bitte versuche es erneut.';
     listEl.innerHTML = '';
