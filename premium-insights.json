@@ -17,6 +17,7 @@
   "source_url": "https://www.srf.ch/news/schweiz/erneuter-anstieg-krankenkassenpraemien-steigen-2027-um-5-prozent"
  },
  "national_change_standard_pct": 4.62,
+ "national_change_standard_pct_prev": 3.93,
  "vorjahressieger": {
   "2026-2027": {
    "regions": 36,
@@ -145,193 +146,225 @@
    "name": "Einsiedler Krankenkasse",
    "change_pct": 3.48,
    "bestand": 11696,
-   "cantons": 9
+   "cantons": 9,
+   "change_pct_prev": 7.5
   },
   "1542": {
    "name": "Assura",
    "change_pct": 4.61,
    "bestand": 712843,
-   "cantons": 26
+   "cantons": 26,
+   "change_pct_prev": 4.35
   },
   "8": {
    "name": "CSS",
    "change_pct": 7.69,
    "bestand": 1466758,
-   "cantons": 26
+   "cantons": 26,
+   "change_pct_prev": 2.57
   },
   "780": {
    "name": "Glarner",
    "change_pct": -0.1,
    "bestand": 5450,
-   "cantons": 3
+   "cantons": 3,
+   "change_pct_prev": 0.02
   },
   "1040": {
    "name": "KK Visperterminen",
    "change_pct": 5.0,
    "bestand": 5326,
-   "cantons": 1
+   "cantons": 1,
+   "change_pct_prev": 4.99
   },
   "1555": {
    "name": "Visana",
    "change_pct": 4.28,
    "bestand": 552570,
-   "cantons": 26
+   "cantons": 26,
+   "change_pct_prev": 2.64
   },
   "1560": {
    "name": "Agrisano",
    "change_pct": 4.92,
    "bestand": 190439,
-   "cantons": 26
+   "cantons": 26,
+   "change_pct_prev": 4.89
   },
   "1562": {
    "name": "Helsana",
    "change_pct": 5.18,
    "bestand": 1396260,
-   "cantons": 27
+   "cantons": 27,
+   "change_pct_prev": 5.44
   },
   "923": {
    "name": "SLKK",
    "change_pct": 3.57,
    "bestand": 14700,
-   "cantons": 21
+   "cantons": 21,
+   "change_pct_prev": 5.95
   },
   "32": {
    "name": "Aquilana",
    "change_pct": 4.07,
    "bestand": 64678,
-   "cantons": 26
+   "cantons": 26,
+   "change_pct_prev": 4.8
   },
   "1568": {
    "name": "sana24",
    "change_pct": 3.89,
    "bestand": 90727,
-   "cantons": 26
+   "cantons": 26,
+   "change_pct_prev": 3.79
   },
   "290": {
    "name": "Concordia",
    "change_pct": 2.8,
    "bestand": 712174,
-   "cantons": 26
+   "cantons": 26,
+   "change_pct_prev": 5.67
   },
   "1318": {
    "name": "KK Wädenswil",
    "change_pct": 3.99,
    "bestand": 20052,
-   "cantons": 4
+   "cantons": 4,
+   "change_pct_prev": 3.53
   },
   "1322": {
    "name": "Birchmeier",
    "change_pct": 6.51,
    "bestand": 7362,
-   "cantons": 1
+   "cantons": 1,
+   "change_pct_prev": 11.01
   },
   "941": {
    "name": "sodalis",
    "change_pct": 5.49,
    "bestand": 53900,
-   "cantons": 2
+   "cantons": 2,
+   "change_pct_prev": 9.35
   },
   "820": {
    "name": "curaulta",
    "change_pct": 5.02,
    "bestand": 5678,
-   "cantons": 1
+   "cantons": 1,
+   "change_pct_prev": 4.03
   },
   "312": {
    "name": "Atupri",
    "change_pct": 3.99,
    "bestand": 173855,
-   "cantons": 27
+   "cantons": 27,
+   "change_pct_prev": 4.35
   },
   "194": {
    "name": "Sumiswalder",
    "change_pct": 5.05,
    "bestand": 32747,
-   "cantons": 21
+   "cantons": 21,
+   "change_pct_prev": 4.9
   },
   "966": {
    "name": "vita surselva",
    "change_pct": 5.88,
    "bestand": 4330,
-   "cantons": 26
+   "cantons": 26,
+   "change_pct_prev": 4.11
   },
   "455": {
    "name": "ÖKK",
    "change_pct": 3.42,
    "bestand": 210929,
-   "cantons": 27
+   "cantons": 27,
+   "change_pct_prev": 4.43
   },
   "1479": {
    "name": "Mutuel",
    "change_pct": 3.2,
    "bestand": 459864,
-   "cantons": 27
+   "cantons": 27,
+   "change_pct_prev": 3.11
   },
   "343": {
    "name": "Avenir",
    "change_pct": 3.96,
    "bestand": 323996,
-   "cantons": 26
+   "cantons": 26,
+   "change_pct_prev": 3.06
   },
   "1509": {
    "name": "Sanitas",
    "change_pct": 3.31,
    "bestand": 642973,
-   "cantons": 26
+   "cantons": 26,
+   "change_pct_prev": 3.81
   },
   "360": {
    "name": "KK Luzerner Hinterland",
    "change_pct": 4.99,
    "bestand": 23776,
-   "cantons": 10
+   "cantons": 10,
+   "change_pct_prev": 3.71
   },
   "1384": {
    "name": "Swica",
    "change_pct": 3.58,
    "bestand": 819187,
-   "cantons": 27
+   "cantons": 27,
+   "change_pct_prev": 3.99
   },
   "1386": {
    "name": "Galenos",
    "change_pct": 2.87,
    "bestand": 56370,
-   "cantons": 26
+   "cantons": 26,
+   "change_pct_prev": -8.01
   },
   "881": {
    "name": "EGK",
    "change_pct": 3.45,
    "bestand": 95250,
-   "cantons": 26
+   "cantons": 26,
+   "change_pct_prev": 3.22
   },
   "246": {
    "name": "KK Steffisburg",
    "change_pct": 4.06,
    "bestand": 11780,
-   "cantons": 11
+   "cantons": 11,
+   "change_pct_prev": 9.22
   },
   "376": {
    "name": "KPT",
    "change_pct": 2.71,
    "bestand": 459540,
-   "cantons": 28
+   "cantons": 28,
+   "change_pct_prev": 3.55
   },
   "1401": {
    "name": "rhenusana",
    "change_pct": 4.07,
    "bestand": 12281,
-   "cantons": 26
+   "cantons": 26,
+   "change_pct_prev": 5.29
   },
   "509": {
    "name": "Vivao Sympany",
    "change_pct": 6.6,
    "bestand": 226160,
-   "cantons": 28
+   "cantons": 28,
+   "change_pct_prev": 3.46
   },
   "1535": {
    "name": "Philos",
    "change_pct": 3.39,
    "bestand": 181100,
-   "cantons": 26
+   "cantons": 26,
+   "change_pct_prev": 3.26
   }
  }
 }

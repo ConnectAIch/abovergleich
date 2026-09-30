@@ -85,6 +85,9 @@ MIN_BESTAND_RANKING = 50_000   # Kassen-Rankings: nur Kassen mit so vielen Versi
 
 def load_year(year):
     names = {int(k): v for k, v in INSURER_NAMES.items()}
+    # ältere Jahre enthalten Kassen, die es nicht mehr gibt (fusioniert, aufgelöst)
+    for r in read_csv(DATA / f"praemien_{year}.csv"):
+        names.setdefault(int(r["Versicherer"].lstrip("0")), f"Nr. {r['Versicherer'].lstrip('0')}")
     rows = build_rows(year, names)
     # nur Erwachsene mit Unfall, das ist die Referenz für alle Tabellen
     return [r for r in rows if r["age_class"] == "AKL-ERW" and r["accident_included"]]
@@ -739,15 +742,37 @@ def jojo_html(jojo):
     ]
 
 
-def insights_block(cantons, insurers, nat, top3_prev, top3_cur):
-    big = sorted([x for x in insurers.values() if x["bestand"] >= MIN_BESTAND_RANKING], key=lambda x: x["change_pct"])
-    lo, hi = big[:3], big[-3:][::-1]
+def insights_block(cantons, insurers, nat, top3_prev, top3_cur, ins_prev, nat_prev, top3_prev2):
+    """Startseite. Ein Jahr allein täuscht: wer im Vorjahr tief blieb, holt oft
+    nach. Darum pro Kasse beide Anstiege und die Summe über zwei Jahre."""
+    Y0 = YEAR - 2
+    big = []
+    for i, x in insurers.items():
+        a = ins_prev.get(i, {}).get("change_pct")
+        if x["bestand"] < MIN_BESTAND_RANKING or a is None:
+            continue
+        tot = ((1 + a / 100) * (1 + x["change_pct"] / 100) - 1) * 100
+        # Jojo: im Vorjahr unter dem Schnitt, dieses Jahr deutlich darüber
+        jojo = a < nat_prev and x["change_pct"] >= nat + 1.5
+        big.append({"id": i, "prev": a, "cur": x["change_pct"], "tot": tot, "jojo": jojo})
+    big.sort(key=lambda x: x["tot"])
+    tot_all = ((1 + nat_prev / 100) * (1 + nat / 100) - 1) * 100
     by_change = sorted(cantons.items(), key=lambda x: -x[1]["change_pct"])
-    cons = sorted(set(top3_prev) | set(top3_cur), key=lambda i: -(top3_prev.get(i, 0) + top3_cur.get(i, 0)))[:5]
+    cons = sorted(set(top3_prev2) | set(top3_prev) | set(top3_cur),
+                  key=lambda i: -(top3_prev2.get(i, 0) + top3_prev.get(i, 0) + top3_cur.get(i, 0)))[:6]
 
-    def li(x):
-        cls = "var(--red)" if x["change_pct"] > nat else "var(--green)"
-        return f'<div><strong>{e(x["name"])}</strong> <span style="color:{cls};font-weight:600;">{pct(x["change_pct"])}</span></div>'
+    def pc(v, ref):
+        cls = "var(--red)" if v > ref else "var(--green)"
+        return f'<span style="color:{cls};font-weight:600;">{pct(v)}</span>'
+
+    tag = ('<span style="display:inline-block;margin-left:8px;padding:1px 7px;border-radius:6px;font-size:11px;'
+           'font-weight:700;background:rgba(220,38,38,.1);color:var(--red);vertical-align:1px;">Jojo</span>')
+    td = 'style="text-align:right;padding:9px 12px;white-space:nowrap;"'
+    kas = "".join(
+        f'<tr style="border-bottom:1px solid var(--border);"><td style="padding:9px 12px;font-weight:600;">{kasse_link(x["id"])}{tag if x["jojo"] else ""}</td>'
+        f'<td {td}>{pc(x["prev"], nat_prev)}</td><td {td}>{pc(x["cur"], nat)}</td>'
+        f'<td {td}><strong>{pc(x["tot"], tot_all)}</strong></td></tr>' for x in big)
+    n_jojo = sum(x["jojo"] for x in big)
 
     def cli(c, v):
         return (f'<div><a href="/krankenkasse/{CANTONS[c][1]}/" style="color:var(--text);"><strong>{e(CANTONS[c][0])}</strong></a> '
@@ -758,6 +783,7 @@ def insights_block(cantons, insurers, nat, top3_prev, top3_cur):
         for name, slug in sorted(CANTONS.values()))
     trs = "".join(
         f'<tr style="border-bottom:1px solid var(--border);"><td style="padding:10px 12px;font-weight:600;">{kasse_link(i)}</td>'
+        f'<td style="text-align:center;padding:10px 12px;">{top3_prev2.get(i, 0)} / 26</td>'
         f'<td style="text-align:center;padding:10px 12px;">{top3_prev.get(i, 0)} / 26</td>'
         f'<td style="text-align:center;padding:10px 12px;">{top3_cur.get(i, 0)} / 26</td></tr>' for i in cons)
 
@@ -767,16 +793,17 @@ def insights_block(cantons, insurers, nat, top3_prev, top3_cur):
 <section class="insights-section" style="padding:80px 40px;background:var(--bg);">
   <div style="max-width:900px;margin:0 auto;">
     <div class="section-label">Datenanalyse</div>
-    <h2 class="section-headline" style="margin-bottom:8px;">Krankenkassenprämien {PREV} vs. {YEAR}</h2>
-    <p style="color:var(--muted);margin-bottom:32px;">Laut BAG steigt die mittlere Prämie {YEAR} um {BAG_OFFICIAL['change_pct']:.1f}&#8239;%. Unsere Auswertung aller Kassen und Kantone zeigt, wie unterschiedlich aufgeschlagen wird.</p>
+    <h2 class="section-headline" style="margin-bottom:8px;">Krankenkassenprämien {Y0} bis {YEAR}</h2>
+    <p style="color:var(--muted);margin-bottom:32px;">Laut BAG steigt die mittlere Prämie {YEAR} um {BAG_OFFICIAL['change_pct']:.1f}&#8239;%. Ein Jahr allein sagt wenig: Manche Kassen halten ein Jahr still und schlagen im nächsten umso stärker auf. Darum vergleichen wir über drei Jahre.</p>
 
     <div {card}>
-      <h3 style="font-size:18px;font-weight:700;margin-bottom:6px;">Prämienveränderung pro Kasse (Standardmodell)</h3>
-      <div style="font-size:14px;color:var(--muted);margin-bottom:18px;">Durchschnitt, gewichtet nach Versicherten: <strong style="color:var(--text);">{pct(nat)}</strong></div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;font-size:15px;line-height:2;">
-        <div><div {col}>Am wenigsten</div>{"".join(li(x) for x in lo)}</div>
-        <div><div {col}>Am meisten</div>{"".join(li(x) for x in hi)}</div>
-      </div>
+      <h3 style="font-size:18px;font-weight:700;margin-bottom:6px;">Anstieg pro Kasse seit {Y0} (Standardmodell)</h3>
+      <div style="font-size:14px;color:var(--muted);margin-bottom:16px;">Schnitt, gewichtet nach Versicherten: {pct(nat_prev)} im {PREV}, {pct(nat)} im {YEAR}, zusammen <strong style="color:var(--text);">{pct(tot_all)}</strong>. Rot heisst über dem Schnitt.{f" <strong style='color:var(--text);'>Jojo</strong>: im Vorjahr unter dem Schnitt, jetzt deutlich darüber." if n_jojo else ""}</div>
+      <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:14px;">
+        <thead><tr style="border-bottom:1px solid var(--border2);"><th style="text-align:left;padding:8px 12px;">Kasse</th><th style="text-align:right;padding:8px 12px;">{PREV}</th><th style="text-align:right;padding:8px 12px;">{YEAR}</th><th style="text-align:right;padding:8px 12px;">Seit {Y0}</th></tr></thead>
+        <tbody>{kas}</tbody>
+      </table></div>
+      <div style="font-size:12px;color:var(--muted);margin-top:10px;">Kassen mit mindestens {MIN_BESTAND_RANKING // 1000}'000 Versicherten, sortiert nach dem Anstieg seit {Y0}.</div>
     </div>
 
     <div {card}>
@@ -793,7 +820,7 @@ def insights_block(cantons, insurers, nat, top3_prev, top3_cur):
       <h3 style="font-size:18px;font-weight:700;margin-bottom:6px;">Wer ist konstant günstig?</h3>
       <p style="font-size:14px;color:var(--muted);margin-bottom:14px;">In wie vielen Kantonen gehört die Kasse zu den 3 günstigsten im Standardmodell?</p>
       <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:14px;">
-        <thead><tr style="border-bottom:1px solid var(--border2);"><th style="text-align:left;padding:8px 12px;">Kasse</th><th style="padding:8px 12px;">{PREV}</th><th style="padding:8px 12px;">{YEAR}</th></tr></thead>
+        <thead><tr style="border-bottom:1px solid var(--border2);"><th style="text-align:left;padding:8px 12px;">Kasse</th><th style="padding:8px 12px;">{Y0}</th><th style="padding:8px 12px;">{PREV}</th><th style="padding:8px 12px;">{YEAR}</th></tr></thead>
         <tbody>{trs}</tbody>
       </table></div>
     </div>
@@ -1292,8 +1319,14 @@ def main():
     # Startseite: Insights-Block ersetzen
     idx = ROOT / "index.html"
     s = idx.read_text(encoding="utf-8")
+    prev2 = load_year(YEAR - 2)
+    by_canton_prev2 = defaultdict(list)
+    for r in prev2:
+        by_canton_prev2[r["canton"]].append(r)
+    _, ins_prev, nat_prev = analyse(prev, prev2, bestand)
     block = insights_block(cantons, insurers, nat,
-                           top3_counts(prev, by_canton_prev), top3_counts(cur, by_canton_cur))
+                           top3_counts(prev, by_canton_prev), top3_counts(cur, by_canton_cur),
+                           ins_prev, nat_prev, top3_counts(prev2, by_canton_prev2))
     new, n = re.subn(r"<!-- INSIGHTS:START.*?<!-- INSIGHTS:END -->", lambda _: block, s, flags=re.S)
     if n != 1:
         sys.exit("Insights-Marker in index.html nicht gefunden")
@@ -1311,13 +1344,20 @@ def main():
     (ROOT / "premium-insights.json").write_text(json.dumps({
         "generated": date.today().isoformat(), "data_year": YEAR, "previous_year": PREV,
         "bag_official": BAG_OFFICIAL, "national_change_standard_pct": round(nat, 2),
+        "national_change_standard_pct_prev": round(nat_prev, 2),
         "vorjahressieger": {k: ({kk: vv for kk, vv in v.items() if kk != "rows"} if isinstance(v, dict) else v) for k, v in jojo.items()},
         "cantons": {c: {k: round(v, 2) for k, v in d.items()} for c, d in cantons.items()},
-        "insurers": {str(i): {**d, "change_pct": round(d["change_pct"], 2), "bestand": round(d["bestand"])}
+        "insurers": {str(i): {**d, "change_pct": round(d["change_pct"], 2), "bestand": round(d["bestand"]),
+                              "change_pct_prev": round(ins_prev[i]["change_pct"], 2) if i in ins_prev else None}
                      for i, d in insurers.items()},
     }, ensure_ascii=False, indent=1), encoding="utf-8")
 
     write_sitemap(paths)
+    try:
+        import sync_handyabo
+        sync_handyabo.apply()
+    except (Exception, SystemExit) as err:  # handyabo nicht erreichbar: Kacheln bleiben wie sie sind
+        print(f"! handyabo-Zahlen nicht aktualisiert: {err}")
     bust_assets()
     print(f"✓ {len(paths)} Seiten, national {nat:+.2f}% (Standard F300), "
           f"Kantone {min(v['change_pct'] for v in cantons.values()):+.1f} bis {max(v['change_pct'] for v in cantons.values()):+.1f}%")
