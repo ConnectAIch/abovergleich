@@ -336,6 +336,15 @@
   .kk-own-bill { font-size: 13px; color: var(--text2); margin-top: 2px; }
   .kk-optional { text-transform: none; letter-spacing: 0; font-weight: 400; }
   .kk-hint { font-size: 12px; color: var(--muted); margin-top: 10px; line-height: 1.5; }
+  .kk-upload { margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px dashed var(--border2); display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+  .kk-upload[hidden] { display: none; }
+  .kk-upload-btn { background: var(--surface); border: 1px solid var(--border2); border-radius: 10px; padding: 10px 14px; font: 600 14px 'Plus Jakarta Sans', sans-serif; color: var(--text); cursor: pointer; }
+  .kk-upload-btn:hover { border-color: var(--accent-dark); }
+  .kk-upload-btn:disabled { opacity: .6; cursor: wait; }
+  .kk-upload-status { font-size: 13px; color: var(--text2); }
+  .kk-upload-status.err { color: var(--red); }
+  .kk-upload-note { flex-basis: 100%; font-size: 11px; color: var(--muted); line-height: 1.5; }
+  .kk-upload-note a { color: var(--muted); }
   .kk-own {
     background: var(--surface); border: 1px solid var(--border2);
     border-radius: 12px; padding: 18px 18px 14px; margin-bottom: 16px;
@@ -784,6 +793,12 @@
     <p class="hero-sub">Gleiche Leistung, tieferer Preis. Die Grundversicherung ist bei allen Kassen gesetzlich identisch. Vergleiche jetzt in 60 Sekunden.</p>
 
     <div class="kk-calculator" id="kk-calc" style="text-align:left;">
+      <div class="kk-upload" id="kk-upload" hidden>
+        <button type="button" class="kk-upload-btn" id="kk-upload-btn">&#128247; Rechnung oder Police hochladen</button>
+        <input type="file" id="kk-upload-file" accept="image/*,application/pdf" hidden>
+        <span class="kk-upload-status" id="kk-upload-status">Schneller: Foto oder PDF deiner Rechnung, wir füllen alles aus. Oder unten selbst eingeben.</span>
+        <div class="kk-upload-note">Das Dokument geht zur Texterkennung an unseren KI-Dienst und wird nicht gespeichert. Bankdaten lesen wir nicht aus. <a href="/datenschutz/">Datenschutz</a></div>
+      </div>
       <div class="kk-fields">
         <div class="kk-field">
           <label for="kk-plz">PLZ</label>
@@ -1555,6 +1570,112 @@ const KK_INSURERS = [
   paid.addEventListener('change', () => { try { localStorage.setItem('kk-paid', paid.value); } catch (e) {} });
 })();
 
+// Rechnung oder Police hochladen: Claude liest Kasse, Prämie, Franchise und
+// Adresse (Edge Function read-invoice). Knopf erscheint nur, wenn der Dienst
+// eingerichtet ist.
+const INVOICE_API = SUPABASE_URL + '/functions/v1/read-invoice';
+
+function insurerIdFromName(name) {
+  const n = (name || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  // Wortgrenzen: «assura» steckt sonst in «Assurance», «css» in anderen Wörtern
+  const rules = [
+    [/sana24/, 1568], [/\bavenir\b/, 343], [/\bphilos\b/, 1535], [/\bmutuel (assurance|kranken)/, 1479],
+    [/agrisano/, 1560], [/helsana/, 1562], [/sanitas/, 1509], [/swica/, 1384], [/visana/, 1555], [/galenos/, 1386],
+    [/\bcss\b/, 8], [/concordia/, 290], [/\bkpt\b/, 376], [/atupri/, 312], [/\bassura\b/, 1542], [/\begk\b/, 881],
+    [/\b(o|oe)kk\b/, 455], [/sympany|vivao/, 509], [/aquilana/, 32], [/\bslkk\b/, 923], [/sumiswald/, 194],
+    [/steffisburg/, 246], [/einsiedl/, 134], [/luzerner hinterland/, 360], [/glarner/, 780], [/curaulta/, 820],
+    [/sodalis/, 941], [/vita surselva/, 966], [/visperterminen/, 1040], [/wadenswil/, 1318], [/birchmeier/, 1322],
+    [/rhenusana/, 1401],
+  ];
+  for (const [re, id] of rules) if (re.test(n)) return id;
+  // «Groupe Mutuel» allein ist nicht eindeutig (Avenir, Mutuel, Philos)
+  return null;
+}
+
+function fileToPayload(file) {
+  return new Promise((resolve, reject) => {
+    if (file.type === 'application/pdf') {
+      if (file.size > 5 * 1024 * 1024) return reject(new Error('PDF zu gross (max. 5 MB).'));
+      const r = new FileReader();
+      r.onload = () => resolve({ data: String(r.result).split(',')[1], media_type: 'application/pdf' });
+      r.onerror = () => reject(new Error('Datei konnte nicht gelesen werden.'));
+      return r.readAsDataURL(file);
+    }
+    // Fotos im Browser verkleinern: schneller, günstiger, und kein Originalbild übertragen
+    const img = new Image();
+    img.onload = () => {
+      const scale = Math.min(1, 1800 / Math.max(img.width, img.height));
+      const c = document.createElement('canvas');
+      c.width = Math.round(img.width * scale); c.height = Math.round(img.height * scale);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(img.src);
+      resolve({ data: c.toDataURL('image/jpeg', 0.85).split(',')[1], media_type: 'image/jpeg' });
+    };
+    img.onerror = () => reject(new Error('Bild konnte nicht gelesen werden. Versuche ein JPG oder PDF.'));
+    img.src = URL.createObjectURL(file);
+  });
+}
+
+function applyInvoice(r) {
+  const $ = id => document.getElementById(id);
+  const notes = [];
+  const id = insurerIdFromName(r.insurer);
+  if (id) { $('kk-current').value = String(id); $('kk-current').dispatchEvent(new Event('change')); }
+  else if (r.insurer) notes.push(`Kasse «${r.insurer}» bitte selbst auswählen`);
+  const persons = (r.persons || []).filter(p => p.basic_premium_monthly);
+  const person = persons[0];
+  if (person) {
+    $('kk-paid').value = person.basic_premium_monthly.toFixed(2);
+    $('kk-paid').dispatchEvent(new Event('change'));
+    if (person.birth_year) $('kk-year').value = person.birth_year;
+    if (persons.length > 1) notes.push(`${persons.length} Personen auf der Rechnung, verglichen wird ${person.name || 'die erste'}`);
+  }
+  if (r.franchise && [...$('kk-franchise').options].some(o => o.value === String(r.franchise))) $('kk-franchise').value = String(r.franchise);
+  if (r.accident_included !== null && r.accident_included !== undefined) $('kk-accident').value = String(r.accident_included);
+  if (r.postal_code && /^\d{4}$/.test(r.postal_code)) $('kk-plz').value = r.postal_code;
+  // Für die Kündigung: nur in diesem Browserfenster merken
+  const prefill = { name: r.policyholder_name || person?.name || '', street: r.street || '',
+    city: [r.postal_code, r.city].filter(Boolean).join(' '), nr: r.insured_number || '', kasse: id };
+  try { sessionStorage.setItem('kd-prefill', JSON.stringify(prefill)); } catch (e) {}
+  if ($('cap-name')) { $('cap-name').value = prefill.name; $('cap-street').value = prefill.street; $('cap-plz').value = r.postal_code || ''; $('cap-city').value = r.city || ''; }
+  return notes;
+}
+
+(async function initUpload() {
+  const box = document.getElementById('kk-upload');
+  if (!box) return;
+  try {
+    const res = await fetch(INVOICE_API);
+    if (!(await res.json()).enabled) return;
+  } catch (e) { return; }
+  box.hidden = false;
+  const btn = document.getElementById('kk-upload-btn'), input = document.getElementById('kk-upload-file');
+  const status = document.getElementById('kk-upload-status');
+  const say = (t, err) => { status.textContent = t; status.classList.toggle('err', !!err); };
+  btn.onclick = () => input.click();
+  input.onchange = async () => {
+    const file = input.files[0];
+    input.value = '';
+    if (!file) return;
+    btn.disabled = true; say('Lese dein Dokument, das dauert ein paar Sekunden…');
+    try {
+      const payload = await fileToPayload(file);
+      const res = await fetch(INVOICE_API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      const r = await res.json();
+      if (!res.ok || r.error) throw new Error(r.error || 'Das Dokument konnte nicht gelesen werden.');
+      const notes = applyInvoice(r);
+      const ready = document.getElementById('kk-plz').value && document.getElementById('kk-year').value;
+      say('Übernommen. ' + (notes.length ? notes.join('. ') + '. ' : '') + (ready ? '' : 'Bitte PLZ und Jahrgang ergänzen.'));
+      if (ready) checkKK();
+      else document.getElementById(document.getElementById('kk-plz').value ? 'kk-year' : 'kk-plz').focus();
+    } catch (e) {
+      say(e.message, true);
+    } finally {
+      btn.disabled = false;
+    }
+  };
+})();
+
 async function checkKK() {
   const plz = document.getElementById('kk-plz').value.trim();
   const year = document.getElementById('kk-year').value.trim();
@@ -1758,7 +1879,7 @@ async function checkKK() {
           <div style="text-align:right;"><div class="kk-own-price">CHF ${fmt(ownPick.premium)}</div><div class="kk-own-bill">${billLine}</div><div class="kk-own-delta">${delta}</div></div>
         </div>
         ${matchNote ? `<div class="kk-own-match">${matchNote}</div>` : guessNote}
-        <div class="kk-own-save">${save}</div>
+        <div class="kk-own-save">${save}${saveAll >= 12 ? `<br><a href="/krankenkasse-kuendigen/?kasse=${currentId}" style="color:var(--accent-dark);font-weight:600;">Kündigungsbrief an ${ownPick.insurer_name} erstellen &rarr;</a>` : ''}</div>
         ${ownChoices.length > 1 ? `<details class="kk-own-tariffs"${pickerOpen ? ' open' : ''}><summary>${pickerLabel} (${ownChoices.length})</summary>${tariffs}</details>` : ''}
       </div>`;
       el.querySelectorAll('.kk-own-tariff').forEach(t => t.onclick = () => {

@@ -1080,6 +1080,14 @@ def kuendigen_page(kv):
   KASSEN.forEach(function (k) {{ sel.add(new Option(k.name, k.id)); }});
   var q = new URLSearchParams(location.search).get('kasse');
   if (q) sel.value = q;
+  // Aus dem Rechner (hochgeladene Rechnung), nur für dieses Browserfenster gespeichert
+  try {{
+    var pf = JSON.parse(sessionStorage.getItem('kd-prefill') || 'null');
+    if (pf) {{
+      if (!q && pf.kasse) sel.value = String(pf.kasse);
+      ['name', 'street', 'city', 'nr'].forEach(function (k) {{ if (pf[k] && !$('kd-' + k).value) $('kd-' + k).value = pf[k]; }});
+    }}
+  }} catch (e) {{}}
 
   var days = Math.floor((DEADLINE - new Date()) / 86400000);
   if (days >= 0) $('kd-left').textContent = days === 0 ? 'Heute ist der letzte Tag.' : 'Noch ' + days + ' Tage.';
