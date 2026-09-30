@@ -34,27 +34,29 @@ from pathlib import Path
 DATA_DIR = Path(__file__).parent / "data"
 OUTPUT_DIR = Path(__file__).parent.parent  # project root for website JSON
 
+# BAG-Nummer -> Name, laut BAG-Verzeichnis der zugelassenen Krankenversicherer
+# (1.1.2026). Die frühere Tabelle hier war verschoben: 31 von 34 Nummern
+# trugen einen fremden Namen (z.B. 32 = Aquilana, nicht Concordia).
 INSURER_NAMES = {
-    "8": "CSS", "32": "Concordia", "134": "Visana", "194": "Atupri",
-    "246": "Aquilana", "290": "Galenos", "312": "Helsana", "343": "Intras",
-    "360": "Sanitas", "376": "KPT", "455": "ÖKK", "509": "Progrès",
-    "780": "Rhenusana", "820": "Sanitas", "881": "Sympany", "923": "Swica",
-    "941": "Vivao Sympany", "966": "Wincare", "1040": "EGK",
-    "1113": "Groupe Mutuel", "1318": "Assura", "1322": "Helsana",
-    "1384": "Mutuel Assurance", "1386": "KPT", "1401": "Groupe Mutuel",
-    "1479": "Helsana", "1507": "CSS", "1509": "Swica", "1535": "Assura",
-    "1542": "KPT", "1555": "Groupe Mutuel", "1560": "KPT", "1562": "Assura",
-    "1568": "Helsana", "1570": "Groupe Mutuel",
-    "829": "Visana", "901": "Swica",
+    "8": "CSS", "32": "Aquilana", "134": "Einsiedler Krankenkasse",
+    "194": "Sumiswalder", "246": "KK Steffisburg", "290": "Concordia",
+    "312": "Atupri", "343": "Avenir", "360": "KK Luzerner Hinterland",
+    "376": "KPT", "455": "ÖKK", "509": "Vivao Sympany", "780": "Glarner",
+    "820": "curaulta", "881": "EGK", "923": "SLKK", "941": "sodalis",
+    "966": "vita surselva", "1040": "KK Visperterminen",
+    "1113": "Vallée d'Entremont", "1318": "KK Wädenswil", "1322": "Birchmeier",
+    "1384": "Swica", "1386": "Galenos", "1401": "rhenusana", "1479": "Mutuel",
+    "1507": "AMB", "1509": "Sanitas", "1535": "Philos", "1542": "Assura",
+    "1555": "Visana", "1560": "Agrisano", "1562": "Helsana", "1568": "sana24",
 }
 
-# Consolidate sub-brands to parent brand for cleaner analysis
+# Konzernmarken zusammenfassen, für Auswertungen auf Gruppenebene
 BRAND_CONSOLIDATION = {
-    "Intras": "CSS",
-    "Progrès": "Helsana",
-    "Wincare": "Sanitas",
-    "Vivao Sympany": "Sympany",
-    "Mutuel Assurance": "Groupe Mutuel",
+    "Avenir": "Groupe Mutuel",
+    "Mutuel": "Groupe Mutuel",
+    "Philos": "Groupe Mutuel",
+    "AMB": "Groupe Mutuel",
+    "sana24": "Visana",
 }
 
 TARIF_TO_MODEL = {

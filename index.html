@@ -1581,28 +1581,42 @@ async function checkKK() {
     subEl.textContent = `${data.locality} (${data.canton}) · ${data.age_class} · Franchise CHF ${data.franchise.toLocaleString('de-CH')} · ${accidentIncluded ? 'Mit Unfall' : 'Ohne Unfall'}`;
 
     // Insurer website mapping
+    // Schlüssel = premiums.insurer_name. Websites laut BAG-Verzeichnis der
+    // zugelassenen Krankenversicherer (1.1.2026).
     const insurerUrls = {
+      'AMB': 'https://www.groupemutuel.ch',
+      'Agrisano': 'https://www.agrisano.ch',
       'Aquilana': 'https://www.aquilana.ch',
       'Assura': 'https://www.assura.ch',
       'Atupri': 'https://www.atupri.ch',
+      'Avenir': 'https://www.groupemutuel.ch',
+      'Birchmeier': 'https://www.kkbirchmeier.ch',
       'Concordia': 'https://www.concordia.ch',
       'CSS': 'https://www.css.ch',
+      'curaulta': 'https://www.curaulta.ch',
       'EGK': 'https://www.egk.ch',
+      'Einsiedler Krankenkasse': 'https://www.kkeinsiedeln.ch',
       'Galenos': 'https://www.galenos.ch',
-      'Groupe Mutuel': 'https://www.groupemutuel.ch',
+      'Glarner': 'https://www.glkv.ch',
       'Helsana': 'https://www.helsana.ch',
-      'Intras': 'https://www.css.ch',
+      'KK Luzerner Hinterland': 'https://www.kklh.ch',
+      'KK Steffisburg': 'https://www.kkst.ch',
+      'KK Visperterminen': 'https://www.kkv.ch',
+      'KK Wädenswil': 'https://www.kkwaedenswil.ch',
       'KPT': 'https://www.kpt.ch',
       'Mutuel': 'https://www.groupemutuel.ch',
       'ÖKK': 'https://www.oekk.ch',
-      'Progrès': 'https://www.helsana.ch',
-      'Rhenusana': 'https://www.rhenusana.ch',
+      'Philos': 'https://www.groupemutuel.ch',
+      'rhenusana': 'https://www.rhenusana.ch',
+      'sana24': 'https://www.visana.ch',
       'Sanitas': 'https://www.sanitas.com',
+      'SLKK': 'https://www.slkk.ch',
+      'sodalis': 'https://www.sodalis.ch',
+      'Sumiswalder': 'https://www.sumiswalder.ch',
       'Swica': 'https://www.swica.ch',
-      'Sympany': 'https://www.sympany.ch',
       'Visana': 'https://www.visana.ch',
-      'Vivao': 'https://www.sympany.ch',
-      'Wincare': 'https://www.sanitas.com'
+      'vita surselva': 'https://www.vitasurselva.ch',
+      'Vivao Sympany': 'https://www.sympany.ch'
     };
 
     function affiliateLink(insurerName) {
