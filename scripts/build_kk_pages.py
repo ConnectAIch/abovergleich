@@ -1113,7 +1113,7 @@ def kuendigen_page(kv):
 <ol>
 <li><strong>Neue Kasse wählen</strong> und dort für den 1. Januar {YEAR} anmelden. Sie muss dich ohne Gesundheitsfragen aufnehmen.</li>
 <li><strong>Bisherige Kasse kündigen</strong>, mit dem Brief unten. Unterschreiben nicht vergessen.</li>
-<li><strong>Abschicken:</strong> per Mail, wenn deine Kasse das annimmt (steht beim Brief), sonst per Einschreiben, spätestens eine Woche vor dem {DEADLINE}.</li>
+<li><strong>Abschicken:</strong> per Mail, wenn deine Kasse das annimmt (steht beim Brief), sonst per Post, spätestens eine Woche vor dem {DEADLINE}. Ein Einschreiben ist nicht Pflicht, beweist aber den Eingang.</li>
 <li><strong>Bestätigung abwarten.</strong> Die neue Kasse bestätigt dir und der alten Kasse schriftlich, dass du bei ihr versichert bist. Bis dahin bleibt die alte Versicherung bestehen, du bist also nie ohne Schutz.</li>
 </ol>
 <p>Wichtig: Wer bis 31. Dezember noch offene Prämien oder Kostenbeteiligungen bei der bisherigen Kasse hat, kann nicht wechseln. Offene Rechnungen vorher bezahlen.</p>

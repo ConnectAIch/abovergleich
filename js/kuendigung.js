@@ -200,12 +200,14 @@
         ' Die Eingangsbestätigung der Kasse ist dein Beweis, heb sie auf.' + src;
     } else if (k.portal) {
       el.innerHTML = '<strong>' + nm + ' nimmt die Kündigung per Mail oder im Kundenportal ' + esc(k.portal) + ' an,</strong> nennt aber keine Mail-Adresse. ' +
-        'Lade das PDF herunter und schick es über ' + esc(k.portal) + ', oder per Einschreiben.' + src;
+        'Lade das PDF herunter und schick es über ' + esc(k.portal) + ' oder per Post.' + src;
     } else {
-      el.innerHTML = '<strong>Per Einschreiben schicken.</strong> ' +
-        (k.post_only ? nm + ' verlangt dafür ausdrücklich einen eingeschriebenen Brief. '
-                     : nm + ' nennt auf der eigenen Website keinen Mail-Weg für die Grundversicherung. ') +
-        'Unterschreib oben oder nach dem Drucken von Hand, und bring den Brief spätestens eine Woche vor dem ' + esc(D.deadline_text) + ' zur Post.' + src;
+      el.innerHTML = k.post_only
+        ? '<strong>Per eingeschriebenem Brief.</strong> ' + nm + ' verlangt das ausdrücklich. ' +
+          'Druck das PDF aus und bring es spätestens eine Woche vor dem ' + esc(D.deadline_text) + ' zur Post.' + src
+        : '<strong>Per Post an die Adresse im Brief.</strong> ' + nm + ' nennt auf der eigenen Website keinen Mail-Weg für die Grundversicherung. ' +
+          'Druck das PDF aus und schick es spätestens eine Woche vor dem ' + esc(D.deadline_text) + ' ab. ' +
+          'Ein Einschreiben ist nicht vorgeschrieben, aber dein Beweis, dass der Brief rechtzeitig ankam.' + src;
     }
   }
 
