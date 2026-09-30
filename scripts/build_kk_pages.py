@@ -1040,6 +1040,13 @@ KUENDIGEN_CSS = """
   .kd-actions button[hidden] { display:none; }
   .kd-actions button:disabled { opacity:.6; cursor:default; }
   .kd-msg { font-size:13px; color:var(--text2); margin-top:8px; min-height:1em; }
+  .kd-wechsel[hidden], .kk-cta[hidden] { display:none !important; }
+  .kd-wechsel { background:var(--surface); border:2px solid var(--accent); border-radius:14px; padding:18px 20px; margin:18px 0; font-size:15px; line-height:1.6; }
+  .kd-wechsel h2 { font-size:19px; margin:0 0 8px; }
+  .kd-wechsel ol { margin:0; padding-left:20px; }
+  .kd-wechsel li { margin:8px 0; }
+  .kd-wechsel a { color:var(--accent-dark); font-weight:700; }
+  .kd-wechsel .kd-go { display:inline-block; margin-top:6px; background:var(--accent); color:var(--text); padding:9px 16px; border-radius:10px; text-decoration:none; }
   .kd-preview-label { font-size:12px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; margin-top:18px; }
   @media (max-width:640px) { .kd-form { grid-template-columns:1fr; } #kd-brief { padding:20px; } }
   @media print {
@@ -1067,13 +1074,14 @@ def kuendigen_page(kv):
             "portal": x.get("online_channel") if ok and not x.get("cancel_email") else None,
             "post_only": x.get("email_accepted") == "nein",
             "src": (x.get("sources") or [None])[0],
+            "url": f"https://www.{x['web']}" if x.get("web") else None,
         }
 
     stand = ".".join(str(int(t)) for t in reversed(kan_doc["stand"].split("-")))
     data = [{"id": i, "name": INSURER_NAMES[str(i)], "address": address_lines(kv, i), **weg(i)} for i in ids]
     end = f"31. Dezember {PREV}"
     deadline_iso = f"{PREV}-11-30"
-    kd_data = json.dumps({"kassen": data, "end": end, "deadline": deadline_iso, "deadline_text": DEADLINE,
+    kd_data = json.dumps({"kassen": data, "end": end, "start": f"1. Januar {YEAR}", "deadline": deadline_iso, "deadline_text": DEADLINE,
                           "stand": stand}, ensure_ascii=False).replace("</", "<\\/")
 
     def weg_cell(i):
@@ -1107,7 +1115,8 @@ def kuendigen_page(kv):
 <h1>Krankenkasse kündigen: bis {DEADLINE.replace(' ' + str(PREV), '')}, mit Vorlage</h1>
 <div class="article-meta">Grundversicherung auf den 1. Januar {YEAR} wechseln · Brief in 2 Minuten</div>
 <p class="kk-lead">Die Kündigung der Grundversicherung muss bis am <strong>{DEADLINE}</strong> bei deiner Kasse <strong>eingetroffen</strong> sein. Der Poststempel zählt nicht. <span id="kd-left"></span></p>
-<a class="kk-cta" href="/#kk-rechner">Zuerst vergleichen: lohnt sich der Wechsel? &rarr;</a>
+<div id="wechsel" class="kd-wechsel" hidden></div>
+<a class="kk-cta" id="kd-compare" href="/#kk-rechner">Zuerst vergleichen: lohnt sich der Wechsel? &rarr;</a>
 
 <h2>So wechselst du in vier Schritten</h2>
 <ol>

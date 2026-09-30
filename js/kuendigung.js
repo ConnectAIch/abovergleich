@@ -35,6 +35,21 @@
   } catch (e) {}
   if (window.Combobox) Combobox.enhance(sel, { search: true, placeholder: 'Kasse suchen…' });
 
+  // Aus dem Rechner mit «Wechseln»: zuerst bei der neuen Kasse anmelden, dann
+  // die bisherige kündigen. Die Reihenfolge ist egal (die alte Versicherung
+  // endet erst, wenn die neue sie bestätigt), aber so vergisst man keinen Teil.
+  var neu = KASSEN.find(function (k) { return String(k.id) === new URLSearchParams(location.search).get('neu'); });
+  if (neu && String(neu.id) !== sel.value) {
+    var w = $('wechsel');
+    var go = neu.url ? neu.url + '?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=kk-wechsel' : null;
+    w.innerHTML = '<h2>Wechsel zu ' + esc(neu.name) + ' in zwei Schritten</h2><ol>' +
+      '<li><strong>Bei ' + esc(neu.name) + ' anmelden</strong>, für den ' + esc(D.start) + '. Online in ein paar Minuten, ohne Gesundheitsfragen.' +
+      (go ? '<br><a class="kd-go" href="' + esc(go) + '" target="_blank" rel="noopener sponsored">Zu ' + esc(neu.name) + ' &rarr;</a>' : '') + '</li>' +
+      '<li><strong>Deine bisherige Kasse kündigen</strong>, bis ' + esc(D.deadline_text) + '. Der Brief ist unten schon vorbereitet. <a href="#vorlage">Zum Brief &darr;</a></li></ol>';
+    w.hidden = false;
+    $('kd-compare').hidden = true;
+  }
+
   var days = Math.floor((DEADLINE - new Date()) / 86400000);
   if (days >= 0) $('kd-left').textContent = days === 0 ? 'Heute ist der letzte Tag.' : 'Noch ' + days + ' Tage.';
 

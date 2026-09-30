@@ -1478,7 +1478,7 @@ async function checkKK() {
       const noMatch = matchNote.startsWith('Kein Tarif') ? matchNote : '';
       const save = saveAll < 12
         ? 'Du bist schon bei der günstigsten Kasse.'
-        : `${ownGuessed ? 'Falls du im Standardmodell bist: ' : ''}<strong>CHF ${fmt0(saveAll)} pro Jahr</strong> ${ownGuessed ? 'weniger mit' : 'sparst du mit'} ${best.insurer_name}. <a href="/krankenkasse-kuendigen/?kasse=${currentId}">Kündigungsbrief erstellen &rarr;</a>`;
+        : `${ownGuessed ? 'Falls du im Standardmodell bist: ' : ''}<strong>CHF ${fmt0(saveAll)} pro Jahr</strong> ${ownGuessed ? 'weniger mit' : 'sparst du mit'} ${best.insurer_name}. <a href="/krankenkasse-kuendigen/?kasse=${currentId}&neu=${best.insurer_id}#wechsel">Jetzt wechseln &rarr;</a>`;
       const tariffs = ownChoices.map((p, i) => `<div class="kk-own-tariff${p === ownPick ? ' selected' : ''}" data-i="${i}">
           <span>${tariffLabel(p)}</span><span>CHF ${fmt(p.premium)}</span></div>`).join('');
       const narrowed = ownChoices.length < ownOffers.length;
@@ -1516,11 +1516,20 @@ async function checkKK() {
     }
 
     function renderRow(p, rank, opts = {}) {
-      const link = affiliateLink(p.insurer_name);
-      const cta = link
-        ? `<a href="${link}" target="_blank" rel="noopener sponsored" class="kk-link">Zur Kasse ${arrowSvg}</a>`
-        : '';
       const isOwn = currentId && p.insurer_id === currentId;
+      // Andere Kasse: «Wechseln» führt in den Ablauf auf der Kündigungsseite
+      // (erst bei der neuen Kasse anmelden, dann die alte kündigen). Eigene
+      // Kasse, anderes Modell: das ändert man bei der Kasse selbst, ohne Kündigung.
+      let cta = '';
+      if (!isOwn) {
+        const q = new URLSearchParams();
+        if (currentId) q.set('kasse', currentId);
+        q.set('neu', p.insurer_id);
+        cta = `<a href="/krankenkasse-kuendigen/?${q}#wechsel" class="kk-link">Wechseln ${arrowSvg}</a>`;
+      } else if (p !== ownPick) {
+        const link = affiliateLink(p.insurer_name);
+        if (link) cta = `<a href="${link}" target="_blank" rel="noopener sponsored" class="kk-link">Modell ändern ${arrowSvg}</a>`;
+      }
       let meta = changeText(p);
       // Ersparnis nur gegen einen Tarif, den wir kennen, nie gegen eine Annahme
       if (ownPick && !ownGuessed && p !== ownPick) {
