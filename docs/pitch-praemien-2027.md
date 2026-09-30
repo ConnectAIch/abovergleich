@@ -23,7 +23,7 @@ im Titel, die Falle im Text.
 - [x] Vorjahressieger, geprüft 30.09. auf priminfo: 9050 Appenzell, Vivao Sympany callmed 24 und
       casamed hmo 2027 CHF 263.10, Platz 9 hinter KPT 231.00, ÖKK, Assura, Helsana, CSS, Sanitas,
       Concordia, Agrisano. 2026: 215.90 (Platz 1), +21,9 %.
-- [ ] Rating-Seite, Kantonsseiten und Anker #vorjahressieger live.
+- [x] Rating-Seite, Kantonsseiten und Anker #vorjahressieger live (geprüft 30.09.).
 - [x] Zitate: «Redaktion abovergleich.com».
 - [ ] In jeder Mail um einen **Link** bitten. Bei handyabo gab es trotz 5 Nennungen im Blick
       keinen Link, und ohne Links bleiben unsere Seiten unindexiert.
