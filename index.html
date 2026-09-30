@@ -5,16 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- Primary SEO -->
-<title>Krankenkassen-Vergleich Schweiz 2026 – Günstigste Grundversicherung finden | abovergleich.com</title>
-<meta name="description" content="Krankenkassen-Vergleich mit offiziellen BAG-Daten 2026. Finde die günstigste Grundversicherung für deine PLZ. Spare bis CHF 1'200 pro Jahr. Unabhängig, transparent, kostenlos.">
-<meta name="keywords" content="Krankenkassen Vergleich Schweiz, Grundversicherung Vergleich, Krankenkassenprämien 2026, günstigste Krankenkasse, BAG Prämien, Franchise Vergleich, Abo Vergleich Schweiz, Handy Abo, Internet Abo">
+<title>Krankenkassen-Vergleich Schweiz 2027 – Günstigste Grundversicherung finden | abovergleich.com</title>
+<meta name="description" content="Krankenkassen-Vergleich mit offiziellen BAG-Daten 2027. Finde die günstigste Grundversicherung für deine PLZ. Spare bis CHF 1'200 pro Jahr. Unabhängig, transparent, kostenlos.">
+<meta name="keywords" content="Krankenkassen Vergleich Schweiz, Grundversicherung Vergleich, Krankenkassenprämien 2027, günstigste Krankenkasse, BAG Prämien, Franchise Vergleich, Abo Vergleich Schweiz, Handy Abo, Internet Abo">
 <link rel="canonical" href="https://abovergleich.com/">
 
 <!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://abovergleich.com/">
-<meta property="og:title" content="Krankenkassen-Vergleich Schweiz 2026 – Günstigste Grundversicherung finden">
-<meta property="og:description" content="Spare bis CHF 1'200 pro Jahr. Vergleiche alle 34 Krankenkassen mit offiziellen BAG-Daten. Unabhängig und kostenlos.">
+<meta property="og:title" content="Krankenkassen-Vergleich Schweiz 2027 – Günstigste Grundversicherung finden">
+<meta property="og:description" content="Spare bis CHF 1'200 pro Jahr. Vergleiche alle Krankenkassen mit offiziellen BAG-Daten. Unabhängig und kostenlos.">
 <meta property="og:site_name" content="abovergleich.com">
 <meta property="og:locale" content="de_CH">
 <meta property="og:image" content="https://abovergleich.com/og-image.svg">
@@ -23,8 +23,8 @@
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Krankenkassen-Vergleich Schweiz 2026 – Günstigste Grundversicherung finden">
-<meta name="twitter:description" content="Spare bis CHF 1'200 pro Jahr. Vergleiche alle 34 Krankenkassen mit offiziellen BAG-Daten.">
+<meta name="twitter:title" content="Krankenkassen-Vergleich Schweiz 2027 – Günstigste Grundversicherung finden">
+<meta name="twitter:description" content="Spare bis CHF 1'200 pro Jahr. Vergleiche alle Krankenkassen mit offiziellen BAG-Daten.">
 <meta name="twitter:image" content="https://abovergleich.com/og-image.svg">
 
 <!-- Structured Data -->
@@ -739,7 +739,7 @@
 <section class="hero" id="kk-rechner">
   <div class="hero-bg"></div>
   <div class="hero-content" style="max-width:700px;">
-    <div class="hero-badge">Krankenkassen-Vergleich Schweiz <span class="data-year">2026</span></div>
+    <div class="hero-badge">Krankenkassen-Vergleich Schweiz <span class="calc-year">2027</span></div>
     <h1>Zahlst du zu viel<br>für deine <em>Krankenkasse?</em></h1>
     <p class="hero-sub">Gleiche Leistung, tieferer Preis. Die Grundversicherung ist bei allen Kassen gesetzlich identisch. Vergleiche jetzt in 60 Sekunden.</p>
 
@@ -790,6 +790,7 @@
           <button class="kk-filter-chip" data-filter="family_doctor">Hausarzt</button>
           <button class="kk-filter-chip" data-filter="hmo">HMO</button>
           <button class="kk-filter-chip" data-filter="telmed">Telmed</button>
+          <button class="kk-filter-chip" data-filter="diverse">Alternativ</button>
         </div>
         <div id="kk-results-list"></div>
         <div class="kk-model-legend" id="kk-model-legend" style="display:none;">
@@ -797,9 +798,10 @@
           <div><span>Hausarzt</span> = Immer zuerst zum Hausarzt</div>
           <div><span>HMO</span> = Behandlung im Gesundheitszentrum</div>
           <div><span>Telmed</span> = Zuerst telefonische Beratung</div>
+          <div><span>Alternativ</span> = Hausarzt, Telmed oder Apotheke nach Wahl</div>
           <div style="flex-basis:100%;font-size:11px;color:var(--muted);margin-top:4px;">Die Leistungen der Grundversicherung sind bei allen Modellen gesetzlich identisch. Nur der Zugangsweg unterscheidet sich.</div>
         </div>
-        <div style="font-size:12px;color:var(--muted);margin-top:16px;text-align:center;">Quelle: BAG Priminfo <span class="data-year">2026</span> · Alle Angaben ohne Gewähr</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:16px;text-align:center;">Quelle: BAG Priminfo <span class="calc-year">2027</span> · Alle Angaben ohne Gewähr</div>
 
         <!-- Wechsel-Wecker CTA (inside results) -->
         <div class="wecker-cta" id="wecker-cta" style="display:none;">
@@ -1575,6 +1577,7 @@ async function checkKK() {
       return;
     }
 
+    if (data.year) document.querySelectorAll('.calc-year').forEach(el => el.textContent = data.year);
     subEl.textContent = `${data.locality} (${data.canton}) · ${data.age_class} · Franchise CHF ${data.franchise.toLocaleString('de-CH')} · ${accidentIncluded ? 'Mit Unfall' : 'Ohne Unfall'}`;
 
     // Insurer website mapping
@@ -1617,7 +1620,7 @@ async function checkKK() {
       'family_doctor': 'Du gehst immer zuerst zu deinem gewählten Hausarzt. Er überweist dich bei Bedarf weiter.',
       'telmed': 'Du rufst zuerst eine medizinische Hotline an, bevor du einen Arzt aufsuchst.',
       'apotheke': 'Erste Anlaufstelle ist die Apotheke. Von dort wirst du bei Bedarf an einen Arzt verwiesen.',
-      'diverse': 'Alternatives Versicherungsmodell mit eingeschränkter Arztwahl.',
+      'diverse': 'Flexibles Modell: du wählst je nach Fall Hausarzt, Telmed-Hotline oder Apotheke als erste Anlaufstelle.',
     };
 
     function modelTip(modelType) {
