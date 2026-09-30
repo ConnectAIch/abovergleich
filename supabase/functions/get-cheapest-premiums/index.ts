@@ -5,12 +5,28 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 // (Vorjahre bleiben für Vergleiche), deshalb wird jede Abfrage darauf gefiltert.
 // Jährlich Ende September nach dem Import (scripts/import_premiums.py) anheben.
 const PREMIUM_YEAR = 2027;
+const PREV_YEAR = PREMIUM_YEAR - 1;
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
 };
+
+const json = (body: unknown, status = 200) =>
+  new Response(JSON.stringify(body), { status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+
+type Row = {
+  insurer_id: number; insurer_name: string; premium: number;
+  model_type: string; tariff: string; tariff_name: string;
+};
+
+// Einige Tarifcodes wurden zwischen den Jahren umbenannt, z.B. "Santé (HMO)"
+// hiess vorher "HMO". Gleiche Logik wie scripts/build_kk_pages.py.
+function tariffCandidates(tariff: string): string[] {
+  const m = tariff.match(/^(.*?)\s*\((.*)\)\s*$/);
+  return m ? [tariff, m[2], m[1]] : [tariff];
+}
 
 Deno.serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
@@ -21,10 +37,7 @@ Deno.serve(async (req: Request) => {
     const { plz, year_of_birth, franchise, accident_included } = await req.json();
 
     if (!plz || !year_of_birth || !franchise) {
-      return new Response(
-        JSON.stringify({ error: 'Missing required fields: plz, year_of_birth, franchise' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+      return json({ error: 'Missing required fields: plz, year_of_birth, franchise' }, 400);
     }
 
     const withAccident = accident_included !== undefined ? accident_included : true;
@@ -34,7 +47,7 @@ Deno.serve(async (req: Request) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     );
 
-    // 1. Look up PLZ to get canton and region
+    // 1. PLZ -> Kanton und Prämienregion
     const { data: plzData, error: plzError } = await supabase
       .from('plz_regions')
       .select('canton, region, locality')
@@ -42,74 +55,70 @@ Deno.serve(async (req: Request) => {
       .limit(1);
 
     if (plzError || !plzData || plzData.length === 0) {
-      return new Response(
-        JSON.stringify({ error: `PLZ ${plz} nicht gefunden` }),
-        { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+      return json({ error: `PLZ ${plz} nicht gefunden` }, 404);
     }
 
     const { canton, region, locality } = plzData[0];
     const premiumRegion = `PR-REG CH${region}`;
 
-    // 2. Determine age class (massgebend ist das Alter im Prämienjahr)
+    // 2. Altersklasse (massgebend ist das Alter im Prämienjahr)
     const age = PREMIUM_YEAR - parseInt(year_of_birth);
     let ageClass: string;
     if (age <= 18) ageClass = 'AKL-KIN';
     else if (age <= 25) ageClass = 'AKL-JUG';
     else ageClass = 'AKL-ERW';
 
-    // 3. Query cheapest standard model premiums
-    const { data: premiums, error: premError } = await supabase
-      .from('premiums')
-      .select('insurer_name, premium, model_type, tariff_name')
-      .eq('year', PREMIUM_YEAR)
-      .eq('canton', canton)
-      .eq('region', premiumRegion)
-      .eq('age_class', ageClass)
-      .eq('franchise', parseInt(franchise))
-      .eq('accident_included', withAccident)
-      .eq('model_type', 'standard')
-      .order('premium', { ascending: true })
-      .limit(20);
+    // 3. Alle Tarife für dieses Profil, dieses und letztes Jahr. Bei Kindern
+    //    nur die Prämie fürs erste Kind (K1), sonst stehen Geschwisterrabatte
+    //    als "günstigste Kasse" in der Liste.
+    const fetchYear = (year: number) => {
+      let q = supabase
+        .from('premiums')
+        .select('insurer_id, insurer_name, premium, model_type, tariff, tariff_name')
+        .eq('year', year)
+        .eq('canton', canton)
+        .eq('region', premiumRegion)
+        .eq('age_class', ageClass)
+        .eq('franchise', parseInt(franchise))
+        .eq('accident_included', withAccident)
+        .order('premium', { ascending: true })
+        .limit(1000);
+      if (ageClass === 'AKL-KIN') q = q.eq('age_subgroup', 'K1');
+      return q;
+    };
 
-    if (premError) {
-      return new Response(
-        JSON.stringify({ error: premError.message }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+    const [{ data: cur, error: curError }, { data: prev }] = await Promise.all([
+      fetchYear(PREMIUM_YEAR), fetchYear(PREV_YEAR),
+    ]);
+
+    if (curError) {
+      return json({ error: curError.message }, 500);
     }
 
-    // 4. Get cheapest across ALL models (enough for filtering)
-    const { data: allModels } = await supabase
-      .from('premiums')
-      .select('insurer_name, premium, model_type, tariff_name')
-      .eq('year', PREMIUM_YEAR)
-      .eq('canton', canton)
-      .eq('region', premiumRegion)
-      .eq('age_class', ageClass)
-      .eq('franchise', parseInt(franchise))
-      .eq('accident_included', withAccident)
-      .order('premium', { ascending: true })
-      .limit(50);
+    const prevByTariff = new Map<string, number>();
+    for (const p of (prev || []) as Row[]) prevByTariff.set(`${p.insurer_id}|${p.tariff}`, Number(p.premium));
 
-    // Deduplicate by insurer+model (keep cheapest per insurer per model)
+    const offers = ((cur || []) as Row[]).map(p => {
+      let before: number | null = null;
+      for (const t of tariffCandidates(p.tariff)) {
+        const hit = prevByTariff.get(`${p.insurer_id}|${t}`);
+        if (hit !== undefined) { before = hit; break; }
+      }
+      return { ...p, premium: Number(p.premium), premium_prev: before };
+    });
+
+    // Kompatibel zur bisherigen Antwort (älterer Frontend-Stand im Cache)
     const seen = new Set<string>();
-    const uniquePremiums = (premiums || []).filter(p => {
-      if (seen.has(p.insurer_name)) return false;
-      seen.add(p.insurer_name);
-      return true;
-    });
-
+    const standard_model = offers.filter(p => p.model_type === 'standard')
+      .filter(p => !seen.has(p.insurer_name) && seen.add(p.insurer_name)).slice(0, 10);
     const seenAll = new Set<string>();
-    const uniqueAll = (allModels || []).filter(p => {
-      const key = p.insurer_name + '|' + p.model_type;
-      if (seenAll.has(key)) return false;
-      seenAll.add(key);
-      return true;
-    });
+    const cheapest_any_model = offers
+      .filter(p => { const k = p.insurer_name + '|' + p.model_type; return !seenAll.has(k) && seenAll.add(k); })
+      .slice(0, 20);
 
-    const result = {
+    return json({
       year: PREMIUM_YEAR,
+      prev_year: PREV_YEAR,
       plz: parseInt(plz),
       locality,
       canton,
@@ -118,19 +127,13 @@ Deno.serve(async (req: Request) => {
       age_class: ageClass === 'AKL-ERW' ? 'Erwachsene (26+)' : ageClass === 'AKL-JUG' ? 'Junge Erwachsene (19-25)' : 'Kinder (0-18)',
       franchise: parseInt(franchise),
       accident_included: withAccident,
-      standard_model: uniquePremiums.slice(0, 10),
-      cheapest_any_model: uniqueAll.slice(0, 20),
-    };
-
-    return new Response(
-      JSON.stringify(result),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+      insurer_count: new Set(offers.map(p => p.insurer_id)).size,
+      offers,
+      standard_model,
+      cheapest_any_model,
+    });
 
   } catch (err) {
-    return new Response(
-      JSON.stringify({ error: err.message }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+    return json({ error: err.message }, 500);
   }
 });
