@@ -624,9 +624,13 @@ def hub_page(cantons, cheapest_by_canton):
     rows = []
     for c, (name, slug) in sorted(CANTONS.items(), key=lambda x: x[1][0]):
         ch = cheapest_by_canton[c]
+        reg = (RATING or {}).get("regions", {}).get(f"{c}|{MAIN_REGION.get(c)}", {})
+        top = max(reg.items(), key=lambda x: x[1]["note"] or 0, default=None)
+        durable = (f'{e(INSURER_NAMES[str(top[0])])}<span class="sub">Note {note_fmt(top[1]["note"])}</span>' if top else "–")
         rows.append(
             f'<tr><td><a href="/krankenkasse/{slug}/"><strong>{e(name)}</strong></a></td>'
             f'<td>{e(ch["insurer"])}<span class="sub">CHF {chf(ch["premium"])}, Franchise 2\'500</span></td>'
+            f'<td>{durable}</td>'
             f'<td class="num">CHF {chf(cantons[c]["avg_standard"], 0)}</td>'
             f'<td class="num kk-up">{pct(cantons[c]["change_pct"])}</td></tr>')
     body = [
@@ -637,9 +641,10 @@ def hub_page(cantons, cheapest_by_canton):
         f"<p class=\"kk-lead\">Wie teuer die Grundversicherung ist, hängt vor allem vom Wohnort ab. "
         f"Hier siehst du für jeden Kanton die günstigste Kasse {YEAR}, die durchschnittliche Standardprämie und wie stark sie steigt.</p>",
         f'<a class="kk-cta" href="/#kk-rechner">Prämie für deine PLZ berechnen &rarr;</a>',
-        f'<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Kanton</th><th>Günstigste Kasse</th>'
+        f'<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Kanton</th><th>Günstigste Kasse</th><th>Dauerhaft günstig</th>'
         f'<th class="num">Ø Standard</th><th class="num">vs. {PREV}</th></tr></thead><tbody>{"".join(rows)}</tbody></table></div>',
         f'<p class="kk-note">Günstigste Kasse: Erwachsene, Franchise 2\'500, mit Unfall, alle Modelle, Hauptregion des Kantons. '
+        f'Dauerhaft günstig: beste Note im <a href="{RATING_PATH}">Preistreue-Rating</a> in der Hauptregion. '
         f'Ø Standard und Veränderung: Standardmodell, Franchise 300, gewichtet nach Versichertenzahl. '
         f'Details zur Rechnung: <a href="/krankenkassenpraemien-{YEAR}/#methode">Methode</a>.</p>',
     ]
@@ -775,8 +780,9 @@ def insights_block(cantons, insurers, nat, top3_prev, top3_cur, ins_prev, nat_pr
         tot = ((1 + a / 100) * (1 + x["change_pct"] / 100) - 1) * 100
         # Jojo: im Vorjahr unter dem Schnitt, dieses Jahr deutlich darüber
         jojo = a < nat_prev and x["change_pct"] >= nat + 1.5
-        big.append({"id": i, "prev": a, "cur": x["change_pct"], "tot": tot, "jojo": jojo})
-    big.sort(key=lambda x: x["tot"])
+        note = (RATING or {}).get("national", {}).get(i, {}).get("note")
+        big.append({"id": i, "prev": a, "cur": x["change_pct"], "tot": tot, "jojo": jojo, "note": note})
+    big.sort(key=lambda x: (-(x["note"] or 0), x["tot"]))
     tot_all = ((1 + nat_prev / 100) * (1 + nat / 100) - 1) * 100
     by_change = sorted(cantons.items(), key=lambda x: -x[1]["change_pct"])
     cons = sorted(set(top3_prev2) | set(top3_prev) | set(top3_cur),
@@ -791,8 +797,9 @@ def insights_block(cantons, insurers, nat, top3_prev, top3_cur, ins_prev, nat_pr
     td = 'style="text-align:right;padding:9px 12px;white-space:nowrap;"'
     kas = "".join(
         f'<tr style="border-bottom:1px solid var(--border);"><td style="padding:9px 12px;font-weight:600;">{kasse_link(x["id"])}{tag if x["jojo"] else ""}</td>'
+        f'<td {td}><strong style="font-size:15px;">{note_fmt(x["note"])}</strong></td>'
         f'<td {td}>{pc(x["prev"], nat_prev)}</td><td {td}>{pc(x["cur"], nat)}</td>'
-        f'<td {td}><strong>{pc(x["tot"], tot_all)}</strong></td></tr>' for x in big)
+        f'<td {td}>{pc(x["tot"], tot_all)}</td></tr>' for x in big)
     n_jojo = sum(x["jojo"] for x in big)
 
     def cli(c, v):
@@ -814,17 +821,17 @@ def insights_block(cantons, insurers, nat, top3_prev, top3_cur, ins_prev, nat_pr
 <section class="insights-section" style="padding:80px 40px;background:var(--bg);">
   <div style="max-width:900px;margin:0 auto;">
     <div class="section-label">Datenanalyse</div>
-    <h2 class="section-headline" style="margin-bottom:8px;">Krankenkassenprämien {Y0} bis {YEAR}</h2>
-    <p style="color:var(--muted);margin-bottom:32px;">Laut BAG steigt die mittlere Prämie {YEAR} um {BAG_OFFICIAL['change_pct']:.1f}&#8239;%. Ein Jahr allein sagt wenig: Manche Kassen halten ein Jahr still und schlagen im nächsten umso stärker auf. Darum vergleichen wir über drei Jahre.</p>
+    <h2 class="section-headline" style="margin-bottom:8px;">Welche Kasse ist dauerhaft günstig?</h2>
+    <p style="color:var(--muted);margin-bottom:32px;">Laut BAG steigt die mittlere Prämie {YEAR} um {BAG_OFFICIAL['change_pct']:.1f}&#8239;%. Ein Jahr allein sagt wenig: Manche Kassen halten ein Jahr still und schlagen im nächsten umso stärker auf. Unser <a href="/krankenkassen-rating/" style="color:var(--accent-dark);">Preistreue-Rating</a> rechnet deshalb mit den BAG-Prämien seit {(RATING or {}).get("years", [Y0])[0]}.</p>
 
     <div {card}>
-      <h3 style="font-size:18px;font-weight:700;margin-bottom:6px;">Anstieg pro Kasse seit {Y0} (Standardmodell)</h3>
-      <div style="font-size:14px;color:var(--muted);margin-bottom:16px;">Schnitt, gewichtet nach Versicherten: {pct(nat_prev)} im {PREV}, {pct(nat)} im {YEAR}, zusammen <strong style="color:var(--text);">{pct(tot_all)}</strong>. Rot heisst über dem Schnitt.{f" <strong style='color:var(--text);'>Jojo</strong>: im Vorjahr unter dem Schnitt, jetzt deutlich darüber." if n_jojo else ""}</div>
+      <h3 style="font-size:18px;font-weight:700;margin-bottom:6px;">Preistreue-Rating {YEAR} und Anstieg pro Kasse</h3>
+      <div style="font-size:14px;color:var(--muted);margin-bottom:16px;">Note von 0 bis 10 aus Preis, Konstanz, Treue, Rabatt-Treue, Tarif-Bestand und Reserven. Daneben der Anstieg der Standardprämie, Schnitt aller Kassen {pct(nat_prev)} im {PREV} und {pct(nat)} im {YEAR}. Rot heisst über dem Schnitt.{f" <strong style='color:var(--text);'>Jojo</strong>: im Vorjahr unter dem Schnitt, jetzt deutlich darüber." if n_jojo else ""}</div>
       <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:14px;">
-        <thead><tr style="border-bottom:1px solid var(--border2);"><th style="text-align:left;padding:8px 12px;">Kasse</th><th style="text-align:right;padding:8px 12px;">{PREV}</th><th style="text-align:right;padding:8px 12px;">{YEAR}</th><th style="text-align:right;padding:8px 12px;">Seit {Y0}</th></tr></thead>
+        <thead><tr style="border-bottom:1px solid var(--border2);"><th style="text-align:left;padding:8px 12px;">Kasse</th><th style="text-align:right;padding:8px 12px;">Note</th><th style="text-align:right;padding:8px 12px;">{PREV}</th><th style="text-align:right;padding:8px 12px;">{YEAR}</th><th style="text-align:right;padding:8px 12px;">Seit {Y0}</th></tr></thead>
         <tbody>{kas}</tbody>
       </table></div>
-      <div style="font-size:12px;color:var(--muted);margin-top:10px;">Kassen mit mindestens {MIN_BESTAND_RANKING // 1000}'000 Versicherten, sortiert nach dem Anstieg seit {Y0}.</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:10px;">Kassen mit mindestens {MIN_BESTAND_RANKING // 1000}'000 Versicherten, sortiert nach Note. In deiner Region kann die Reihenfolge anders sein, siehe Kantone unten. <a href="/krankenkassen-rating/" style="color:var(--accent-dark);">So rechnen wir &rarr;</a></div>
     </div>
 
     <div {card}>
@@ -833,18 +840,10 @@ def insights_block(cantons, insurers, nat, top3_prev, top3_cur, ins_prev, nat_pr
         <div><div {col}>Stärkster Anstieg</div>{"".join(cli(c, v) for c, v in by_change[:3])}</div>
         <div><div {col}>Schwächster Anstieg</div>{"".join(cli(c, v) for c, v in by_change[-3:][::-1])}</div>
       </div>
-      <div style="margin-top:18px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);">Günstigste Krankenkasse {YEAR} in deinem Kanton</div>
+      <div style="margin-top:18px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);">Dauerhaft günstig in deinem Kanton</div>
       <div style="display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px;font-size:14px;">{canton_links}</div>
     </div>
 
-    <div {card}>
-      <h3 style="font-size:18px;font-weight:700;margin-bottom:6px;">Wer ist konstant günstig?</h3>
-      <p style="font-size:14px;color:var(--muted);margin-bottom:14px;">In wie vielen Kantonen gehört die Kasse zu den 3 günstigsten im Standardmodell?</p>
-      <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:14px;">
-        <thead><tr style="border-bottom:1px solid var(--border2);"><th style="text-align:left;padding:8px 12px;">Kasse</th><th style="padding:8px 12px;">{Y0}</th><th style="padding:8px 12px;">{PREV}</th><th style="padding:8px 12px;">{YEAR}</th></tr></thead>
-        <tbody>{trs}</tbody>
-      </table></div>
-    </div>
 
     <div style="font-size:12px;color:var(--muted);text-align:center;">Quelle: BAG · Erwachsene, Franchise 300, mit Unfall · <a href="/krankenkassenpraemien-{YEAR}/" style="color:var(--accent-dark);">Ganze Auswertung {YEAR}</a> · <a href="/krankenkassen-rating/" style="color:var(--accent-dark);">Preistreue-Rating</a> · <a href="/kasse/" style="color:var(--accent-dark);">Alle Kassen</a> · <a href="/krankenkasse-kuendigen/" style="color:var(--accent-dark);">Kündigen bis {DEADLINE}</a></div>
   </div>
@@ -856,6 +855,7 @@ def insights_block(cantons, insurers, nat, top3_prev, top3_cur, ins_prev, nat_pr
 # ── Preistreue-Rating ──────────────────────────────────────────────────────
 
 RATING = None   # wird in main() aus build_rating.compute() gefüllt
+MAIN_REGION = {}  # Kanton -> Hauptregion, in main() gefüllt
 RATING_PATH = "/krankenkassen-rating/"
 
 
@@ -1188,23 +1188,26 @@ def kasse_page(i, cur, by_canton_cur, prev_idx, insurers, ic, top3_cur, kv):
 
 def kasse_hub(insurers, top3_cur):
     path = "/kasse/"
-    ids = sorted(KASSE_SLUG, key=lambda i: INSURER_NAMES[str(i)].lower())
+    nat = (RATING or {}).get("national", {})
+    regio = ' <span class="sub">Regionalkasse</span>'
+    ids = sorted(KASSE_SLUG, key=lambda i: (nat.get(i, {}).get("regional", True), -(nat.get(i, {}).get("note") or 0)))
     rows = "".join(
-        f'<tr><td>{kasse_link(i)}</td>'
+        f'<tr><td>{kasse_link(i)}{regio if nat.get(i, {}).get("regional") else ""}</td>'
+        f'<td class="num"><strong>{note_fmt(nat.get(i, {}).get("note"))}</strong></td>'
         f'<td class="num">{people(insurers[i]["bestand"]) if i in insurers and insurers[i]["bestand"] >= 1000 else "–"}</td>'
         f'<td class="num {"kk-up" if i in insurers and insurers[i]["change_pct"] > 0 else ""}">{pct(insurers[i]["change_pct"]) if i in insurers else "–"}</td>'
-        f'<td class="num">{top3_cur.get(i, 0)}</td></tr>' for i in ids)
+        f'</tr>' for i in ids)
     body = [
         crumbs_html([("Krankenkassen-Vergleich", "/"), ("Kassen", path)]),
         f'<div class="article-badge">Prämien {YEAR}</div>',
         f"<h1>Alle Krankenkassen: Prämien {YEAR} im Vergleich</h1>",
         f'<div class="article-meta">{len(ids)} Kassen mit Grundversicherung · Offizielle BAG-Daten</div>',
-        f'<p class="kk-lead">Wie stark jede Kasse {YEAR} aufschlägt und wo sie zu den günstigsten gehört. '
+        f'<p class="kk-lead">Welche Kasse dauerhaft günstig ist und wie stark sie {YEAR} aufschlägt. '
         f'Ein Klick auf die Kasse zeigt alle Kantone, Modelle und die Kündigungsadresse.</p>',
-        f'<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Kasse</th><th class="num">Versicherte</th>'
-        f'<th class="num">vs. {PREV}</th><th class="num">Top 3 in Kantonen</th></tr></thead><tbody>{rows}</tbody></table></div>',
-        f'<p class="kk-note">Veränderung: Standardmodell, Franchise 300, gewichtet nach Versicherten je Kanton. '
-        f'Top 3: in wie vielen der 26 Kantone die Kasse zu den drei günstigsten im Standardmodell gehört. '
+        f'<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Kasse</th><th class="num">Preistreue</th><th class="num">Versicherte</th>'
+        f'<th class="num">vs. {PREV}</th></tr></thead><tbody>{rows}</tbody></table></div>',
+        f'<p class="kk-note">Preistreue: Note von 0 bis 10 aus dem <a href="{RATING_PATH}">Preistreue-Rating</a>, sortiert nach Note, Regionalkassen am Schluss. '
+        f'Veränderung: Standardmodell, Franchise 300, gewichtet nach Versicherten je Kanton. '
         f'Versicherte: Durchschnittsbestand {YEAR - 2} laut BAG.</p>',
     ]
     return path, page(path, f"Alle Krankenkassen {YEAR}: Prämienerhöhung je Kasse im Vergleich",
@@ -1513,7 +1516,8 @@ def main():
         path, content = canton_page(c, by_canton_cur[c], prev_idx, cantons, ins_c, regions)
         write(path, content)
         paths.append(path)
-        cheapest[c] = ranking(by_canton_cur[c], c, main_region(by_canton_cur[c], c), 2500, prev_idx, n=1)[0]
+        MAIN_REGION[c] = main_region(by_canton_cur[c], c)
+        cheapest[c] = ranking(by_canton_cur[c], c, MAIN_REGION[c], 2500, prev_idx, n=1)[0]
 
     jojo = jojo_analysis()
     model_counts = defaultdict(int)
