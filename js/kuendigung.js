@@ -300,8 +300,22 @@
       btn.textContent = label;
     });
   }
+  // Anonym zählen, von welcher Kasse zu welcher gewechselt wird. Name,
+  // Adresse und Unterschrift verlassen den Browser nie.
+  function track(event) {
+    var L = letter();
+    var body = {
+      event: event, quelle: 'editor', kasse_alt: L.kasse ? L.kasse.id : null, kasse_neu: neu ? neu.id : null,
+      zusatz: (document.querySelector('input[name="kd-zusatz"]:checked') || {}).value,
+      kanal: L.kasse ? (L.kasse.mail ? 'mail' : L.kasse.portal ? 'portal' : 'post') : null,
+    };
+    try {
+      fetch('https://zexpmaegqsayleaohiip.supabase.co/functions/v1/kk-ereignis', { method: 'POST', keepalive: true,
+        headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).catch(function () {});
+    } catch (e) {}
+  }
   $('kd-pdf').onclick = function () {
-    withPdf(this, function (doc, L) { doc.save(fileName(L)); });
+    withPdf(this, function (doc, L) { doc.save(fileName(L)); track('kuendigung_pdf'); });
   };
   // Mail vorbereiten: PDF speichern und das Mailprogramm mit Empfänger,
   // Betreff und Text öffnen. Den Anhang kann ein mailto-Link nicht mitgeben,
@@ -309,6 +323,7 @@
   $('kd-mail').onclick = function () {
     withPdf(this, function (doc, L) {
       doc.save(fileName(L));
+      track('kuendigung_mail');
       $('kd-msg').textContent = 'PDF gespeichert. Häng es im Mailprogramm an, bevor du auf Senden drückst.';
       location.href = 'mailto:' + encodeURIComponent(L.kasse.mail) + '?subject=' + encodeURIComponent(mailSubject(L)) + '&body=' + encodeURIComponent(mailBody(L));
     });
@@ -320,6 +335,7 @@
   $('kd-share').onclick = function () {
     withPdf(this, function (doc, L) {
       var file = new File([doc.output('blob')], fileName(L), { type: 'application/pdf' });
+      track('kuendigung_mail');
       if (L.kasse.mail && navigator.clipboard) navigator.clipboard.writeText(L.kasse.mail).catch(function () {});
       navigator.share({ files: [file], title: mailSubject(L), text: mailBody(L) }).then(function () {
         if (L.kasse.mail) $('kd-msg').textContent = 'Die Adresse ' + L.kasse.mail + ' ist kopiert, füg sie als Empfänger ein.';
@@ -328,6 +344,7 @@
   };
   $('kd-copy').onclick = function () {
     var t = plain(letter());
+    track('kuendigung_text');
     (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(
       function () { $('kd-copy').textContent = 'Kopiert'; },
       function () { $('kd-copy').textContent = 'Bitte markieren und kopieren'; });

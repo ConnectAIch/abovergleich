@@ -1508,7 +1508,7 @@ def kuendigen_page(kv):
 <p>Wichtig: Wer bis 31. Dezember noch offene Prämien oder Kostenbeteiligungen bei der bisherigen Kasse hat, kann nicht wechseln. Offene Rechnungen vorher bezahlen.</p>
 
 <h2 id="vorlage">Kündigungsbrief erstellen</h2>
-<p>Der Brief und das PDF entstehen nur in deinem Browser. Wir speichern und versenden nichts, abschicken tust du selbst.</p>
+<p>Der Brief und das PDF entstehen nur in deinem Browser. Name, Adresse und Unterschrift sehen wir nie, abschicken tust du selbst. Anonym zählen wir nur, von welcher Kasse gewechselt wird (<a href="/datenschutz/">Datenschutz</a>).</p>
 <div class="kd-form">
   <div class="full"><label for="kd-kasse">Deine bisherige Kasse</label><select id="kd-kasse"></select></div>
   <div><label for="kd-name">Vorname und Name</label><input id="kd-name" autocomplete="name"></div>

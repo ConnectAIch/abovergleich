@@ -1339,6 +1339,25 @@ let RATING_DATA = null;
 const ratingLoad = fetch("/rating-daten.json?v=59774db6").then(r => r.ok ? r.json() : null)
   .then(d => { RATING_DATA = d; }).catch(() => {});
 
+// Anonyme Ereignisse (Tabelle kk_events, siehe Datenschutz). Schlägt nie laut fehl.
+const EREIGNIS_API = SUPABASE_URL + '/functions/v1/kk-ereignis';
+function kkLog(event, fields) {
+  try {
+    fetch(EREIGNIS_API, { method: 'POST', keepalive: true, headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(Object.assign({ event }, fields)) }).catch(() => {});
+  } catch (e) {}
+}
+const ageKey = a => /^Kind/.test(a || '') ? 'KIN' : /^Jung/.test(a || '') ? 'JUG' : 'ERW';
+// Klick auf «Wechseln» in der Ergebnisliste
+document.addEventListener('click', ev => {
+  const a = ev.target.closest('a[href*="/krankenkasse-kuendigen/"]');
+  if (!a || !a.closest('#kk-calc')) return;
+  const q = new URL(a.href, location.href).searchParams;
+  kkLog('wechsel_klick', Object.assign({}, window._kkLast || {}, {
+    kasse_alt: parseInt(q.get('kasse')) || (window._kkLast || {}).kasse_alt || null,
+    kasse_neu: parseInt(q.get('neu')) || null, quelle: 'rechner' }));
+});
+
 async function checkKK() {
   const plz = document.getElementById('kk-plz').value.trim();
   const year = document.getElementById('kk-year').value.trim();
@@ -1508,6 +1527,16 @@ async function checkKK() {
         matchNote = `Kein Tarif deiner Kasse kostete ${data.prev_year} genau CHF ${fmt(paid)}. Nimm den Betrag der Grundversicherung von der Rechnung, ohne Zusatzversicherung, oder wähle deinen Tarif unten.`;
       }
     }
+
+    // Anonym zählen, was verglichen wird (ohne PLZ, Jahrgang, Namen)
+    if (offers[0]) kkLog('vergleich', {
+      jahr: data.year, canton: data.canton, region: data.region, altersklasse: ageKey(data.age_class),
+      franchise: Number(data.franchise), unfall: accidentIncluded, kasse_alt: currentId,
+      kasse_neu: offers[0].insurer_id, modell_neu: offers[0].model_type, praemie_bezahlt: paid,
+      ersparnis_jahr: ownPick && !ownGuessed ? (ownPick.premium - offers[0].premium) * 12 : null, quelle: 'rechner',
+    });
+    window._kkLast = { jahr: data.year, canton: data.canton, region: data.region, altersklasse: ageKey(data.age_class),
+      franchise: Number(data.franchise), unfall: accidentIncluded, kasse_alt: currentId };
 
     function bestPerInsurer(list) {
       const seen = new Set();
