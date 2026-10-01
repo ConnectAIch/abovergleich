@@ -30,35 +30,55 @@ im Titel, die Falle im Text.
 
 ## 1. Blick, Bernadette Hogg (warm, kennt uns vom Roaming-Check)
 
-**Betreff:** Krankenkasse 2027: Nicht die billigste nehmen, sondern die treueste
+**Betreff:** Krankenkasse 2027: Die Billigste von heute ist oft die Teuerste von morgen
 
-Hallo Frau Hogg
+Stil wie die Hogg-Mails zu Roaming, Peer Score und unabhängigen Anbietern: persönlich, Aufhänger des Tages, Zwischentitel in Grossbuchstaben, nachprüfbare Beispiele, offener Hinweis zur Sorgfalt.
 
-nach dem Roaming-Check diesmal Krankenkasse, von unserer Schwesterseite abovergleich.com.
+```
+Liebe Frau Hogg
 
-Alle schreiben jetzt «Wechseln lohnt sich». Wir haben die BAG-Prämien von 2020 bis 2027 in
-jeder Region durchgerechnet und gesehen, dass die günstigste Kasse oft die ist, die danach
-kräftig aufschlägt:
+seit Dienstag liegen die Prämien 2027 auf dem Tisch, im Schnitt plus 5 Prozent, und überall steht jetzt: Wechseln lohnt sich. Das stimmt. Die Prämiendaten des Bundes zeigen aber auch, wohin man besser nicht wechselt. Ich gebe Ihnen das gerne als Erste, die übrigen Redaktionen bekommen es frühestens morgen.
 
-- Neue Sparmodelle starten mit bis zu 20 % Rabatt und verlieren ihn Jahr für Jahr. Die 2021
-  eingeführten lagen 18,4 % unter Standard, heute 13,2 %. Beispiel Helsana Flexmed in Luzern:
-  2027 CHF 348.30 statt 319.70 (+8,9 %), das Standardmodell derselben Kasse +3,7 %.
-- Der günstigste Tarif von 2026 steigt 2027 um 7,7 %, der Markt um 5,4 %. In Appenzell etwa
-  war Vivao Sympany die Billigste und liegt nach +21,9 % nur noch auf Platz 9.
-- Es geht auch anders: In unserem Preistreue-Rating liegen Concordia, Agrisano und KPT vorne.
-  Sie sind günstig und waren es auch in den Jahren davor.
+Wir haben die Prämien aller Krankenkassen von 2020 bis 2027 in jeder Prämienregion der Schweiz durchgerechnet.
 
-Für Ihre Leserinnen und Leser gibt es pro Kanton die dauerhaft günstigsten Kassen, und wer im
-Standardmodell ist, spart mit einem Modellwechsel bei der eigenen Kasse im Median CHF 871 im
-Jahr, ohne Kündigung.
+DIE BILLIGSTE VON HEUTE
 
-Rating und Methodik: https://abovergleich.com/krankenkassen-rating/
+Der günstigste Tarif von 2026 steigt 2027 im Schnitt um 7,7 Prozent, der Markt um 5,4 Prozent. Nur in 8 von 36 Regionen ist er noch die Nummer eins. Im Jahr davor war es genau gleich.
 
-Wenn Sie uns nennen, wäre ein Link auf das Rating toll, dann können Leser ihre Region selbst
-prüfen. Zahlen für einzelne Kantone oder Kassen rechnen wir gern nach, auch kurzfristig.
+Ein Beispiel aus Appenzell: Vivao Sympany war 2026 mit 215.90 Franken pro Monat die günstigste Kasse. 2027 kostet derselbe Tarif 263.10 Franken, plus 21,9 Prozent. Damit liegt die Kasse noch auf Platz 9.
 
-Freundliche Grüsse
-Redaktion abovergleich.com / handyabo.com
+DIE SPARMODELL-FALLE
+
+Ein neues Sparmodell darf bis zu 20 Prozent unter dem Standardmodell starten, solange die Kasse keine Kostenzahlen aus fünf Jahren hat (Art. 101 KVV). Danach muss der Rabatt belegt sein, und genau das sieht man in den Daten: Die 2021 eingeführten Sparmodelle lagen 18,4 Prozent unter dem Standard ihrer Kasse, heute sind es noch 13,2 Prozent. Wer ins neue Modell gewechselt ist und bleibt, zahlt Jahr für Jahr etwas mehr.
+
+Beispiel Helsana: Das Modell Flexmed kam 2024 auf den Markt. In der Stadt Luzern kostet es 2027 348.30 Franken statt 319.70, plus 8,9 Prozent. Das Standardmodell derselben Kasse steigt um 3,7 Prozent.
+
+Ein Hinweis, weil Sie nachrechnen werden: Luzern liegt beim Median aller Regionen. In Zürich ist der Effekt bei Flexmed deutlich kleiner, deshalb nenne ich Luzern und nicht Zürich. Nachprüfbar auf priminfo.admin.ch mit PLZ 6003, Jahrgang 1985, Franchise 2'500, ohne Unfall.
+
+ES GEHT AUCH ANDERS
+
+Wir haben daraus ein Preistreue-Rating gebaut, eine Note von 0 bis 10. Es zählt nicht nur der Preis von heute, sondern auch, wie oft eine Kasse seit 2020 in ihrer Region unter den fünf günstigsten war, wie stark sie aufschlägt, ob ihre neuen Modelle den Rabatt halten, wie oft sie Tarife streicht und wie dick ihre Reserven sind. Vorne liegen Concordia (9,0), Agrisano (8,5) und KPT (7,2). Sie sind heute günstig und waren es auch in den Jahren davor.
+
+WAS IHRE LESERINNEN UND LESER TUN KÖNNEN
+
+Wer im Standardmodell ist, spart mit einem Modellwechsel bei der eigenen Kasse im Median 871 Franken im Jahr, ganz ohne Kündigung. Wer kündigt, muss bis am 30. November bei der Kasse sein, der Poststempel zählt nicht. Elf Kassen mit zusammen 58 Prozent der Versicherten nehmen die Kündigung laut eigener Website auch per Mail an. Und wer 25 ist: Ab dem Jahr, in dem man 26 wird, gilt die Erwachsenenprämie, im selben Tarif im Median 48 Prozent mehr.
+
+Ein Hinweis zur Sorgfalt: Alle Zahlen stammen aus den Prämiendateien des BAG. Unseren Verlauf von 2024 bis 2027 haben wir mit priminfo abgeglichen, er stimmt auf den Franken. Kundenbewertungen fliessen ins Rating nicht ein, und von Krankenkassen nehmen wir keine Provisionen.
+
+Rating mit Rangliste und Methodik:
+https://abovergleich.com/krankenkassen-rating/
+
+Die dauerhaft günstigsten Kassen pro Kanton und die Vorjahressieger:
+https://abovergleich.com/krankenkassenpraemien-2027/#vorjahressieger
+
+Den Pressetext finden Sie im Anhang. Für jede Region und jede Kasse rechnen wir gerne nach, auch kurzfristig, die Rohdaten gibt es auf Zuruf als CSV. Und wenn Sie uns erwähnen, freuen wir uns über einen Link aufs Rating, dann können Ihre Leser ihre eigene Region prüfen.
+
+Herzliche Grüsse
+Matthias Zwingli
+Redaktion abovergleich.com
+hello@handyabo.com
+https://abovergleich.com
+```
 
 ## 2. Tages-Anzeiger, Jon Mettler (warm)
 
