@@ -368,7 +368,7 @@
       body: JSON.stringify({
         email: email, wecker: $('kd-wecker').checked, pdf: b64, filename: fileName(L),
         kasse: k.name, kanal: k.mail ? 'mail' : k.portal ? 'portal' : 'post', ziel: k.mail || k.portal || '',
-        deadline: D.deadline_text, neu: neu ? neu.name : '',
+        deadline: D.deadline_text, neu: neu ? neu.name : '', neu_url: neu && neu.url ? neu.url : '',
         plz: plzOf() || pr.plz, jahrgang: jahrgangOf() || pr.year, franchise: pr.franchise,
         accident_included: pr.accident === true, current_insurer_id: k.id, new_insurer_id: neu ? neu.id : null,
         paid_monthly: (function () { try { return parseFloat((localStorage.getItem('kk-paid') || '').replace(',', '.')) || null; } catch (e) { return null; } })(),
@@ -380,9 +380,8 @@
     }, function (err) { delete sent[key]; throw err; });
     return sent[key];
   }
-  function sentText(res) {
-    return 'Das PDF ist unterwegs an ' + val('kd-email') + ', schau auch im Spam-Ordner nach.' +
-      (res && res.wecker ? ' Dein Wechsel-Wecker ist eingeschaltet.' : '');
+  function sentText() {
+    return 'Mail ist unterwegs an ' + val('kd-email') + '. Klick dort auf «Kündigung herunterladen», damit bestätigst du auch deine Adresse. Nichts da? Schau im Spam-Ordner.';
   }
 
   $('kd-send').onclick = function () {
@@ -398,7 +397,7 @@
     withPdf(this, function (doc, L) {
       return sendCopy(doc, L).then(function (res) {
         track('kuendigung_mail');
-        $('kd-msg').textContent = sentText(res) + ' Häng es an die Mail an die Kasse an, oder leite unsere Mail einfach weiter.';
+        $('kd-msg').textContent = sentText(res) + ' Das PDF hängst du dann an die Mail an die Kasse an.';
         location.href = 'mailto:' + encodeURIComponent(L.kasse.mail) + '?subject=' + encodeURIComponent(mailSubject(L)) + '&body=' + encodeURIComponent(mailBody(L));
       }, function () { $('kd-msg').textContent = 'Der Versand hat nicht geklappt. Bitte nochmals versuchen.'; });
     });

@@ -1406,7 +1406,8 @@ KUENDIGEN_CSS = """
   .kd-consent { display:flex; gap:10px; align-items:flex-start; font-size:13px; line-height:1.5; color:var(--text2); margin:4px 0 8px; cursor:pointer; }
   .kd-consent input { width:18px; height:18px; margin-top:2px; flex:0 0 auto; accent-color:var(--accent-dark); }
   .kd-consent a { color:var(--accent-dark); }
-  .kd-consent.kd-need { color:var(--orange); }
+  .kd-terms { font-size:12px; color:var(--muted); margin:8px 0 0; }
+  .kd-terms a { color:var(--muted); }
   .kd-ctas { display:flex; flex-wrap:wrap; align-items:center; gap:8px 20px; margin:8px 0 24px; }
   .kd-ctas .kk-cta { margin:0; }
   .kd-cta-sec { color:var(--accent-dark) !important; font-weight:600; }
@@ -1544,8 +1545,9 @@ def kuendigen_page(kv):
   <div class="kd-sign-row"><span id="kd-pad-hint"></span><button type="button" id="kd-pad-clear" class="kd-link">Neu zeichnen</button></div>
 </div>
 <div id="kd-kanal" class="kd-kanal"></div>
-<label class="kd-consent"><input type="checkbox" id="kd-wecker" checked> <span>Nächstes Jahr die besten Kassen für mich ins Postfach (Wechsel-Wecker, 1 Mail im Jahr). <a href="/datenschutz/#wecker" target="_blank">Datenschutz</a></span></label>
+<label class="kd-consent"><input type="checkbox" id="kd-wecker" checked> <span>Nächstes Jahr die besten Kassen für mich ins Postfach (1 Mail im Jahr)</span></label>
 <div class="kd-actions"><button id="kd-send">PDF per Mail zuschicken</button><button id="kd-mail" class="sec" hidden>Mail an die Kasse vorbereiten</button><button id="kd-share" class="sec" hidden>PDF teilen</button><button id="kd-copy" class="sec">Text kopieren</button></div>
+<div class="kd-terms">Mit dem Versand akzeptierst du unseren <a href="/datenschutz/#kuendigung" target="_blank">Datenschutz</a>: Wir speichern deine E-Mail-Adresse und die Angaben zum Wechsel, den Brief nur 60 Tage zum Abholen.</div>
 <div id="kd-msg" class="kd-msg" role="status"></div>
 <div class="kd-preview-label">Vorschau</div>
 <div id="kd-brief"></div>
@@ -1573,6 +1575,55 @@ def kuendigen_page(kv):
                     body, [breadcrumb([("Krankenkassen-Vergleich", "/"), ("Krankenkasse kündigen", path)]), faq(qa)])
     return path, html_out.replace("</style>", KUENDIGEN_CSS + "</style>", 1)
 
+
+
+def pickup_page():
+    """Abholseite für das Kündigungs-PDF aus der Mail. Erst der Klick auf den
+    Knopf bestätigt die E-Mail-Adresse (Mailfilter öffnen Links, klicken aber
+    keine Knöpfe). Nicht in der Sitemap, noindex."""
+    path = "/krankenkasse-kuendigen/pdf/"
+    body = f"""{crumbs_html([("Krankenkassen-Vergleich", "/"), ("Krankenkasse kündigen", "/krankenkasse-kuendigen/"), ("Dein PDF", path)])}
+<h1>Deine Kündigung</h1>
+<div id="kp">
+  <p class="kk-lead">Ein Klick, und du hast dein PDF. Damit bestätigst du auch deine E-Mail-Adresse.</p>
+  <button class="kk-cta kp-btn" id="kp-go">PDF herunterladen</button>
+</div>
+<div id="kp-msg" class="kk-note" role="status"></div>
+<script>
+(function () {{
+  var API = 'https://zexpmaegqsayleaohiip.supabase.co/functions/v1/kuendigung-pdf';
+  var t = new URLSearchParams(location.search).get('t') || '';
+  var box = document.getElementById('kp'), msg = document.getElementById('kp-msg');
+  var esc = function (s) {{ return String(s || '').replace(/[&<>"]/g, function (c) {{ return {{ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }}[c]; }}); }};
+  if (!t) {{ box.innerHTML = '<p class="kk-lead">Dieser Link ist unvollständig. Öffne ihn direkt aus der Mail.</p>'; return; }}
+  function go(btn) {{
+    btn.disabled = true; btn.textContent = 'Einen Moment…'; msg.textContent = '';
+    fetch(API, {{ method: 'POST', headers: {{ 'Content-Type': 'application/json' }}, body: JSON.stringify({{ action: 'abholen', t: t }}) }})
+      .then(function (r) {{ return r.json(); }})
+      .then(function (d) {{
+        if (!d.ok) {{ msg.textContent = d.error || 'Das hat nicht geklappt.'; btn.disabled = false; btn.textContent = 'PDF herunterladen'; return; }}
+        var weg = d.kanal === 'mail'
+          ? 'Schick das PDF als Anhang an <a href="mailto:' + esc(d.ziel) + '">' + esc(d.ziel) + '</a>, von der Mail-Adresse, die ' + esc(d.kasse) + ' von dir kennt.'
+          : d.kanal === 'portal' ? 'Lade das PDF in ' + esc(d.ziel) + ' hoch oder schick es per Post.'
+          : 'Druck das PDF aus, unterschreib es falls nötig, und schick es per Post an ' + esc(d.kasse) + '.';
+        var neu = d.neu
+          ? 'Bei <strong>' + esc(d.neu) + '</strong> für den 1. Januar anmelden.' + (d.neu_url ? ' <a href="' + esc(d.neu_url) + '?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=kk-wechsel" target="_blank" rel="noopener sponsored">Zu ' + esc(d.neu) + ' &rarr;</a>' : '')
+          : 'Bei der neuen Kasse für den 1. Januar anmelden. <a href="/#kk-rechner">Günstigste Kasse finden &rarr;</a>';
+        box.innerHTML = '<p class="kk-lead"><strong>E-Mail-Adresse bestätigt.</strong> Dein PDF wird heruntergeladen. <a href="' + esc(d.url) + '">Nicht gestartet?</a></p>' +
+          '<h2>So geht es weiter</h2><ol>' +
+          '<li><strong>Abschicken:</strong> ' + weg + ' Eintreffen muss die Kündigung bis ' + esc(d.deadline) + '.</li>' +
+          '<li>' + neu + '</li>' +
+          '<li><strong>Bestätigung abwarten.</strong> Die neue Kasse meldet der alten, dass du bei ihr versichert bist. Bis dahin bleibst du bei der alten versichert.</li></ol>';
+        location.href = d.url;
+      }})
+      .catch(function () {{ msg.textContent = 'Keine Verbindung. Bitte nochmals versuchen.'; btn.disabled = false; btn.textContent = 'PDF herunterladen'; }});
+  }}
+  document.getElementById('kp-go').onclick = function () {{ go(this); }};
+}})();
+</script>"""
+    html_out = page(path, "Deine Kündigung herunterladen", "Kündigungsbrief für die Grundversicherung herunterladen.", body, [])
+    html_out = html_out.replace('<meta name="robots" content="index, follow">', '<meta name="robots" content="noindex, nofollow">', 1)
+    return path, html_out.replace("</style>", "  .kp-btn { border:none; cursor:pointer; font-family:inherit; font-size:16px; }\n  .kp-btn:disabled { opacity:.6; }\n</style>", 1)
 
 
 def write_sitemap(paths):
@@ -1750,6 +1801,9 @@ def main():
         path, content = fn()
         write(path, content)
         paths.insert(0, path)
+
+    path, content = pickup_page()   # nicht in die Sitemap
+    write(path, content)
 
     # Startseite: Insights-Block ersetzen
     idx = ROOT / "index.html"
