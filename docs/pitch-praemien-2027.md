@@ -57,7 +57,7 @@ Ein Hinweis, weil Sie nachrechnen werden: Luzern liegt beim Median aller Regione
 
 ES GEHT AUCH ANDERS
 
-Wir haben daraus ein Preistreue-Rating gebaut, eine Note von 0 bis 10. Es zählt nicht nur der Preis von heute, sondern auch, wie oft eine Kasse seit 2020 in ihrer Region unter den fünf günstigsten war, wie stark sie aufschlägt, ob ihre neuen Modelle den Rabatt halten, wie oft sie Tarife streicht und wie dick ihre Reserven sind. Vorne liegen Concordia (8,2), Agrisano (8,1) und KPT (7,8). Sie sind heute günstig und waren es auch in den Jahren davor.
+Wir haben daraus ein Preistreue-Rating gebaut, eine Note von 0 bis 10. Es zählt nicht nur der Preis von heute, sondern auch, wie oft eine Kasse seit 2020 in ihrer Region unter den fünf günstigsten war, wie stark sie aufschlägt, ob ihre neuen Modelle den Rabatt halten, wie oft sie Tarife streicht und wie dick ihre Reserven sind. Vorne liegen Concordia (9,1), Agrisano (8,6) und KPT (8,4). Sie sind heute günstig und waren es auch in den Jahren davor.
 
 WAS IHRE LESERINNEN UND LESER TUN KÖNNEN
 

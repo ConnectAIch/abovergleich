@@ -966,13 +966,13 @@ def rating_page(r):
 
     method = [
         ("preis", "Preis heute", "Position des günstigsten Tarifs der Kasse unter allen Kassen der Prämienregion, "
-         f"{YEAR}. Unter den günstigsten 10 % = 10 Punkte, ab 80 % = 0."),
+         f"{YEAR}. Unter den günstigsten 20 % = 10 Punkte, ab 80 % = 0."),
         ("konstanz", "Konstanz", f"In wie vielen Jahren seit {y0} war die Kasse in der Region unter den 5 günstigsten? "
-         "Ab 40 % der Jahre = 10 Punkte."),
+         "Ab 30 % der Jahre = 10 Punkte."),
         ("treue", "Treue", "Wie stark stieg der günstigste Tarif der Kasse, wenn man in ihm blieb, verglichen mit dem Median "
-         "aller Tarife der Region? Mittel über alle Jahre. 0,5 Punkte pro Jahr unter dem Markt = 10, 1,5 Punkte darüber = 0."),
+         "aller Tarife der Region? Mittel über alle Jahre. 0,3 Punkte pro Jahr unter dem Markt = 10, 1,5 Punkte darüber = 0."),
         ("rabatt", "Rabatt-Treue", f"Behalten neue Modelle ihren Rabatt gegenüber dem Standardmodell derselben Kasse? "
-         "Gemessen an denselben Tarifen vom Startjahr bis heute. Kein Verlust = 10, 1,5 Punkte Verlust pro Jahr = 0. "
+         "Gemessen an denselben Tarifen vom Startjahr bis heute. Kein Verlust = 10, 2 Punkte Verlust pro Jahr = 0. "
          "Kassen ohne neue Modelle seit 2021 werden hier nicht bewertet."),
         ("tarife", "Tarif-Bestand", "Anteil der Tarife, die im Folgejahr unter gleichem Tarifcode weiterlaufen. "
          "100 % = 10 Punkte, 80 % = 0. Wer Tarife streicht oder umbenennt, zwingt Versicherte zum Wechseln."),

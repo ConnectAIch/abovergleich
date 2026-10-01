@@ -46,10 +46,10 @@ def scale(key, raw):
     if raw is None:
         return None
     return clip({
-        "preis": lambda r: 10 * (0.8 - r) / 0.7,          # Position <= 10 % = 10, >= 80 % = 0
-        "konstanz": lambda r: 10 * r / 0.4,               # >= 40 % der Jahre unter den 5 günstigsten = 10
-        "treue": lambda r: 10 * (1.5 - r) / 2,            # <= -0.5 Pkt./Jahr ggü. Markt = 10, >= +1.5 = 0
-        "rabatt": lambda r: 10 * (1 + r / 1.5),           # 0 Pkt./Jahr = 10, -1.5 = 0
+        "preis": lambda r: 10 * (0.8 - r) / 0.6,          # Position <= 20 % = 10, >= 80 % = 0
+        "konstanz": lambda r: 10 * r / 0.3,               # >= 30 % der Jahre unter den 5 günstigsten = 10
+        "treue": lambda r: 10 * (1.5 - r) / 1.8,          # <= -0.3 Pkt./Jahr ggü. Markt = 10, >= +1.5 = 0
+        "rabatt": lambda r: 10 * (1 + r / 2),             # 0 Pkt./Jahr = 10, -2 = 0
         "tarife": lambda r: 10 * (r - 0.8) / 0.2,         # 100 % bleiben = 10, 80 % = 0
         "solvenz": lambda r: 10 * (r - 100) / 100,        # >= 200 % = 10, 100 % = 0
     }[key](raw))

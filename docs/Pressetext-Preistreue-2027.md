@@ -14,7 +14,7 @@ Ein neues Modell darf bis zu 20 Prozent unter dem Standardmodell starten, solang
 Der günstigste Tarif von 2026 steigt 2027 im Schnitt um **7,7 Prozent**, der Markt um 5,4 Prozent. Nur in 8 von 36 Regionen ist er noch die Nummer 1. Im Jahr davor war es genauso. Beispiel Appenzell: Vivao Sympany war 2026 mit CHF 215.90 die günstigste Kasse, 2027 kostet derselbe Tarif CHF 263.10, plus 21,9 Prozent, und liegt nur noch auf Platz 9. Wer letztes Jahr zur Billigsten gewechselt hat, sollte dieses Jahr wieder vergleichen.
 
 **3. Es gibt Kassen, die dauerhaft günstig bleiben.**
-Das Preistreue-Rating von abovergleich.com bewertet jede Kasse mit einer Note von 0 bis 10: Preis heute, wie oft sie seit 2020 in der Region unter den fünf günstigsten war, wie stark sie aufschlägt, ob neue Modelle ihren Rabatt behalten, wie oft sie Tarife streicht, und wie gut ihre Reserven sind. Vorne liegen **Concordia (8,2), Agrisano (8,1) und KPT (7,8)**. Welche Kasse in der eigenen Region vorne liegt, zeigt die Seite jedes Kantons.
+Das Preistreue-Rating von abovergleich.com bewertet jede Kasse mit einer Note von 0 bis 10: Preis heute, wie oft sie seit 2020 in der Region unter den fünf günstigsten war, wie stark sie aufschlägt, ob neue Modelle ihren Rabatt behalten, wie oft sie Tarife streicht, und wie gut ihre Reserven sind. Vorne liegen **Concordia (9,1), Agrisano (8,6) und KPT (8,4)**. Welche Kasse in der eigenen Region vorne liegt, zeigt die Seite jedes Kantons.
 
 ---
 
