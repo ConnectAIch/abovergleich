@@ -46,7 +46,7 @@
     var w = $('wechsel');
     var go = neu.url ? neu.url + '?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=kk-wechsel' : null;
     w.innerHTML = '<h2>Wechsel zu ' + esc(neu.name) + ' in zwei Schritten</h2><ol>' +
-      '<li><strong>Bei ' + esc(neu.name) + ' anmelden</strong>, für den ' + esc(D.start) + '. Online in ein paar Minuten, ohne Gesundheitsfragen.' +
+      '<li><strong>Bei ' + esc(neu.name) + ' anmelden</strong>, für den ' + esc(D.start) + '. Online in etwa 10 Minuten, ohne Gesundheitsfragen. Halte deine AHV-Nummer bereit (steht auf der Versichertenkarte).' +
       (go ? '<br><a class="kd-go" href="' + esc(go) + '" target="_blank" rel="noopener sponsored">Zu ' + esc(neu.name) + ' &rarr;</a>' : '') + '</li>' +
       '<li><strong>Deine bisherige Kasse kündigen</strong>, bis ' + esc(D.deadline_text) + '. Der Brief ist unten schon vorbereitet. <a href="#vorlage">Zum Brief &darr;</a></li></ol>';
     w.hidden = false;
@@ -400,23 +400,6 @@
         $('kd-msg').textContent = sentText(res) + ' Das PDF hängst du dann an die Mail an die Kasse an.';
         location.href = 'mailto:' + encodeURIComponent(L.kasse.mail) + '?subject=' + encodeURIComponent(mailSubject(L)) + '&body=' + encodeURIComponent(mailBody(L));
       }, function () { $('kd-msg').textContent = 'Der Versand hat nicht geklappt. Bitte nochmals versuchen.'; });
-    });
-  };
-  // Auf dem Handy: das PDF direkt ins Mailprogramm teilen, mit Anhang.
-  // Teilen muss im Klick passieren, die Kopie an dich läuft parallel.
-  var canShareFiles = false;
-  try { canShareFiles = !!(navigator.canShare && navigator.canShare({ files: [new File(['x'], 'x.pdf', { type: 'application/pdf' })] })); } catch (e) {}
-  $('kd-share').hidden = !canShareFiles;
-  $('kd-share').onclick = function () {
-    withPdf(this, function (doc, L) {
-      var file = new File([doc.output('blob')], fileName(L), { type: 'application/pdf' });
-      track('kuendigung_mail');
-      if (L.kasse.mail && navigator.clipboard) navigator.clipboard.writeText(L.kasse.mail).catch(function () {});
-      var shared = navigator.share({ files: [file], title: mailSubject(L), text: mailBody(L) }).catch(function () {});
-      sendCopy(doc, L).then(function (res) {
-        $('kd-msg').textContent = (L.kasse.mail ? 'Die Adresse ' + L.kasse.mail + ' ist kopiert, füg sie als Empfänger ein. ' : '') + sentText(res);
-      }, function () {});
-      return shared;
     });
   };
   $('kd-copy').onclick = function () {

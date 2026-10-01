@@ -1546,7 +1546,7 @@ def kuendigen_page(kv):
 </div>
 <div id="kd-kanal" class="kd-kanal"></div>
 <label class="kd-consent"><input type="checkbox" id="kd-wecker" checked> <span>Nächstes Jahr die besten Kassen für mich ins Postfach (1 Mail im Jahr)</span></label>
-<div class="kd-actions"><button id="kd-send">PDF per Mail zuschicken</button><button id="kd-mail" class="sec" hidden>Mail an die Kasse vorbereiten</button><button id="kd-share" class="sec" hidden>PDF teilen</button><button id="kd-copy" class="sec">Text kopieren</button></div>
+<div class="kd-actions"><button id="kd-send">PDF per Mail zuschicken</button><button id="kd-mail" class="sec" hidden>Mail an die Kasse vorbereiten</button><button id="kd-copy" class="sec">Text kopieren</button></div>
 <div class="kd-terms">Mit dem Versand akzeptierst du unseren <a href="/datenschutz/#kuendigung" target="_blank">Datenschutz</a>: Wir speichern deine E-Mail-Adresse und die Angaben zum Wechsel, den Brief nur 60 Tage zum Abholen.</div>
 <div id="kd-msg" class="kd-msg" role="status"></div>
 <div class="kd-preview-label">Vorschau</div>
@@ -1606,9 +1606,12 @@ def pickup_page():
           ? 'Schick das PDF als Anhang an <a href="mailto:' + esc(d.ziel) + '">' + esc(d.ziel) + '</a>, von der Mail-Adresse, die ' + esc(d.kasse) + ' von dir kennt.'
           : d.kanal === 'portal' ? 'Lade das PDF in ' + esc(d.ziel) + ' hoch oder schick es per Post.'
           : 'Druck das PDF aus, unterschreib es falls nötig, und schick es per Post an ' + esc(d.kasse) + '.';
-        var neu = d.neu
-          ? 'Bei <strong>' + esc(d.neu) + '</strong> für den 1. Januar anmelden.' + (d.neu_url ? ' <a href="' + esc(d.neu_url) + '?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=kk-wechsel" target="_blank" rel="noopener sponsored">Zu ' + esc(d.neu) + ' &rarr;</a>' : '')
-          : 'Bei der neuen Kasse für den 1. Januar anmelden. <a href="/#kk-rechner">Günstigste Kasse finden &rarr;</a>';
+        var neu = (d.neu
+          ? '<strong>Bei ' + esc(d.neu) + ' anmelden</strong>, online in etwa 10 Minuten.' + (d.neu_url ? ' <a href="' + esc(d.neu_url) + '?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=kk-wechsel" target="_blank" rel="noopener sponsored">Zu ' + esc(d.neu) + ' &rarr;</a>' : '')
+          : '<strong>Bei der neuen Kasse anmelden</strong>, online in etwa 10 Minuten. <a href="/#kk-rechner">Günstigste Kasse finden &rarr;</a>') +
+          '<ul class="kp-list"><li>Beginn: 1. Januar</li><li>AHV-Nummer (756…, steht auf deiner Versichertenkarte)</li>' +
+          '<li>Franchise und Modell, das du gewählt hast</li><li>beim Hausarzt- oder HMO-Modell: deine Praxis</li></ul>' +
+          'Gesundheitsfragen gibt es in der Grundversicherung keine. Fragt das Formular danach, geht es um eine Zusatzversicherung, die du nicht abschliessen musst.';
         box.innerHTML = '<p class="kk-lead"><strong>E-Mail-Adresse bestätigt.</strong> Dein PDF wird heruntergeladen. <a href="' + esc(d.url) + '">Nicht gestartet?</a></p>' +
           '<h2>So geht es weiter</h2><ol>' +
           '<li><strong>Abschicken:</strong> ' + weg + ' Eintreffen muss die Kündigung bis ' + esc(d.deadline) + '.</li>' +
@@ -1623,7 +1626,7 @@ def pickup_page():
 </script>"""
     html_out = page(path, "Deine Kündigung herunterladen", "Kündigungsbrief für die Grundversicherung herunterladen.", body, [])
     html_out = html_out.replace('<meta name="robots" content="index, follow">', '<meta name="robots" content="noindex, nofollow">', 1)
-    return path, html_out.replace("</style>", "  .kp-btn { border:none; cursor:pointer; font-family:inherit; font-size:16px; }\n  .kp-btn:disabled { opacity:.6; }\n</style>", 1)
+    return path, html_out.replace("</style>", "  .kp-btn { border:none; cursor:pointer; font-family:inherit; font-size:16px; }\n  .kp-btn:disabled { opacity:.6; }\n  .kp-list { margin:8px 0 8px 18px; }\n  .kp-list li { margin:2px 0; }\n</style>", 1)
 
 
 def write_sitemap(paths):

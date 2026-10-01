@@ -69,6 +69,8 @@
   @media (max-width:768px) { .kk-facts { grid-template-columns:1fr; } }
   .kp-btn { border:none; cursor:pointer; font-family:inherit; font-size:16px; }
   .kp-btn:disabled { opacity:.6; }
+  .kp-list { margin:8px 0 8px 18px; }
+  .kp-list li { margin:2px 0; }
 </style>
 </head>
 <body>
@@ -115,9 +117,12 @@
           ? 'Schick das PDF als Anhang an <a href="mailto:' + esc(d.ziel) + '">' + esc(d.ziel) + '</a>, von der Mail-Adresse, die ' + esc(d.kasse) + ' von dir kennt.'
           : d.kanal === 'portal' ? 'Lade das PDF in ' + esc(d.ziel) + ' hoch oder schick es per Post.'
           : 'Druck das PDF aus, unterschreib es falls nötig, und schick es per Post an ' + esc(d.kasse) + '.';
-        var neu = d.neu
-          ? 'Bei <strong>' + esc(d.neu) + '</strong> für den 1. Januar anmelden.' + (d.neu_url ? ' <a href="' + esc(d.neu_url) + '?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=kk-wechsel" target="_blank" rel="noopener sponsored">Zu ' + esc(d.neu) + ' &rarr;</a>' : '')
-          : 'Bei der neuen Kasse für den 1. Januar anmelden. <a href="/#kk-rechner">Günstigste Kasse finden &rarr;</a>';
+        var neu = (d.neu
+          ? '<strong>Bei ' + esc(d.neu) + ' anmelden</strong>, online in etwa 10 Minuten.' + (d.neu_url ? ' <a href="' + esc(d.neu_url) + '?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=kk-wechsel" target="_blank" rel="noopener sponsored">Zu ' + esc(d.neu) + ' &rarr;</a>' : '')
+          : '<strong>Bei der neuen Kasse anmelden</strong>, online in etwa 10 Minuten. <a href="/#kk-rechner">Günstigste Kasse finden &rarr;</a>') +
+          '<ul class="kp-list"><li>Beginn: 1. Januar</li><li>AHV-Nummer (756…, steht auf deiner Versichertenkarte)</li>' +
+          '<li>Franchise und Modell, das du gewählt hast</li><li>beim Hausarzt- oder HMO-Modell: deine Praxis</li></ul>' +
+          'Gesundheitsfragen gibt es in der Grundversicherung keine. Fragt das Formular danach, geht es um eine Zusatzversicherung, die du nicht abschliessen musst.';
         box.innerHTML = '<p class="kk-lead"><strong>E-Mail-Adresse bestätigt.</strong> Dein PDF wird heruntergeladen. <a href="' + esc(d.url) + '">Nicht gestartet?</a></p>' +
           '<h2>So geht es weiter</h2><ol>' +
           '<li><strong>Abschicken:</strong> ' + weg + ' Eintreffen muss die Kündigung bis ' + esc(d.deadline) + '.</li>' +
