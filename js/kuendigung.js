@@ -157,7 +157,9 @@
       : 'Hiermit kündige ich meine obligatorische Krankenpflegeversicherung nach KVG') +
       ' fristgerecht auf den ' + END + (more.length ? ':' : '.')];
     more.forEach(function (m) { body.push('- ' + m); });
-    if ($('kd-zusatz').checked) body.push('', 'Die Zusatzversicherungen sind von dieser Kündigung nicht betroffen und laufen weiter.');
+    var zusatz = (document.querySelector('input[name="kd-zusatz"]:checked') || {}).value;
+    if (zusatz === 'behalten') body.push('', 'Meine Zusatzversicherungen sind von dieser Kündigung nicht betroffen und laufen weiter.');
+    if (zusatz === 'kuendigen') body.push('', 'Zusätzlich kündige ich meine Zusatzversicherungen nach VVG auf den nächstmöglichen Termin.');
     body.push('', 'Bitte bestätigen Sie mir den Eingang der Kündigung schriftlich.');
     return {
       kasse: k, name: name,
@@ -331,9 +333,15 @@
       function () { $('kd-copy').textContent = 'Bitte markieren und kopieren'; });
   };
 
-  ['kd-kasse', 'kd-name', 'kd-nr', 'kd-street', 'kd-city', 'kd-more', 'kd-zusatz'].forEach(function (id) {
+  ['kd-kasse', 'kd-name', 'kd-nr', 'kd-street', 'kd-city', 'kd-more'].forEach(function (id) {
     $(id).addEventListener('input', render);
     $(id).addEventListener('change', render);
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('input[name="kd-zusatz"]'), function (r) {
+    r.addEventListener('change', function () {
+      $('kd-zusatz-warn').hidden = !document.querySelector('input[name="kd-zusatz"][value="kuendigen"]').checked;
+      render();
+    });
   });
   render();
 })();

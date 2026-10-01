@@ -1112,8 +1112,15 @@ def award_strip(i):
     mine = [a for a in AWARDS if a["insurer"] == i]
     if not mine:
         return ""
-    imgs = "".join(f'<a href="{AWARD_PATH}#{a["id"]}"><img src="{award_badge_url(a["id"], "-quer")}" alt="{e(a["alt"])}" width="248" height="72" loading="lazy"></a>' for a in mine)
-    return f'<div class="kk-awardrow">{imgs}</div>'
+    # Gesamtwertung und Kategorien als Badge, Kantonssiege nur gezählt
+    show = [a for a in mine if a["group"] != "Kantone"]
+    kant = [a for a in mine if a["group"] == "Kantone"]
+    if not show:
+        show, kant = kant[:1], kant[1:]
+    imgs = "".join(f'<a href="{AWARD_PATH}#{a["id"]}"><img src="{award_badge_url(a["id"], "-quer")}" alt="{e(a["alt"])}" width="248" height="72" loading="lazy"></a>' for a in show[:3])
+    more = (f'<div class="kk-rnote">Dazu Sieger in {len(kant)} {"Kanton" if len(kant) == 1 else "Kantonen"}. '
+            f'<a href="{AWARD_PATH}">Alle Auszeichnungen</a></div>') if kant else ""
+    return f'<div class="kk-awardrow">{imgs}</div>{more}'
 
 
 def award_page():
@@ -1212,24 +1219,27 @@ def kasse_page(i, cur, by_canton_cur, prev_idx, insurers, ic, top3_cur, kv):
     cants = sorted({r["canton"] for r in own} & set(CANTONS), key=lambda c: CANTONS[c][0])
     info = insurers.get(i)
 
+    # Eine Beispielperson für die ganze Tabelle, damit jede Zahl dasselbe meint:
+    # Erwachsene, Franchise 300, mit Unfall, Prämienregion 1 des Kantons.
     rows, first_in = [], []
     for c in cants:
-        main = main_region(by_canton_cur[c], c)
-        rk = ranking(by_canton_cur[c], c, main, 2500, prev_idx, n=999)
+        reg = main_region(by_canton_cur[c], c)
+        mine = [r for r in by_canton_cur[c] if r["insurer_id"] == i and r["region"] == reg and r["franchise"] == 300]
+        std = min((r for r in mine if r["model_type"] == "standard"), key=lambda r: r["premium"], default=None)
+        before = tariff_match(prev_idx, std, 300) if std else None
+        chg = (std["premium"] / before - 1) * 100 if std and before else None
+        rk = ranking(by_canton_cur[c], c, reg, 300, prev_idx, n=999)
         pos = next((n for n, x in enumerate(rk, 1) if x["insurer_id"] == i), None)
-        v = ic.get((c, i))
-        chg = sum(x for _, x in v) / len(v) * 100 if v else None
-        lvl = sum(p for p, _ in v) / len(v) if v else None
         if pos == 1:
             first_in.append(c)
         best = rk[pos - 1] if pos else None
         rows.append(
             f'<tr><td><a href="/krankenkasse/{CANTONS[c][1]}/">{e(CANTONS[c][0])}</a></td>'
-            f'<td class="num">{"CHF " + chf(lvl, 0) if lvl else "–"}</td>'
-            f'<td class="num {"kk-up" if (chg or 0) > 0 else "kk-down"}">{pct(chg) if chg is not None else "–"}</td>'
-            f'<td>{("CHF " + chf(best["premium"])) if best else "–"}'
-            f'{("<span class=sub>" + MODEL_LABEL[best["model"]] + " · " + e(best["tariff"]) + "</span>") if best else ""}</td>'
-            f'<td class="num">{f"{pos} / {len(rk)}" if pos else "–"}</td></tr>')
+            f'<td class="num">{"CHF " + chf(std["premium"]) if std else "–"}'
+            f'{("<span class=sub>" + pct(chg) + " zu " + str(PREV) + "</span>") if chg is not None else ""}</td>'
+            f'<td class="num">{("CHF " + chf(best["premium"])) if best and best["model"] != "standard" else "–"}'
+            f'{("<span class=sub>" + MODEL_LABEL[best["model"]] + "</span>") if best and best["model"] != "standard" else ""}</td>'
+            f'<td class="num">{f"{pos}. von {len(rk)}" if pos else "–"}</td></tr>')
 
     # Modellwechsel innerhalb der Kasse: Standard gegen günstigstes anderes Modell
     by_reg = defaultdict(list)
@@ -1271,25 +1281,35 @@ def kasse_page(i, cur, by_canton_cur, prev_idx, insurers, ic, top3_cur, kv):
     p.append(f'<div class="article-meta">Offizielle Prämien des BAG · {len(cants)} {"Kanton" if len(cants) == 1 else "Kantone"}'
              f'{" · rund " + people(info["bestand"]) + " Versicherte" if info and info["bestand"] >= 1000 else ""}</div>')
     if chg is not None:
-        p.append(f'<p class="kk-lead">{e(name)} erhöht die Prämie im Standardmodell {YEAR} im Schnitt um <strong>{pct(chg)}</strong> '
-                 f'(Erwachsene, Franchise 300, gewichtet nach Versicherten je Kanton). Das ist {rel} die {BAG_OFFICIAL["change_pct"]:.1f}&#8239;%, '
-                 f'um die laut BAG die mittlere Prämie über alle Kassen steigt.</p>')
+        tip_chg = ('<span class="tip" tabindex="0" aria-label="Info">i<span>Standardmodell, Erwachsene, Franchise 300, mit Unfall. '
+                   'Schnitt über alle Kantone, gewichtet nach Versicherten. Der Schnitt aller Kassen ist die mittlere Prämie laut BAG.</span></span>')
+        verb = (f"im Schnitt <strong>{pct(chg, sign=False)}</strong> teurer" if chg >= 0
+                else f"im Schnitt <strong>{pct(-chg, sign=False)}</strong> günstiger")
+        p.append(f'<p class="kk-lead">{e(name)} wird {YEAR} {verb}. '
+                 f'Alle Kassen zusammen: {pct(BAG_OFFICIAL["change_pct"])}.{tip_chg}</p>')
     facts = []
     if chg is not None:
-        facts.append((pct(chg), f"Standardprämie {YEAR} gegenüber {PREV}"))
-    facts.append((f"{t3} von 26", "Kantonen, in denen die Kasse zu den 3 günstigsten im Standardmodell gehört"))
+        facts.append((pct(chg), f"gegenüber {PREV}"))
+    facts.append((f"{t3} von 26", 'Kantonen unter den 3 günstigsten<span class="tip" tabindex="0" aria-label="Info">i<span>'
+                  'Standardmodell, Erwachsene, Franchise 300, in Region 1 jedes Kantons.</span></span>'))
     if gap and gap > 0:
-        facts.append((f"CHF {chf(gap, 0)}", f"pro Jahr spart im Median, wer bei {e(name)} vom Standard- ins günstigste andere Modell wechselt"))
+        facts.append((f"CHF {chf(gap, 0)}", f'pro Jahr weniger mit einem Sparmodell bei {e(name)}<span class="tip" tabindex="0" aria-label="Info">i<span>'
+                      'Hausarzt, HMO oder Telmed statt Standardmodell, gleiche Leistungen. Median über alle Regionen, Franchise 2\'500.</span></span>'))
     p.append('<div class="kk-facts">' + "".join(
         f'<div class="kk-fact"><div class="kk-fact-val">{v}</div><div class="kk-fact-label">{l}</div></div>' for v, l in facts) + "</div>")
     p.append(f'<a class="kk-cta" href="/?kasse={i}#kk-rechner">Mit deiner {e(name)}-Rechnung vergleichen &rarr;</a>')
     p.append(rating_kasse_card(i))
 
     p.append(f"<h2>{e(name)} {YEAR} in jedem Kanton</h2>")
-    p.append(f"<p>Ø Standard und Veränderung: Standardmodell, Franchise 300, mit Unfall, Mittel über die Prämienregionen. "
-             f"Günstigster Tarif und Rang: Franchise 2'500, mit Unfall, alle Modelle, Hauptregion des Kantons, Rang unter allen Kassen.</p>")
-    p.append(f'<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Kanton</th><th class="num">Ø Standard</th>'
-             f'<th class="num">vs. {PREV}</th><th>Günstigster Tarif</th><th class="num">Rang</th></tr></thead>'
+    tip_reg = ('<span class="tip" tabindex="0" aria-label="Info">i<span>Viele Kantone haben zwei oder drei Prämienregionen. '
+               'Wir zeigen Region 1, meist die Städte. Auf dem Land ist es oft etwas günstiger. Deine genaue Prämie zeigt der Rechner.</span></span>')
+    tip_spar = ('<span class="tip" tabindex="0" aria-label="Info">i<span>Hausarzt, HMO oder Telmed: Du gehst zuerst zur Hausärztin, '
+                'in die HMO-Praxis oder rufst an. Die Leistungen sind gleich wie im Standardmodell.</span></span>')
+    tip_platz = ('<span class="tip" tabindex="0" aria-label="Info">i<span>Rang des günstigsten Angebots von ' + e(name) +
+                 ' unter allen Kassen im Kanton. 1 heisst: niemand ist günstiger.</span></span>')
+    p.append(f"<p>Beispiel: <strong>Erwachsene Person, Franchise 300, mit Unfall</strong>, Prämie pro Monat.{tip_reg}</p>")
+    p.append(f'<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Kanton</th><th class="num">Standardmodell</th>'
+             f'<th class="num">Günstigstes Sparmodell{tip_spar}</th><th class="num">Platz{tip_platz}</th></tr></thead>'
              f'<tbody>{"".join(rows)}</tbody></table></div>')
     if first_in:
         p.append(f"<p>Am günstigsten von allen Kassen ist {e(name)} {YEAR} in: "
@@ -1320,7 +1340,7 @@ def kasse_page(i, cur, by_canton_cur, prev_idx, insurers, ic, top3_cur, kv):
                    f"Versicherten je Kanton. Laut BAG steigt die mittlere Prämie aller Kassen um {BAG_OFFICIAL['change_pct']:.1f} Prozent."))
     qa.append((f"Ist {name} günstig?",
                f"{name} gehört {YEAR} in {t3} von 26 Kantonen zu den drei günstigsten Kassen im Standardmodell"
-               + (f" und ist in {len(first_in)} {'Kanton' if len(first_in) == 1 else 'Kantonen'} die günstigste Kasse überhaupt (Franchise 2'500)." if first_in else ".")
+               + (f" und ist in {len(first_in)} {'Kanton' if len(first_in) == 1 else 'Kantonen'} die günstigste Kasse überhaupt (Franchise 300, mit Unfall)." if first_in else ".")
                + " Wie günstig es für dich ist, hängt von Wohnort, Franchise und Modell ab."))
     qa.append((f"Bis wann kann ich {name} kündigen?",
                f"Die Kündigung muss bis am {DEADLINE} bei {name} eingetroffen sein, dann wechselst du auf den 1. Januar {YEAR}. "
@@ -1368,6 +1388,15 @@ KUENDIGEN_CSS = """
   .kd-form .full { grid-column:1 / -1; }
   .kd-check { display:flex; gap:8px; align-items:flex-start; font-size:14px; color:var(--text2); }
   .kd-check input { width:auto; margin-top:4px; }
+  .kd-zusatz { border:0; padding:0; margin:0; display:flex; flex-direction:column; gap:8px; }
+  .kd-zusatz legend { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); margin-bottom:8px; }
+  .kd-form .kd-zusatz .kd-check { text-transform:none; letter-spacing:0; font-size:15px; font-weight:500; color:var(--text); margin:0; }
+  .kd-reco { font-size:11px; font-weight:700; color:var(--green); background:rgba(22,163,74,.1); border-radius:999px; padding:1px 8px; margin-left:4px; white-space:nowrap; }
+  .kd-warn { font-size:14px; line-height:1.5; color:var(--text2); background:rgba(234,88,12,.07); border-left:3px solid var(--orange); border-radius:8px; padding:12px 14px; }
+  .kd-warn a { color:var(--accent-dark); }
+  .kd-ctas { display:flex; flex-wrap:wrap; align-items:center; gap:8px 20px; margin:8px 0 24px; }
+  .kd-ctas .kk-cta { margin:0; }
+  .kd-cta-sec { color:var(--accent-dark) !important; font-weight:600; }
   #kd-brief { background:#fff; color:#111; border:1px solid var(--border2); border-radius:8px; padding:32px 36px; font-family:Arial,Helvetica,sans-serif; font-size:14px; line-height:1.55; white-space:pre-wrap; margin:12px 0; }
   .kd-actions { display:flex; gap:10px; flex-wrap:wrap; }
   .kd-actions button { background:var(--accent); color:var(--text); border:none; border-radius:10px; padding:12px 18px; font-weight:700; cursor:pointer; font-family:inherit; }
@@ -1455,7 +1484,8 @@ def kuendigen_page(kv):
          "Bei Zusatzversicherungen ist das anders."),
         ("Was passiert mit meiner Zusatzversicherung?",
          "Nichts, wenn du sie nicht selbst kündigst. Die Zusatzversicherung kann bei der bisherigen Kasse bleiben, auch wenn du "
-         "die Grundversicherung wechselst. Für sie gelten eigene Fristen im Vertrag."),
+         "die Grundversicherung wechselst. Für sie gelten eigene Fristen im Vertrag. Ein Wechsel lohnt sich selten: Die neue Kasse "
+         "darf Gesundheitsfragen stellen und Vorbehalte machen. Berater empfehlen ihn trotzdem oft, weil sie dafür Provision erhalten."),
         ("Kann ich auch auf Ende Juni wechseln?",
          "Nur im Standardmodell mit Franchise 300. Dann muss die Kündigung bis 31. März eintreffen, der Wechsel gilt ab 1. Juli."),
     ]
@@ -1465,15 +1495,16 @@ def kuendigen_page(kv):
 <div class="article-meta">Grundversicherung auf den 1. Januar {YEAR} wechseln · Brief in 2 Minuten</div>
 <p class="kk-lead">Die Kündigung der Grundversicherung muss bis am <strong>{DEADLINE}</strong> bei deiner Kasse <strong>eingetroffen</strong> sein. Der Poststempel zählt nicht. <span id="kd-left"></span></p>
 <div id="wechsel" class="kd-wechsel" hidden></div>
-<a class="kk-cta" id="kd-compare" href="/#kk-rechner">Zuerst vergleichen: lohnt sich der Wechsel? &rarr;</a>
+<div class="kd-ctas"><a class="kk-cta" href="#vorlage">Kündigung jetzt erstellen &darr;</a><a class="kd-cta-sec" id="kd-compare" href="/#kk-rechner">Zuerst vergleichen: lohnt sich der Wechsel? &rarr;</a></div>
 
 <h2>So wechselst du in vier Schritten</h2>
 <ol>
 <li><strong>Neue Kasse wählen</strong> und dort für den 1. Januar {YEAR} anmelden. Sie muss dich ohne Gesundheitsfragen aufnehmen.</li>
-<li><strong>Bisherige Kasse kündigen</strong>, mit dem Brief unten. Unterschreiben nicht vergessen.</li>
+<li><strong>Bisherige Kasse kündigen, direkt hier:</strong> Im <a href="#vorlage">Kündigungs-Editor</a> wählst du deine Kasse, gibst Name und Adresse ein und unterschreibst mit Maus oder Finger. Den Brief mit der richtigen Adresse lädst du als PDF herunter.</li>
 <li><strong>Abschicken:</strong> per Mail, wenn deine Kasse das annimmt (steht beim Brief), sonst per Post, spätestens eine Woche vor dem {DEADLINE}. Ein Einschreiben ist nicht Pflicht, beweist aber den Eingang.</li>
 <li><strong>Bestätigung abwarten.</strong> Die neue Kasse bestätigt dir und der alten Kasse schriftlich, dass du bei ihr versichert bist. Bis dahin bleibt die alte Versicherung bestehen, du bist also nie ohne Schutz.</li>
 </ol>
+<a class="kk-cta" href="#vorlage">Zum Kündigungs-Editor &darr;</a>
 <p>Wichtig: Wer bis 31. Dezember noch offene Prämien oder Kostenbeteiligungen bei der bisherigen Kasse hat, kann nicht wechseln. Offene Rechnungen vorher bezahlen.</p>
 
 <h2 id="vorlage">Kündigungsbrief erstellen</h2>
@@ -1485,7 +1516,12 @@ def kuendigen_page(kv):
   <div><label for="kd-street">Strasse und Nr.</label><input id="kd-street" autocomplete="street-address"></div>
   <div><label for="kd-city">PLZ und Ort</label><input id="kd-city" autocomplete="address-level2" placeholder="8004 Zürich"></div>
   <div class="full"><label for="kd-more">Kinder im selben Brief <span style="text-transform:none;font-weight:400;">(optional, eine Person pro Zeile, mit Geburtsdatum)</span></label><textarea id="kd-more" rows="2" placeholder="Anna Muster, 12.03.2015"></textarea><div class="kd-hint">Erwachsene kündigen je selbst, mit eigenem Brief und eigener Unterschrift. Das verlangen mehrere Kassen.</div></div>
-  <label class="kd-check full"><input type="checkbox" id="kd-zusatz" checked> Zusatzversicherungen behalten (nur die Grundversicherung kündigen)</label>
+  <fieldset class="kd-zusatz full"><legend>Zusatzversicherung bei dieser Kasse <span class="tip" tabindex="0" aria-label="Info">i<span>Eine Zusatzversicherung zu wechseln lohnt sich selten. Die neue Kasse darf Gesundheitsfragen stellen, Vorbehalte machen oder dich ablehnen, und mit dem Alter wird der Einstieg teurer. Berater drängen trotzdem oft dazu, weil sie dafür bis zu 16 Monatsprämien Provision erhalten. <a href="/blog/provisionen-zusatzversicherung/">Mehr dazu</a></span></span></legend>
+    <label class="kd-check"><input type="radio" name="kd-zusatz" value="keine"> Habe ich nicht</label>
+    <label class="kd-check"><input type="radio" name="kd-zusatz" value="behalten" checked> Behalten, nur die Grundversicherung kündigen <span class="kd-reco">empfohlen</span></label>
+    <label class="kd-check"><input type="radio" name="kd-zusatz" value="kuendigen"> Auch kündigen</label>
+    <div class="kd-warn" id="kd-zusatz-warn" hidden><strong>Gut überlegen.</strong> Eine Zusatzversicherung zu wechseln lohnt sich selten. Die neue Kasse darf Gesundheitsfragen stellen, Vorbehalte machen oder dich ablehnen, und mit dem Alter wird der Einstieg teurer. Berater drängen trotzdem oft dazu, weil sie dafür bis zu 16 Monatsprämien Provision erhalten. Zudem gelten eigene Fristen, oft drei Monate auf Ende Jahr. Dann ist es für {YEAR} schon zu spät und die Kündigung gilt erst auf den nächstmöglichen Termin. Kündige die Zusatzversicherung erst, wenn die neue schriftlich zugesagt hat. <a href="/blog/provisionen-zusatzversicherung/">Warum Berater zum Wechsel drängen</a></div>
+  </fieldset>
 </div>
 <div class="kd-sign">
   <label for="kd-pad">Unterschrift</label>

@@ -417,3 +417,10 @@ footer > div { max-width: 1000px; }
    zeigt das, ohne die Tabellen in Linkfarbe zu tauchen. */
 a.kasse-link { color: inherit; text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 2px; text-underline-offset: 4px; }
 a.kasse-link:hover { color: var(--accent-dark); }
+
+/* Info-Punkt «i»: Erklärung erscheint beim Hovern oder Antippen (tabindex). */
+.tip { position:relative; display:inline-flex; align-items:center; justify-content:center; width:17px; height:17px; border-radius:50%; background:var(--surface2); color:var(--muted); font-size:11px; font-weight:700; font-style:normal; text-transform:none; letter-spacing:0; line-height:1; cursor:help; vertical-align:middle; margin-left:4px; }
+.tip > span { display:none; position:absolute; z-index:30; bottom:calc(100% + 8px); left:50%; transform:translateX(-50%); width:min(280px, 80vw); background:var(--dark); color:#fff; font-size:13px; font-weight:400; line-height:1.5; text-align:left; padding:10px 12px; border-radius:8px; box-shadow:0 6px 20px rgba(0,0,0,.18); }
+.tip > span a { color:var(--accent); }
+.tip:hover > span, .tip:focus > span, .tip:focus-within > span { display:block; }
+@media (max-width:600px) { .tip > span { left:auto; right:-10px; transform:none; } }
