@@ -20,6 +20,7 @@ abovergleich.com hilft beim Sparen auf der Grundversicherung. Die Leistungen sin
 - [Alle Krankenkassen 2027](https://abovergleich.com/kasse/): Prämienveränderung je Kasse, Seite pro Kasse mit Kantonen, Modellen und Kündigungsadresse.
 - [Preistreue-Rating 2027](https://abovergleich.com/krankenkassen-rating/): Note 0 bis 10 je Kasse aus BAG-Prämien seit 2020: Preis, Konstanz unter den günstigsten, Aufschläge, Rabatt-Treue neuer Sparmodelle, Tarif-Bestand, Reserven.
 - [Preistreue-Award 2027](https://abovergleich.com/krankenkassen-rating/award/): Gesamtsieger, Kategoriensieger und Sieger je Kanton, mit Regeln.
+- [Verwaltungskosten der Krankenkassen](https://abovergleich.com/blog/verwaltungskosten-krankenkassen/): Verwaltung, Werbung und Vermittler-Provisionen je Kasse (BAG), mit Reserven und Preistreue-Note.
 - [Krankenkasse kündigen](https://abovergleich.com/krankenkasse-kuendigen/): Frist 30. November 2026, Kündigungs-Editor mit Unterschrift und PDF, Kündigungsweg (Mail oder Post) und Adresse jeder Kasse laut BAG.
 - [Hausrat & Haftpflicht](https://abovergleich.com/hausratversicherung/): Bedarfsrechner und Anbieter-Vergleich.
 - [Unsere Methode](https://abovergleich.com/methode/): Wie wir vergleichen und warum wir keine Telefonnummern verlangen.

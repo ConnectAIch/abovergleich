@@ -973,7 +973,7 @@ def rating_kasse_card(i):
                   if vd["ohne_personal"] else "")) if vd else ""
         adm_html = (f'<p class="kk-rnote">Verwaltungskosten {last}: <strong>CHF {v:.0f}</strong> pro versicherte Person '
                     f'(Schnitt aller Kassen CHF {m:.0f})'
-                    + (f', {first}: CHF {adm[first]["verwaltung"]:.0f}' if first != last else "") + f'.{det} Quelle: BAG.</p>')
+                    + (f', {first}: CHF {adm[first]["verwaltung"]:.0f}' if first != last else "") + f'.{det} Quelle: BAG. <a href="{BLOG_VERWALTUNG}">Alle Kassen im Vergleich</a></p>')
     hint = ""
     big_note, label = n["note"], f"Preistreue-Rating {YEAR}"
     if home:
@@ -1122,7 +1122,7 @@ def rating_page(r):
 <p>Rabatt gegenüber dem Standardmodell derselben Kasse, Franchise 2'500, Median. Dieselben Tarife vom Startjahr bis {YEAR} verfolgt. Wer in ein neues Modell wechselt und bleibt, zahlt also Jahr für Jahr etwas mehr als beim Standard. Die Teilnote «Rabatt-Treue» misst, wie stark das bei jeder Kasse passiert.</p>
 
 <h2>Verwaltungskosten: wer viel für sich selbst ausgibt</h2>
-<p>Das BAG veröffentlicht für jede Kasse, was sie pro versicherte Person für die Verwaltung der Grundversicherung ausgibt: Löhne, Informatik, Werbung und Provisionen. Werbung und Provisionen an Vermittler weist es separat aus. Die Zahl fliesst nicht in die Note ein, weil sie schon im Preis steckt, aber sie zeigt, wo Prämiengeld hängen bleibt. Schnitt aller Kassen {a1}: <strong>CHF {mk[a1]:.0f}</strong>.</p>
+<p>Das BAG veröffentlicht für jede Kasse, was sie pro versicherte Person für die Verwaltung der Grundversicherung ausgibt: Löhne, Informatik, Werbung und Provisionen. Werbung und Provisionen an Vermittler weist es separat aus. Die Zahl fliesst nicht in die Note ein, weil sie schon im Preis steckt, aber sie zeigt, wo Prämiengeld hängen bleibt. Schnitt aller Kassen {a1}: <strong>CHF {mk[a1]:.0f}</strong>. <a href="{BLOG_VERWALTUNG}">Mehr dazu: was jede Kasse für Werbung und Vermittler ausgibt &rarr;</a></p>
 <div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Kasse</th><th class="num">{a0}</th><th class="num">{a1}</th><th class="num">Veränderung</th><th class="num">Werbung {vjahr}</th><th class="num">Provisionen {vjahr}</th></tr></thead><tbody>{adm_html}</tbody></table></div>
 <p class="kk-note">Pro versicherte Person und Jahr, nur Grundversicherung. Gesamtkosten aus den Aufsichtsdaten des BAG, Werbung und Provisionen aus der BAG-Auswertung der Verwaltungskosten. ¹ {GRUPPE_HINWEIS}. Der Gesamtbetrag ist trotzdem vergleichbar.</p>
 
@@ -1766,6 +1766,94 @@ def pickup_page():
     return path, html_out.replace("</style>", "  .kp-btn { border:none; cursor:pointer; font-family:inherit; font-size:16px; }\n  .kp-btn:disabled { opacity:.6; }\n  .kp-list { margin:8px 0 8px 18px; }\n  .kp-list li { margin:2px 0; }\n</style>", 1)
 
 
+# Werbung und Provisionen aller Kassen in der Grundversicherung, Mio. CHF.
+# Summe aus der BAG-Auswertung Verwaltungskosten (Jahresrechnung definitiv,
+# OKP CH), mit fusionierten Kassen zusammengezählt wie in der BAG-Pivot.
+# Deckt sich mit moneyland (Okt. 2024) und Handelszeitung (Sept. 2025).
+MARKT_WERBUNG = {2020: 60.3, 2021: 62.4, 2022: 72.6, 2023: 80.0, 2024: 73.3, 2025: 74.1}
+MARKT_PROVISIONEN = {2020: 60.4, 2021: 48.1, 2022: 48.4, 2023: 59.0, 2024: 49.9, 2025: 32.6}
+BLOG_VERWALTUNG = "/blog/verwaltungskosten-krankenkassen/"
+
+
+def blog_verwaltung_page():
+    """Blog: Verwaltungskosten, Werbung und Provisionen je Kasse. Jede Zahl
+    kommt aus den BAG-Dateien, nichts ist von Hand übertragen."""
+    path = BLOG_VERWALTUNG
+    nat = RATING["national"]
+    adm = RATING["verwaltung"]["kassen"]
+    mk = RATING["verwaltung"]["markt_verwaltung"]
+    big = [i for i in nat if not nat[i]["regional"] and nat[i]["note"] is not None and adm.get(str(i))]
+    last = max(mk)
+    first = min(mk)
+    def v(i, y=None):
+        d = adm[str(i)]
+        return d.get(y or max(d), {}).get("verwaltung")
+    rows = sorted(big, key=lambda i: v(i, last) or 999)
+    vj = max((vdet(i)[0] for i in big if vdet(i)[0]), default="")
+    tot_n = sum(adm[str(i)][last]["bestand"] for i in adm if last in adm[str(i)])
+    tot_p = sum(adm[str(i)][last]["bestand"] * adm[str(i)][last]["praemie"] for i in adm if last in adm[str(i)])
+    share = mk[last] / (tot_p / tot_n) * 100
+    lo, hi = rows[0], rows[-1]
+    wb = max(big, key=lambda i: (vdet(i)[1] or {}).get("werbung", 0))
+    pv = max(big, key=lambda i: (vdet(i)[1] or {}).get("provisionen", 0))
+    def prov_years(i):
+        d = VDET.get(str(i)) or {}
+        ys = sorted(d)[-2:]
+        return [d[y]["provisionen"] for y in ys] if len(ys) == 2 else None
+    # «praktisch keine Provisionen» nur bei zwei Jahren in Folge unter CHF 2 und eigenem Personal,
+    # sonst kann eine Umbuchung in den Betriebsaufwand dahinterstecken
+    pv0 = [i for i in big if prov_years(i) and max(prov_years(i)) < 2 and not (vdet(i)[1] or {}).get("ohne_personal")]
+    fus = [i for i in big if adm[str(i)][last].get("bestand", 0) < 50_000]
+    grow = sorted((i for i in big if v(i, first)), key=lambda i: v(i, last) / v(i, first))
+    sol = lambda i: nat[i]["raw"].get("solvenz")
+    thin = [i for i in big if (v(i, last) or 0) > mk[last] and (sol(i) or 999) < 130]
+    flag = lambda i: (vdet(i)[1] or {}).get("ohne_personal")
+    ch = lambda a, b: f"{(b / a - 1) * 100:+.0f}".replace("-", "−") + "&#8239;%"
+    nm = lambda i: e(nat[i]["name"])
+
+    trs = "".join(
+        f'<tr><td>{kasse_link(i)}{"&nbsp;¹" if flag(i) else ""}{"&nbsp;²" if i in fus else ""}</td><td class="num"><strong>CHF {v(i, last):.0f}</strong></td>'
+        f'<td class="num">{ch(v(i, first), v(i, last)) if v(i, first) else "–"}</td>'
+        f'<td class="num">{("CHF " + format((vdet(i)[1] or {}).get("werbung", 0), ".0f")) if vdet(i)[1] else "–"}</td>'
+        f'<td class="num">{("CHF " + format((vdet(i)[1] or {}).get("provisionen", 0), ".0f")) if vdet(i)[1] else "–"}</td>'
+        f'<td class="num">{(format(sol(i), ".0f") + "&#8239;%") if sol(i) else "–"}</td>'
+        f'<td class="num">{note_fmt(nat[i]["note"])}</td></tr>' for i in rows)
+    mrows = "".join(f'<tr><td>{y}</td><td class="num">{MARKT_WERBUNG[y]:.1f}</td><td class="num">{MARKT_PROVISIONEN[y]:.1f}</td></tr>'.replace(".", ",")
+                    for y in sorted(MARKT_WERBUNG))
+    title = "Verwaltungskosten der Krankenkassen: was jede Kasse ausgibt"
+    desc = (f"Verwaltung, Werbung und Vermittler-Provisionen je Krankenkasse in der Grundversicherung, "
+            f"mit Reserven und Preistreue-Note. Alle Zahlen vom BAG.")
+    body = f"""{crumbs_html([("Krankenkassen-Vergleich", "/"), ("Ratgeber", "/blog/"), ("Verwaltungskosten", path)])}
+<div class="article-badge">Hintergrund</div>
+<h1>Was die Krankenkassen für Verwaltung, Werbung und Vermittler ausgeben</h1>
+<div class="article-meta">Grundversicherung · Zahlen des BAG · Lesezeit: 4 Min.</div>
+<p class="kk-lead">Im Schnitt kostet die Verwaltung der Grundversicherung <strong>CHF {mk[last]:.0f} pro versicherte Person und Jahr</strong> ({last}), rund {share:.0f}&#8239;% der Prämie. Dahinter stecken grosse Unterschiede: von CHF {v(lo, last):.0f} bei {nm(lo)} bis CHF {v(hi, last):.0f} bei {nm(hi)}. Für Werbung gaben alle Kassen zusammen {vj} CHF {MARKT_WERBUNG[int(vj)]:.0f} Mio. aus, für Provisionen an Vermittler CHF {MARKT_PROVISIONEN[int(vj)]:.0f} Mio.</p>
+
+<h2>Verwaltungskosten je Kasse</h2>
+<p>Kassen mit mindestens 50'000 Versicherten, pro versicherte Person und Jahr. Verwaltung {last} mit Veränderung seit {first}, Werbung und Provisionen {vj}, dazu die Solvenzquote (Reserven im Verhältnis zum gesetzlichen Minimum) und die Note im <a href="{RATING_PATH}">Preistreue-Rating</a>.</p>
+<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Kasse</th><th class="num">Verwaltung {last}</th><th class="num">seit {first}</th><th class="num">Werbung {vj}</th><th class="num">Provisionen {vj}</th><th class="num">Solvenz</th><th class="num">Preistreue</th></tr></thead><tbody>{trs}</tbody></table></div>
+<p class="kk-note">¹ Ohne eigenes Personal: Die Kasse kauft ihre Verwaltung als Gebühr bei einer Konzern- oder Partnerfirma ein. Der Gesamtbetrag ist vergleichbar, wie er sich auf die Kassen eines Konzerns verteilt, bestimmt aber der Konzern.{(" ² Die Zahlen stammen aus einer Zeit, als die Kasse noch unter 50'000 Versicherte hatte. Seither ist sie gewachsen oder hat mit einer anderen Kasse fusioniert.") if fus else ""}</p>
+
+<h2>Werbung und Vermittler</h2>
+<p>Am meisten pro Kopf für Werbung gibt {nm(wb)} aus: CHF {vdet(wb)[1]["werbung"]:.0f} pro versicherte Person ({vj}). Bei den Provisionen an Vermittler liegt {nm(pv)} vorne, mit CHF {vdet(pv)[1]["provisionen"]:.0f} pro Kopf. {"Praktisch keine Provisionen, zwei Jahre in Folge unter CHF 2 pro Kopf, zahlen " + " und ".join([", ".join(nm(i) for i in pv0[:-1]), nm(pv0[-1])] if len(pv0) > 1 else [nm(pv0[0])]) + "." if pv0 else ""}</p>
+<p>In der Grundversicherung ist die Provision gedeckelt: höchstens CHF 70 pro Abschluss, seit 1. September 2024 verbindlich für alle Kassen. Das zeigt sich in den Zahlen:</p>
+<div class="kk-table-wrap"><table class="kk-table" style="min-width:0;"><thead><tr><th>Jahr</th><th class="num">Werbung, Mio. CHF</th><th class="num">Provisionen, Mio. CHF</th></tr></thead><tbody>{mrows}</tbody></table></div>
+<p>Bei der Zusatzversicherung ist das anders, dort sind bis zu 16 Monatsprämien Provision erlaubt. Mehr dazu: <a href="/blog/provisionen-zusatzversicherung/">Warum dein Berater dir die Zusatzversicherung verkaufen will</a>.</p>
+
+<h2>Wer seit {first} zulegt und wer spart</h2>
+<p>Den stärksten Anstieg der Verwaltungskosten pro Kopf haben {", ".join(f"{nm(i)} ({ch(v(i, first), v(i, last))})" for i in grow[::-1][:3])}. Gesenkt haben sie {", ".join(f"{nm(i)} ({ch(v(i, first), v(i, last))})" for i in grow[:3] if v(i, last) < v(i, first)) or "nur wenige"}. Der Schnitt aller Kassen stieg von CHF {mk[first]:.0f} auf CHF {mk[last]:.0f}.</p>
+
+<h2>Verwaltung und Reserven zusammen</h2>
+<p>Die Reserven sind das Polster, mit dem eine Kasse teure Jahre abfedert, ohne gleich die Prämien zu erhöhen. {("Überdurchschnittliche Verwaltungskosten bei einer Solvenzquote unter 130&#8239;% haben " + ", ".join(nm(i) for i in thin) + ". Das heisst nicht, dass etwas falsch läuft, aber hier bleibt am wenigsten Spielraum.") if thin else "Keine grosse Kasse kombiniert hohe Verwaltungskosten mit knappen Reserven."} Die Reserven fliessen mit 10&#8239;% in die Preistreue-Note ein, die Verwaltungskosten nicht, weil sie schon im Preis stecken.</p>
+
+<h2>Was heisst das für dich?</h2>
+<p>Die Verwaltung macht nur einen kleinen Teil der Prämie aus, rund {share:.0f}&#8239;%. Zwischen der schlanksten und der teuersten grossen Kasse liegen CHF {v(hi, last) - v(lo, last):.0f} im Jahr. Beim Prämienvergleich sind die Unterschiede meist viel grösser. Entscheidend bleibt, was du bezahlst und ob die Kasse über die Jahre günstig bleibt.</p>
+<a class="kk-cta" href="/#kk-rechner">Prämien vergleichen &rarr;</a>
+
+<p class="kk-note">Quellen: BAG, Aufsichtsdaten der obligatorischen Krankenpflegeversicherung (Verwaltungsaufwand je versicherte Person, {first} bis {last}); BAG, Auswertungen Verwaltungskosten (Werbeaufwand und Provisionen, Jahresrechnung definitiv {vj}); BAG über priminfo.admin.ch, Solvenzquoten per 1.1.2026. Werbung und Provisionen umfassen nur die Grundversicherung.</p>"""
+    return path, page(path, title, desc, body, [breadcrumb([("Krankenkassen-Vergleich", "/"), ("Ratgeber", "/blog/"), ("Verwaltungskosten", path)])])
+
+
 def write_sitemap(paths):
     today = date.today().isoformat()
     static = [("/", "1.0"), ("/hausratversicherung/", "0.9"), ("/methode/", "0.6"),
@@ -1806,6 +1894,7 @@ abovergleich.com hilft beim Sparen auf der Grundversicherung. Die Leistungen sin
 - [Alle Krankenkassen {YEAR}]({SITE}/kasse/): Prämienveränderung je Kasse, Seite pro Kasse mit Kantonen, Modellen und Kündigungsadresse.
 - [Preistreue-Rating {YEAR}]({SITE}/krankenkassen-rating/): Note 0 bis 10 je Kasse aus BAG-Prämien seit 2020: Preis, Konstanz unter den günstigsten, Aufschläge, Rabatt-Treue neuer Sparmodelle, Tarif-Bestand, Reserven.
 - [Preistreue-Award {YEAR}]({SITE}/krankenkassen-rating/award/): Gesamtsieger, Kategoriensieger und Sieger je Kanton, mit Regeln.
+- [Verwaltungskosten der Krankenkassen]({SITE}{BLOG_VERWALTUNG}): Verwaltung, Werbung und Vermittler-Provisionen je Kasse (BAG), mit Reserven und Preistreue-Note.
 - [Krankenkasse kündigen]({SITE}/krankenkasse-kuendigen/): Frist {DEADLINE}, Kündigungs-Editor mit Unterschrift und PDF, Kündigungsweg (Mail oder Post) und Adresse jeder Kasse laut BAG.
 - [Hausrat & Haftpflicht]({SITE}/hausratversicherung/): Bedarfsrechner und Anbieter-Vergleich.
 - [Unsere Methode]({SITE}/methode/): Wie wir vergleichen und warum wir keine Telefonnummern verlangen.
@@ -1943,6 +2032,10 @@ def main():
         path, content = fn()
         write(path, content)
         paths.insert(0, path)
+
+    path, content = blog_verwaltung_page()
+    write(path, content)
+    paths.append(path)
 
     path, content = pickup_page()   # nicht in die Sitemap
     write(path, content)
