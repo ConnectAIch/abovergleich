@@ -37,14 +37,23 @@ function limited(ip: string, max: number) {
 
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
 
-function mail(p: { kasse: string; deadline: string; link: string }) {
+function mail(p: { kasse: string; deadline: string; link: string; kanal: string; ziel: string; neu: string }) {
+  const weg = p.kanal === 'mail' ? `per Mail an ${esc(p.ziel)}`
+    : p.kanal === 'portal' ? `über ${esc(p.ziel)} oder per Post`
+    : `per Post an ${esc(p.kasse)}`;
+  const li = 'margin:0 0 10px;';
   return `<!doctype html><html><body style="margin:0;background:#fafaf9;font-family:Inter,Arial,sans-serif;color:#1c1917;">
 <div style="max-width:520px;margin:0 auto;padding:28px 20px;font-size:15px;line-height:1.6;">
   <div style="font-size:20px;font-weight:800;margin-bottom:18px;">abo<span style="color:#a68600;">vergleich</span>.com</div>
-  <h1 style="font-size:21px;margin:0 0 14px;">Deine Kündigung an ${esc(p.kasse)} ist bereit</h1>
-  <p style="margin:0 0 20px;">Frist: bis <strong>${esc(p.deadline)}</strong> bei der Kasse.</p>
-  <a href="${p.link}" style="display:inline-block;background:#fed001;color:#1c1917;font-weight:700;text-decoration:none;padding:13px 22px;border-radius:10px;">Kündigung herunterladen</a>
-  <p style="font-size:12px;color:#6b6560;margin-top:24px;">Damit bestätigst du auch deine E-Mail-Adresse. Der Link gilt 60 Tage.<br><a href="${SITE}/" style="color:#a68600;">abovergleich.com</a></p>
+  <h1 style="font-size:21px;margin:0 0 16px;">Deine Kündigung an ${esc(p.kasse)} ist bereit</h1>
+  <a href="${p.link}" style="display:inline-block;background:#fed001;color:#1c1917;font-weight:700;text-decoration:none;padding:13px 22px;border-radius:10px;margin-bottom:22px;">Kündigung herunterladen</a>
+  <div style="font-weight:700;margin-bottom:8px;">So wechselst du</div>
+  <ol style="padding-left:20px;margin:0;">
+    <li style="${li}"><strong>Kündigung abschicken</strong> ${weg}. Sie muss bis <strong>${esc(p.deadline)}</strong> dort sein.</li>
+    <li style="${li}"><strong>${p.neu ? `Bei ${esc(p.neu)} anmelden` : 'Bei der neuen Kasse anmelden'}</strong> für den 1. Januar, online in etwa 10 Minuten. Halte deine AHV-Nummer bereit, sie steht auf der Versichertenkarte.</li>
+    <li style="${li}"><strong>Bestätigung abwarten.</strong> Die neue Kasse meldet sich bei der alten, bis dahin bleibst du versichert.</li>
+  </ol>
+  <p style="font-size:12px;color:#6b6560;margin-top:22px;">Der Klick auf den Knopf bestätigt auch deine E-Mail-Adresse. Der Link gilt 60 Tage.<br><a href="${SITE}/" style="color:#a68600;">abovergleich.com</a></p>
 </div></body></html>`;
 }
 
@@ -143,7 +152,8 @@ Deno.serve(async (req) => {
         reply_to: 'hello@handyabo.com',
         to: [email],
         subject: `Deine Kündigung an ${kasse}`,
-        html: mail({ kasse, deadline, link: `${SITE}/krankenkasse-kuendigen/pdf/?t=${doc.token}` }),
+        html: mail({ kasse, deadline, link: `${SITE}/krankenkasse-kuendigen/pdf/?t=${doc.token}`,
+          kanal: String(b.kanal || 'post'), ziel: String(b.ziel || '').slice(0, 120), neu: String(b.neu || '').slice(0, 80) }),
       }),
     });
     if (!res.ok) {

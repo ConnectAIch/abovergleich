@@ -1406,6 +1406,10 @@ KUENDIGEN_CSS = """
   .kd-consent { display:flex; gap:10px; align-items:flex-start; font-size:13px; line-height:1.5; color:var(--text2); margin:4px 0 8px; cursor:pointer; }
   .kd-consent input { width:18px; height:18px; margin-top:2px; flex:0 0 auto; accent-color:var(--accent-dark); }
   .kd-consent a { color:var(--accent-dark); }
+  .kd-done { display:flex; gap:14px; align-items:flex-start; background:rgba(22,163,74,.08); border:2px solid var(--green); border-radius:14px; padding:18px 20px; margin:14px 0; }
+  .kd-done-icon { flex:0 0 36px; height:36px; border-radius:50%; background:var(--green); color:#fff; font-size:20px; font-weight:800; display:flex; align-items:center; justify-content:center; }
+  .kd-done strong { display:block; font-family:'Plus Jakarta Sans',sans-serif; font-size:19px; margin-bottom:4px; }
+  .kd-done p { margin:0; font-size:15px; line-height:1.5; color:var(--text2); }
   .kd-terms { font-size:12px; color:var(--muted); margin:8px 0 0; }
   .kd-terms a { color:var(--muted); }
   .kd-ctas { display:flex; flex-wrap:wrap; align-items:center; gap:8px 20px; margin:8px 0 24px; }
@@ -1549,6 +1553,7 @@ def kuendigen_page(kv):
 <div class="kd-actions"><button id="kd-send">PDF per Mail zuschicken</button><button id="kd-mail" class="sec" hidden>Mail an die Kasse vorbereiten</button><button id="kd-copy" class="sec">Text kopieren</button></div>
 <div class="kd-terms">Mit dem Versand akzeptierst du unseren <a href="/datenschutz/#kuendigung" target="_blank">Datenschutz</a>: Wir speichern deine E-Mail-Adresse und die Angaben zum Wechsel, den Brief nur 60 Tage zum Abholen.</div>
 <div id="kd-msg" class="kd-msg" role="status"></div>
+<div id="kd-done" class="kd-done" hidden></div>
 <div class="kd-preview-label">Vorschau</div>
 <div id="kd-brief"></div>
 

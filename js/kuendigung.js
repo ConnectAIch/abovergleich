@@ -308,7 +308,7 @@
       $('kd-msg').textContent = 'Das hat nicht geklappt. Versuch es nochmals oder nimm «Text kopieren».';
     }).then(function () {
       btn.disabled = false;
-      btn.textContent = label;
+      btn.textContent = btn.id === 'kd-send' && !$('kd-done').hidden ? 'Nochmals senden' : label;
     });
   }
 
@@ -358,11 +358,11 @@
   // Kopie per Mail an die Person selbst, bei jeder Aktion genau einmal pro
   // Fassung des Briefs. Mit Häkchen schaltet sie den Wechsel-Wecker ein.
   var sent = {};
-  function sendCopy(doc, L) {
+  function sendCopy(doc, L, force) {
     var email = val('kd-email'), pr = profile(), k = L.kasse;
     var b64 = doc.output('datauristring').split(',')[1];
     var key = email + '|' + $('kd-wecker').checked + '|' + b64.length + '|' + plain(L).length;
-    if (sent[key]) return sent[key];
+    if (sent[key] && !force) return sent[key];
     sent[key] = fetch('https://zexpmaegqsayleaohiip.supabase.co/functions/v1/kuendigung-pdf', {
       method: 'POST', keepalive: b64.length < 60000, headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -384,9 +384,21 @@
     return 'Mail ist unterwegs an ' + val('kd-email') + '. Klick dort auf «Kündigung herunterladen», damit bestätigst du auch deine Adresse. Nichts da? Schau im Spam-Ordner.';
   }
 
+  // Gut sichtbare Bestätigung statt einer Textzeile
+  function done() {
+    var box = $('kd-done');
+    box.innerHTML = '<div class="kd-done-icon">✓</div><div><strong>Verschickt!</strong>' +
+      '<p>Die Mail ist unterwegs an <b>' + esc(val('kd-email')) + '</b>. Öffne sie und klick auf «Kündigung herunterladen».</p>' +
+      '<p style="font-size:13px;color:var(--muted);margin-top:6px;">Nach 5 Minuten nichts da? Schau im Spam-Ordner nach oder prüf die Adresse oben.</p></div>';
+    box.hidden = false;
+    $('kd-msg').textContent = '';
+    $('kd-send').textContent = 'Nochmals senden';
+    $('kd-send').classList.add('sec');
+    box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
   $('kd-send').onclick = function () {
     withPdf(this, function (doc, L) {
-      return sendCopy(doc, L).then(function (res) { $('kd-msg').textContent = sentText(res); },
+      return sendCopy(doc, L, !$('kd-done').hidden).then(function () { done(); },
         function (err) { $('kd-msg').textContent = (err && err.message !== 'Versand' && err.message) || 'Der Versand hat nicht geklappt. Bitte nochmals versuchen.'; });
     });
   };
