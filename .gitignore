@@ -12,3 +12,4 @@ node_modules/
 supabase/.temp/
 scripts/data/*.xlsx
 !scripts/data/kv_verzeichnis_*.xlsx
+docs/presse/
