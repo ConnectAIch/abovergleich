@@ -870,6 +870,21 @@ AWARDS = []       # Preistreue-Award, in main() aus build_awards.compute() gefü
 AWARD_PATH = "/krankenkassen-rating/award/"
 RATING_PATH = "/krankenkassen-rating/"
 
+# Aufschlüsselung der Verwaltungskosten (scripts/extract_verwaltung.py)
+_VD = DATA / "verwaltung_detail.json"
+VDET = json.loads(_VD.read_text(encoding="utf-8"))["kassen"] if _VD.exists() else {}
+
+
+def vdet(i):
+    """Letztes Jahr der BAG-Aufschlüsselung einer Kasse: (Jahr, Werte) oder (None, None)."""
+    d = VDET.get(str(i)) or {}
+    y = max(d, default=None)
+    return (y, d[y]) if y else (None, None)
+
+
+GRUPPE_HINWEIS = ("ohne eigenes Personal: die Verwaltung wird als Gebühr bei einer Konzern- oder Partnerfirma "
+                  "eingekauft, wie sie sich auf die Konzernkassen verteilt, bestimmt der Konzern")
+
 
 def note_fmt(v):
     return f"{v:.1f}".replace(".", ",") if v is not None else "–"
@@ -913,9 +928,13 @@ def rating_kasse_card(i):
     adm_html = ""
     if last:
         v, m = adm[last]["verwaltung"], mk[last]
+        vy, vd = vdet(i)
+        det = (f' {vy}: Werbung CHF {vd["werbung"]:.0f}, Provisionen an Vermittler CHF {vd["provisionen"]:.0f}.'
+               + (' Die Kasse hat kein eigenes Personal und kauft ihre Verwaltung als Gebühr bei einer Konzern- oder Partnerfirma ein.'
+                  if vd["ohne_personal"] else "")) if vd else ""
         adm_html = (f'<p class="kk-rnote">Verwaltungskosten {last}: <strong>CHF {v:.0f}</strong> pro versicherte Person '
                     f'(Schnitt aller Kassen CHF {m:.0f})'
-                    + (f', {first}: CHF {adm[first]["verwaltung"]:.0f}' if first != last else "") + '. Quelle: BAG, Aufsichtsdaten.</p>')
+                    + (f', {first}: CHF {adm[first]["verwaltung"]:.0f}' if first != last else "") + f'.{det} Quelle: BAG.</p>')
     hint = " Regionalkasse: die Note stützt sich auf wenige Regionen." if n["regional"] else ""
     vn = n.get("varianten") or {}
     var_html = ('<div class="kk-rvar">' + " · ".join(
@@ -959,9 +978,15 @@ def rating_page(r):
         if a1 in d and a0 in d:
             adm_rows.append((d[a1]["verwaltung"], i, d[a0]["verwaltung"]))
     adm_rows.sort()
+    def adm_extra(i):
+        y, d = vdet(i)
+        if not d:
+            return '<td class="num">–</td><td class="num">–</td>'
+        return f'<td class="num">CHF {d["werbung"]:.0f}</td><td class="num">CHF {d["provisionen"]:.0f}</td>'
+    vjahr = max((y for y, _ in (vdet(i) for i in big) if y), default="")
     adm_html = "".join(
-        f'<tr><td>{kasse_link(i)}</td><td class="num">CHF {v0:.0f}</td><td class="num"><strong>CHF {v1:.0f}</strong></td>'
-        f'<td class="num">{pct((v1 / v0 - 1) * 100, sign=True)}</td></tr>' for v1, i, v0 in adm_rows)
+        f'<tr><td>{kasse_link(i)}{"&nbsp;¹" if (vdet(i)[1] or {}).get("ohne_personal") else ""}</td><td class="num">CHF {v0:.0f}</td><td class="num"><strong>CHF {v1:.0f}</strong></td>'
+        f'<td class="num">{pct((v1 / v0 - 1) * 100, sign=True)}</td>{adm_extra(i)}</tr>' for v1, i, v0 in adm_rows)
     cantons = "".join(f'<a href="/krankenkasse/{slug}/">{e(nm)}</a>' for nm, slug in sorted(CANTONS.values()))
 
     method = [
@@ -1043,8 +1068,9 @@ def rating_page(r):
 <p>Rabatt gegenüber dem Standardmodell derselben Kasse, Franchise 2'500, Median. Dieselben Tarife vom Startjahr bis {YEAR} verfolgt. Wer in ein neues Modell wechselt und bleibt, zahlt also Jahr für Jahr etwas mehr als beim Standard. Die Teilnote «Rabatt-Treue» misst, wie stark das bei jeder Kasse passiert.</p>
 
 <h2>Verwaltungskosten: wer viel für sich selbst ausgibt</h2>
-<p>Das BAG veröffentlicht für jede Kasse, was sie pro versicherte Person für die Verwaltung der Grundversicherung ausgibt: Löhne, Informatik, Werbung und Provisionen. Wofür genau, weist es nicht aus. Die Zahl fliesst nicht in die Note ein, weil sie schon im Preis steckt, aber sie zeigt, wo Prämiengeld hängen bleibt. Schnitt aller Kassen {a1}: <strong>CHF {mk[a1]:.0f}</strong>.</p>
-<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Kasse</th><th class="num">{a0}</th><th class="num">{a1}</th><th class="num">Veränderung</th></tr></thead><tbody>{adm_html}</tbody></table></div>
+<p>Das BAG veröffentlicht für jede Kasse, was sie pro versicherte Person für die Verwaltung der Grundversicherung ausgibt: Löhne, Informatik, Werbung und Provisionen. Werbung und Provisionen an Vermittler weist es separat aus. Die Zahl fliesst nicht in die Note ein, weil sie schon im Preis steckt, aber sie zeigt, wo Prämiengeld hängen bleibt. Schnitt aller Kassen {a1}: <strong>CHF {mk[a1]:.0f}</strong>.</p>
+<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Kasse</th><th class="num">{a0}</th><th class="num">{a1}</th><th class="num">Veränderung</th><th class="num">Werbung {vjahr}</th><th class="num">Provisionen {vjahr}</th></tr></thead><tbody>{adm_html}</tbody></table></div>
+<p class="kk-note">Pro versicherte Person und Jahr, nur Grundversicherung. Gesamtkosten aus den Aufsichtsdaten des BAG, Werbung und Provisionen aus der BAG-Auswertung der Verwaltungskosten. ¹ {GRUPPE_HINWEIS}. Der Gesamtbetrag ist trotzdem vergleichbar.</p>
 
 <h2>So rechnen wir</h2>
 <div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Teilnote</th><th class="num">Gewicht</th><th>Was sie misst</th></tr></thead><tbody>{meth_rows}</tbody></table></div>
@@ -1193,6 +1219,8 @@ def award_page():
   <li>Der Award kostet nichts und ist an nichts gekoppelt. Ob eine Kasse das Badge einbindet oder verlinkt, ändert weder Note noch Reihenfolge auf abovergleich.com.</li>
   <li>Ein Link ist keine Bedingung. Der Einbindungscode enthält ihn, weil eine Auszeichnung ohne Beleg wenig wert ist. Wer das Badge ohne Link nutzt, darf das.</li>
   <li>Die Edition ist ein Stichtag: die Prämien {YEAR}. Das Badge {YEAR} behält seine Aussage, auch wenn sich die Note im nächsten Jahr ändert.</li>
+  <li>Gesamtwertung und Kategorien: Kassen mit mindestens 50'000 Versicherten. Bei Gleichstand gewinnen alle. Die Note rechnen wir für vier Situationen (mit oder ohne Unfall, Franchise 300 oder 2'500) und gewichten sie nach dem Bestand laut BAG.</li>
+  <li>«Schlankste Verwaltung»: die gesamten Verwaltungskosten pro versicherte Person laut BAG, letztes verfügbares Jahr, auch was eine Kasse bei einer Konzernfirma einkauft.</li>
 </ul>
 
 {"".join(groups)}

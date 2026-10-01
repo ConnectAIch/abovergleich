@@ -1,0 +1,1856 @@
+{
+ "quelle": "BAG, Auswertungen Verwaltungskosten (Jahresrechnung definitiv, OKP CH), Stand Juli 2026",
+ "einheit": "CHF pro versicherte Person und Jahr",
+ "kassen": {
+  "8": {
+   "2020": {
+    "versicherte": 860639,
+    "personal": 359.8,
+    "eingekauft": -241.7,
+    "werbung": 0.6,
+    "provisionen": 3.4,
+    "ohne_personal": false
+   },
+   "2021": {
+    "versicherte": 860968,
+    "personal": 364.4,
+    "eingekauft": -212.0,
+    "werbung": 0.6,
+    "provisionen": 2.3,
+    "ohne_personal": false
+   },
+   "2022": {
+    "versicherte": 892916,
+    "personal": 358.1,
+    "eingekauft": -202.6,
+    "werbung": 0.6,
+    "provisionen": 2.3,
+    "ohne_personal": false
+   },
+   "2023": {
+    "versicherte": 1501294,
+    "personal": 233.2,
+    "eingekauft": -88.9,
+    "werbung": 6.8,
+    "provisionen": 4.1,
+    "ohne_personal": false
+   },
+   "2024": {
+    "versicherte": 1537730,
+    "personal": 246.9,
+    "eingekauft": -101.1,
+    "werbung": 6.0,
+    "provisionen": 5.6,
+    "ohne_personal": false
+   },
+   "2025": {
+    "versicherte": 1466758,
+    "personal": 271.3,
+    "eingekauft": -120.3,
+    "werbung": 5.7,
+    "provisionen": 2.8,
+    "ohne_personal": false
+   }
+  },
+  "32": {
+   "2020": {
+    "versicherte": 39704,
+    "personal": 73.2,
+    "eingekauft": 94.3,
+    "werbung": 11.4,
+    "provisionen": 0.8,
+    "ohne_personal": false
+   },
+   "2021": {
+    "versicherte": 37663,
+    "personal": 77.8,
+    "eingekauft": 101.0,
+    "werbung": 13.8,
+    "provisionen": 2.1,
+    "ohne_personal": false
+   },
+   "2022": {
+    "versicherte": 42211,
+    "personal": 79.9,
+    "eingekauft": 101.7,
+    "werbung": 10.7,
+    "provisionen": 2.9,
+    "ohne_personal": false
+   },
+   "2023": {
+    "versicherte": 69514,
+    "personal": 65.9,
+    "eingekauft": 90.7,
+    "werbung": 7.3,
+    "provisionen": 0.9,
+    "ohne_personal": false
+   },
+   "2024": {
+    "versicherte": 88204,
+    "personal": 61.2,
+    "eingekauft": 88.4,
+    "werbung": 5.3,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2025": {
+    "versicherte": 64684,
+    "personal": 82.9,
+    "eingekauft": 111.7,
+    "werbung": 7.7,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   }
+  },
+  "134": {
+   "2020": {
+    "versicherte": 4467,
+    "personal": 125.3,
+    "eingekauft": 71.1,
+    "werbung": 16.6,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2021": {
+    "versicherte": 4393,
+    "personal": 133.0,
+    "eingekauft": 76.1,
+    "werbung": 30.7,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2022": {
+    "versicherte": 4454,
+    "personal": 135.3,
+    "eingekauft": 88.1,
+    "werbung": 16.7,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2023": {
+    "versicherte": 5541,
+    "personal": 126.9,
+    "eingekauft": 92.0,
+    "werbung": 16.7,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2024": {
+    "versicherte": 8473,
+    "personal": 114.3,
+    "eingekauft": 111.2,
+    "werbung": 9.1,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2025": {
+    "versicherte": 11718,
+    "personal": 117.5,
+    "eingekauft": 110.3,
+    "werbung": 7.8,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   }
+  },
+  "194": {
+   "2020": {
+    "versicherte": 19475,
+    "personal": 80.7,
+    "eingekauft": 17.3,
+    "werbung": 0.3,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2021": {
+    "versicherte": 18827,
+    "personal": 83.9,
+    "eingekauft": 23.1,
+    "werbung": 0.5,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2022": {
+    "versicherte": 18380,
+    "personal": 82.6,
+    "eingekauft": 29.7,
+    "werbung": 1.3,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2023": {
+    "versicherte": 18858,
+    "personal": 88.2,
+    "eingekauft": 33.6,
+    "werbung": 2.4,
+    "provisionen": 0.5,
+    "ohne_personal": false
+   },
+   "2024": {
+    "versicherte": 31773,
+    "personal": 62.8,
+    "eingekauft": 38.3,
+    "werbung": 0.9,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2025": {
+    "versicherte": 32747,
+    "personal": 66.5,
+    "eingekauft": 40.2,
+    "werbung": 1.6,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   }
+  },
+  "246": {
+   "2020": {
+    "versicherte": 5932,
+    "personal": 148.3,
+    "eingekauft": 64.5,
+    "werbung": 1.0,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2021": {
+    "versicherte": 5859,
+    "personal": 147.8,
+    "eingekauft": 65.0,
+    "werbung": 1.0,
+    "provisionen": 3.0,
+    "ohne_personal": false
+   },
+   "2022": {
+    "versicherte": 5967,
+    "personal": 164.1,
+    "eingekauft": 67.8,
+    "werbung": 1.4,
+    "provisionen": 31.4,
+    "ohne_personal": false
+   },
+   "2023": {
+    "versicherte": 9577,
+    "personal": 113.3,
+    "eingekauft": 59.8,
+    "werbung": 1.0,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2024": {
+    "versicherte": 11451,
+    "personal": 100.3,
+    "eingekauft": 62.1,
+    "werbung": 1.2,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2025": {
+    "versicherte": 11800,
+    "personal": 98.6,
+    "eingekauft": 67.2,
+    "werbung": 1.2,
+    "provisionen": 0.1,
+    "ohne_personal": false
+   }
+  },
+  "290": {
+   "2020": {
+    "versicherte": 609391,
+    "personal": 119.6,
+    "eingekauft": 42.4,
+    "werbung": 8.3,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2021": {
+    "versicherte": 602993,
+    "personal": 127.1,
+    "eingekauft": 39.3,
+    "werbung": 8.6,
+    "provisionen": 0.3,
+    "ohne_personal": false
+   },
+   "2022": {
+    "versicherte": 596612,
+    "personal": 121.2,
+    "eingekauft": 42.4,
+    "werbung": 9.3,
+    "provisionen": 0.6,
+    "ohne_personal": false
+   },
+   "2023": {
+    "versicherte": 599412,
+    "personal": 116.5,
+    "eingekauft": 40.0,
+    "werbung": 11.0,
+    "provisionen": 2.4,
+    "ohne_personal": false
+   },
+   "2024": {
+    "versicherte": 672886,
+    "personal": 115.7,
+    "eingekauft": 39.8,
+    "werbung": 8.3,
+    "provisionen": 1.4,
+    "ohne_personal": false
+   },
+   "2025": {
+    "versicherte": 712174,
+    "personal": 113.3,
+    "eingekauft": 44.0,
+    "werbung": 9.0,
+    "provisionen": 0.2,
+    "ohne_personal": false
+   }
+  },
+  "312": {
+   "2020": {
+    "versicherte": 181990,
+    "personal": 86.3,
+    "eingekauft": 60.6,
+    "werbung": 14.1,
+    "provisionen": 1.8,
+    "ohne_personal": false
+   },
+   "2021": {
+    "versicherte": 195470,
+    "personal": 93.5,
+    "eingekauft": 71.7,
+    "werbung": 13.9,
+    "provisionen": 1.4,
+    "ohne_personal": false
+   },
+   "2022": {
+    "versicherte": 193285,
+    "personal": 98.0,
+    "eingekauft": 71.3,
+    "werbung": 16.2,
+    "provisionen": 0.8,
+    "ohne_personal": false
+   },
+   "2023": {
+    "versicherte": 152028,
+    "personal": 125.9,
+    "eingekauft": 92.2,
+    "werbung": 20.7,
+    "provisionen": 2.7,
+    "ohne_personal": false
+   },
+   "2024": {
+    "versicherte": 150974,
+    "personal": 128.9,
+    "eingekauft": 105.7,
+    "werbung": 18.7,
+    "provisionen": 5.7,
+    "ohne_personal": false
+   },
+   "2025": {
+    "versicherte": 173430,
+    "personal": 123.5,
+    "eingekauft": 85.6,
+    "werbung": 15.0,
+    "provisionen": 4.0,
+    "ohne_personal": false
+   }
+  },
+  "343": {
+   "2020": {
+    "versicherte": 179410,
+    "personal": 0.0,
+    "eingekauft": 201.0,
+    "werbung": 15.7,
+    "provisionen": 3.2,
+    "ohne_personal": true
+   },
+   "2021": {
+    "versicherte": 177341,
+    "personal": 0.0,
+    "eingekauft": 221.7,
+    "werbung": 10.3,
+    "provisionen": 2.4,
+    "ohne_personal": true
+   },
+   "2022": {
+    "versicherte": 175813,
+    "personal": 0.0,
+    "eingekauft": 218.7,
+    "werbung": 14.8,
+    "provisionen": 6.3,
+    "ohne_personal": true
+   },
+   "2023": {
+    "versicherte": 156325,
+    "personal": 0.0,
+    "eingekauft": 181.5,
+    "werbung": 17.7,
+    "provisionen": 15.1,
+    "ohne_personal": true
+   },
+   "2024": {
+    "versicherte": 179944,
+    "personal": 0.0,
+    "eingekauft": 175.3,
+    "werbung": 11.8,
+    "provisionen": 9.9,
+    "ohne_personal": true
+   },
+   "2025": {
+    "versicherte": 323996,
+    "personal": 0.0,
+    "eingekauft": 191.7,
+    "werbung": 8.2,
+    "provisionen": 2.3,
+    "ohne_personal": true
+   }
+  },
+  "360": {
+   "2020": {
+    "versicherte": 19284,
+    "personal": 58.0,
+    "eingekauft": 44.5,
+    "werbung": 0.6,
+    "provisionen": 0.2,
+    "ohne_personal": false
+   },
+   "2021": {
+    "versicherte": 18901,
+    "personal": 56.8,
+    "eingekauft": 46.3,
+    "werbung": 0.7,
+    "provisionen": 0.1,
+    "ohne_personal": false
+   },
+   "2022": {
+    "versicherte": 18971,
+    "personal": 57.1,
+    "eingekauft": 47.3,
+    "werbung": 0.6,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2023": {
+    "versicherte": 23233,
+    "personal": 48.7,
+    "eingekauft": 39.5,
+    "werbung": 0.5,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2024": {
+    "versicherte": 25585,
+    "personal": 53.1,
+    "eingekauft": 41.3,
+    "werbung": 0.3,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2025": {
+    "versicherte": 23776,
+    "personal": 58.7,
+    "eingekauft": 57.6,
+    "werbung": 0.5,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   }
+  },
+  "376": {
+   "2020": {
+    "versicherte": 355848,
+    "personal": 111.3,
+    "eingekauft": 141.2,
+    "werbung": 11.8,
+    "provisionen": 2.8,
+    "ohne_personal": false
+   },
+   "2021": {
+    "versicherte": 342659,
+    "personal": 119.0,
+    "eingekauft": 189.5,
+    "werbung": 18.2,
+    "provisionen": 2.3,
+    "ohne_personal": false
+   },
+   "2022": {
+    "versicherte": 357095,
+    "personal": 121.2,
+    "eingekauft": 98.2,
+    "werbung": 20.1,
+    "provisionen": 7.4,
+    "ohne_personal": false
+   },
+   "2023": {
+    "versicherte": 556753,
+    "personal": 95.6,
+    "eingekauft": 70.4,
+    "werbung": 5.7,
+    "provisionen": 7.8,
+    "ohne_personal": false
+   },
+   "2024": {
+    "versicherte": 546003,
+    "personal": 109.7,
+    "eingekauft": 66.2,
+    "werbung": 6.4,
+    "provisionen": 1.6,
+    "ohne_personal": false
+   },
+   "2025": {
+    "versicherte": 463989,
+    "personal": 138.0,
+    "eingekauft": 77.1,
+    "werbung": 13.7,
+    "provisionen": 2.8,
+    "ohne_personal": false
+   }
+  },
+  "455": {
+   "2020": {
+    "versicherte": 148579,
+    "personal": 115.8,
+    "eingekauft": 80.8,
+    "werbung": 7.5,
+    "provisionen": 4.6,
+    "ohne_personal": false
+   },
+   "2021": {
+    "versicherte": 149564,
+    "personal": 134.7,
+    "eingekauft": 51.3,
+    "werbung": 6.9,
+    "provisionen": 5.9,
+    "ohne_personal": false
+   },
+   "2022": {
+    "versicherte": 170904,
+    "personal": 134.5,
+    "eingekauft": 94.3,
+    "werbung": 11.3,
+    "provisionen": 9.3,
+    "ohne_personal": false
+   },
+   "2023": {
+    "versicherte": 174496,
+    "personal": 137.5,
+    "eingekauft": 55.2,
+    "werbung": 11.3,
+    "provisionen": 10.2,
+    "ohne_personal": false
+   },
+   "2024": {
+    "versicherte": 175385,
+    "personal": 136.3,
+    "eingekauft": 56.3,
+    "werbung": 7.0,
+    "provisionen": 18.3,
+    "ohne_personal": false
+   },
+   "2025": {
+    "versicherte": 213681,
+    "personal": 141.4,
+    "eingekauft": 10.5,
+    "werbung": 4.7,
+    "provisionen": 17.9,
+    "ohne_personal": false
+   }
+  },
+  "509": {
+   "2020": {
+    "versicherte": 152408,
+    "personal": 0.0,
+    "eingekauft": 225.0,
+    "werbung": 9.5,
+    "provisionen": 3.0,
+    "ohne_personal": true
+   },
+   "2021": {
+    "versicherte": 144498,
+    "personal": 0.0,
+    "eingekauft": 225.6,
+    "werbung": 15.9,
+    "provisionen": 3.8,
+    "ohne_personal": true
+   },
+   "2022": {
+    "versicherte": 149902,
+    "personal": 0.0,
+    "eingekauft": 237.1,
+    "werbung": 15.4,
+    "provisionen": 17.5,
+    "ohne_personal": true
+   },
+   "2023": {
+    "versicherte": 177465,
+    "personal": 0.0,
+    "eingekauft": 234.0,
+    "werbung": 6.8,
+    "provisionen": 5.4,
+    "ohne_personal": true
+   },
+   "2024": {
+    "versicherte": 211968,
+    "personal": 0.0,
+    "eingekauft": 217.3,
+    "werbung": 9.9,
+    "provisionen": 0.9,
+    "ohne_personal": true
+   },
+   "2025": {
+    "versicherte": 235548,
+    "personal": 0.0,
+    "eingekauft": 195.4,
+    "werbung": 6.0,
+    "provisionen": 0.3,
+    "ohne_personal": true
+   }
+  },
+  "780": {
+   "2020": {
+    "versicherte": 7838,
+    "personal": 172.5,
+    "eingekauft": 54.7,
+    "werbung": 12.3,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2021": {
+    "versicherte": 8133,
+    "personal": 176.5,
+    "eingekauft": 56.4,
+    "werbung": 25.7,
+    "provisionen": 0.1,
+    "ohne_personal": false
+   },
+   "2022": {
+    "versicherte": 8708,
+    "personal": 178.6,
+    "eingekauft": 67.6,
+    "werbung": 17.4,
+    "provisionen": 0.2,
+    "ohne_personal": false
+   },
+   "2023": {
+    "versicherte": 9549,
+    "personal": 182.8,
+    "eingekauft": 73.7,
+    "werbung": 16.2,
+    "provisionen": 0.1,
+    "ohne_personal": false
+   },
+   "2024": {
+    "versicherte": 9829,
+    "personal": 183.4,
+    "eingekauft": 95.5,
+    "werbung": 10.0,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2025": {
+    "versicherte": 5460,
+    "personal": 304.9,
+    "eingekauft": 120.0,
+    "werbung": 6.6,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   }
+  },
+  "820": {
+   "2020": {
+    "versicherte": 2633,
+    "personal": 70.4,
+    "eingekauft": 90.8,
+    "werbung": 0.2,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2021": {
+    "versicherte": 2606,
+    "personal": 72.0,
+    "eingekauft": 102.8,
+    "werbung": 0.2,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2022": {
+    "versicherte": 2559,
+    "personal": 74.5,
+    "eingekauft": 111.2,
+    "werbung": 0.8,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2023": {
+    "versicherte": 2570,
+    "personal": 76.8,
+    "eingekauft": 97.0,
+    "werbung": 0.2,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2024": {
+    "versicherte": 2568,
+    "personal": 92.0,
+    "eingekauft": 105.8,
+    "werbung": 0.2,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2025": {
+    "versicherte": 2487,
+    "personal": 137.2,
+    "eingekauft": 156.4,
+    "werbung": 0.2,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   }
+  },
+  "829": {
+   "2020": {
+    "versicherte": 5519,
+    "personal": 223.9,
+    "eingekauft": 18.6,
+    "werbung": 6.0,
+    "provisionen": 6.1,
+    "ohne_personal": false
+   },
+   "2021": {
+    "versicherte": 6712,
+    "personal": 184.0,
+    "eingekauft": 12.8,
+    "werbung": 1.6,
+    "provisionen": 13.3,
+    "ohne_personal": false
+   },
+   "2022": {
+    "versicherte": 9024,
+    "personal": 147.2,
+    "eingekauft": 14.2,
+    "werbung": 3.4,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2023": {
+    "versicherte": 26156,
+    "personal": 68.3,
+    "eingekauft": 29.6,
+    "werbung": 0.4,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2024": {
+    "versicherte": 12662,
+    "personal": 150.6,
+    "eingekauft": 50.1,
+    "werbung": 0.1,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2025": {
+    "versicherte": 9234,
+    "personal": 0.0,
+    "eingekauft": 0.0,
+    "werbung": 0.0,
+    "provisionen": 0.0,
+    "ohne_personal": true
+   }
+  },
+  "881": {
+   "2020": {
+    "versicherte": 85484,
+    "personal": 170.0,
+    "eingekauft": 101.3,
+    "werbung": 6.2,
+    "provisionen": 7.1,
+    "ohne_personal": false
+   },
+   "2021": {
+    "versicherte": 85592,
+    "personal": 170.4,
+    "eingekauft": 109.5,
+    "werbung": 0.0,
+    "provisionen": 7.0,
+    "ohne_personal": false
+   },
+   "2022": {
+    "versicherte": 86595,
+    "personal": 133.1,
+    "eingekauft": 76.1,
+    "werbung": 0.0,
+    "provisionen": 9.4,
+    "ohne_personal": false
+   },
+   "2023": {
+    "versicherte": 96136,
+    "personal": 116.1,
+    "eingekauft": 61.1,
+    "werbung": 0.0,
+    "provisionen": 6.0,
+    "ohne_personal": false
+   },
+   "2024": {
+    "versicherte": 120968,
+    "personal": 84.4,
+    "eingekauft": 68.9,
+    "werbung": 0.0,
+    "provisionen": 3.6,
+    "ohne_personal": false
+   },
+   "2025": {
+    "versicherte": 95250,
+    "personal": 109.4,
+    "eingekauft": 89.7,
+    "werbung": 0.0,
+    "provisionen": 1.2,
+    "ohne_personal": false
+   }
+  },
+  "901": {
+   "2020": {
+    "versicherte": 3690,
+    "personal": 72.1,
+    "eingekauft": 78.9,
+    "werbung": 1.2,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2021": {
+    "versicherte": 3599,
+    "personal": 74.8,
+    "eingekauft": 84.6,
+    "werbung": 1.6,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2022": {
+    "versicherte": 3457,
+    "personal": 78.2,
+    "eingekauft": 98.9,
+    "werbung": 1.0,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2023": {
+    "versicherte": 3420,
+    "personal": 82.4,
+    "eingekauft": 89.8,
+    "werbung": 0.5,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2024": {
+    "versicherte": 3604,
+    "personal": 105.0,
+    "eingekauft": 88.8,
+    "werbung": 0.7,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2025": {
+    "versicherte": 3192,
+    "personal": 114.0,
+    "eingekauft": 118.8,
+    "werbung": 1.2,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   }
+  },
+  "923": {
+   "2020": {
+    "versicherte": 20306,
+    "personal": 102.2,
+    "eingekauft": 62.9,
+    "werbung": 1.4,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2021": {
+    "versicherte": 18324,
+    "personal": 106.4,
+    "eingekauft": 69.0,
+    "werbung": 0.8,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2022": {
+    "versicherte": 16889,
+    "personal": 109.8,
+    "eingekauft": 71.9,
+    "werbung": 2.1,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2023": {
+    "versicherte": 13520,
+    "personal": 139.8,
+    "eingekauft": 78.4,
+    "werbung": 2.3,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2024": {
+    "versicherte": 13416,
+    "personal": 129.2,
+    "eingekauft": 89.9,
+    "werbung": -1.4,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2025": {
+    "versicherte": 14674,
+    "personal": 125.1,
+    "eingekauft": 105.5,
+    "werbung": 11.9,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   }
+  },
+  "941": {
+   "2020": {
+    "versicherte": 37528,
+    "personal": 63.0,
+    "eingekauft": 48.4,
+    "werbung": 2.0,
+    "provisionen": 3.9,
+    "ohne_personal": false
+   },
+   "2021": {
+    "versicherte": 36906,
+    "personal": 67.0,
+    "eingekauft": 41.9,
+    "werbung": 2.7,
+    "provisionen": 5.0,
+    "ohne_personal": false
+   },
+   "2022": {
+    "versicherte": 37301,
+    "personal": 65.5,
+    "eingekauft": 41.7,
+    "werbung": 3.9,
+    "provisionen": 7.9,
+    "ohne_personal": false
+   },
+   "2023": {
+    "versicherte": 37733,
+    "personal": 77.0,
+    "eingekauft": 44.8,
+    "werbung": 3.9,
+    "provisionen": 8.3,
+    "ohne_personal": false
+   },
+   "2024": {
+    "versicherte": 41457,
+    "personal": 67.8,
+    "eingekauft": 53.7,
+    "werbung": 3.9,
+    "provisionen": 1.9,
+    "ohne_personal": false
+   },
+   "2025": {
+    "versicherte": 53886,
+    "personal": 56.1,
+    "eingekauft": 40.6,
+    "werbung": 3.1,
+    "provisionen": 0.5,
+    "ohne_personal": false
+   }
+  },
+  "966": {
+   "2020": {
+    "versicherte": 3477,
+    "personal": 157.0,
+    "eingekauft": 76.9,
+    "werbung": 3.4,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2021": {
+    "versicherte": 3537,
+    "personal": 138.3,
+    "eingekauft": 69.5,
+    "werbung": 3.5,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2022": {
+    "versicherte": 3510,
+    "personal": 135.6,
+    "eingekauft": 66.0,
+    "werbung": 6.9,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2023": {
+    "versicherte": 3922,
+    "personal": 125.7,
+    "eingekauft": 59.6,
+    "werbung": 5.7,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2024": {
+    "versicherte": 4175,
+    "personal": 122.9,
+    "eingekauft": 87.9,
+    "werbung": 4.5,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2025": {
+    "versicherte": 4314,
+    "personal": 130.1,
+    "eingekauft": 90.9,
+    "werbung": 5.6,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   }
+  },
+  "1040": {
+   "2020": {
+    "versicherte": 4533,
+    "personal": 104.8,
+    "eingekauft": 31.9,
+    "werbung": 0.1,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2021": {
+    "versicherte": 4294,
+    "personal": 111.5,
+    "eingekauft": 42.8,
+    "werbung": 0.0,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2022": {
+    "versicherte": 4149,
+    "personal": 136.9,
+    "eingekauft": 82.8,
+    "werbung": 2.5,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2023": {
+    "versicherte": 4271,
+    "personal": 138.3,
+    "eingekauft": 48.5,
+    "werbung": 0.9,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2024": {
+    "versicherte": 4895,
+    "personal": 90.4,
+    "eingekauft": 58.7,
+    "werbung": 0.0,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2025": {
+    "versicherte": 5333,
+    "personal": 76.4,
+    "eingekauft": 60.1,
+    "werbung": 0.6,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   }
+  },
+  "1113": {
+   "2020": {
+    "versicherte": 4281,
+    "personal": 11.3,
+    "eingekauft": 189.8,
+    "werbung": 2.0,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2021": {
+    "versicherte": 4328,
+    "personal": 11.0,
+    "eingekauft": 221.8,
+    "werbung": 1.8,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2022": {
+    "versicherte": 4729,
+    "personal": 8.3,
+    "eingekauft": 221.7,
+    "werbung": 3.6,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2023": {
+    "versicherte": 6519,
+    "personal": 6.4,
+    "eingekauft": 220.8,
+    "werbung": 4.2,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2024": {
+    "versicherte": 5855,
+    "personal": 7.6,
+    "eingekauft": 238.6,
+    "werbung": 2.9,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2025": {
+    "versicherte": 4900,
+    "personal": 9.1,
+    "eingekauft": 265.9,
+    "werbung": 11.5,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   }
+  },
+  "1318": {
+   "2020": {
+    "versicherte": 11196,
+    "personal": 116.1,
+    "eingekauft": 64.8,
+    "werbung": 2.2,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2021": {
+    "versicherte": 11058,
+    "personal": 123.2,
+    "eingekauft": 81.2,
+    "werbung": 0.8,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2022": {
+    "versicherte": 10682,
+    "personal": 133.9,
+    "eingekauft": 72.6,
+    "werbung": 1.0,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2023": {
+    "versicherte": 13073,
+    "personal": 122.3,
+    "eingekauft": 67.3,
+    "werbung": 0.7,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2024": {
+    "versicherte": 21198,
+    "personal": 88.6,
+    "eingekauft": 79.4,
+    "werbung": 0.4,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2025": {
+    "versicherte": 20053,
+    "personal": 91.8,
+    "eingekauft": 62.4,
+    "werbung": 0.4,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   }
+  },
+  "1322": {
+   "2020": {
+    "versicherte": 3710,
+    "personal": 240.3,
+    "eingekauft": 123.6,
+    "werbung": 12.4,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2021": {
+    "versicherte": 3339,
+    "personal": 271.8,
+    "eingekauft": 115.1,
+    "werbung": 11.2,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2022": {
+    "versicherte": 3062,
+    "personal": 306.3,
+    "eingekauft": 139.5,
+    "werbung": 12.3,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2023": {
+    "versicherte": 2827,
+    "personal": 346.9,
+    "eingekauft": 140.6,
+    "werbung": 13.4,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2024": {
+    "versicherte": 2796,
+    "personal": 358.0,
+    "eingekauft": 137.1,
+    "werbung": 17.6,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   },
+   "2025": {
+    "versicherte": 7374,
+    "personal": 152.5,
+    "eingekauft": 99.5,
+    "werbung": 7.5,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   }
+  },
+  "1384": {
+   "2020": {
+    "versicherte": 738955,
+    "personal": 88.5,
+    "eingekauft": 60.9,
+    "werbung": 9.0,
+    "provisionen": 1.4,
+    "ohne_personal": false
+   },
+   "2021": {
+    "versicherte": 749090,
+    "personal": 94.7,
+    "eingekauft": 71.6,
+    "werbung": 9.9,
+    "provisionen": 1.4,
+    "ohne_personal": false
+   },
+   "2022": {
+    "versicherte": 754833,
+    "personal": 95.2,
+    "eingekauft": 77.5,
+    "werbung": 11.0,
+    "provisionen": 1.0,
+    "ohne_personal": false
+   },
+   "2023": {
+    "versicherte": 727810,
+    "personal": 104.0,
+    "eingekauft": 85.7,
+    "werbung": 10.2,
+    "provisionen": 3.2,
+    "ohne_personal": false
+   },
+   "2024": {
+    "versicherte": 813080,
+    "personal": 113.2,
+    "eingekauft": 77.5,
+    "werbung": 8.7,
+    "provisionen": 1.3,
+    "ohne_personal": false
+   },
+   "2025": {
+    "versicherte": 819802,
+    "personal": 114.4,
+    "eingekauft": 75.8,
+    "werbung": 8.6,
+    "provisionen": 1.8,
+    "ohne_personal": false
+   }
+  },
+  "1386": {
+   "2020": {
+    "versicherte": 9160,
+    "personal": 142.6,
+    "eingekauft": 30.8,
+    "werbung": 8.8,
+    "provisionen": 122.6,
+    "ohne_personal": false
+   },
+   "2021": {
+    "versicherte": 14407,
+    "personal": 119.2,
+    "eingekauft": 44.0,
+    "werbung": 9.0,
+    "provisionen": 17.9,
+    "ohne_personal": false
+   },
+   "2022": {
+    "versicherte": 15200,
+    "personal": 109.1,
+    "eingekauft": 41.3,
+    "werbung": 10.0,
+    "provisionen": 5.2,
+    "ohne_personal": false
+   },
+   "2023": {
+    "versicherte": 14192,
+    "personal": 126.7,
+    "eingekauft": 74.6,
+    "werbung": 8.9,
+    "provisionen": 8.6,
+    "ohne_personal": false
+   },
+   "2024": {
+    "versicherte": 12887,
+    "personal": 138.0,
+    "eingekauft": 85.1,
+    "werbung": 11.0,
+    "provisionen": 2.1,
+    "ohne_personal": false
+   },
+   "2025": {
+    "versicherte": 11566,
+    "personal": 144.6,
+    "eingekauft": 90.5,
+    "werbung": 14.1,
+    "provisionen": 16.7,
+    "ohne_personal": false
+   }
+  },
+  "1401": {
+   "2020": {
+    "versicherte": 9660,
+    "personal": 119.0,
+    "eingekauft": 76.2,
+    "werbung": 12.7,
+    "provisionen": 3.3,
+    "ohne_personal": false
+   },
+   "2021": {
+    "versicherte": 9505,
+    "personal": 116.2,
+    "eingekauft": 80.0,
+    "werbung": 12.1,
+    "provisionen": 2.0,
+    "ohne_personal": false
+   },
+   "2022": {
+    "versicherte": 10321,
+    "personal": 106.5,
+    "eingekauft": 78.0,
+    "werbung": 14.0,
+    "provisionen": 4.0,
+    "ohne_personal": false
+   },
+   "2023": {
+    "versicherte": 10360,
+    "personal": 110.3,
+    "eingekauft": 85.6,
+    "werbung": 15.4,
+    "provisionen": 8.3,
+    "ohne_personal": false
+   },
+   "2024": {
+    "versicherte": 12224,
+    "personal": 98.3,
+    "eingekauft": 76.3,
+    "werbung": 10.6,
+    "provisionen": 2.4,
+    "ohne_personal": false
+   },
+   "2025": {
+    "versicherte": 12281,
+    "personal": 98.8,
+    "eingekauft": 56.1,
+    "werbung": 11.6,
+    "provisionen": 1.1,
+    "ohne_personal": false
+   }
+  },
+  "1479": {
+   "2020": {
+    "versicherte": 299242,
+    "personal": 0.0,
+    "eingekauft": 213.6,
+    "werbung": 15.9,
+    "provisionen": 6.8,
+    "ohne_personal": true
+   },
+   "2021": {
+    "versicherte": 307317,
+    "personal": 0.0,
+    "eingekauft": 243.1,
+    "werbung": 11.1,
+    "provisionen": 6.8,
+    "ohne_personal": true
+   },
+   "2022": {
+    "versicherte": 314841,
+    "personal": 0.0,
+    "eingekauft": 235.5,
+    "werbung": 15.3,
+    "provisionen": 10.9,
+    "ohne_personal": true
+   },
+   "2023": {
+    "versicherte": 296991,
+    "personal": 0.0,
+    "eingekauft": 199.0,
+    "werbung": 17.4,
+    "provisionen": 13.5,
+    "ohne_personal": true
+   },
+   "2024": {
+    "versicherte": 334760,
+    "personal": 0.0,
+    "eingekauft": 181.4,
+    "werbung": 12.1,
+    "provisionen": 10.3,
+    "ohne_personal": true
+   },
+   "2025": {
+    "versicherte": 437442,
+    "personal": 0.0,
+    "eingekauft": 191.4,
+    "werbung": 9.2,
+    "provisionen": 6.0,
+    "ohne_personal": true
+   }
+  },
+  "1507": {
+   "2020": {
+    "versicherte": 7361,
+    "personal": 0.0,
+    "eingekauft": 192.1,
+    "werbung": 13.1,
+    "provisionen": 0.4,
+    "ohne_personal": true
+   },
+   "2021": {
+    "versicherte": 7190,
+    "personal": 0.0,
+    "eingekauft": 213.8,
+    "werbung": 8.9,
+    "provisionen": 2.1,
+    "ohne_personal": true
+   },
+   "2022": {
+    "versicherte": 9237,
+    "personal": 0.0,
+    "eingekauft": 223.7,
+    "werbung": 13.6,
+    "provisionen": 7.4,
+    "ohne_personal": true
+   },
+   "2023": {
+    "versicherte": 10341,
+    "personal": 0.0,
+    "eingekauft": 193.9,
+    "werbung": 13.8,
+    "provisionen": 2.3,
+    "ohne_personal": true
+   },
+   "2024": {
+    "versicherte": 11050,
+    "personal": 0.0,
+    "eingekauft": 181.3,
+    "werbung": 9.9,
+    "provisionen": 0.9,
+    "ohne_personal": true
+   },
+   "2025": {
+    "versicherte": 18586,
+    "personal": 0.0,
+    "eingekauft": 209.8,
+    "werbung": 7.8,
+    "provisionen": 2.4,
+    "ohne_personal": true
+   }
+  },
+  "1509": {
+   "2020": {
+    "versicherte": 524840,
+    "personal": 103.5,
+    "eingekauft": 75.3,
+    "werbung": 12.0,
+    "provisionen": 7.4,
+    "ohne_personal": false
+   },
+   "2021": {
+    "versicherte": 537987,
+    "personal": 102.9,
+    "eingekauft": 83.2,
+    "werbung": 11.0,
+    "provisionen": 7.3,
+    "ohne_personal": false
+   },
+   "2022": {
+    "versicherte": 591254,
+    "personal": 101.9,
+    "eingekauft": 88.9,
+    "werbung": 11.1,
+    "provisionen": 3.0,
+    "ohne_personal": false
+   },
+   "2023": {
+    "versicherte": 594850,
+    "personal": 109.3,
+    "eingekauft": 83.4,
+    "werbung": 9.2,
+    "provisionen": 7.5,
+    "ohne_personal": false
+   },
+   "2024": {
+    "versicherte": 639302,
+    "personal": 111.0,
+    "eingekauft": 81.7,
+    "werbung": 7.8,
+    "provisionen": 6.2,
+    "ohne_personal": false
+   },
+   "2025": {
+    "versicherte": 642973,
+    "personal": 103.5,
+    "eingekauft": 85.6,
+    "werbung": 8.5,
+    "provisionen": 7.3,
+    "ohne_personal": false
+   }
+  },
+  "1535": {
+   "2020": {
+    "versicherte": 215232,
+    "personal": 0.0,
+    "eingekauft": 194.9,
+    "werbung": 15.5,
+    "provisionen": 2.2,
+    "ohne_personal": true
+   },
+   "2021": {
+    "versicherte": 204598,
+    "personal": 0.0,
+    "eingekauft": 203.1,
+    "werbung": 9.9,
+    "provisionen": 1.7,
+    "ohne_personal": true
+   },
+   "2022": {
+    "versicherte": 197058,
+    "personal": 0.0,
+    "eingekauft": 218.0,
+    "werbung": 15.2,
+    "provisionen": 6.9,
+    "ohne_personal": true
+   },
+   "2023": {
+    "versicherte": 202217,
+    "personal": 0.0,
+    "eingekauft": 185.4,
+    "werbung": 16.8,
+    "provisionen": 14.9,
+    "ohne_personal": true
+   },
+   "2024": {
+    "versicherte": 200097,
+    "personal": 0.0,
+    "eingekauft": 171.1,
+    "werbung": 12.4,
+    "provisionen": 6.3,
+    "ohne_personal": true
+   },
+   "2025": {
+    "versicherte": 181100,
+    "personal": 0.0,
+    "eingekauft": 190.4,
+    "werbung": 8.5,
+    "provisionen": 2.4,
+    "ohne_personal": true
+   }
+  },
+  "1542": {
+   "2020": {
+    "versicherte": 985644,
+    "personal": 0.0,
+    "eingekauft": 169.7,
+    "werbung": 0.1,
+    "provisionen": 1.7,
+    "ohne_personal": true
+   },
+   "2021": {
+    "versicherte": 937286,
+    "personal": 0.0,
+    "eingekauft": 206.2,
+    "werbung": 1.3,
+    "provisionen": 2.2,
+    "ohne_personal": true
+   },
+   "2022": {
+    "versicherte": 902319,
+    "personal": 0.0,
+    "eingekauft": 200.5,
+    "werbung": 2.1,
+    "provisionen": 1.4,
+    "ohne_personal": true
+   },
+   "2023": {
+    "versicherte": 804064,
+    "personal": 0.0,
+    "eingekauft": 211.0,
+    "werbung": 4.3,
+    "provisionen": 2.2,
+    "ohne_personal": true
+   },
+   "2024": {
+    "versicherte": 682061,
+    "personal": 0.0,
+    "eingekauft": 249.6,
+    "werbung": 6.7,
+    "provisionen": 6.0,
+    "ohne_personal": true
+   },
+   "2025": {
+    "versicherte": 712845,
+    "personal": 0.0,
+    "eingekauft": 221.1,
+    "werbung": 5.7,
+    "provisionen": 4.6,
+    "ohne_personal": true
+   }
+  },
+  "1555": {
+   "2020": {
+    "versicherte": 493623,
+    "personal": 99.1,
+    "eingekauft": 23.0,
+    "werbung": 6.7,
+    "provisionen": 11.9,
+    "ohne_personal": false
+   },
+   "2021": {
+    "versicherte": 484761,
+    "personal": 107.4,
+    "eingekauft": 42.1,
+    "werbung": 8.8,
+    "provisionen": 3.3,
+    "ohne_personal": false
+   },
+   "2022": {
+    "versicherte": 492036,
+    "personal": 107.7,
+    "eingekauft": 36.5,
+    "werbung": 9.8,
+    "provisionen": 10.0,
+    "ohne_personal": false
+   },
+   "2023": {
+    "versicherte": 498455,
+    "personal": 119.8,
+    "eingekauft": 68.2,
+    "werbung": 8.6,
+    "provisionen": 5.2,
+    "ohne_personal": false
+   },
+   "2024": {
+    "versicherte": 509645,
+    "personal": 126.5,
+    "eingekauft": 72.1,
+    "werbung": 9.9,
+    "provisionen": 7.3,
+    "ohne_personal": false
+   },
+   "2025": {
+    "versicherte": 552573,
+    "personal": 114.3,
+    "eingekauft": 69.7,
+    "werbung": 11.5,
+    "provisionen": 3.4,
+    "ohne_personal": false
+   }
+  },
+  "1560": {
+   "2020": {
+    "versicherte": 154954,
+    "personal": 64.8,
+    "eingekauft": 17.0,
+    "werbung": 4.5,
+    "provisionen": 46.8,
+    "ohne_personal": false
+   },
+   "2021": {
+    "versicherte": 146677,
+    "personal": 71.6,
+    "eingekauft": 17.9,
+    "werbung": 4.3,
+    "provisionen": 48.0,
+    "ohne_personal": false
+   },
+   "2022": {
+    "versicherte": 143877,
+    "personal": 74.6,
+    "eingekauft": 17.9,
+    "werbung": 4.6,
+    "provisionen": 48.3,
+    "ohne_personal": false
+   },
+   "2023": {
+    "versicherte": 136911,
+    "personal": 78.8,
+    "eingekauft": 18.2,
+    "werbung": 5.3,
+    "provisionen": 48.9,
+    "ohne_personal": false
+   },
+   "2024": {
+    "versicherte": 151415,
+    "personal": 81.5,
+    "eingekauft": 23.8,
+    "werbung": 4.9,
+    "provisionen": 47.3,
+    "ohne_personal": false
+   },
+   "2025": {
+    "versicherte": 190439,
+    "personal": 75.8,
+    "eingekauft": 71.9,
+    "werbung": 5.1,
+    "provisionen": 0.0,
+    "ohne_personal": false
+   }
+  },
+  "1562": {
+   "2020": {
+    "versicherte": 876591,
+    "personal": 450.3,
+    "eingekauft": -254.8,
+    "werbung": 7.8,
+    "provisionen": 16.9,
+    "ohne_personal": false
+   },
+   "2021": {
+    "versicherte": 932899,
+    "personal": 433.6,
+    "eingekauft": -231.4,
+    "werbung": 9.6,
+    "provisionen": 14.9,
+    "ohne_personal": false
+   },
+   "2022": {
+    "versicherte": 1412757,
+    "personal": 261.0,
+    "eingekauft": -101.7,
+    "werbung": 7.9,
+    "provisionen": 5.5,
+    "ohne_personal": false
+   },
+   "2023": {
+    "versicherte": 1305105,
+    "personal": 283.6,
+    "eingekauft": -115.9,
+    "werbung": 8.7,
+    "provisionen": 2.7,
+    "ohne_personal": false
+   },
+   "2024": {
+    "versicherte": 1290207,
+    "personal": 290.9,
+    "eingekauft": -123.5,
+    "werbung": 8.9,
+    "provisionen": 3.1,
+    "ohne_personal": false
+   },
+   "2025": {
+    "versicherte": 1400928,
+    "personal": 274.2,
+    "eingekauft": -124.0,
+    "werbung": 8.9,
+    "provisionen": 4.8,
+    "ohne_personal": false
+   }
+  },
+  "1568": {
+   "2020": {
+    "versicherte": 74798,
+    "personal": 90.2,
+    "eingekauft": 20.7,
+    "werbung": 6.0,
+    "provisionen": 23.9,
+    "ohne_personal": false
+   },
+   "2021": {
+    "versicherte": 71874,
+    "personal": 99.3,
+    "eingekauft": 38.4,
+    "werbung": 8.0,
+    "provisionen": 6.0,
+    "ohne_personal": false
+   },
+   "2022": {
+    "versicherte": 72996,
+    "personal": 101.0,
+    "eingekauft": 40.9,
+    "werbung": 9.0,
+    "provisionen": 8.9,
+    "ohne_personal": false
+   },
+   "2023": {
+    "versicherte": 76696,
+    "personal": 115.8,
+    "eingekauft": 64.2,
+    "werbung": 7.9,
+    "provisionen": 16.4,
+    "ohne_personal": false
+   },
+   "2024": {
+    "versicherte": 89262,
+    "personal": 122.4,
+    "eingekauft": 69.5,
+    "werbung": 9.4,
+    "provisionen": 9.7,
+    "ohne_personal": false
+   },
+   "2025": {
+    "versicherte": 90730,
+    "personal": 116.6,
+    "eingekauft": 71.7,
+    "werbung": 11.7,
+    "provisionen": 3.1,
+    "ohne_personal": false
+   }
+  },
+  "1570": {
+   "2020": {
+    "versicherte": 56313,
+    "personal": 95.3,
+    "eingekauft": 21.6,
+    "werbung": 6.3,
+    "provisionen": 37.4,
+    "ohne_personal": false
+   },
+   "2021": {
+    "versicherte": 58472,
+    "personal": 103.1,
+    "eingekauft": 39.6,
+    "werbung": 8.2,
+    "provisionen": 7.3,
+    "ohne_personal": false
+   },
+   "2022": {
+    "versicherte": 60606,
+    "personal": 104.9,
+    "eingekauft": 42.3,
+    "werbung": 9.4,
+    "provisionen": 9.1,
+    "ohne_personal": false
+   },
+   "2023": {
+    "versicherte": 60211,
+    "personal": 117.6,
+    "eingekauft": 67.3,
+    "werbung": 8.4,
+    "provisionen": 6.1,
+    "ohne_personal": false
+   },
+   "2024": {
+    "versicherte": 48098,
+    "personal": 132.9,
+    "eingekauft": 77.9,
+    "werbung": 10.5,
+    "provisionen": 4.2,
+    "ohne_personal": false
+   },
+   "2025": {
+    "versicherte": 44804,
+    "personal": 126.8,
+    "eingekauft": 79.1,
+    "werbung": 12.9,
+    "provisionen": 0.3,
+    "ohne_personal": false
+   }
+  }
+ }
+}
