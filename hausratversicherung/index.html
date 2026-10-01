@@ -74,7 +74,7 @@
 }
 </script>
 
-<link rel="stylesheet" href="/styles/shared.css?v=5ded8e51">
+<link rel="stylesheet" href="/styles/shared.css?v=62f644db">
 <style>
   /* HERO */
   .hero {
@@ -398,13 +398,17 @@
 <!-- NAV -->
 <nav>
   <a href="/" class="logo">abo<span>vergleich</span>.com</a>
-  <div class="nav-right" id="nav-menu">
-    <a href="/" class="nav-link" onclick="toggleNav()">Krankenkasse</a>
-    <a href="/hausratversicherung/" class="nav-link active" onclick="toggleNav()">Hausrat &amp; Haftpflicht</a>
-    <a href="https://handyabo.com/internet/" class="nav-link" onclick="toggleNav()">Internet</a>
-    <a href="https://handyabo.com/" class="nav-link" onclick="toggleNav()">Handy-Abo</a>
+  <div class="nav-right" id="nav-menu" onclick="if(event.target.closest('a'))this.classList.remove('open')">
+    <a href="/#kk-rechner" class="nav-link">Prämienrechner</a>
+    <a href="/krankenkassen-rating/" class="nav-link">Rating</a>
+    <a href="/krankenkasse/" class="nav-link">Kantone</a>
+    <a href="/kasse/" class="nav-link">Kassen</a>
+    <a href="/krankenkasse-kuendigen/" class="nav-link">Kündigen</a>
+    <a href="/blog/" class="nav-link">Ratgeber</a>
+    <a href="https://handyabo.com/" class="nav-link">Handy-Abo</a>
+    <a href="/#kk-rechner" class="nav-cta">Prämien vergleichen</a>
   </div>
-  <button class="nav-burger" id="nav-burger" onclick="toggleNav()" aria-label="Menu">
+  <button class="nav-burger" id="nav-burger" onclick="document.getElementById('nav-menu').classList.toggle('open');this.classList.toggle('open')" aria-label="Menü">
     <span></span><span></span><span></span>
   </button>
 </nav>

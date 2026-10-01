@@ -39,6 +39,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 from import_premiums import build_rows, load_env, read_csv  # noqa: E402
 from premium_analysis import INSURER_NAMES  # noqa: E402
 import kv_verzeichnis  # noqa: E402
+import site_nav  # noqa: E402
 
 YEAR = 2027
 PREV = YEAR - 1
@@ -427,10 +428,7 @@ def page(path, title, description, body, jsonld):
 </head>
 <body>
 
-<nav>
-  <a href="/" class="logo">abo<span>vergleich</span>.com</a>
-  <a href="/#kk-rechner" class="nav-back">Prämienrechner &rarr;</a>
-</nav>
+{site_nav.nav_html(path)}
 
 <article class="article kk-page">
 {body}
@@ -768,7 +766,7 @@ def jojo_html(jojo):
     ]
 
 
-def insights_block(cantons, insurers, nat, top3_prev, top3_cur, ins_prev, nat_prev, top3_prev2):
+def insights_block(cantons, insurers, nat, top3_prev, top3_cur, ins_prev, nat_prev, top3_prev2, jojo=None):
     """Startseite. Ein Jahr allein täuscht: wer im Vorjahr tief blieb, holt oft
     nach. Darum pro Kasse beide Anstiege und die Summe über zwei Jahre."""
     Y0 = YEAR - 2
@@ -778,10 +776,8 @@ def insights_block(cantons, insurers, nat, top3_prev, top3_cur, ins_prev, nat_pr
         if x["bestand"] < MIN_BESTAND_RANKING or a is None:
             continue
         tot = ((1 + a / 100) * (1 + x["change_pct"] / 100) - 1) * 100
-        # Jojo: im Vorjahr unter dem Schnitt, dieses Jahr deutlich darüber
-        jojo = a < nat_prev and x["change_pct"] >= nat + 1.5
         note = (RATING or {}).get("national", {}).get(i, {}).get("note")
-        big.append({"id": i, "prev": a, "cur": x["change_pct"], "tot": tot, "jojo": jojo, "note": note})
+        big.append({"id": i, "prev": a, "cur": x["change_pct"], "tot": tot, "note": note})
     big.sort(key=lambda x: (-(x["note"] or 0), x["tot"]))
     tot_all = ((1 + nat_prev / 100) * (1 + nat / 100) - 1) * 100
     by_change = sorted(cantons.items(), key=lambda x: -x[1]["change_pct"])
@@ -792,15 +788,12 @@ def insights_block(cantons, insurers, nat, top3_prev, top3_cur, ins_prev, nat_pr
         cls = "var(--red)" if v > ref else "var(--green)"
         return f'<span style="color:{cls};font-weight:600;">{pct(v)}</span>'
 
-    tag = ('<span style="display:inline-block;margin-left:8px;padding:1px 7px;border-radius:6px;font-size:11px;'
-           'font-weight:700;background:rgba(220,38,38,.1);color:var(--red);vertical-align:1px;">Jojo</span>')
     td = 'style="text-align:right;padding:9px 12px;white-space:nowrap;"'
     kas = "".join(
-        f'<tr style="border-bottom:1px solid var(--border);"><td style="padding:9px 12px;font-weight:600;">{kasse_link(x["id"])}{tag if x["jojo"] else ""}</td>'
+        f'<tr style="border-bottom:1px solid var(--border);"><td style="padding:9px 12px;font-weight:600;">{kasse_link(x["id"])}</td>'
         f'<td {td}><strong style="font-size:15px;">{note_fmt(x["note"])}</strong></td>'
         f'<td {td}>{pc(x["prev"], nat_prev)}</td><td {td}>{pc(x["cur"], nat)}</td>'
         f'<td {td}>{pc(x["tot"], tot_all)}</td></tr>' for x in big)
-    n_jojo = sum(x["jojo"] for x in big)
 
     def cli(c, v):
         return (f'<div><a href="/krankenkasse/{CANTONS[c][1]}/" style="color:var(--text);"><strong>{e(CANTONS[c][0])}</strong></a> '
@@ -815,18 +808,26 @@ def insights_block(cantons, insurers, nat, top3_prev, top3_cur, ins_prev, nat_pr
         f'<td style="text-align:center;padding:10px 12px;">{top3_prev.get(i, 0)} / 26</td>'
         f'<td style="text-align:center;padding:10px 12px;">{top3_cur.get(i, 0)} / 26</td></tr>' for i in cons)
 
+    example = ""
+    rows = ((jojo or {}).get(f"{PREV}-{YEAR}") or {}).get("rows") or []
+    if rows:
+        x = rows[0]
+        chg = f"{x['change']:.1f}".replace(".", ",")
+        example = (f"Ein Beispiel aus {e(CANTONS[x['canton']][0])}: {e(x['insurer'])} war {PREV} die günstigste Kasse. "
+                   f"{YEAR} kostet derselbe Tarif <strong>{chg} Prozent mehr</strong>, die Kasse ist nur noch auf Platz {x['rank_after']}.")
     card = 'style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:20px;"'
     col = 'style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:10px;"'
     return f"""<!-- INSIGHTS:START (generiert von scripts/build_kk_pages.py) -->
 <section class="insights-section" style="padding:80px 40px;background:var(--bg);">
   <div style="max-width:900px;margin:0 auto;">
     <div class="section-label">Datenanalyse</div>
-    <h2 class="section-headline" style="margin-bottom:8px;">Welche Kasse ist dauerhaft günstig?</h2>
-    <p style="color:var(--muted);margin-bottom:32px;">Laut BAG steigt die mittlere Prämie {YEAR} um {BAG_OFFICIAL['change_pct']:.1f}&#8239;%. Ein Jahr allein sagt wenig: Manche Kassen halten ein Jahr still und schlagen im nächsten umso stärker auf. Unser <a href="/krankenkassen-rating/" style="color:var(--accent-dark);">Preistreue-Rating</a> rechnet deshalb mit den BAG-Prämien seit {(RATING or {}).get("years", [Y0])[0]}.</p>
+    <h2 class="section-headline" style="margin-bottom:8px;">Die Billigste von heute ist oft die Teuerste von morgen</h2>
+    <p style="color:var(--text2);font-size:17px;line-height:1.6;margin-bottom:10px;">{example}</p>
+    <p style="color:var(--muted);margin-bottom:32px;">Wer jedes Jahr zur Billigsten wechselt, landet oft genau dort. Unser <a href="/krankenkassen-rating/" style="color:var(--accent-dark);">Preistreue-Rating</a> zeigt, welche Kassen seit {(RATING or {}).get("years", [Y0])[0]} günstig bleiben.</p>
 
     <div {card}>
       <h3 style="font-size:18px;font-weight:700;margin-bottom:6px;">Preistreue-Rating {YEAR} und Anstieg pro Kasse</h3>
-      <div style="font-size:14px;color:var(--muted);margin-bottom:16px;">Note von 0 bis 10 aus Preis, Konstanz, Treue, Rabatt-Treue, Tarif-Bestand und Reserven. Daneben der Anstieg der Standardprämie, Schnitt aller Kassen {pct(nat_prev)} im {PREV} und {pct(nat)} im {YEAR}. Rot heisst über dem Schnitt.{f" <strong style='color:var(--text);'>Jojo</strong>: im Vorjahr unter dem Schnitt, jetzt deutlich darüber." if n_jojo else ""}</div>
+      <div style="font-size:14px;color:var(--muted);margin-bottom:16px;">Note von 0 bis 10 aus Preis, Konstanz, Treue, Rabatt-Treue, Tarif-Bestand und Reserven. Daneben der Anstieg der Standardprämie, Schnitt aller Kassen {pct(nat_prev)} im {PREV} und {pct(nat)} im {YEAR}. Rot heisst über dem Schnitt.</div>
       <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:14px;">
         <thead><tr style="border-bottom:1px solid var(--border2);"><th style="text-align:left;padding:8px 12px;">Kasse</th><th style="text-align:right;padding:8px 12px;">Note</th><th style="text-align:right;padding:8px 12px;">{PREV}</th><th style="text-align:right;padding:8px 12px;">{YEAR}</th><th style="text-align:right;padding:8px 12px;">Seit {Y0}</th></tr></thead>
         <tbody>{kas}</tbody>
@@ -1548,7 +1549,7 @@ def main():
     _, ins_prev, nat_prev = analyse(prev, prev2, bestand)
     block = insights_block(cantons, insurers, nat,
                            top3_counts(prev, by_canton_prev), top3_counts(cur, by_canton_cur),
-                           ins_prev, nat_prev, top3_counts(prev2, by_canton_prev2))
+                           ins_prev, nat_prev, top3_counts(prev2, by_canton_prev2), jojo)
     new, n = re.subn(r"<!-- INSIGHTS:START.*?<!-- INSIGHTS:END -->", lambda _: block, s, flags=re.S)
     if n != 1:
         sys.exit("Insights-Marker in index.html nicht gefunden")
@@ -1575,6 +1576,7 @@ def main():
     }, ensure_ascii=False, indent=1), encoding="utf-8")
 
     write_sitemap(paths)
+    site_nav.apply_static()
     try:
         import sync_handyabo
         sync_handyabo.apply()

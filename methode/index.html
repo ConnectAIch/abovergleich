@@ -19,7 +19,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles/shared.css?v=5ded8e51">
+<link rel="stylesheet" href="/styles/shared.css?v=62f644db">
 <style>
   .fact-box {
     background: var(--surface); border: 1px solid var(--border);
@@ -79,7 +79,19 @@
 
 <nav>
   <a href="/" class="logo">abo<span>vergleich</span>.com</a>
-  <a href="/" class="nav-back">&larr; Zum Vergleich</a>
+  <div class="nav-right" id="nav-menu" onclick="if(event.target.closest('a'))this.classList.remove('open')">
+    <a href="/#kk-rechner" class="nav-link">Prämienrechner</a>
+    <a href="/krankenkassen-rating/" class="nav-link">Rating</a>
+    <a href="/krankenkasse/" class="nav-link">Kantone</a>
+    <a href="/kasse/" class="nav-link">Kassen</a>
+    <a href="/krankenkasse-kuendigen/" class="nav-link">Kündigen</a>
+    <a href="/blog/" class="nav-link">Ratgeber</a>
+    <a href="https://handyabo.com/" class="nav-link">Handy-Abo</a>
+    <a href="/#kk-rechner" class="nav-cta">Prämien vergleichen</a>
+  </div>
+  <button class="nav-burger" id="nav-burger" onclick="document.getElementById('nav-menu').classList.toggle('open');this.classList.toggle('open')" aria-label="Menü">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
 <article class="article">
@@ -121,7 +133,7 @@
     <div class="warn-label">Rechenbeispiel</div>
     <p>Eine typische Zusatzversicherung (Spital, Zahn, Alternativmedizin) kostet <strong>CHF 150 pro Monat</strong>.</p>
     <p>Bei 16 Monatspr&auml;mien verdient der Broker an einem einzigen Abschluss: <strong>CHF 2'400</strong>.</p>
-    <p style="font-size:14px;color:var(--muted);margin-bottom:0;">Das ist mehr als dein gesamtes erstes Jahr an Zusatzversicherung. Quelle: <a href="https://svv.ch/de/standpunkte/standpunkt/branchenvereinbarung-im-vermittlergeschaeft-allgemeinverbindlich-erklaert" style="color:var(--muted);">SVV Stellungnahme</a>, Branchenvereinbarung.</p>
+    <p style="font-size:14px;color:var(--muted);margin-bottom:0;">Das ist mehr als dein gesamtes erstes Jahr an Zusatzversicherung. Quelle: <a href="https://www.admin.ch/gov/de/start/dokumentation/medienmitteilungen.msg-id-102058.html" style="color:var(--muted);">Bundesrat, Medienmitteilung vom 14.08.2024</a>, Branchenvereinbarung Vermittler.</p>
   </div>
 
   <p>Vor der Obergrenze von 2024 kamen bei einigen Kassen sogenannte &laquo;Superprovisionen&raquo; dazu. Das waren Bonussysteme, die Brokern <strong>40 bis 60% zus&auml;tzlich</strong> zur Grundprovision zahlten, wenn sie genug Abschl&uuml;sse liefern. (<a href="https://www.srf.ch/news/schweiz/steigende-gesundheitskosten-wie-die-krankenkassen-geld-verschleudern-makler-packen-aus">SRF Kassensturz Recherche</a>) Heute z&auml;hlen solche Boni zur Obergrenze von 16 Monatspr&auml;mien.</p>
@@ -228,7 +240,7 @@
     <a href="https://www.finma.ch/de/news/2024/11/20241121-mm-kaltaquise-verbot/" style="color:var(--muted);text-decoration:underline;">FINMA Medienmitteilung 21.11.2024</a> (Kaltakquise-Verbot) &middot;
     <a href="https://www.bvger.ch/de/newsroom/medienmitteilungen/comparis-qualifies-as-an-insurance-intermediary-1265" style="color:var(--muted);text-decoration:underline;">BVGer Urteil B-5886/2023</a> (Comparis als Vermittler, 5.7.2024) &middot;
     <a href="https://www.watson.ch/schweiz/krankenkasse/440249926-krankenkasse-schweizer-vermittler-kassieren-halbe-milliarde-provision" style="color:var(--muted);text-decoration:underline;">watson.ch</a> (CHF 480 Mio. Provisionen, 2023) &middot;
-    <a href="https://svv.ch/de/standpunkte/standpunkt/branchenvereinbarung-im-vermittlergeschaeft-allgemeinverbindlich-erklaert" style="color:var(--muted);text-decoration:underline;">SVV Stellungnahme</a> (Branchenvereinbarung) &middot;
+    <a href="https://www.admin.ch/gov/de/start/dokumentation/medienmitteilungen.msg-id-102058.html" style="color:var(--muted);text-decoration:underline;">Bundesrat, 14.08.2024</a> (Branchenvereinbarung allgemeinverbindlich) &middot;
     <a href="https://opendata.swiss/de/dataset/health-insurance-premiums" style="color:var(--muted);text-decoration:underline;">opendata.swiss Pr&auml;miendaten</a> &middot;
     <a href="https://www.fedlex.admin.ch/eli/cc/1995/1328_1328_1328/de#art_25" style="color:var(--muted);text-decoration:underline;">KVG Art. 25-31</a> (Leistungskatalog) &middot;
     Alle Angaben ohne Gew&auml;hr.

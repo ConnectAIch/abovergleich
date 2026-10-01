@@ -10,12 +10,25 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles/shared.css?v=5ded8e51">
+<link rel="stylesheet" href="/styles/shared.css?v=62f644db">
 </head>
 <body>
 
 <nav>
   <a href="/" class="logo">abo<span>vergleich</span>.com</a>
+  <div class="nav-right" id="nav-menu" onclick="if(event.target.closest('a'))this.classList.remove('open')">
+    <a href="/#kk-rechner" class="nav-link">Prämienrechner</a>
+    <a href="/krankenkassen-rating/" class="nav-link">Rating</a>
+    <a href="/krankenkasse/" class="nav-link">Kantone</a>
+    <a href="/kasse/" class="nav-link">Kassen</a>
+    <a href="/krankenkasse-kuendigen/" class="nav-link">Kündigen</a>
+    <a href="/blog/" class="nav-link">Ratgeber</a>
+    <a href="https://handyabo.com/" class="nav-link">Handy-Abo</a>
+    <a href="/#kk-rechner" class="nav-cta">Prämien vergleichen</a>
+  </div>
+  <button class="nav-burger" id="nav-burger" onclick="document.getElementById('nav-menu').classList.toggle('open');this.classList.toggle('open')" aria-label="Menü">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
 <main class="legal-page">
