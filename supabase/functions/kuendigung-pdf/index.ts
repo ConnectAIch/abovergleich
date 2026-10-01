@@ -82,7 +82,7 @@ async function abholen(t: string) {
   if (error || !signed) return json({ error: 'Das PDF ist gerade nicht erreichbar. Bitte nochmals versuchen.' }, 500);
   return json({
     ok: true, url: signed.signedUrl, filename: doc.filename,
-    kasse: doc.kasse, kanal: doc.kanal, ziel: doc.ziel, neu: doc.neu, neu_url: doc.neu_url, deadline: doc.deadline,
+    kasse: doc.kasse, kanal: doc.kanal, ziel: doc.ziel, neu: doc.neu, neu_url: doc.neu_url, deadline: doc.deadline, signiert: doc.signiert,
   });
 }
 
@@ -229,7 +229,7 @@ Deno.serve(async (req) => {
     const up = await supabase.storage.from(BUCKET).upload(path, bytes, { contentType: 'application/pdf' });
     if (up.error) { console.error('upload', up.error); return json({ error: 'Speichern nicht möglich. Bitte nochmals versuchen.' }, 500); }
     const { data: doc, error: docErr } = await supabase.from('kk_kuendigung_pdf').insert({
-      email, path, filename, kasse, deadline,
+      email, path, filename, kasse, deadline, signiert: b.signiert === true,
       kanal: String(b.kanal || 'post').slice(0, 12), ziel: String(b.ziel || '').slice(0, 120),
       neu: String(b.neu || '').slice(0, 80) || null, neu_url: /^https:\/\//.test(String(b.neu_url || '')) ? String(b.neu_url).slice(0, 300) : null,
     }).select('token').single();

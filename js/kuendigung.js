@@ -366,7 +366,7 @@
     sent[key] = fetch('https://zexpmaegqsayleaohiip.supabase.co/functions/v1/kuendigung-pdf', {
       method: 'POST', keepalive: b64.length < 60000, headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        email: email, wecker: $('kd-wecker').checked, pdf: b64, filename: fileName(L),
+        email: email, wecker: $('kd-wecker').checked, pdf: b64, filename: fileName(L), signiert: !!sig,
         kasse: k.name, kanal: k.mail ? 'mail' : k.portal ? 'portal' : 'post', ziel: k.mail || k.portal || '',
         deadline: D.deadline_text, neu: neu ? neu.name : '', neu_url: neu && neu.url ? neu.url : '',
         plz: plzOf() || pr.plz, jahrgang: jahrgangOf() || pr.year, franchise: pr.franchise,

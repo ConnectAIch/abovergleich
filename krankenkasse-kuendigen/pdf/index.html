@@ -114,9 +114,9 @@
       .then(function (d) {
         if (!d.ok) { msg.textContent = d.error || 'Das hat nicht geklappt.'; btn.disabled = false; btn.textContent = 'PDF herunterladen'; return; }
         var weg = d.kanal === 'mail'
-          ? 'Schick das PDF als Anhang an <a href="mailto:' + esc(d.ziel) + '">' + esc(d.ziel) + '</a>, von der Mail-Adresse, die ' + esc(d.kasse) + ' von dir kennt.'
+          ? 'Schick das PDF als Anhang an <a href="mailto:' + esc(d.ziel) + '">' + esc(d.ziel) + '</a>, von der Mail-Adresse, die ' + esc(d.kasse) + ' von dir kennt.' + (d.signiert ? '' : ' Im PDF fehlt die Unterschrift: ausdrucken, unterschreiben, einscannen, oder neu erstellen mit Unterschrift.')
           : d.kanal === 'portal' ? 'Lade das PDF in ' + esc(d.ziel) + ' hoch oder schick es per Post.'
-          : 'Druck das PDF aus, unterschreib es falls nötig, und schick es per Post an ' + esc(d.kasse) + '.';
+          : 'Druck das PDF aus und schick es per Post an ' + esc(d.kasse) + '.' + (d.signiert ? '' : ' Vorher von Hand unterschreiben, im PDF fehlt die Unterschrift.');
         var neu = (d.neu
           ? '<strong>Bei ' + esc(d.neu) + ' anmelden</strong>, online in etwa 10 Minuten.' + (d.neu_url ? ' <a href="' + esc(d.neu_url) + '?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=kk-wechsel" target="_blank" rel="noopener sponsored">Zu ' + esc(d.neu) + ' &rarr;</a>' : '')
           : '<strong>Bei der neuen Kasse anmelden</strong>, online in etwa 10 Minuten. <a href="/#kk-rechner">Günstigste Kasse finden &rarr;</a>') +
@@ -126,7 +126,7 @@
         box.innerHTML = '<p class="kk-lead"><strong>E-Mail-Adresse bestätigt.</strong> Dein PDF wird heruntergeladen. <a href="' + esc(d.url) + '">Nicht gestartet?</a></p>' +
           '<h2>So geht es weiter</h2><ol>' +
           '<li><strong>Abschicken:</strong> ' + weg + ' Eintreffen muss die Kündigung bis ' + esc(d.deadline) + '.</li>' +
-          '<li>' + neu + '</li>' +
+          '<li>' + neu + ' Spätestens bis Ende Dezember, am besten gleich jetzt.</li>' +
           '<li><strong>Bestätigung abwarten.</strong> Die neue Kasse meldet der alten, dass du bei ihr versichert bist. Bis dahin bleibst du bei der alten versichert.</li></ol>';
         location.href = d.url;
       })
