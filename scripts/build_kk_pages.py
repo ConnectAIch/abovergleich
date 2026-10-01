@@ -1393,7 +1393,8 @@ KUENDIGEN_CSS = """
   .kd-reco { font-size:11px; font-weight:700; color:var(--green); background:rgba(22,163,74,.1); border-radius:999px; padding:1px 8px; margin-left:4px; white-space:nowrap; }
   .kd-warn { font-size:14px; line-height:1.5; color:var(--text2); background:rgba(234,88,12,.07); border-left:3px solid var(--orange); border-radius:8px; padding:12px 14px; }
   .kd-warn a { color:var(--accent-dark); }
-  .kd-hint-warn { color:var(--orange); }
+  .kd-plzort { display:grid; grid-template-columns:110px 1fr; gap:10px; }
+  .kd-form .kd-invalid { border-color:var(--orange); background:rgba(234,88,12,.05); }
   .kd-send { background:var(--surface); border:2px solid var(--accent); border-radius:14px; padding:18px 20px; margin:18px 0 12px; }
   .kd-send-title { font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; font-size:18px; margin-bottom:4px; }
   .kd-send p { font-size:14px; color:var(--text2); margin:0 0 12px; }
@@ -1512,7 +1513,7 @@ def kuendigen_page(kv):
 <h2>So wechselst du in vier Schritten</h2>
 <ol>
 <li><strong>Neue Kasse wählen</strong> und dort für den 1. Januar {YEAR} anmelden. Sie muss dich ohne Gesundheitsfragen aufnehmen.</li>
-<li><strong>Bisherige Kasse kündigen, direkt hier:</strong> Im <a href="#vorlage">Kündigungs-Editor</a> wählst du deine Kasse, gibst Name und Adresse ein und unterschreibst mit Maus oder Finger. Den Brief mit der richtigen Adresse lädst du als PDF herunter.</li>
+<li><strong>Bisherige Kasse kündigen, direkt hier:</strong> Im <a href="#vorlage">Kündigungs-Editor</a> wählst du deine Kasse, gibst Name und Adresse ein und unterschreibst mit Maus oder Finger. Den fertigen Brief mit der richtigen Adresse schicken wir dir als PDF per Mail.</li>
 <li><strong>Abschicken:</strong> per Mail, wenn deine Kasse das annimmt (steht beim Brief), sonst per Post, spätestens eine Woche vor dem {DEADLINE}. Ein Einschreiben ist nicht Pflicht, beweist aber den Eingang.</li>
 <li><strong>Bestätigung abwarten.</strong> Die neue Kasse bestätigt dir und der alten Kasse schriftlich, dass du bei ihr versichert bist. Bis dahin bleibt die alte Versicherung bestehen, du bist also nie ohne Schutz.</li>
 </ol>
@@ -1520,14 +1521,15 @@ def kuendigen_page(kv):
 <p>Wichtig: Wer bis 31. Dezember noch offene Prämien oder Kostenbeteiligungen bei der bisherigen Kasse hat, kann nicht wechseln. Offene Rechnungen vorher bezahlen.</p>
 
 <h2 id="vorlage">Kündigungsbrief erstellen</h2>
-<p>Kasse wählen, Name und Adresse eintragen, unterschreiben. Der Brief entsteht in deinem Browser. Lädst du das PDF herunter, sehen wir Name, Adresse und Unterschrift nie. Abschicken an die Kasse tust du selbst (<a href="/datenschutz/">Datenschutz</a>).</p>
+<p>Kasse wählen, Angaben eintragen, unterschreiben. Du bekommst das PDF sofort und als Kopie per Mail. Abschicken an die Kasse tust du selbst.</p>
 <div class="kd-form">
   <div class="full"><label for="kd-kasse">Deine bisherige Kasse</label><select id="kd-kasse"></select></div>
   <div><label for="kd-name">Vorname und Name</label><input id="kd-name" autocomplete="name"></div>
   <div><label for="kd-birth">Geburtsdatum</label><input id="kd-birth" autocomplete="bday" inputmode="numeric" placeholder="12.03.1985"></div>
-  <div><label for="kd-street">Strasse und Nr.</label><input id="kd-street" autocomplete="street-address"></div>
-  <div><label for="kd-city">PLZ und Ort</label><input id="kd-city" autocomplete="postal-code" placeholder="8004 Zürich"><div class="kd-hint kd-hint-warn" id="kd-city-hint" hidden>Bitte mit Postleitzahl, z.&nbsp;B. 8004 Zürich.</div></div>
-  <div><label for="kd-nr">Versicherten-Nr. <span style="text-transform:none;font-weight:400;">(empfohlen)</span></label><input id="kd-nr"><div class="kd-hint">Steht auf der Versichertenkarte. So findet dich die Kasse sicher.</div></div>
+  <div><label for="kd-street">Strasse und Nr.</label><input id="kd-street" autocomplete="address-line1"></div>
+  <div class="kd-plzort"><div><label for="kd-plz">PLZ</label><input id="kd-plz" autocomplete="postal-code" inputmode="numeric" maxlength="4" placeholder="8004"></div><div><label for="kd-ort">Ort</label><input id="kd-ort" autocomplete="address-level2" placeholder="Zürich"></div></div>
+  <div><label for="kd-email">E-Mail</label><input id="kd-email" type="email" autocomplete="email" placeholder="du@beispiel.ch"><div class="kd-hint">Dorthin schicken wir dir das PDF als Kopie.</div></div>
+  <div><label for="kd-nr">Versicherten-Nr. <span style="text-transform:none;font-weight:400;">(optional)</span></label><input id="kd-nr"><div class="kd-hint">Steht auf der Versichertenkarte.</div></div>
   <div class="full"><label for="kd-more">Kinder im selben Brief <span style="text-transform:none;font-weight:400;">(optional, eine Person pro Zeile, mit Geburtsdatum)</span></label><textarea id="kd-more" rows="2" placeholder="Anna Muster, 12.03.2015"></textarea><div class="kd-hint">Erwachsene kündigen je selbst, mit eigenem Brief und eigener Unterschrift. Das verlangen mehrere Kassen.</div></div>
   <fieldset class="kd-zusatz full"><legend>Zusatzversicherung bei dieser Kasse <span class="tip" tabindex="0" aria-label="Info">i<span>Eine Zusatzversicherung zu wechseln lohnt sich selten. Die neue Kasse darf Gesundheitsfragen stellen, Vorbehalte machen oder dich ablehnen, und mit dem Alter wird der Einstieg teurer. Berater drängen trotzdem oft dazu, weil sie dafür bis zu 16 Monatsprämien Provision erhalten. <a href="/blog/provisionen-zusatzversicherung/">Mehr dazu</a></span></span></legend>
     <label class="kd-check"><input type="radio" name="kd-zusatz" value="keine"> Habe ich nicht</label>
@@ -1542,14 +1544,8 @@ def kuendigen_page(kv):
   <div class="kd-sign-row"><span id="kd-pad-hint"></span><button type="button" id="kd-pad-clear" class="kd-link">Neu zeichnen</button></div>
 </div>
 <div id="kd-kanal" class="kd-kanal"></div>
-<div class="kd-send">
-  <div class="kd-send-title">PDF per Mail erhalten</div>
-  <p>Wir schicken dir den fertigen Brief mit einer Anleitung, wie du ihn an deine Kasse schickst. Und nächstes Jahr, wenn die neuen Prämien kommen, die besten Kassen für dich direkt ins Postfach.</p>
-  <div class="kd-send-row"><input type="email" id="kd-email" placeholder="deine@email.ch" autocomplete="email" aria-label="Deine E-Mail-Adresse"><button id="kd-send">PDF zuschicken</button></div>
-  <label class="kd-consent"><input type="checkbox" id="kd-consent"> <span>Ja, schickt mir das PDF und einmal im Jahr meinen persönlichen Prämienvergleich (Wechsel-Wecker). Dafür speichert abovergleich.com meine E-Mail-Adresse, PLZ, Jahrgang, Franchise und Kassen. Keine Weitergabe an Krankenkassen, abmelden mit einem Klick. <a href="/datenschutz/#wecker" target="_blank">Datenschutz</a></span></label>
-  <div class="kd-hint">Das PDF geht dafür einmal durch unseren Server und wird nicht gespeichert. Ohne E-Mail? Unten einfach herunterladen.</div>
-</div>
-<div class="kd-actions"><button id="kd-pdf" class="sec">PDF herunterladen</button><button id="kd-mail" class="sec" hidden>Mail an die Kasse vorbereiten</button><button id="kd-share" class="sec" hidden>PDF teilen</button><button id="kd-copy" class="sec">Text kopieren</button></div>
+<label class="kd-consent"><input type="checkbox" id="kd-wecker" checked> <span>Nächstes Jahr die besten Kassen für mich ins Postfach (Wechsel-Wecker, 1 Mail im Jahr). <a href="/datenschutz/#wecker" target="_blank">Datenschutz</a></span></label>
+<div class="kd-actions"><button id="kd-send">PDF per Mail zuschicken</button><button id="kd-mail" class="sec" hidden>Mail an die Kasse vorbereiten</button><button id="kd-share" class="sec" hidden>PDF teilen</button><button id="kd-copy" class="sec">Text kopieren</button></div>
 <div id="kd-msg" class="kd-msg" role="status"></div>
 <div class="kd-preview-label">Vorschau</div>
 <div id="kd-brief"></div>

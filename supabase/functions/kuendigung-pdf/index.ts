@@ -1,8 +1,8 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-// Kündigungs-Editor: schickt das im Browser erstellte PDF an die Person selbst
-// und schaltet den Wechsel-Wecker ein (Einwilligung steht beim Knopf).
+// Kündigungs-Editor: schickt das im Browser erstellte PDF an die Person selbst.
+// Mit dem Häkchen (voreingestellt, abwählbar) schaltet es den Wechsel-Wecker ein.
 // Das PDF wird nur durchgereicht, nie gespeichert. In kk_wecker landen E-Mail,
 // PLZ, Jahrgang, Franchise, alte und neue Kasse, Herkunft und Zeitpunkt der
 // Einwilligung.
@@ -30,7 +30,7 @@ function limited(ip: string) {
 
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
 
-function mail(p: { kasse: string; kanal: string; ziel: string; deadline: string; neu: string; stopUrl: string }) {
+function mail(p: { kasse: string; kanal: string; ziel: string; deadline: string; neu: string; stopUrl: string; wecker: boolean }) {
   const weg = p.kanal === 'mail'
     ? `Schick das PDF als Anhang an <strong>${esc(p.ziel)}</strong>, am besten von der Mail-Adresse, die ${esc(p.kasse)} von dir kennt. Die Eingangsbestätigung der Kasse ist dein Beweis, heb sie auf.`
     : p.kanal === 'portal'
@@ -47,10 +47,10 @@ function mail(p: { kasse: string; kanal: string; ziel: string; deadline: string;
     <li style="margin-bottom:8px;"><strong>Neue Kasse:</strong> ${p.neu ? `Melde dich bei ${esc(p.neu)} für den 1. Januar an, falls noch nicht geschehen.` : 'Melde dich bei der neuen Kasse für den 1. Januar an, falls noch nicht geschehen.'} Sie muss dich ohne Gesundheitsfragen aufnehmen.</li>
     <li><strong>Bestätigung:</strong> Die neue Kasse meldet der alten, dass du versichert bist. Bis dahin bleibst du bei der alten versichert, also nie ohne Schutz.</li>
   </ol>
-  <div style="background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:12px;padding:16px 18px;margin:22px 0;font-size:14px;line-height:1.6;">
-    <strong>Dein Wechsel-Wecker ist eingeschaltet.</strong> Einmal im Jahr, wenn Ende September die neuen Prämien kommen, schicken wir dir deinen persönlichen Vergleich. Sonst nichts, keine Werbung von Kassen, keine Weitergabe.
-  </div>
-  <p style="font-size:12px;color:#6b6560;line-height:1.6;">Den Brief hast du selbst erstellt, wir haben ihn nur zugestellt und nicht gespeichert. Wecker nicht gewollt? <a href="${p.stopUrl}" style="color:#6b6560;">Hier abmelden</a>.<br><a href="${SITE}/" style="color:#a68600;">abovergleich.com</a>, unabhängiger Krankenkassen-Vergleich. Von Krankenkassen nehmen wir keine Provisionen.</p>
+  ${p.wecker ? `<div style="background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:12px;padding:16px 18px;margin:22px 0;font-size:14px;line-height:1.6;">
+    <strong>Dein Wechsel-Wecker ist eingeschaltet.</strong> Nächstes Jahr, wenn Ende September die neuen Prämien kommen, schicken wir dir die besten Kassen für dich. Sonst nichts, keine Weitergabe an Kassen.
+  </div>` : ''}
+  <p style="font-size:12px;color:#6b6560;line-height:1.6;">Den Brief hast du selbst erstellt, wir haben ihn nur zugestellt und nicht gespeichert.${p.wecker ? ` Wecker nicht gewollt? <a href="${p.stopUrl}" style="color:#6b6560;">Hier abmelden</a>.` : ''}<br><a href="${SITE}/" style="color:#a68600;">abovergleich.com</a>, unabhängiger Krankenkassen-Vergleich. Von Krankenkassen nehmen wir keine Provisionen.</p>
 </div></body></html>`;
 }
 
@@ -68,7 +68,6 @@ Deno.serve(async (req) => {
     const b = await req.json();
     const email = String(b.email || '').trim().toLowerCase();
     if (!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(email) || email.length > 200) return json({ error: 'Bitte eine gültige E-Mail-Adresse eingeben.' }, 400);
-    if (b.consent !== true) return json({ error: 'Bitte bestätige den Hinweis zum Wecker.' }, 400);
     const pdf = String(b.pdf || '');
     if (!pdf || !/^[A-Za-z0-9+/=]+$/.test(pdf)) return json({ error: 'Das PDF fehlt. Bitte nochmals versuchen oder herunterladen.' }, 400);
     if (pdf.length > MAX_PDF) return json({ error: 'Das PDF ist zu gross. Lade es herunter.' }, 400);
@@ -77,9 +76,10 @@ Deno.serve(async (req) => {
     const plz = parseInt(b.plz), jahrgang = parseInt(b.jahrgang);
     const franchise = [300, 500, 1000, 1500, 2000, 2500].includes(parseInt(b.franchise)) ? parseInt(b.franchise) : 2500;
 
-    // Wecker: nur mit PLZ und Jahrgang, sonst nur das PDF verschicken
+    // Wecker nur, wenn das Häkchen gesetzt ist (Voreinstellung, abwählbar),
+    // und nur mit PLZ und Jahrgang. Sonst nur das PDF verschicken.
     let token: string | null = null;
-    if (plz >= 1000 && plz <= 9699 && jahrgang >= 1920 && jahrgang <= 2030) {
+    if (b.wecker === true && plz >= 1000 && plz <= 9699 && jahrgang >= 1920 && jahrgang <= 2030) {
       const now = new Date().toISOString();
       const row = {
         email, plz, jahrgang, franchise,
@@ -102,7 +102,7 @@ Deno.serve(async (req) => {
     const html = mail({
       kasse, kanal: String(b.kanal || 'post'), ziel: String(b.ziel || '').slice(0, 120),
       deadline: String(b.deadline || '30. November').slice(0, 40), neu: String(b.neu || '').slice(0, 80),
-      stopUrl: token ? `${WECKER}?stop=${token}` : `${SITE}/datenschutz/`,
+      stopUrl: token ? `${WECKER}?stop=${token}` : `${SITE}/datenschutz/`, wecker: !!token,
     });
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',

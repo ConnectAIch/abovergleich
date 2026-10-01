@@ -31,7 +31,9 @@
     var pf = JSON.parse(sessionStorage.getItem('kd-prefill') || 'null');
     if (pf) {
       if (!q && pf.kasse) sel.value = String(pf.kasse);
-      ['name', 'street', 'city', 'nr'].forEach(function (k) { if (pf[k] && !$('kd-' + k).value) $('kd-' + k).value = pf[k]; });
+      ['name', 'street', 'nr'].forEach(function (k) { if (pf[k] && !$('kd-' + k).value) $('kd-' + k).value = pf[k]; });
+      var pc = String(pf.city || '').match(/^(\d{4})\s+(.+)$/);
+      if (pc && !$('kd-plz').value) { $('kd-plz').value = pc[1]; $('kd-ort').value = pc[2]; }
     }
   } catch (e) {}
   if (window.Combobox) Combobox.enhance(sel, { search: true, placeholder: 'Kasse suchen…' });
@@ -148,8 +150,8 @@
   function letter() {
     var k = kasse();
     var name = val('kd-name') || 'Vorname Name';
-    var city = val('kd-city') || 'PLZ Ort';
-    var ort = val('kd-city') ? city.replace(/^\d{4}\s*/, '') || 'Ort' : 'Ort';
+    var city = (val('kd-plz') + ' ' + val('kd-ort')).trim() || 'PLZ Ort';
+    var ort = val('kd-ort') || 'Ort';
     var more = $('kd-more').value.split('\n').map(function (s) { return s.trim(); }).filter(Boolean);
     var subject = ['Kündigung der obligatorischen Krankenpflegeversicherung (Grundversicherung)'];
     var ids = [];
@@ -179,7 +181,6 @@
   }
   function render() {
     var L = letter(), b = $('kd-brief');
-    $('kd-city-hint').hidden = !val('kd-city') || /^\d{4}\b/.test(val('kd-city'));
     b.textContent = '';
     b.appendChild(document.createTextNode([].concat(L.sender, ['', ''], L.recipient, ['', '', L.dateLine, '', ''], L.subject,
       ['', 'Sehr geehrte Damen und Herren', ''], L.body, ['', 'Freundliche Grüsse', '']).join('\n') + '\n'));
@@ -216,19 +217,19 @@
     var nm = esc(k.name);
     if (k.mail) {
       el.innerHTML = '<strong>' + nm + ' nimmt die Kündigung per Mail an.</strong> ' +
-        'Unterschreib oben, lade das PDF herunter und schick es an <a href="mailto:' + esc(k.mail) + '">' + esc(k.mail) + '</a>' +
+        'Unterschreib oben, lass dir das PDF zuschicken und leite es an <a href="mailto:' + esc(k.mail) + '">' + esc(k.mail) + '</a>' +
         (k.own ? ', <strong>von der Mail-Adresse, die ' + nm + ' von dir kennt</strong>. Von einer anderen Adresse gilt die Kündigung nicht.'
                : ', am besten von der Mail-Adresse, die deine Kasse von dir kennt.') +
         ' Die Eingangsbestätigung der Kasse ist dein Beweis, heb sie auf.' + src;
     } else if (k.portal) {
       el.innerHTML = '<strong>' + nm + ' nimmt die Kündigung per Mail oder im Kundenportal ' + esc(k.portal) + ' an,</strong> nennt aber keine Mail-Adresse. ' +
-        'Lade das PDF herunter und schick es über ' + esc(k.portal) + ' oder per Post.' + src;
+        'Lass dir das PDF zuschicken und lade es in ' + esc(k.portal) + ' hoch, oder schick es per Post.' + src;
     } else {
       el.innerHTML = k.post_only
         ? '<strong>Per eingeschriebenem Brief.</strong> ' + nm + ' verlangt das ausdrücklich. ' +
-          'Druck das PDF aus und bring es spätestens eine Woche vor dem ' + esc(D.deadline_text) + ' zur Post.' + src
+          'Lass dir das PDF zuschicken, druck es aus und bring es spätestens eine Woche vor dem ' + esc(D.deadline_text) + ' zur Post.' + src
         : '<strong>Per Post an die Adresse im Brief.</strong> ' + nm + ' nennt auf der eigenen Website keinen Mail-Weg für die Grundversicherung. ' +
-          'Druck das PDF aus und schick es spätestens eine Woche vor dem ' + esc(D.deadline_text) + ' ab. ' +
+          'Lass dir das PDF zuschicken, druck es aus und schick es spätestens eine Woche vor dem ' + esc(D.deadline_text) + ' ab. ' +
           'Ein Einschreiben ist nicht vorgeschrieben, aber dein Beweis, dass der Brief rechtzeitig ankam.' + src;
     }
   }
@@ -296,8 +297,7 @@
   }
   function withPdf(btn, fn) {
     var label = btn.textContent;
-    if (!kasse()) { $('kd-msg').textContent = 'Bitte zuerst deine Kasse wählen.'; return; }
-    if (!val('kd-name')) { $('kd-msg').textContent = 'Bitte deinen Namen eintragen.'; $('kd-name').focus(); return; }
+    if (!check()) return;
     $('kd-msg').textContent = '';
     btn.disabled = true;
     btn.textContent = 'Einen Moment…';
@@ -305,14 +305,39 @@
       var L = letter();
       return fn(makePdf(L), L);   // darf ein Promise liefern, der Knopf wartet darauf
     }).catch(function () {
-      $('kd-msg').textContent = 'Das PDF konnte nicht erstellt werden. Nimm «Text kopieren» oder versuch es nochmals.';
+      $('kd-msg').textContent = 'Das hat nicht geklappt. Versuch es nochmals oder nimm «Text kopieren».';
     }).then(function () {
       btn.disabled = false;
       btn.textContent = label;
     });
   }
-  // Anonym zählen, von welcher Kasse zu welcher gewechselt wird. Name,
-  // Adresse und Unterschrift verlassen den Browser nie.
+
+  // Pflichtfelder: ohne sie findet die Kasse dich nicht sicher, und ohne
+  // E-Mail können wir das PDF nicht zuschicken.
+  var REQUIRED = [['kd-name', 'Name'], ['kd-birth', 'Geburtsdatum'], ['kd-street', 'Strasse'],
+    ['kd-plz', 'PLZ'], ['kd-ort', 'Ort'], ['kd-email', 'E-Mail']];
+  var OK = {
+    'kd-birth': /^\d{1,2}\.\d{1,2}\.(19|20)\d{2}$/,
+    'kd-plz': /^\d{4}$/,
+    'kd-email': /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i,
+  };
+  function check() {
+    if (!kasse()) { $('kd-msg').textContent = 'Bitte zuerst deine Kasse wählen.'; return false; }
+    var bad = REQUIRED.filter(function (f) {
+      var v = val(f[0]), ok = v && (!OK[f[0]] || OK[f[0]].test(v));
+      $(f[0]).classList.toggle('kd-invalid', !ok);
+      return !ok;
+    });
+    if (bad.length) {
+      $('kd-msg').textContent = 'Bitte noch ausfüllen: ' + bad.map(function (f) { return f[1]; }).join(', ') + '.';
+      $(bad[0][0]).focus();
+      return false;
+    }
+    return true;
+  }
+  REQUIRED.forEach(function (f) { $(f[0]).addEventListener('input', function () { $(f[0]).classList.remove('kd-invalid'); }); });
+
+  // Statistik ohne Namen, Adresse oder E-Mail (Datenschutz 3.3)
   function track(event) {
     var L = letter();
     var body = {
@@ -326,64 +351,60 @@
         headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).catch(function () {});
     } catch (e) {}
   }
-  function plzOf() { var m = val('kd-city').match(/^(\d{4})\b/); return m ? parseInt(m[1], 10) : null; }
+  function plzOf() { return /^\d{4}$/.test(val('kd-plz')) ? parseInt(val('kd-plz'), 10) : null; }
   function jahrgangOf() { var m = val('kd-birth').match(/(19|20)\d{2}\s*$/); return m ? parseInt(m[0], 10) : null; }
   function profile() { try { return JSON.parse(localStorage.getItem('kk-profile') || 'null') || {}; } catch (e) { return {}; } }
 
-  // PDF per Mail an die Person selbst, schaltet den Wechsel-Wecker ein
+  // Kopie per Mail an die Person selbst, bei jeder Aktion genau einmal pro
+  // Fassung des Briefs. Mit Häkchen schaltet sie den Wechsel-Wecker ein.
+  var sent = {};
+  function sendCopy(doc, L) {
+    var email = val('kd-email'), pr = profile(), k = L.kasse;
+    var b64 = doc.output('datauristring').split(',')[1];
+    var key = email + '|' + $('kd-wecker').checked + '|' + b64.length + '|' + plain(L).length;
+    if (sent[key]) return sent[key];
+    sent[key] = fetch('https://zexpmaegqsayleaohiip.supabase.co/functions/v1/kuendigung-pdf', {
+      method: 'POST', keepalive: b64.length < 60000, headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: email, wecker: $('kd-wecker').checked, pdf: b64, filename: fileName(L),
+        kasse: k.name, kanal: k.mail ? 'mail' : k.portal ? 'portal' : 'post', ziel: k.mail || k.portal || '',
+        deadline: D.deadline_text, neu: neu ? neu.name : '',
+        plz: plzOf() || pr.plz, jahrgang: jahrgangOf() || pr.year, franchise: pr.franchise,
+        accident_included: pr.accident === true, current_insurer_id: k.id, new_insurer_id: neu ? neu.id : null,
+        paid_monthly: (function () { try { return parseFloat((localStorage.getItem('kk-paid') || '').replace(',', '.')) || null; } catch (e) { return null; } })(),
+      }),
+    }).then(function (r) { return r.json(); }).then(function (res) {
+      if (!res.ok) { delete sent[key]; throw new Error(res.error || 'Versand'); }
+      track('kuendigung_pdf');
+      return res;
+    }, function (err) { delete sent[key]; throw err; });
+    return sent[key];
+  }
+  function sentText(res) {
+    return 'Das PDF ist unterwegs an ' + val('kd-email') + ', schau auch im Spam-Ordner nach.' +
+      (res && res.wecker ? ' Dein Wechsel-Wecker ist eingeschaltet.' : '');
+  }
+
   $('kd-send').onclick = function () {
-    var email = val('kd-email');
-    if (!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(email)) { $('kd-msg').textContent = 'Bitte deine E-Mail-Adresse eintragen.'; $('kd-email').focus(); return; }
-    if (!$('kd-consent').checked) {
-      $('kd-consent').parentNode.classList.add('kd-need');
-      $('kd-msg').textContent = 'Bitte das Häkchen beim Wechsel-Wecker setzen, oder das PDF ohne E-Mail herunterladen.';
-      return;
-    }
-    $('kd-consent').parentNode.classList.remove('kd-need');
-    var btn = this;
-    withPdf(btn, function (doc, L) {
-      var pr = profile(), k = L.kasse;
-      var b64 = doc.output('datauristring').split(',')[1];
-      btn.textContent = 'Wird verschickt…';
-      return fetch('https://zexpmaegqsayleaohiip.supabase.co/functions/v1/kuendigung-pdf', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: email, consent: $('kd-consent').checked, pdf: b64, filename: fileName(L),
-          kasse: k.name, kanal: k.mail ? 'mail' : k.portal ? 'portal' : 'post', ziel: k.mail || k.portal || '',
-          deadline: D.deadline_text, neu: neu ? neu.name : '',
-          plz: plzOf() || pr.plz, jahrgang: jahrgangOf() || pr.year, franchise: pr.franchise,
-          accident_included: pr.accident === true, current_insurer_id: k.id, new_insurer_id: neu ? neu.id : null,
-          paid_monthly: (function () { try { return parseFloat((localStorage.getItem('kk-paid') || '').replace(',', '.')) || null; } catch (e) { return null; } })(),
-        }),
-      }).then(function (r) { return r.json(); }).then(function (res) {
-        if (res.ok) {
-          $('kd-msg').textContent = 'Verschickt an ' + email + '. Schau auch im Spam-Ordner nach.' +
-            (res.wecker ? ' Dein Wechsel-Wecker ist eingeschaltet.' : '');
-          track('kuendigung_pdf');
-        } else {
-          $('kd-msg').textContent = res.error || 'Der Versand hat nicht geklappt. Lade das PDF herunter.';
-        }
-      }).catch(function () {
-        $('kd-msg').textContent = 'Der Versand hat nicht geklappt. Lade das PDF herunter.';
-      });
+    withPdf(this, function (doc, L) {
+      return sendCopy(doc, L).then(function (res) { $('kd-msg').textContent = sentText(res); },
+        function (err) { $('kd-msg').textContent = (err && err.message !== 'Versand' && err.message) || 'Der Versand hat nicht geklappt. Bitte nochmals versuchen.'; });
     });
   };
-
-  $('kd-pdf').onclick = function () {
-    withPdf(this, function (doc, L) { doc.save(fileName(L)); track('kuendigung_pdf'); });
-  };
-  // Mail vorbereiten: PDF speichern und das Mailprogramm mit Empfänger,
-  // Betreff und Text öffnen. Den Anhang kann ein mailto-Link nicht mitgeben,
-  // der Hinweis sagt das.
+  // Mail an die Kasse: zuerst die Kopie mit PDF an dich, dann das Mailprogramm
+  // mit Empfänger, Betreff und Text. Den Anhang kann ein mailto-Link nicht
+  // mitgeben, also leitest du am einfachsten unsere Mail weiter.
   $('kd-mail').onclick = function () {
     withPdf(this, function (doc, L) {
-      doc.save(fileName(L));
-      track('kuendigung_mail');
-      $('kd-msg').textContent = 'PDF gespeichert. Häng es im Mailprogramm an, bevor du auf Senden drückst.';
-      location.href = 'mailto:' + encodeURIComponent(L.kasse.mail) + '?subject=' + encodeURIComponent(mailSubject(L)) + '&body=' + encodeURIComponent(mailBody(L));
+      return sendCopy(doc, L).then(function (res) {
+        track('kuendigung_mail');
+        $('kd-msg').textContent = sentText(res) + ' Häng es an die Mail an die Kasse an, oder leite unsere Mail einfach weiter.';
+        location.href = 'mailto:' + encodeURIComponent(L.kasse.mail) + '?subject=' + encodeURIComponent(mailSubject(L)) + '&body=' + encodeURIComponent(mailBody(L));
+      }, function () { $('kd-msg').textContent = 'Der Versand hat nicht geklappt. Bitte nochmals versuchen.'; });
     });
   };
-  // Auf dem Handy: das PDF direkt ins Mailprogramm teilen, mit Anhang
+  // Auf dem Handy: das PDF direkt ins Mailprogramm teilen, mit Anhang.
+  // Teilen muss im Klick passieren, die Kopie an dich läuft parallel.
   var canShareFiles = false;
   try { canShareFiles = !!(navigator.canShare && navigator.canShare({ files: [new File(['x'], 'x.pdf', { type: 'application/pdf' })] })); } catch (e) {}
   $('kd-share').hidden = !canShareFiles;
@@ -392,20 +413,26 @@
       var file = new File([doc.output('blob')], fileName(L), { type: 'application/pdf' });
       track('kuendigung_mail');
       if (L.kasse.mail && navigator.clipboard) navigator.clipboard.writeText(L.kasse.mail).catch(function () {});
-      navigator.share({ files: [file], title: mailSubject(L), text: mailBody(L) }).then(function () {
-        if (L.kasse.mail) $('kd-msg').textContent = 'Die Adresse ' + L.kasse.mail + ' ist kopiert, füg sie als Empfänger ein.';
-      }).catch(function () {});
+      var shared = navigator.share({ files: [file], title: mailSubject(L), text: mailBody(L) }).catch(function () {});
+      sendCopy(doc, L).then(function (res) {
+        $('kd-msg').textContent = (L.kasse.mail ? 'Die Adresse ' + L.kasse.mail + ' ist kopiert, füg sie als Empfänger ein. ' : '') + sentText(res);
+      }, function () {});
+      return shared;
     });
   };
   $('kd-copy').onclick = function () {
-    var t = plain(letter());
+    if (!check()) return;
+    var btn = this, t = plain(letter());
     track('kuendigung_text');
     (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(
-      function () { $('kd-copy').textContent = 'Kopiert'; },
-      function () { $('kd-copy').textContent = 'Bitte markieren und kopieren'; });
+      function () { btn.textContent = 'Kopiert'; },
+      function () { btn.textContent = 'Bitte markieren und kopieren'; });
+    // Kopie mit PDF trotzdem an die Mail-Adresse
+    loadPdf().then(function () { var L = letter(); return sendCopy(makePdf(L), L); })
+      .then(function (res) { $('kd-msg').textContent = 'Text kopiert. ' + sentText(res); }, function () {});
   };
 
-  ['kd-kasse', 'kd-name', 'kd-birth', 'kd-nr', 'kd-street', 'kd-city', 'kd-more'].forEach(function (id) {
+  ['kd-kasse', 'kd-name', 'kd-birth', 'kd-nr', 'kd-street', 'kd-plz', 'kd-ort', 'kd-more'].forEach(function (id) {
     $(id).addEventListener('input', render);
     $(id).addEventListener('change', render);
   });
