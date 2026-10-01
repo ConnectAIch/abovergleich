@@ -14,7 +14,7 @@ Ein neues Modell darf bis zu 20 Prozent unter dem Standardmodell starten, solang
 Der günstigste Tarif von 2026 steigt 2027 im Schnitt um **7,7 Prozent**, der Markt um 5,4 Prozent. Nur in 8 von 36 Regionen ist er noch die Nummer 1. Im Jahr davor war es genauso. Beispiel Appenzell: Vivao Sympany war 2026 mit CHF 215.90 die günstigste Kasse, 2027 kostet derselbe Tarif CHF 263.10, plus 21,9 Prozent, und liegt nur noch auf Platz 9. Wer letztes Jahr zur Billigsten gewechselt hat, sollte dieses Jahr wieder vergleichen.
 
 **3. Es gibt Kassen, die dauerhaft günstig bleiben.**
-Das Preistreue-Rating von abovergleich.com bewertet jede Kasse mit einer Note von 0 bis 10: Preis heute, wie oft sie seit 2020 in der Region unter den fünf günstigsten war, wie stark sie aufschlägt, ob neue Modelle ihren Rabatt behalten, wie oft sie Tarife streicht, und wie gut ihre Reserven sind. Vorne liegen **Concordia (9,0), Agrisano (8,5) und KPT (7,2)**. Welche Kasse in der eigenen Region vorne liegt, zeigt die Seite jedes Kantons.
+Das Preistreue-Rating von abovergleich.com bewertet jede Kasse mit einer Note von 0 bis 10: Preis heute, wie oft sie seit 2020 in der Region unter den fünf günstigsten war, wie stark sie aufschlägt, ob neue Modelle ihren Rabatt behalten, wie oft sie Tarife streicht, und wie gut ihre Reserven sind. Vorne liegen **Concordia (8,2), Agrisano (8,1) und KPT (7,8)**. Welche Kasse in der eigenen Region vorne liegt, zeigt die Seite jedes Kantons.
 
 ---
 
@@ -32,7 +32,7 @@ Das Preistreue-Rating von abovergleich.com bewertet jede Kasse mit einer Note vo
 
 ## Methodik
 
-Grundlage sind die Prämien aller Krankenkassen von 2020 bis 2027 für jede Prämienregion, veröffentlicht vom BAG (opendata.swiss), dazu die Solvenzquoten laut BAG per 1. Januar 2026. Ausgewertet wurden Erwachsene mit Unfalldeckung, Franchise 300 und 2'500. Das Rating hat sechs Teilnoten: Preis heute (30 Prozent), Konstanz (25), Treue-Anstieg (15), Rabatt-Treue neuer Modelle (10), Tarif-Bestand (10) und Reserven (10). Die Formel ist auf der Website offengelegt. Kundenbewertungen fliessen nicht ein, keine Kasse bezahlt für ihre Platzierung.
+Grundlage sind die Prämien aller Krankenkassen von 2020 bis 2027 für jede Prämienregion, veröffentlicht vom BAG (opendata.swiss), dazu die Solvenzquoten laut BAG per 1. Januar 2026. Ausgewertet wurden Erwachsene mit und ohne Unfalldeckung, Franchise 300 und 2'500, gewichtet nach dem Versichertenbestand laut BAG. Das Rating hat sechs Teilnoten: Preis heute (30 Prozent), Konstanz (25), Treue-Anstieg (15), Rabatt-Treue neuer Modelle (10), Tarif-Bestand (10) und Reserven (10). Die Formel ist auf der Website offengelegt. Kundenbewertungen fliessen nicht ein, keine Kasse bezahlt für ihre Platzierung.
 
 ---
 

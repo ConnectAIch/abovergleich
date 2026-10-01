@@ -13,7 +13,8 @@ Bewertungen. Sechs Teilnoten von 0 bis 10:
   Tarif-Bestand    10 %  wie viele Tarife laufen im Folgejahr unverändert weiter?
   Finanzpolster    10 %  Solvenzquote laut BAG (Reserven / Mindestreserven)
 
-Erwachsene mit Unfall, Franchise 300 und 2'500 gemittelt. Die Rohdaten
+Vier Varianten (Erwachsene mit und ohne Unfall, Franchise 300 und 2'500),
+zur Gesamtnote gewichtet nach dem Bestand laut BAG (compute_all). Die Rohdaten
 (scripts/data/praemien_YYYY.csv) liegen nur lokal; das Ergebnis schreibt
 build_kk_pages.py auf die Seiten und nach /rating-daten.json.
 
@@ -60,9 +61,11 @@ def note(parts):
     return round(sum(v * WEIGHTS[k] for k, v in have.items()) / w, 1) if w else None
 
 
-def compute():
+def compute(accident=True, main_f=MAIN_F, rows=None):
+    """Eine Variante: mit oder ohne Unfall, mit den Franchisen in main_f.
+    compute_all() rechnet die vier Varianten und gewichtet sie."""
     years = list(range(FIRST, b.YEAR + 1))
-    rows = {y: b.load_year(y) for y in years}
+    rows = rows or {y: b.load_year(y, accident) for y in years}
     bestand = defaultdict(float)
     for (i, _c), v in b.load_bestand().items():
         bestand[i] += v
@@ -101,7 +104,7 @@ def compute():
 
     treue = defaultdict(list)
     erosion = defaultdict(list)
-    for F in MAIN_F:
+    for F in main_f:
         market = defaultdict(list)
         stay = []
         for y0, y1 in zip(years, years[1:]):
@@ -200,8 +203,8 @@ def compute():
     national = {}
     for i in ids:
         regs = [(reg, ii) for (reg, ii) in pos27 if ii == i]
-        pos = [pos27[k][F] for k in regs for F in MAIN_F if F in pos27[k]]
-        kon = [sum(v) / len(v) for k in regs for F in MAIN_F for v in [top[k][F]] if len(v) >= 3]
+        pos = [pos27[k][F] for k in regs for F in main_f if F in pos27[k]]
+        kon = [sum(v) / len(v) for k in regs for F in main_f for v in [top[k][F]] if len(v) >= 3]
         raw = {
             "preis": q(pos) if pos else None,
             "konstanz": q(kon) if kon else None,
@@ -219,8 +222,8 @@ def compute():
     regions = defaultdict(dict)
     for (reg, i), p in pos27.items():
         n = national[i]
-        pr = [p[F] for F in MAIN_F if F in p]
-        kv = [sum(top[(reg, i)][F]) / len(top[(reg, i)][F]) for F in MAIN_F if len(top[(reg, i)][F]) >= 3]
+        pr = [p[F] for F in main_f if F in p]
+        kv = [sum(top[(reg, i)][F]) / len(top[(reg, i)][F]) for F in main_f if len(top[(reg, i)][F]) >= 3]
         parts = dict(n["parts"])
         parts["preis"] = scale("preis", st.mean(pr)) if pr else None
         parts["konstanz"] = scale("konstanz", st.mean(kv)) if kv else n["parts"]["konstanz"]
@@ -236,18 +239,66 @@ def compute():
             "verwaltung": adm, "weights": WEIGHTS, "labels": LABELS}
 
 
+# Gewichte der vier Varianten nach dem Bestand, BAG KVSTAT 2024 T 7.16
+# (Erwachsene ab 26): rund 44 % mit Unfalldeckung über die Kasse, 56 % ohne;
+# von denen mit Franchise 300 oder 2'500 haben 54,5 % die 300, 45,5 % die 2'500.
+VARIANTS = [("mit", 300), ("mit", 2500), ("ohne", 300), ("ohne", 2500)]
+VARIANT_W = {("mit", 300): .44 * .545, ("mit", 2500): .44 * .455,
+             ("ohne", 300): .56 * .545, ("ohne", 2500): .56 * .455}
+VARIANT_LABEL = {("mit", 300): "Mit Unfall, Franchise 300", ("mit", 2500): "Mit Unfall, Franchise 2'500",
+                 ("ohne", 300): "Ohne Unfall, Franchise 300", ("ohne", 2500): "Ohne Unfall, Franchise 2'500"}
+
+
+def _wmean(pairs):
+    pairs = [(w, v) for w, v in pairs if v is not None]
+    return sum(w * v for w, v in pairs) / sum(w for w, _ in pairs) if pairs else None
+
+
+def compute_all():
+    """Vier Varianten (mit/ohne Unfall × Franchise 300/2'500), gewichtet zu
+    einer Gesamtnote. Struktur wie compute(), dazu je Kasse und Region die
+    Einzelnoten der Varianten."""
+    years = list(range(FIRST, b.YEAR + 1))
+    rows = {"mit": {y: b.load_year(y, True) for y in years}, "ohne": {y: b.load_year(y, False) for y in years}}
+    V = {v: compute(v[0] == "mit", (v[1],), rows[v[0]]) for v in VARIANTS}
+    base = V[("mit", 2500)]
+    national = {}
+    for i, n in base["national"].items():
+        vs = {v: V[v]["national"].get(i) for v in VARIANTS}
+        parts = {k: _wmean([(VARIANT_W[v], (x or {}).get("parts", {}).get(k)) for v, x in vs.items()]) for k in WEIGHTS}
+        raw = {k: _wmean([(VARIANT_W[v], (x or {}).get("raw", {}).get(k)) for v, x in vs.items()]) for k in WEIGHTS}
+        tot = _wmean([(VARIANT_W[v], (x or {}).get("note")) for v, x in vs.items()])
+        national[i] = dict(n, note=round(tot, 1) if tot is not None else None, parts=parts, raw=raw,
+                           varianten={f"{v[0]}-{v[1]}": (x or {}).get("note") for v, x in vs.items()})
+    regions = defaultdict(dict)
+    for reg, m in base["regions"].items():
+        for i in m:
+            vs = {v: V[v]["regions"].get(reg, {}).get(i) for v in VARIANTS}
+            tot = _wmean([(VARIANT_W[v], (x or {}).get("note")) for v, x in vs.items()])
+            regions[reg][i] = {
+                "note": round(tot, 1) if tot is not None else None,
+                "v": [(x or {}).get("note") for x in vs.values()],
+                "top5": (vs[("mit", 300)] or vs[("mit", 2500)])["top5"],
+                "top5o": ((vs[("ohne", 300)] or vs[("ohne", 2500)] or {}).get("top5")) or (vs[("mit", 300)] or vs[("mit", 2500)])["top5"],
+            }
+    return dict(base, national=national, regions=regions,
+                varianten=[{"key": f"{v[0]}-{v[1]}", "label": VARIANT_LABEL[v], "gewicht": round(VARIANT_W[v], 3)} for v in VARIANTS])
+
+
 def client_json(r):
     """Kompakte Fassung für den Rechner: Note je Region, Konstanz je Franchise, Tarif-Alter."""
     return {
         "jahr": b.YEAR, "von": FIRST, "top": TOP_N, "franchisen": list(FRANCHISES),
         "national": {str(i): {"note": n["note"], "regional": n["regional"]} for i, n in r["national"].items()},
-        "regionen": {reg: {str(i): [v["note"], v["top5"]] for i, v in m.items()} for reg, m in r["regions"].items()},
+        # je Kasse: [Gesamtnote, top5 mit Unfall, top5 ohne Unfall, [m300, m2500, o300, o2500]]
+        "regionen": {reg: {str(i): [v["note"], v["top5"], v.get("top5o", v["top5"]), v.get("v")] for i, v in m.items()}
+                     for reg, m in r["regions"].items()},
         "seit": {str(i): {c: s for c, s in m.items() if s >= b.YEAR - 2} for i, m in r["seit"].items()},
     }
 
 
 if __name__ == "__main__":
-    r = compute()
+    r = compute_all()
     rows = sorted(r["national"].items(), key=lambda x: -(x[1]["note"] or 0))
     print(f"{'Kasse':24s} {'Note':>5s} " + " ".join(f"{LABELS[k][:7]:>7s}" for k in WEIGHTS))
     for i, n in rows:

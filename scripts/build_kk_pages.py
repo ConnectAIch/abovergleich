@@ -355,6 +355,8 @@ PAGE_CSS = """
   .kk-bar { display:block; height:8px; background:var(--surface2); border-radius:4px; overflow:hidden; }
   .kk-bar span { display:block; height:100%; background:var(--accent); border-radius:4px; }
   .kk-rnote { font-size:13px; color:var(--muted); margin:12px 0 8px; }
+  .kk-rvar { font-size:13px; color:var(--muted); margin:-4px 0 14px; line-height:1.7; }
+  .kk-rvar strong { color:var(--text); }
   .kk-rating > a { color:var(--accent-dark); font-weight:600; font-size:14px; }
   .kk-rtable td, .kk-rtable th { white-space:nowrap; padding-left:8px; padding-right:8px; font-size:14px; }
   .kk-rtable td:nth-child(n+4), .kk-rtable th:nth-child(n+4) { color:var(--muted); }
@@ -915,9 +917,12 @@ def rating_kasse_card(i):
                     f'(Schnitt aller Kassen CHF {m:.0f})'
                     + (f', {first}: CHF {adm[first]["verwaltung"]:.0f}' if first != last else "") + '. Quelle: BAG, Aufsichtsdaten.</p>')
     hint = " Regionalkasse: die Note stützt sich auf wenige Regionen." if n["regional"] else ""
+    vn = n.get("varianten") or {}
+    var_html = ('<div class="kk-rvar">' + " · ".join(
+        f'{e(v["label"])} <strong>{note_fmt(vn.get(v["key"]))}</strong>' for v in RATING.get("varianten", [])) + "</div>") if vn else ""
     return (f'<div class="kk-rating"><div class="kk-rating-head"><div><div class="kk-rating-label">Preistreue-Rating {YEAR}</div>'
             f'<div class="kk-rating-sub">Ist {e(n["name"])} dauerhaft günstig? Aus den BAG-Prämien seit {RATING["years"][0]}.{hint}</div></div>'
-            f'<div class="kk-rating-note">{note_fmt(n["note"])}<span>/10</span></div></div>{rows}{adm_html}'
+            f'<div class="kk-rating-note">{note_fmt(n["note"])}<span>/10</span></div></div>{var_html}{rows}{adm_html}'
             f'{award_strip(i)}<a href="{RATING_PATH}">So rechnen wir &rarr;</a></div>')
 
 
@@ -989,6 +994,13 @@ def rating_page(r):
         ("Bezahlen Kassen für eine gute Note?",
          "Nein. abovergleich.com nimmt keine Provisionen von Krankenkassen. Die Note entsteht aus einer festen Formel, die hier offengelegt ist."),
     ]
+    vkeys = [v["key"] for v in r["varianten"]]
+    vhead = "".join(f'<th class="num">{e(v["label"].replace("Franchise ", "F "))}</th>' for v in r["varianten"])
+    var_table = (f'<div class="kk-table-wrap"><table class="kk-table kk-rtable"><thead><tr><th>Kasse</th><th class="num">Gesamt</th>{vhead}</tr></thead><tbody>'
+                 + "".join(f'<tr><td>{kasse_link(i)}</td><td class="num"><strong>{note_fmt(nat[i]["note"])}</strong></td>'
+                           + "".join(f'<td class="num">{note_fmt(nat[i]["varianten"].get(k))}</td>' for k in vkeys) + "</tr>" for i in big)
+                 + "</tbody></table></div>")
+    wtxt = ", ".join(f'{v["label"]} {round(v["gewicht"] * 100)} %' for v in r["varianten"])
     body = f"""{crumbs_html([("Krankenkassen-Vergleich", "/"), ("Rating", path)])}
 <div class="article-badge">Preistreue-Rating {YEAR}</div>
 <h1>Krankenkassen-Rating {YEAR}: Welche Kasse ist dauerhaft günstig?</h1>
@@ -1004,6 +1016,10 @@ def rating_page(r):
 <h2>Das Rating {YEAR}</h2>
 <p>Note von 0 bis 10, gewichtet aus sechs Teilnoten. Kassen mit mindestens 50'000 Versicherten, über alle Prämienregionen gerechnet. In deiner Region kann die Reihenfolge anders aussehen, siehe unten.</p>
 {table(big)}
+
+<h2>Je nach Situation: mit oder ohne Unfall, Franchise 300 oder 2'500</h2>
+<p>Die Kassen rechnen den Unfallzuschlag und die Franchisen unterschiedlich. Deshalb gibt es vier Einzelnoten. Die Gesamtnote oben gewichtet sie danach, wie viele Erwachsene welche Variante haben (BAG: rund 56 % ohne Unfalldeckung über die Kasse; Franchise 300 etwas häufiger als 2'500). Im Rechner siehst du die Note für deine Situation.</p>
+{var_table}
 
 <h2>Preistreue-Award {YEAR}</h2>
 <p>Aus dem Rating vergeben wir jedes Jahr Auszeichnungen: Gesamtwertung, Kategorien wie «Dauerhaft günstig» oder «Solideste Reserven», und die preistreueste Kasse in jedem Kanton. Kassen können das Badge frei verwenden.</p>
@@ -1032,7 +1048,7 @@ def rating_page(r):
 
 <h2>So rechnen wir</h2>
 <div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Teilnote</th><th class="num">Gewicht</th><th>Was sie misst</th></tr></thead><tbody>{meth_rows}</tbody></table></div>
-<p>Grundlage sind die Prämien aller Kassen {y0} bis {YEAR} für Erwachsene mit Unfalldeckung, Franchise 300 und 2'500. Tarife, die eine Kasse umbenennt, verfolgen wir über den Namen weiter. Fehlt eine Teilnote, verteilt sich ihr Gewicht auf die übrigen. Die Formel gilt für alle Kassen gleich, und keine Kasse bezahlt uns etwas.</p>
+<p>Grundlage sind die Prämien aller Kassen {y0} bis {YEAR} für Erwachsene, je mit und ohne Unfalldeckung und mit Franchise 300 und 2'500. Daraus entstehen vier Einzelnoten; die Gesamtnote gewichtet sie nach dem Bestand laut BAG ({wtxt}). Tarife, die eine Kasse umbenennt, verfolgen wir über den Namen weiter. Fehlt eine Teilnote, verteilt sich ihr Gewicht auf die übrigen. Die Formel gilt für alle Kassen gleich, und keine Kasse bezahlt uns etwas.</p>
 
 <div class="kk-faq"><h2>Häufige Fragen</h2>{"".join(f"<h3>{e(q)}</h3><p>{e(a)}</p>" for q, a in qa)}</div>
 <p class="kk-note">Quellen: BAG, Prämien der obligatorischen Krankenversicherung {y0} bis {YEAR} (opendata.swiss); BAG über priminfo.admin.ch, Solvenzquoten per 1.1.2026; BAG, Aufsichtsdaten OKP; KVV Art. 101. Angaben ohne Gewähr.</p>"""
@@ -1101,6 +1117,13 @@ def award_badge_url(aid, suffix=""):
 
 
 def write_award_badges():
+    # Badges früherer Sieger dieser Edition entfernen (Rating neu gerechnet).
+    # Ab der Vergabe-Mitteilung an die Kassen nicht mehr löschen, sondern einfrieren.
+    folder = ROOT / AWARD_PATH.strip("/") / "badge"
+    keep = {f"{a['id']}{suffix}.svg" for a in AWARDS for suffix, _, _ in build_awards.VARIANTS}
+    for f in folder.glob("*.svg") if folder.exists() else []:
+        if f.name not in keep:
+            f.unlink()
     for a in AWARDS:
         for suffix, fn, dark in build_awards.VARIANTS:
             target = ROOT / AWARD_PATH.strip("/") / "badge" / f"{a['id']}{suffix}.svg"
@@ -1791,7 +1814,7 @@ def main():
 
     global RATING
     import build_rating
-    RATING = build_rating.compute()
+    RATING = build_rating.compute_all()
     client = build_rating.client_json(RATING)
     client["slug"] = {str(i): s for i, s in KASSE_SLUG.items()}   # Rechner verlinkt jede Kasse auf ihre Analyse
     (ROOT / "rating-daten.json").write_text(json.dumps(client, ensure_ascii=False,
