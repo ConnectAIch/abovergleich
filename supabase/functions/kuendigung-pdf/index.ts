@@ -12,6 +12,12 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 //    einen kurz gültigen Download-Link. Ein Mailfilter, der den Link in der
 //    Mail öffnet, bestätigt also nichts.
 //
+// 3. POST { action: 'erinnern' } (täglich, GitHub Action): höchstens je eine
+//    Erinnerung «noch nicht abgeholt» (nach 2 Tagen), «schon angemeldet?»
+//    (3 Tage nach dem Abholen) und «Kündigung bestätigt?» (ab 10. Dezember).
+//    Idempotent: jede Erinnerung geht pro Brief genau einmal raus.
+// 4. POST { action: 'antwort', t, frage, a } (Abholseite): Antwort speichern.
+//
 // Das Häkchen im Editor (voreingestellt, abwählbar) steuert nur die Jahresmail.
 
 const SITE = 'https://abovergleich.com';
@@ -50,19 +56,22 @@ function mail(p: { kasse: string; deadline: string; link: string }) {
 
 const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
 
-// Abgelaufene PDFs löschen, nebenbei bei jedem Aufruf
+// Abgelaufene PDFs löschen. Die Zeile bleibt (ohne Datei) für die
+// Erinnerungen und wird erst nach 400 Tagen entfernt.
 async function cleanup() {
   const { data } = await supabase.from('kk_kuendigung_pdf').select('token, path')
-    .lt('expires_at', new Date().toISOString()).limit(50);
-  if (!data || !data.length) return;
-  await supabase.storage.from(BUCKET).remove(data.map((d) => d.path));
-  await supabase.from('kk_kuendigung_pdf').delete().in('token', data.map((d) => d.token));
+    .lt('expires_at', new Date().toISOString()).not('path', 'is', null).limit(50);
+  if (data && data.length) {
+    await supabase.storage.from(BUCKET).remove(data.map((d) => d.path));
+    await supabase.from('kk_kuendigung_pdf').update({ path: null }).in('token', data.map((d) => d.token));
+  }
+  await supabase.from('kk_kuendigung_pdf').delete().lt('created_at', new Date(Date.now() - 400 * 86_400_000).toISOString());
 }
 
 async function abholen(t: string) {
   if (!/^[0-9a-f-]{36}$/i.test(t)) return json({ error: 'Dieser Link ist ungültig.' }, 400);
   const { data: doc } = await supabase.from('kk_kuendigung_pdf').select('*').eq('token', t).maybeSingle();
-  if (!doc || new Date(doc.expires_at) < new Date()) {
+  if (!doc || !doc.path || new Date(doc.expires_at) < new Date()) {
     return json({ error: 'Dieser Link ist abgelaufen. Erstell den Brief einfach nochmals.' }, 410);
   }
   const now = new Date().toISOString();
@@ -77,6 +86,86 @@ async function abholen(t: string) {
   });
 }
 
+// ── Erinnerungen ────────────────────────────────────────────────────────
+const page = (t: string, extra = '') => `${SITE}/krankenkasse-kuendigen/pdf/?t=${t}${extra}`;
+
+function frame(title: string, inner: string, t: string) {
+  return `<!doctype html><html><body style="margin:0;background:#fafaf9;font-family:Inter,Arial,sans-serif;color:#1c1917;">
+<div style="max-width:520px;margin:0 auto;padding:28px 20px;font-size:15px;line-height:1.6;">
+  <div style="font-size:20px;font-weight:800;margin-bottom:18px;">abo<span style="color:#a68600;">vergleich</span>.com</div>
+  <h1 style="font-size:21px;margin:0 0 14px;">${title}</h1>
+  ${inner}
+  <p style="font-size:12px;color:#6b6560;margin-top:24px;"><a href="${page(t, '&frage=stopp')}" style="color:#6b6560;">Keine Erinnerungen mehr</a> · <a href="${SITE}/" style="color:#a68600;">abovergleich.com</a></p>
+</div></body></html>`;
+}
+const btn = (href: string, label: string, primary = true) =>
+  `<a href="${href}" style="display:inline-block;background:${primary ? '#fed001' : '#f0efed'};color:#1c1917;font-weight:700;text-decoration:none;padding:12px 20px;border-radius:10px;margin:0 8px 8px 0;">${label}</a>`;
+
+async function send(key: string, to: string, subject: string, html: string) {
+  const res = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ from: Deno.env.get('WECKER_FROM') || 'abovergleich.com <wecker@abovergleich.com>',
+      reply_to: 'hello@handyabo.com', to: [to], subject, html }),
+  });
+  if (!res.ok) console.error('resend', res.status, await res.text());
+  return res.ok;
+}
+
+async function erinnern(key: string) {
+  const now = new Date(), iso = now.toISOString();
+  const day = 86_400_000, out = { abholen: 0, anmeldung: 0, bestaetigung: 0 };
+  const base = () => supabase.from('kk_kuendigung_pdf').select('*').eq('keine_erinnerung', false).limit(100);
+
+  // a) zwei Tage nicht abgeholt, Datei noch da
+  const { data: a } = await base().is('downloaded_at', null).is('erinnert_abholen_at', null).not('path', 'is', null)
+    .lt('created_at', new Date(now.getTime() - 2 * day).toISOString()).gt('expires_at', iso);
+  for (const d of a || []) {
+    const ok = await send(key, d.email, `Deine Kündigung an ${d.kasse} wartet noch`, frame(`Deine Kündigung an ${esc(d.kasse)} wartet noch`,
+      `<p style="margin:0 0 20px;">Sie muss bis <strong>${esc(d.deadline || '30. November')}</strong> bei der Kasse sein.</p>${btn(page(d.token), 'Kündigung herunterladen')}`, d.token));
+    if (ok) { await supabase.from('kk_kuendigung_pdf').update({ erinnert_abholen_at: iso }).eq('token', d.token); out.abholen++; }
+  }
+
+  // b) drei Tage nach dem Abholen: schon bei der neuen Kasse angemeldet?
+  const { data: b } = await base().not('downloaded_at', 'is', null).is('erinnert_anmeldung_at', null).is('angemeldet', null)
+    .lt('downloaded_at', new Date(now.getTime() - 3 * day).toISOString());
+  for (const d of b || []) {
+    const wer = d.neu ? `bei ${esc(d.neu)}` : 'bei der neuen Kasse';
+    const ok = await send(key, d.email, `Schon ${d.neu ? 'bei ' + d.neu : 'bei der neuen Kasse'} angemeldet?`, frame(`Schon ${wer} angemeldet?`,
+      `<p style="margin:0 0 18px;">Ohne Anmeldung bleibst du bei ${esc(d.kasse)}. Online dauert sie etwa 10 Minuten.</p>
+       ${btn(page(d.token, '&frage=anmeldung&a=ja'), 'Ja, erledigt')}${btn(page(d.token, '&frage=anmeldung&a=nein'), 'Noch nicht', false)}`, d.token));
+    if (ok) { await supabase.from('kk_kuendigung_pdf').update({ erinnert_anmeldung_at: iso }).eq('token', d.token); out.anmeldung++; }
+  }
+
+  // c) ab 10. Dezember: Kündigung bestätigt? Nur Briefe aus dieser Saison.
+  const y = now.getUTCFullYear();
+  if (now >= new Date(Date.UTC(y, 11, 10))) {
+    const { data: c } = await base().not('downloaded_at', 'is', null).is('erinnert_bestaetigung_at', null).is('bestaetigt', null)
+      .gt('created_at', new Date(Date.UTC(y, 7, 1)).toISOString());
+    for (const d of c || []) {
+      const ok = await send(key, d.email, `Hat ${d.kasse} deine Kündigung bestätigt?`, frame(`Hat ${esc(d.kasse)} deine Kündigung bestätigt?`,
+        `<p style="margin:0 0 18px;">Meist kommt bis Mitte Dezember ein Brief oder eine Mail. Fehlt die Bestätigung, lohnt sich ein Anruf.</p>
+         ${btn(page(d.token, '&frage=bestaetigung&a=ja'), 'Ja, bestätigt')}${btn(page(d.token, '&frage=bestaetigung&a=nein'), 'Noch nichts', false)}`, d.token));
+      if (ok) { await supabase.from('kk_kuendigung_pdf').update({ erinnert_bestaetigung_at: iso }).eq('token', d.token); out.bestaetigung++; }
+    }
+  }
+  return json({ ok: true, ...out });
+}
+
+async function antwort(t: string, frage: string, a: string) {
+  if (!/^[0-9a-f-]{36}$/i.test(t)) return json({ error: 'Dieser Link ist ungültig.' }, 400);
+  const { data: d } = await supabase.from('kk_kuendigung_pdf').select('token, kasse, neu, neu_url, deadline').eq('token', t).maybeSingle();
+  if (!d) return json({ error: 'Diesen Brief gibt es nicht mehr.' }, 410);
+  const now = new Date().toISOString();
+  const upd: Record<string, unknown> = { antwort_at: now };
+  if (frage === 'anmeldung') upd.angemeldet = a === 'ja';
+  else if (frage === 'bestaetigung') upd.bestaetigt = a === 'ja';
+  else if (frage === 'stopp') upd.keine_erinnerung = true;
+  else return json({ error: 'Unbekannte Frage.' }, 400);
+  await supabase.from('kk_kuendigung_pdf').update(upd).eq('token', t);
+  return json({ ok: true, kasse: d.kasse, neu: d.neu, neu_url: d.neu_url, deadline: d.deadline });
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders });
   if (req.method !== 'POST') return json({ error: 'POST' }, 405);
@@ -84,6 +173,17 @@ Deno.serve(async (req) => {
 
   try {
     const b = await req.json();
+    if (b.action === 'erinnern') {
+      const key = Deno.env.get('RESEND_API_KEY');
+      if (!key) return json({ error: 'not_configured' }, 503);
+      if (limited('e:' + ip, 6)) return json({ error: 'rate' }, 429);
+      await cleanup();
+      return await erinnern(key);
+    }
+    if (b.action === 'antwort') {
+      if (limited('w:' + ip, 60)) return json({ error: 'Zu viele Versuche. Bitte später nochmals.' }, 429);
+      return await antwort(String(b.t || ''), String(b.frage || ''), String(b.a || ''));
+    }
     if (b.action === 'abholen') {
       if (limited('a:' + ip, 60)) return json({ error: 'Zu viele Versuche. Bitte später nochmals.' }, 429);
       return await abholen(String(b.t || ''));

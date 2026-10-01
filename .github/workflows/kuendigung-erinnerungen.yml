@@ -1,0 +1,16 @@
+# Täglich die fälligen Erinnerungen zum Kündigungs-PDF verschicken
+# (Edge Function kuendigung-pdf, action 'erinnern'). Idempotent: jede
+# Erinnerung geht pro Brief nur einmal raus, ein zusätzlicher Lauf schadet nicht.
+name: Kuendigung Erinnerungen
+on:
+  schedule:
+    - cron: '0 8 * * *'   # 09:00 / 10:00 Schweizer Zeit
+  workflow_dispatch:
+jobs:
+  erinnern:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Erinnerungen auslösen
+        run: |
+          curl -sS --fail -X POST https://zexpmaegqsayleaohiip.supabase.co/functions/v1/kuendigung-pdf \
+            -H 'Content-Type: application/json' -d '{"action":"erinnern"}'

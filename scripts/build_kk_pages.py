@@ -1627,6 +1627,29 @@ def pickup_page():
       .catch(function () {{ msg.textContent = 'Keine Verbindung. Bitte nochmals versuchen.'; btn.disabled = false; btn.textContent = 'PDF herunterladen'; }});
   }}
   document.getElementById('kp-go').onclick = function () {{ go(this); }};
+
+  // Antworten aus den Erinnerungsmails: ?frage=anmeldung|bestaetigung|stopp&a=ja|nein
+  var frage = new URLSearchParams(location.search).get('frage'), a = new URLSearchParams(location.search).get('a') || '';
+  if (frage) {{
+    document.querySelector('h1').textContent = 'Danke für deine Antwort';
+    box.innerHTML = '<p class="kk-lead">Einen Moment…</p>';
+    fetch(API, {{ method: 'POST', headers: {{ 'Content-Type': 'application/json' }}, body: JSON.stringify({{ action: 'antwort', t: t, frage: frage, a: a }}) }})
+      .then(function (r) {{ return r.json(); }})
+      .then(function (d) {{
+        if (!d.ok) {{ box.innerHTML = '<p class="kk-lead">' + esc(d.error || 'Das hat nicht geklappt.') + '</p>'; return; }}
+        var neu = d.neu ? esc(d.neu) : 'der neuen Kasse';
+        var html = {{
+          'anmeldung|ja': '<p class="kk-lead"><strong>Super.</strong> Jetzt fehlt nur noch die Bestätigung: Die neue Kasse meldet sich bei ' + esc(d.kasse) + '. Wir fragen Mitte Dezember nach, ob alles geklappt hat.</p>',
+          'anmeldung|nein': '<p class="kk-lead">Kein Problem, das geht online in etwa 10 Minuten.</p><ul class="kp-list"><li>Beginn: 1. Januar</li><li>AHV-Nummer (756…, steht auf deiner Versichertenkarte)</li><li>Franchise und Modell</li><li>beim Hausarzt- oder HMO-Modell: deine Praxis</li></ul>' +
+            (d.neu_url ? '<a class="kk-cta" href="' + esc(d.neu_url) + '?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=kk-wechsel" target="_blank" rel="noopener sponsored">Zu ' + neu + ' &rarr;</a>' : '<a class="kk-cta" href="/#kk-rechner">Günstigste Kasse finden &rarr;</a>'),
+          'bestaetigung|ja': '<p class="kk-lead"><strong>Perfekt, dein Wechsel ist durch.</strong> Ab 1. Januar bist du bei ' + neu + ' versichert.</p>',
+          'bestaetigung|nein': '<p class="kk-lead">Ruf ' + esc(d.kasse) + ' an und frag nach, ob die Kündigung angekommen ist. Hast du sie per Mail geschickt, ist deine gesendete Mail der Beweis, per Einschreiben der Beleg der Post. Und frag bei ' + neu + ' nach, ob die Anmeldung durch ist: Erst wenn die neue Kasse sich bei der alten meldet, endet die alte Versicherung.</p>',
+          'stopp|': '<p class="kk-lead">Erledigt, du bekommst zu diesem Brief keine Erinnerungen mehr.</p>'
+        }}[frage + '|' + (frage === 'stopp' ? '' : a)] || '<p class="kk-lead">Gespeichert.</p>';
+        box.innerHTML = html;
+      }})
+      .catch(function () {{ box.innerHTML = '<p class="kk-lead">Keine Verbindung. Bitte Link nochmals öffnen.</p>'; }});
+  }}
 }})();
 </script>"""
     html_out = page(path, "Deine Kündigung herunterladen", "Kündigungsbrief für die Grundversicherung herunterladen.", body, [])
