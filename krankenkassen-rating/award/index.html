@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- generiert von scripts/build_kk_pages.py, nicht von Hand bearbeiten -->
+<title>Preistreue-Award 2027: die preistreuesten Krankenkassen</title>
+<meta name="description" content="34 Auszeichnungen für Krankenkassen, die dauerhaft günstig bleiben, allein aus BAG-Prämien seit 2020. Sieger 2027: Concordia.">
+<link rel="canonical" href="https://abovergleich.com/krankenkassen-rating/award/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="alternate icon" href="/favicon.ico">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://abovergleich.com/krankenkassen-rating/award/">
+<meta property="og:title" content="Preistreue-Award 2027: die preistreuesten Krankenkassen">
+<meta property="og:description" content="34 Auszeichnungen für Krankenkassen, die dauerhaft günstig bleiben, allein aus BAG-Prämien seit 2020. Sieger 2027: Concordia.">
+<meta property="og:site_name" content="abovergleich.com">
+<meta property="og:locale" content="de_CH">
+<meta property="og:image" content="https://abovergleich.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "BreadcrumbList",
+ "itemListElement": [
+  {
+   "@type": "ListItem",
+   "position": 1,
+   "name": "Krankenkassen-Vergleich",
+   "item": "https://abovergleich.com/"
+  },
+  {
+   "@type": "ListItem",
+   "position": 2,
+   "name": "Rating",
+   "item": "https://abovergleich.com/krankenkassen-rating/"
+  },
+  {
+   "@type": "ListItem",
+   "position": 3,
+   "name": "Award",
+   "item": "https://abovergleich.com/krankenkassen-rating/award/"
+  }
+ ]
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles/shared.css?v=c4722bd6">
+<style>
+  .kk-rating { background:var(--surface); border:1px solid var(--border2); border-radius:14px; padding:20px 22px; margin:20px 0; }
+  .kk-rating-head { display:flex; justify-content:space-between; gap:16px; align-items:flex-start; margin-bottom:12px; }
+  .kk-rating-label { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); }
+  .kk-rating-sub { font-size:13px; color:var(--muted); margin-top:4px; }
+  .kk-rating-note { font-family:'Plus Jakarta Sans',sans-serif; font-size:40px; font-weight:800; line-height:1; color:var(--text); white-space:nowrap; }
+  .kk-rating-note span { font-size:16px; color:var(--muted); font-weight:600; }
+  .kk-rrow { display:grid; grid-template-columns:120px 1fr 36px; gap:10px; align-items:center; font-size:14px; padding:4px 0; }
+  .kk-bar { display:block; height:8px; background:var(--surface2); border-radius:4px; overflow:hidden; }
+  .kk-bar span { display:block; height:100%; background:var(--accent); border-radius:4px; }
+  .kk-rnote { font-size:13px; color:var(--muted); margin:12px 0 8px; }
+  .kk-rating > a { color:var(--accent-dark); font-weight:600; font-size:14px; }
+  .kk-rtable td, .kk-rtable th { white-space:nowrap; padding-left:8px; padding-right:8px; font-size:14px; }
+  .kk-rtable td:nth-child(n+4), .kk-rtable th:nth-child(n+4) { color:var(--muted); }
+  .kk-cantonlinks { display:flex; flex-wrap:wrap; gap:6px 14px; font-size:14px; margin-bottom:12px; }
+  .kk-cantonlinks a { color:var(--accent-dark); }
+  .kk-awardrow { display:flex; flex-wrap:wrap; gap:10px; margin:14px 0 6px; }
+  .kk-awardrow img { height:72px; width:auto; display:block; }
+  .kk-page { max-width: 820px; }
+  .kk-lead { font-size: 18px !important; }
+  .kk-facts { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:28px 0 8px; }
+  .kk-fact { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:18px; }
+  .kk-fact-val { font-family:'Plus Jakarta Sans',sans-serif; font-size:24px; font-weight:800; letter-spacing:-.5px; color:var(--text); }
+  .kk-fact-label { font-size:13px; color:var(--muted); margin-top:4px; line-height:1.4; }
+  .kk-table-wrap { overflow-x:auto; margin:16px 0 8px; -webkit-overflow-scrolling:touch; }
+  .kk-table { width:100%; border-collapse:collapse; font-size:14px; min-width:520px; }
+  .kk-table th { text-align:left; font-size:12px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; padding:8px 10px; border-bottom:1px solid var(--border2); }
+  .kk-table td { padding:10px; border-bottom:1px solid var(--border); color:var(--text2); vertical-align:top; }
+  .kk-table td.num, .kk-table th.num { text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .kk-table .sub { display:block; font-size:12px; color:var(--muted); }
+  .kk-up { color:var(--red, #dc2626); }
+  .kk-down { color:var(--green); }
+  .kk-note { font-size:13px !important; color:var(--muted) !important; line-height:1.6 !important; }
+  .kk-cta { display:inline-block; background:var(--accent); color:var(--text) !important; font-weight:700; text-decoration:none !important; padding:12px 22px; border-radius:10px; margin:8px 0 24px; }
+  .kk-canton-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); gap:8px; margin:16px 0 24px; }
+  .kk-canton-grid a { display:block; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:10px 12px; text-decoration:none !important; color:var(--text) !important; font-size:14px; }
+  .kk-canton-grid a span { display:block; font-size:12px; color:var(--muted); }
+  .kk-crumbs { font-size:13px; color:var(--muted); margin-bottom:14px; }
+  .kk-crumbs a { color:var(--muted) !important; }
+  details.kk-gemeinden { margin:8px 0 20px; font-size:14px; color:var(--text2); }
+  details.kk-gemeinden summary { cursor:pointer; color:var(--accent-dark); }
+  details.kk-gemeinden p { font-size:13px !important; line-height:1.7 !important; margin-top:8px; }
+  .kk-faq h3 { margin-top:24px; }
+  @media (max-width:768px) { .kk-facts { grid-template-columns:1fr; } }
+
+  article.kk-page:has(.award-page) { max-width: 980px; }
+  .award-page .rules { list-style:none; padding:0; display:grid; gap:10px; margin:16px 0 0; }
+  .award-page .rules li { position:relative; padding-left:26px; color:var(--text2); }
+  .award-page .rules li::before { content:"✓"; position:absolute; left:0; color:var(--green); font-weight:700; }
+  .grouphead { font-family:'Plus Jakarta Sans',sans-serif; font-size:14px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin:38px 0 14px; padding-bottom:9px; border-bottom:1px solid var(--border); }
+  .win { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:22px; margin-bottom:18px; display:grid; grid-template-columns:240px 1fr; gap:24px; align-items:start; }
+  .win > * { min-width:0; }
+  .win img { display:block; max-width:100%; height:auto; }
+  .win h3 { font-size:22px; margin:0 0 6px; }
+  .win .meta { font-size:15px; color:var(--muted); margin-bottom:14px; }
+  .variants { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px; }
+  .variants a, .pngrow button { font:inherit; font-size:14px; background:none; border:1px solid var(--border2); border-radius:100px; padding:5px 13px; color:var(--text2); text-decoration:none; cursor:pointer; }
+  .pngrow { align-items:center; }
+  .pnglbl { font-size:13px; color:var(--muted); }
+  .pngrow button:hover, .variants a:hover { border-color:var(--accent-dark); color:var(--accent-dark); }
+  .snippet { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:12px 14px; overflow-x:auto; }
+  .snippet code { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:13px; line-height:1.7; color:var(--text2); white-space:pre; }
+  .baustein-lbl { font-size:14px; font-weight:600; color:var(--muted); margin:14px 0 6px; }
+  .baustein { background:var(--surface2); border-left:3px solid var(--accent); border-radius:0 8px 8px 0; padding:12px 16px; color:var(--text2); font-size:15px; line-height:1.65; margin:0; }
+  .kk-awardrow { display:flex; flex-wrap:wrap; gap:10px; margin:14px 0 6px; }
+  .kk-awardrow img { height:72px; width:auto; }
+  @media (max-width:760px) { .win { grid-template-columns:1fr; } .win img { max-width:220px; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">abo<span>vergleich</span>.com</a>
+  <div class="nav-right" id="nav-menu" onclick="if(event.target.closest('a'))this.classList.remove('open')">
+    <a href="/#kk-rechner" class="nav-link">Prämienrechner</a>
+    <a href="/krankenkassen-rating/" class="nav-link active">Rating</a>
+    <a href="/krankenkasse/" class="nav-link">Kantone</a>
+    <a href="/kasse/" class="nav-link">Kassen</a>
+    <a href="/krankenkasse-kuendigen/" class="nav-link">Kündigen</a>
+    <a href="/blog/" class="nav-link">Ratgeber</a>
+    <a href="https://handyabo.com/" class="nav-link">Handy-Abo</a>
+    <a href="/#kk-rechner" class="nav-cta">Prämien vergleichen</a>
+  </div>
+  <button class="nav-burger" id="nav-burger" onclick="document.getElementById('nav-menu').classList.toggle('open');this.classList.toggle('open')" aria-label="Menü">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<article class="article kk-page">
+<div class="award-page">
+<div class="kk-crumbs"><a href="/">Krankenkassen-Vergleich</a> &rsaquo; <a href="/krankenkassen-rating/">Rating</a> &rsaquo; Award</div>
+<div class="article-badge">Edition 2027</div>
+<h1>abovergleich Preistreue-Award 2027</h1>
+<p class="kk-lead">34 Auszeichnungen für Krankenkassen, die dauerhaft günstig bleiben. Vergeben allein aus den Prämiendaten des Bundes seit 2020. Keine Jury, keine Einreichung, keine Gebühr.</p>
+
+<h2>Wofür ausgezeichnet wird</h2>
+<p>Grundlage ist das <a href="/krankenkassen-rating/">Preistreue-Rating</a>: Preis heute, wie oft eine Kasse seit 2020 in ihrer Region unter den fünf günstigsten war, wie stark sie aufschlägt, ob neue Sparmodelle ihren Rabatt halten, wie oft sie Tarife streicht und wie gut ihre Reserven sind. Die <strong>Gesamtwertung</strong> zeichnet die drei besten Noten aus, die <strong>Kategorien</strong> den Besten in je einem Teilaspekt, und in jedem <strong>Kanton</strong> die Kasse mit der besten Note in der Hauptregion, Regionalkassen eingeschlossen.</p>
+
+<h2>Die Regeln</h2>
+<ul class="rules">
+  <li>Die Auswahl folgt allein der Zahl. Es gibt keine Jury, keine Einreichung und keinen Weg, einen Award zu beeinflussen.</li>
+  <li>Der Award kostet nichts und ist an nichts gekoppelt. Ob eine Kasse das Badge einbindet oder verlinkt, ändert weder Note noch Reihenfolge auf abovergleich.com.</li>
+  <li>Ein Link ist keine Bedingung. Der Einbindungscode enthält ihn, weil eine Auszeichnung ohne Beleg wenig wert ist. Wer das Badge ohne Link nutzt, darf das.</li>
+  <li>Die Edition ist ein Stichtag: die Prämien 2027. Das Badge 2027 behält seine Aussage, auch wenn sich die Note im nächsten Jahr ändert.</li>
+</ul>
+
+<div class="grouphead">Gesamtwertung</div><div class="win" id="gesamt-concordia">
+  <img src="/krankenkassen-rating/award/badge/gesamt-concordia.svg" alt="abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse 2027, Concordia" width="240" height="384" loading="lazy">
+  <div>
+    <h3><a class="kasse-link" href="/kasse/concordia/">Concordia</a></h3>
+    <p class="meta">Preistreueste Krankenkasse 2027 · Preistreue 9,0 / 10</p>
+    <div class="variants">
+      <a href="/krankenkassen-rating/award/badge/gesamt-concordia.svg">Hoch hell</a><a href="/krankenkassen-rating/award/badge/gesamt-concordia-dunkel.svg">Hoch dunkel</a>
+      <a href="/krankenkassen-rating/award/badge/gesamt-concordia-quer.svg">Quer hell</a><a href="/krankenkassen-rating/award/badge/gesamt-concordia-quer-dunkel.svg">Quer dunkel</a>
+    </div>
+    <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/gesamt-concordia.svg" data-w="240" data-h="384" data-name="gesamt-concordia-hoch">Hoch</button>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/gesamt-concordia-quer.svg" data-w="375" data-h="109" data-name="gesamt-concordia-quer">Quer</button>
+    </div>
+    <div class="snippet"><code>&lt;a href=&quot;https://abovergleich.com/krankenkassen-rating/&quot;&gt;
+  &lt;img src=&quot;https://abovergleich.com/krankenkassen-rating/award/badge/gesamt-concordia.svg&quot;
+       alt=&quot;abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse 2027, Concordia&quot;
+       width=&quot;240&quot; height=&quot;384&quot; loading=&quot;lazy&quot;&gt;
+&lt;/a&gt;</code></div>
+    <p class="baustein-lbl">Textbaustein zum Übernehmen</p>
+    <blockquote class="baustein">Concordia ist preistreueste Krankenkasse 2027 im Preistreue-Award 2027 von abovergleich.com. Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, allein aus den Prämiendaten des Bundesamts für Gesundheit seit 2020.</blockquote>
+  </div>
+</div><div class="win" id="gesamt-agrisano">
+  <img src="/krankenkassen-rating/award/badge/gesamt-agrisano.svg" alt="abovergleich Preistreue-Award 2027: Zweiter der Gesamtwertung 2027, Agrisano" width="240" height="384" loading="lazy">
+  <div>
+    <h3><a class="kasse-link" href="/kasse/agrisano/">Agrisano</a></h3>
+    <p class="meta">Zweiter der Gesamtwertung 2027 · Preistreue 8,5 / 10</p>
+    <div class="variants">
+      <a href="/krankenkassen-rating/award/badge/gesamt-agrisano.svg">Hoch hell</a><a href="/krankenkassen-rating/award/badge/gesamt-agrisano-dunkel.svg">Hoch dunkel</a>
+      <a href="/krankenkassen-rating/award/badge/gesamt-agrisano-quer.svg">Quer hell</a><a href="/krankenkassen-rating/award/badge/gesamt-agrisano-quer-dunkel.svg">Quer dunkel</a>
+    </div>
+    <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/gesamt-agrisano.svg" data-w="240" data-h="384" data-name="gesamt-agrisano-hoch">Hoch</button>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/gesamt-agrisano-quer.svg" data-w="375" data-h="109" data-name="gesamt-agrisano-quer">Quer</button>
+    </div>
+    <div class="snippet"><code>&lt;a href=&quot;https://abovergleich.com/krankenkassen-rating/&quot;&gt;
+  &lt;img src=&quot;https://abovergleich.com/krankenkassen-rating/award/badge/gesamt-agrisano.svg&quot;
+       alt=&quot;abovergleich Preistreue-Award 2027: Zweiter der Gesamtwertung 2027, Agrisano&quot;
+       width=&quot;240&quot; height=&quot;384&quot; loading=&quot;lazy&quot;&gt;
+&lt;/a&gt;</code></div>
+    <p class="baustein-lbl">Textbaustein zum Übernehmen</p>
+    <blockquote class="baustein">Agrisano ist zweiter der Gesamtwertung 2027 im Preistreue-Award 2027 von abovergleich.com. Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, allein aus den Prämiendaten des Bundesamts für Gesundheit seit 2020.</blockquote>
+  </div>
+</div><div class="win" id="gesamt-kpt">
+  <img src="/krankenkassen-rating/award/badge/gesamt-kpt.svg" alt="abovergleich Preistreue-Award 2027: Dritter der Gesamtwertung 2027, KPT" width="240" height="384" loading="lazy">
+  <div>
+    <h3><a class="kasse-link" href="/kasse/kpt/">KPT</a></h3>
+    <p class="meta">Dritter der Gesamtwertung 2027 · Preistreue 7,2 / 10</p>
+    <div class="variants">
+      <a href="/krankenkassen-rating/award/badge/gesamt-kpt.svg">Hoch hell</a><a href="/krankenkassen-rating/award/badge/gesamt-kpt-dunkel.svg">Hoch dunkel</a>
+      <a href="/krankenkassen-rating/award/badge/gesamt-kpt-quer.svg">Quer hell</a><a href="/krankenkassen-rating/award/badge/gesamt-kpt-quer-dunkel.svg">Quer dunkel</a>
+    </div>
+    <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/gesamt-kpt.svg" data-w="240" data-h="384" data-name="gesamt-kpt-hoch">Hoch</button>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/gesamt-kpt-quer.svg" data-w="375" data-h="109" data-name="gesamt-kpt-quer">Quer</button>
+    </div>
+    <div class="snippet"><code>&lt;a href=&quot;https://abovergleich.com/krankenkassen-rating/&quot;&gt;
+  &lt;img src=&quot;https://abovergleich.com/krankenkassen-rating/award/badge/gesamt-kpt.svg&quot;
+       alt=&quot;abovergleich Preistreue-Award 2027: Dritter der Gesamtwertung 2027, KPT&quot;
+       width=&quot;240&quot; height=&quot;384&quot; loading=&quot;lazy&quot;&gt;
+&lt;/a&gt;</code></div>
+    <p class="baustein-lbl">Textbaustein zum Übernehmen</p>
+    <blockquote class="baustein">KPT ist dritter der Gesamtwertung 2027 im Preistreue-Award 2027 von abovergleich.com. Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, allein aus den Prämiendaten des Bundesamts für Gesundheit seit 2020.</blockquote>
+  </div>
+</div><div class="grouphead">Kategorien</div><div class="win" id="dauerhaft-guenstig-atupri">
+  <img src="/krankenkassen-rating/award/badge/dauerhaft-guenstig-atupri.svg" alt="abovergleich Preistreue-Award 2027: Sieger «Dauerhaft günstig» 2027, Atupri" width="240" height="384" loading="lazy">
+  <div>
+    <h3><a class="kasse-link" href="/kasse/atupri/">Atupri</a></h3>
+    <p class="meta">Sieger «Dauerhaft günstig» 2027 · Top 5 in 50 % der Jahre</p>
+    <div class="variants">
+      <a href="/krankenkassen-rating/award/badge/dauerhaft-guenstig-atupri.svg">Hoch hell</a><a href="/krankenkassen-rating/award/badge/dauerhaft-guenstig-atupri-dunkel.svg">Hoch dunkel</a>
+      <a href="/krankenkassen-rating/award/badge/dauerhaft-guenstig-atupri-quer.svg">Quer hell</a><a href="/krankenkassen-rating/award/badge/dauerhaft-guenstig-atupri-quer-dunkel.svg">Quer dunkel</a>
+    </div>
+    <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/dauerhaft-guenstig-atupri.svg" data-w="240" data-h="384" data-name="dauerhaft-guenstig-atupri-hoch">Hoch</button>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/dauerhaft-guenstig-atupri-quer.svg" data-w="375" data-h="109" data-name="dauerhaft-guenstig-atupri-quer">Quer</button>
+    </div>
+    <div class="snippet"><code>&lt;a href=&quot;https://abovergleich.com/krankenkassen-rating/&quot;&gt;
+  &lt;img src=&quot;https://abovergleich.com/krankenkassen-rating/award/badge/dauerhaft-guenstig-atupri.svg&quot;
+       alt=&quot;abovergleich Preistreue-Award 2027: Sieger «Dauerhaft günstig» 2027, Atupri&quot;
+       width=&quot;240&quot; height=&quot;384&quot; loading=&quot;lazy&quot;&gt;
+&lt;/a&gt;</code></div>
+    <p class="baustein-lbl">Textbaustein zum Übernehmen</p>
+    <blockquote class="baustein">Atupri ist sieger «Dauerhaft günstig» 2027 im Preistreue-Award 2027 von abovergleich.com. Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, allein aus den Prämiendaten des Bundesamts für Gesundheit seit 2020.</blockquote>
+  </div>
+</div><div class="win" id="stabilste-praemien-oekk">
+  <img src="/krankenkassen-rating/award/badge/stabilste-praemien-oekk.svg" alt="abovergleich Preistreue-Award 2027: Sieger «Stabilste Prämien» 2027, ÖKK" width="240" height="384" loading="lazy">
+  <div>
+    <h3><a class="kasse-link" href="/kasse/oekk/">ÖKK</a></h3>
+    <p class="meta">Sieger «Stabilste Prämien» 2027 · 0,5 Pkt. pro Jahr unter dem Markt</p>
+    <div class="variants">
+      <a href="/krankenkassen-rating/award/badge/stabilste-praemien-oekk.svg">Hoch hell</a><a href="/krankenkassen-rating/award/badge/stabilste-praemien-oekk-dunkel.svg">Hoch dunkel</a>
+      <a href="/krankenkassen-rating/award/badge/stabilste-praemien-oekk-quer.svg">Quer hell</a><a href="/krankenkassen-rating/award/badge/stabilste-praemien-oekk-quer-dunkel.svg">Quer dunkel</a>
+    </div>
+    <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/stabilste-praemien-oekk.svg" data-w="240" data-h="384" data-name="stabilste-praemien-oekk-hoch">Hoch</button>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/stabilste-praemien-oekk-quer.svg" data-w="375" data-h="109" data-name="stabilste-praemien-oekk-quer">Quer</button>
+    </div>
+    <div class="snippet"><code>&lt;a href=&quot;https://abovergleich.com/krankenkassen-rating/&quot;&gt;
+  &lt;img src=&quot;https://abovergleich.com/krankenkassen-rating/award/badge/stabilste-praemien-oekk.svg&quot;
+       alt=&quot;abovergleich Preistreue-Award 2027: Sieger «Stabilste Prämien» 2027, ÖKK&quot;
+       width=&quot;240&quot; height=&quot;384&quot; loading=&quot;lazy&quot;&gt;
+&lt;/a&gt;</code></div>
+    <p class="baustein-lbl">Textbaustein zum Übernehmen</p>
+    <blockquote class="baustein">ÖKK ist sieger «Stabilste Prämien» 2027 im Preistreue-Award 2027 von abovergleich.com. Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, allein aus den Prämiendaten des Bundesamts für Gesundheit seit 2020.</blockquote>
+  </div>
+</div><div class="win" id="fairste-sparmodelle-kpt">
+  <img src="/krankenkassen-rating/award/badge/fairste-sparmodelle-kpt.svg" alt="abovergleich Preistreue-Award 2027: Sieger «Fairste Sparmodelle» 2027, KPT" width="240" height="384" loading="lazy">
+  <div>
+    <h3><a class="kasse-link" href="/kasse/kpt/">KPT</a></h3>
+    <p class="meta">Sieger «Fairste Sparmodelle» 2027 · Rabatt gehalten</p>
+    <div class="variants">
+      <a href="/krankenkassen-rating/award/badge/fairste-sparmodelle-kpt.svg">Hoch hell</a><a href="/krankenkassen-rating/award/badge/fairste-sparmodelle-kpt-dunkel.svg">Hoch dunkel</a>
+      <a href="/krankenkassen-rating/award/badge/fairste-sparmodelle-kpt-quer.svg">Quer hell</a><a href="/krankenkassen-rating/award/badge/fairste-sparmodelle-kpt-quer-dunkel.svg">Quer dunkel</a>
+    </div>
+    <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/fairste-sparmodelle-kpt.svg" data-w="240" data-h="384" data-name="fairste-sparmodelle-kpt-hoch">Hoch</button>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/fairste-sparmodelle-kpt-quer.svg" data-w="375" data-h="109" data-name="fairste-sparmodelle-kpt-quer">Quer</button>
+    </div>
+    <div class="snippet"><code>&lt;a href=&quot;https://abovergleich.com/krankenkassen-rating/&quot;&gt;
+  &lt;img src=&quot;https://abovergleich.com/krankenkassen-rating/award/badge/fairste-sparmodelle-kpt.svg&quot;
+       alt=&quot;abovergleich Preistreue-Award 2027: Sieger «Fairste Sparmodelle» 2027, KPT&quot;
+       width=&quot;240&quot; height=&quot;384&quot; loading=&quot;lazy&quot;&gt;
+&lt;/a&gt;</code></div>
+    <p class="baustein-lbl">Textbaustein zum Übernehmen</p>
+    <blockquote class="baustein">KPT ist sieger «Fairste Sparmodelle» 2027 im Preistreue-Award 2027 von abovergleich.com. Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, allein aus den Prämiendaten des Bundesamts für Gesundheit seit 2020.</blockquote>
+  </div>
+</div><div class="win" id="solideste-reserven-galenos">
+  <img src="/krankenkassen-rating/award/badge/solideste-reserven-galenos.svg" alt="abovergleich Preistreue-Award 2027: Sieger «Solideste Reserven» 2027, Galenos" width="240" height="384" loading="lazy">
+  <div>
+    <h3><a class="kasse-link" href="/kasse/galenos/">Galenos</a></h3>
+    <p class="meta">Sieger «Solideste Reserven» 2027 · Solvenzquote 234 %</p>
+    <div class="variants">
+      <a href="/krankenkassen-rating/award/badge/solideste-reserven-galenos.svg">Hoch hell</a><a href="/krankenkassen-rating/award/badge/solideste-reserven-galenos-dunkel.svg">Hoch dunkel</a>
+      <a href="/krankenkassen-rating/award/badge/solideste-reserven-galenos-quer.svg">Quer hell</a><a href="/krankenkassen-rating/award/badge/solideste-reserven-galenos-quer-dunkel.svg">Quer dunkel</a>
+    </div>
+    <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/solideste-reserven-galenos.svg" data-w="240" data-h="384" data-name="solideste-reserven-galenos-hoch">Hoch</button>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/solideste-reserven-galenos-quer.svg" data-w="375" data-h="109" data-name="solideste-reserven-galenos-quer">Quer</button>
+    </div>
+    <div class="snippet"><code>&lt;a href=&quot;https://abovergleich.com/krankenkassen-rating/&quot;&gt;
+  &lt;img src=&quot;https://abovergleich.com/krankenkassen-rating/award/badge/solideste-reserven-galenos.svg&quot;
+       alt=&quot;abovergleich Preistreue-Award 2027: Sieger «Solideste Reserven» 2027, Galenos&quot;
+       width=&quot;240&quot; height=&quot;384&quot; loading=&quot;lazy&quot;&gt;
+&lt;/a&gt;</code></div>
+    <p class="baustein-lbl">Textbaustein zum Übernehmen</p>
+    <blockquote class="baustein">Galenos ist sieger «Solideste Reserven» 2027 im Preistreue-Award 2027 von abovergleich.com. Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, allein aus den Prämiendaten des Bundesamts für Gesundheit seit 2020.</blockquote>
+  </div>
+</div><div class="win" id="schlankste-verwaltung-sodalis">
+  <img src="/krankenkassen-rating/award/badge/schlankste-verwaltung-sodalis.svg" alt="abovergleich Preistreue-Award 2027: Sieger «Schlankste Verwaltung» 2027, sodalis" width="240" height="384" loading="lazy">
+  <div>
+    <h3><a class="kasse-link" href="/kasse/sodalis/">sodalis</a></h3>
+    <p class="meta">Sieger «Schlankste Verwaltung» 2027 · CHF 129 pro Kopf</p>
+    <div class="variants">
+      <a href="/krankenkassen-rating/award/badge/schlankste-verwaltung-sodalis.svg">Hoch hell</a><a href="/krankenkassen-rating/award/badge/schlankste-verwaltung-sodalis-dunkel.svg">Hoch dunkel</a>
+      <a href="/krankenkassen-rating/award/badge/schlankste-verwaltung-sodalis-quer.svg">Quer hell</a><a href="/krankenkassen-rating/award/badge/schlankste-verwaltung-sodalis-quer-dunkel.svg">Quer dunkel</a>
+    </div>
+    <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/schlankste-verwaltung-sodalis.svg" data-w="240" data-h="384" data-name="schlankste-verwaltung-sodalis-hoch">Hoch</button>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/schlankste-verwaltung-sodalis-quer.svg" data-w="375" data-h="109" data-name="schlankste-verwaltung-sodalis-quer">Quer</button>
+    </div>
+    <div class="snippet"><code>&lt;a href=&quot;https://abovergleich.com/krankenkassen-rating/&quot;&gt;
+  &lt;img src=&quot;https://abovergleich.com/krankenkassen-rating/award/badge/schlankste-verwaltung-sodalis.svg&quot;
+       alt=&quot;abovergleich Preistreue-Award 2027: Sieger «Schlankste Verwaltung» 2027, sodalis&quot;
+       width=&quot;240&quot; height=&quot;384&quot; loading=&quot;lazy&quot;&gt;
+&lt;/a&gt;</code></div>
+    <p class="baustein-lbl">Textbaustein zum Übernehmen</p>
+    <blockquote class="baustein">sodalis ist sieger «Schlankste Verwaltung» 2027 im Preistreue-Award 2027 von abovergleich.com. Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, allein aus den Prämiendaten des Bundesamts für Gesundheit seit 2020.</blockquote>
+  </div>
+</div><div class="grouphead">Kantone</div><div class="win" id="kanton-aargau-concordia">
+  <img src="/krankenkassen-rating/award/badge/kanton-aargau-concordia.svg" alt="abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Aargau 2027, Concordia" width="240" height="384" loading="lazy">
+  <div>
+    <h3><a class="kasse-link" href="/kasse/concordia/">Concordia</a></h3>
+    <p class="meta">Preistreueste Krankenkasse im Kanton Aargau 2027 · Preistreue 9,3 / 10</p>
+    <div class="variants">
+      <a href="/krankenkassen-rating/award/badge/kanton-aargau-concordia.svg">Hoch hell</a><a href="/krankenkassen-rating/award/badge/kanton-aargau-concordia-dunkel.svg">Hoch dunkel</a>
+      <a href="/krankenkassen-rating/award/badge/kanton-aargau-concordia-quer.svg">Quer hell</a><a href="/krankenkassen-rating/award/badge/kanton-aargau-concordia-quer-dunkel.svg">Quer dunkel</a>
+    </div>
+    <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-aargau-concordia.svg" data-w="240" data-h="384" data-name="kanton-aargau-concordia-hoch">Hoch</button>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-aargau-concordia-quer.svg" data-w="375" data-h="109" data-name="kanton-aargau-concordia-quer">Quer</button>
+    </div>
+    <div class="snippet"><code>&lt;a href=&quot;https://abovergleich.com/krankenkasse/aargau/&quot;&gt;
+  &lt;img src=&quot;https://abovergleich.com/krankenkassen-rating/award/badge/kanton-aargau-concordia.svg&quot;
+       alt=&quot;abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Aargau 2027, Concordia&quot;
+       width=&quot;240&quot; height=&quot;384&quot; loading=&quot;lazy&quot;&gt;
+&lt;/a&gt;</code></div>
+    <p class="baustein-lbl">Textbaustein zum Übernehmen</p>
+    <blockquote class="baustein">Concordia ist preistreueste Krankenkasse im Kanton Aargau 2027 im Preistreue-Award 2027 von abovergleich.com. Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, allein aus den Prämiendaten des Bundesamts für Gesundheit seit 2020.</blockquote>
+  </div>
+</div><div class="win" id="kanton-appenzell-ausserrhoden-egk">
+  <img src="/krankenkassen-rating/award/badge/kanton-appenzell-ausserrhoden-egk.svg" alt="abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Appenzell Ausserrhoden 2027, EGK" width="240" height="384" loading="lazy">
+  <div>
+    <h3><a class="kasse-link" href="/kasse/egk/">EGK</a></h3>
+    <p class="meta">Preistreueste Krankenkasse im Kanton Appenzell Ausserrhoden 2027 · Preistreue 8,8 / 10</p>
+    <div class="variants">
+      <a href="/krankenkassen-rating/award/badge/kanton-appenzell-ausserrhoden-egk.svg">Hoch hell</a><a href="/krankenkassen-rating/award/badge/kanton-appenzell-ausserrhoden-egk-dunkel.svg">Hoch dunkel</a>
+      <a href="/krankenkassen-rating/award/badge/kanton-appenzell-ausserrhoden-egk-quer.svg">Quer hell</a><a href="/krankenkassen-rating/award/badge/kanton-appenzell-ausserrhoden-egk-quer-dunkel.svg">Quer dunkel</a>
+    </div>
+    <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-appenzell-ausserrhoden-egk.svg" data-w="240" data-h="384" data-name="kanton-appenzell-ausserrhoden-egk-hoch">Hoch</button>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-appenzell-ausserrhoden-egk-quer.svg" data-w="375" data-h="109" data-name="kanton-appenzell-ausserrhoden-egk-quer">Quer</button>
+    </div>
+    <div class="snippet"><code>&lt;a href=&quot;https://abovergleich.com/krankenkasse/appenzell-ausserrhoden/&quot;&gt;
+  &lt;img src=&quot;https://abovergleich.com/krankenkassen-rating/award/badge/kanton-appenzell-ausserrhoden-egk.svg&quot;
+       alt=&quot;abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Appenzell Ausserrhoden 2027, EGK&quot;
+       width=&quot;240&quot; height=&quot;384&quot; loading=&quot;lazy&quot;&gt;
+&lt;/a&gt;</code></div>
+    <p class="baustein-lbl">Textbaustein zum Übernehmen</p>
+    <blockquote class="baustein">EGK ist preistreueste Krankenkasse im Kanton Appenzell Ausserrhoden 2027 im Preistreue-Award 2027 von abovergleich.com. Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, allein aus den Prämiendaten des Bundesamts für Gesundheit seit 2020.</blockquote>
+  </div>
+</div><div class="win" id="kanton-appenzell-innerrhoden-concordia">
+  <img src="/krankenkassen-rating/award/badge/kanton-appenzell-innerrhoden-concordia.svg" alt="abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Appenzell Innerrhoden 2027, Concordia" width="240" height="384" loading="lazy">
+  <div>
+    <h3><a class="kasse-link" href="/kasse/concordia/">Concordia</a></h3>
+    <p class="meta">Preistreueste Krankenkasse im Kanton Appenzell Innerrhoden 2027 · Preistreue 8,5 / 10</p>
+    <div class="variants">
+      <a href="/krankenkassen-rating/award/badge/kanton-appenzell-innerrhoden-concordia.svg">Hoch hell</a><a href="/krankenkassen-rating/award/badge/kanton-appenzell-innerrhoden-concordia-dunkel.svg">Hoch dunkel</a>
+      <a href="/krankenkassen-rating/award/badge/kanton-appenzell-innerrhoden-concordia-quer.svg">Quer hell</a><a href="/krankenkassen-rating/award/badge/kanton-appenzell-innerrhoden-concordia-quer-dunkel.svg">Quer dunkel</a>
+    </div>
+    <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-appenzell-innerrhoden-concordia.svg" data-w="240" data-h="384" data-name="kanton-appenzell-innerrhoden-concordia-hoch">Hoch</button>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-appenzell-innerrhoden-concordia-quer.svg" data-w="375" data-h="109" data-name="kanton-appenzell-innerrhoden-concordia-quer">Quer</button>
+    </div>
+    <div class="snippet"><code>&lt;a href=&quot;https://abovergleich.com/krankenkasse/appenzell-innerrhoden/&quot;&gt;
+  &lt;img src=&quot;https://abovergleich.com/krankenkassen-rating/award/badge/kanton-appenzell-innerrhoden-concordia.svg&quot;
+       alt=&quot;abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Appenzell Innerrhoden 2027, Concordia&quot;
+       width=&quot;240&quot; height=&quot;384&quot; loading=&quot;lazy&quot;&gt;
+&lt;/a&gt;</code></div>
+    <p class="baustein-lbl">Textbaustein zum Übernehmen</p>
+    <blockquote class="baustein">Concordia ist preistreueste Krankenkasse im Kanton Appenzell Innerrhoden 2027 im Preistreue-Award 2027 von abovergleich.com. Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, allein aus den Prämiendaten des Bundesamts für Gesundheit seit 2020.</blockquote>
+  </div>
+</div><div class="win" id="kanton-basel-landschaft-oekk">
+  <img src="/krankenkassen-rating/award/badge/kanton-basel-landschaft-oekk.svg" alt="abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Basel-Landschaft 2027, ÖKK" width="240" height="384" loading="lazy">
+  <div>
+    <h3><a class="kasse-link" href="/kasse/oekk/">ÖKK</a></h3>
+    <p class="meta">Preistreueste Krankenkasse im Kanton Basel-Landschaft 2027 · Preistreue 8,9 / 10</p>
+    <div class="variants">
+      <a href="/krankenkassen-rating/award/badge/kanton-basel-landschaft-oekk.svg">Hoch hell</a><a href="/krankenkassen-rating/award/badge/kanton-basel-landschaft-oekk-dunkel.svg">Hoch dunkel</a>
+      <a href="/krankenkassen-rating/award/badge/kanton-basel-landschaft-oekk-quer.svg">Quer hell</a><a href="/krankenkassen-rating/award/badge/kanton-basel-landschaft-oekk-quer-dunkel.svg">Quer dunkel</a>
+    </div>
+    <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-basel-landschaft-oekk.svg" data-w="240" data-h="384" data-name="kanton-basel-landschaft-oekk-hoch">Hoch</button>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-basel-landschaft-oekk-quer.svg" data-w="375" data-h="109" data-name="kanton-basel-landschaft-oekk-quer">Quer</button>
+    </div>
+    <div class="snippet"><code>&lt;a href=&quot;https://abovergleich.com/krankenkasse/basel-landschaft/&quot;&gt;
+  &lt;img src=&quot;https://abovergleich.com/krankenkassen-rating/award/badge/kanton-basel-landschaft-oekk.svg&quot;
+       alt=&quot;abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Basel-Landschaft 2027, ÖKK&quot;
+       width=&quot;240&quot; height=&quot;384&quot; loading=&quot;lazy&quot;&gt;
+&lt;/a&gt;</code></div>
+    <p class="baustein-lbl">Textbaustein zum Übernehmen</p>
+    <blockquote class="baustein">ÖKK ist preistreueste Krankenkasse im Kanton Basel-Landschaft 2027 im Preistreue-Award 2027 von abovergleich.com. Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, allein aus den Prämiendaten des Bundesamts für Gesundheit seit 2020.</blockquote>
+  </div>
+</div><div class="win" id="kanton-basel-stadt-concordia">
+  <img src="/krankenkassen-rating/award/badge/kanton-basel-stadt-concordia.svg" alt="abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Basel-Stadt 2027, Concordia" width="240" height="384" loading="lazy">
+  <div>
+    <h3><a class="kasse-link" href="/kasse/concordia/">Concordia</a></h3>
+    <p class="meta">Preistreueste Krankenkasse im Kanton Basel-Stadt 2027 · Preistreue 9,4 / 10</p>
+    <div class="variants">
+      <a href="/krankenkassen-rating/award/badge/kanton-basel-stadt-concordia.svg">Hoch hell</a><a href="/krankenkassen-rating/award/badge/kanton-basel-stadt-concordia-dunkel.svg">Hoch dunkel</a>
+      <a href="/krankenkassen-rating/award/badge/kanton-basel-stadt-concordia-quer.svg">Quer hell</a><a href="/krankenkassen-rating/award/badge/kanton-basel-stadt-concordia-quer-dunkel.svg">Quer dunkel</a>
+    </div>
+    <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-basel-stadt-concordia.svg" data-w="240" data-h="384" data-name="kanton-basel-stadt-concordia-hoch">Hoch</button>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-basel-stadt-concordia-quer.svg" data-w="375" data-h="109" data-name="kanton-basel-stadt-concordia-quer">Quer</button>
+    </div>
+    <div class="snippet"><code>&lt;a href=&quot;https://abovergleich.com/krankenkasse/basel-stadt/&quot;&gt;
+  &lt;img src=&quot;https://abovergleich.com/krankenkassen-rating/award/badge/kanton-basel-stadt-concordia.svg&quot;
+       alt=&quot;abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Basel-Stadt 2027, Concordia&quot;
+       width=&quot;240&quot; height=&quot;384&quot; loading=&quot;lazy&quot;&gt;
+&lt;/a&gt;</code></div>
+    <p class="baustein-lbl">Textbaustein zum Übernehmen</p>
+    <blockquote class="baustein">Concordia ist preistreueste Krankenkasse im Kanton Basel-Stadt 2027 im Preistreue-Award 2027 von abovergleich.com. Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, allein aus den Prämiendaten des Bundesamts für Gesundheit seit 2020.</blockquote>
+  </div>
+</div><div class="win" id="kanton-bern-visana">
+  <img src="/krankenkassen-rating/award/badge/kanton-bern-visana.svg" alt="abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Bern 2027, Visana" width="240" height="384" loading="lazy">
+  <div>
+    <h3><a class="kasse-link" href="/kasse/visana/">Visana</a></h3>
+    <p class="meta">Preistreueste Krankenkasse im Kanton Bern 2027 · Preistreue 8,9 / 10</p>
+    <div class="variants">
+      <a href="/krankenkassen-rating/award/badge/kanton-bern-visana.svg">Hoch hell</a><a href="/krankenkassen-rating/award/badge/kanton-bern-visana-dunkel.svg">Hoch dunkel</a>
+      <a href="/krankenkassen-rating/award/badge/kanton-bern-visana-quer.svg">Quer hell</a><a href="/krankenkassen-rating/award/badge/kanton-bern-visana-quer-dunkel.svg">Quer dunkel</a>
+    </div>
+    <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-bern-visana.svg" data-w="240" data-h="384" data-name="kanton-bern-visana-hoch">Hoch</button>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-bern-visana-quer.svg" data-w="375" data-h="109" data-name="kanton-bern-visana-quer">Quer</button>
+    </div>
+    <div class="snippet"><code>&lt;a href=&quot;https://abovergleich.com/krankenkasse/bern/&quot;&gt;
+  &lt;img src=&quot;https://abovergleich.com/krankenkassen-rating/award/badge/kanton-bern-visana.svg&quot;
+       alt=&quot;abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Bern 2027, Visana&quot;
+       width=&quot;240&quot; height=&quot;384&quot; loading=&quot;lazy&quot;&gt;
+&lt;/a&gt;</code></div>
+    <p class="baustein-lbl">Textbaustein zum Übernehmen</p>
+    <blockquote class="baustein">Visana ist preistreueste Krankenkasse im Kanton Bern 2027 im Preistreue-Award 2027 von abovergleich.com. Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, allein aus den Prämiendaten des Bundesamts für Gesundheit seit 2020.</blockquote>
+  </div>
+</div><div class="win" id="kanton-freiburg-concordia">
+  <img src="/krankenkassen-rating/award/badge/kanton-freiburg-concordia.svg" alt="abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Freiburg 2027, Concordia" width="240" height="384" loading="lazy">
+  <div>
+    <h3><a class="kasse-link" href="/kasse/concordia/">Concordia</a></h3>
+    <p class="meta">Preistreueste Krankenkasse im Kanton Freiburg 2027 · Preistreue 9,4 / 10</p>
+    <div class="variants">
+      <a href="/krankenkassen-rating/award/badge/kanton-freiburg-concordia.svg">Hoch hell</a><a href="/krankenkassen-rating/award/badge/kanton-freiburg-concordia-dunkel.svg">Hoch dunkel</a>
+      <a href="/krankenkassen-rating/award/badge/kanton-freiburg-concordia-quer.svg">Quer hell</a><a href="/krankenkassen-rating/award/badge/kanton-freiburg-concordia-quer-dunkel.svg">Quer dunkel</a>
+    </div>
+    <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-freiburg-concordia.svg" data-w="240" data-h="384" data-name="kanton-freiburg-concordia-hoch">Hoch</button>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-freiburg-concordia-quer.svg" data-w="375" data-h="109" data-name="kanton-freiburg-concordia-quer">Quer</button>
+    </div>
+    <div class="snippet"><code>&lt;a href=&quot;https://abovergleich.com/krankenkasse/freiburg/&quot;&gt;
+  &lt;img src=&quot;https://abovergleich.com/krankenkassen-rating/award/badge/kanton-freiburg-concordia.svg&quot;
+       alt=&quot;abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Freiburg 2027, Concordia&quot;
+       width=&quot;240&quot; height=&quot;384&quot; loading=&quot;lazy&quot;&gt;
+&lt;/a&gt;</code></div>
+    <p class="baustein-lbl">Textbaustein zum Übernehmen</p>
+    <blockquote class="baustein">Concordia ist preistreueste Krankenkasse im Kanton Freiburg 2027 im Preistreue-Award 2027 von abovergleich.com. Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, allein aus den Prämiendaten des Bundesamts für Gesundheit seit 2020.</blockquote>
+  </div>
+</div><div class="win" id="kanton-genf-sanitas">
+  <img src="/krankenkassen-rating/award/badge/kanton-genf-sanitas.svg" alt="abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Genf 2027, Sanitas" width="240" height="384" loading="lazy">
+  <div>
+    <h3><a class="kasse-link" href="/kasse/sanitas/">Sanitas</a></h3>
+    <p class="meta">Preistreueste Krankenkasse im Kanton Genf 2027 · Preistreue 8,1 / 10</p>
+    <div class="variants">
+      <a href="/krankenkassen-rating/award/badge/kanton-genf-sanitas.svg">Hoch hell</a><a href="/krankenkassen-rating/award/badge/kanton-genf-sanitas-dunkel.svg">Hoch dunkel</a>
+      <a href="/krankenkassen-rating/award/badge/kanton-genf-sanitas-quer.svg">Quer hell</a><a href="/krankenkassen-rating/award/badge/kanton-genf-sanitas-quer-dunkel.svg">Quer dunkel</a>
+    </div>
+    <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-genf-sanitas.svg" data-w="240" data-h="384" data-name="kanton-genf-sanitas-hoch">Hoch</button>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-genf-sanitas-quer.svg" data-w="375" data-h="109" data-name="kanton-genf-sanitas-quer">Quer</button>
+    </div>
+    <div class="snippet"><code>&lt;a href=&quot;https://abovergleich.com/krankenkasse/genf/&quot;&gt;
+  &lt;img src=&quot;https://abovergleich.com/krankenkassen-rating/award/badge/kanton-genf-sanitas.svg&quot;
+       alt=&quot;abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Genf 2027, Sanitas&quot;
+       width=&quot;240&quot; height=&quot;384&quot; loading=&quot;lazy&quot;&gt;
+&lt;/a&gt;</code></div>
+    <p class="baustein-lbl">Textbaustein zum Übernehmen</p>
+    <blockquote class="baustein">Sanitas ist preistreueste Krankenkasse im Kanton Genf 2027 im Preistreue-Award 2027 von abovergleich.com. Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, allein aus den Prämiendaten des Bundesamts für Gesundheit seit 2020.</blockquote>
+  </div>
+</div><div class="win" id="kanton-glarus-concordia">
+  <img src="/krankenkassen-rating/award/badge/kanton-glarus-concordia.svg" alt="abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Glarus 2027, Concordia" width="240" height="384" loading="lazy">
+  <div>
+    <h3><a class="kasse-link" href="/kasse/concordia/">Concordia</a></h3>
+    <p class="meta">Preistreueste Krankenkasse im Kanton Glarus 2027 · Preistreue 9,1 / 10</p>
+    <div class="variants">
+      <a href="/krankenkassen-rating/award/badge/kanton-glarus-concordia.svg">Hoch hell</a><a href="/krankenkassen-rating/award/badge/kanton-glarus-concordia-dunkel.svg">Hoch dunkel</a>
+      <a href="/krankenkassen-rating/award/badge/kanton-glarus-concordia-quer.svg">Quer hell</a><a href="/krankenkassen-rating/award/badge/kanton-glarus-concordia-quer-dunkel.svg">Quer dunkel</a>
+    </div>
+    <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-glarus-concordia.svg" data-w="240" data-h="384" data-name="kanton-glarus-concordia-hoch">Hoch</button>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-glarus-concordia-quer.svg" data-w="375" data-h="109" data-name="kanton-glarus-concordia-quer">Quer</button>
+    </div>
+    <div class="snippet"><code>&lt;a href=&quot;https://abovergleich.com/krankenkasse/glarus/&quot;&gt;
+  &lt;img src=&quot;https://abovergleich.com/krankenkassen-rating/award/badge/kanton-glarus-concordia.svg&quot;
+       alt=&quot;abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Glarus 2027, Concordia&quot;
+       width=&quot;240&quot; height=&quot;384&quot; loading=&quot;lazy&quot;&gt;
+&lt;/a&gt;</code></div>
+    <p class="baustein-lbl">Textbaustein zum Übernehmen</p>
+    <blockquote class="baustein">Concordia ist preistreueste Krankenkasse im Kanton Glarus 2027 im Preistreue-Award 2027 von abovergleich.com. Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, allein aus den Prämiendaten des Bundesamts für Gesundheit seit 2020.</blockquote>
+  </div>
+</div><div class="win" id="kanton-graubuenden-concordia">
+  <img src="/krankenkassen-rating/award/badge/kanton-graubuenden-concordia.svg" alt="abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Graubünden 2027, Concordia" width="240" height="384" loading="lazy">
+  <div>
+    <h3><a class="kasse-link" href="/kasse/concordia/">Concordia</a></h3>
+    <p class="meta">Preistreueste Krankenkasse im Kanton Graubünden 2027 · Preistreue 9,4 / 10</p>
+    <div class="variants">
+      <a href="/krankenkassen-rating/award/badge/kanton-graubuenden-concordia.svg">Hoch hell</a><a href="/krankenkassen-rating/award/badge/kanton-graubuenden-concordia-dunkel.svg">Hoch dunkel</a>
+      <a href="/krankenkassen-rating/award/badge/kanton-graubuenden-concordia-quer.svg">Quer hell</a><a href="/krankenkassen-rating/award/badge/kanton-graubuenden-concordia-quer-dunkel.svg">Quer dunkel</a>
+    </div>
+    <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-graubuenden-concordia.svg" data-w="240" data-h="384" data-name="kanton-graubuenden-concordia-hoch">Hoch</button>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-graubuenden-concordia-quer.svg" data-w="375" data-h="109" data-name="kanton-graubuenden-concordia-quer">Quer</button>
+    </div>
+    <div class="snippet"><code>&lt;a href=&quot;https://abovergleich.com/krankenkasse/graubuenden/&quot;&gt;
+  &lt;img src=&quot;https://abovergleich.com/krankenkassen-rating/award/badge/kanton-graubuenden-concordia.svg&quot;
+       alt=&quot;abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Graubünden 2027, Concordia&quot;
+       width=&quot;240&quot; height=&quot;384&quot; loading=&quot;lazy&quot;&gt;
+&lt;/a&gt;</code></div>
+    <p class="baustein-lbl">Textbaustein zum Übernehmen</p>
+    <blockquote class="baustein">Concordia ist preistreueste Krankenkasse im Kanton Graubünden 2027 im Preistreue-Award 2027 von abovergleich.com. Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, allein aus den Prämiendaten des Bundesamts für Gesundheit seit 2020.</blockquote>
+  </div>
+</div><div class="win" id="kanton-jura-atupri">
+  <img src="/krankenkassen-rating/award/badge/kanton-jura-atupri.svg" alt="abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Jura 2027, Atupri" width="240" height="384" loading="lazy">
+  <div>
+    <h3><a class="kasse-link" href="/kasse/atupri/">Atupri</a></h3>
+    <p class="meta">Preistreueste Krankenkasse im Kanton Jura 2027 · Preistreue 7,7 / 10</p>
+    <div class="variants">
+      <a href="/krankenkassen-rating/award/badge/kanton-jura-atupri.svg">Hoch hell</a><a href="/krankenkassen-rating/award/badge/kanton-jura-atupri-dunkel.svg">Hoch dunkel</a>
+      <a href="/krankenkassen-rating/award/badge/kanton-jura-atupri-quer.svg">Quer hell</a><a href="/krankenkassen-rating/award/badge/kanton-jura-atupri-quer-dunkel.svg">Quer dunkel</a>
+    </div>
+    <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-jura-atupri.svg" data-w="240" data-h="384" data-name="kanton-jura-atupri-hoch">Hoch</button>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-jura-atupri-quer.svg" data-w="375" data-h="109" data-name="kanton-jura-atupri-quer">Quer</button>
+    </div>
+    <div class="snippet"><code>&lt;a href=&quot;https://abovergleich.com/krankenkasse/jura/&quot;&gt;
+  &lt;img src=&quot;https://abovergleich.com/krankenkassen-rating/award/badge/kanton-jura-atupri.svg&quot;
+       alt=&quot;abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Jura 2027, Atupri&quot;
+       width=&quot;240&quot; height=&quot;384&quot; loading=&quot;lazy&quot;&gt;
+&lt;/a&gt;</code></div>
+    <p class="baustein-lbl">Textbaustein zum Übernehmen</p>
+    <blockquote class="baustein">Atupri ist preistreueste Krankenkasse im Kanton Jura 2027 im Preistreue-Award 2027 von abovergleich.com. Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, allein aus den Prämiendaten des Bundesamts für Gesundheit seit 2020.</blockquote>
+  </div>
+</div><div class="win" id="kanton-luzern-concordia">
+  <img src="/krankenkassen-rating/award/badge/kanton-luzern-concordia.svg" alt="abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Luzern 2027, Concordia" width="240" height="384" loading="lazy">
+  <div>
+    <h3><a class="kasse-link" href="/kasse/concordia/">Concordia</a></h3>
+    <p class="meta">Preistreueste Krankenkasse im Kanton Luzern 2027 · Preistreue 9,3 / 10</p>
+    <div class="variants">
+      <a href="/krankenkassen-rating/award/badge/kanton-luzern-concordia.svg">Hoch hell</a><a href="/krankenkassen-rating/award/badge/kanton-luzern-concordia-dunkel.svg">Hoch dunkel</a>
+      <a href="/krankenkassen-rating/award/badge/kanton-luzern-concordia-quer.svg">Quer hell</a><a href="/krankenkassen-rating/award/badge/kanton-luzern-concordia-quer-dunkel.svg">Quer dunkel</a>
+    </div>
+    <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-luzern-concordia.svg" data-w="240" data-h="384" data-name="kanton-luzern-concordia-hoch">Hoch</button>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-luzern-concordia-quer.svg" data-w="375" data-h="109" data-name="kanton-luzern-concordia-quer">Quer</button>
+    </div>
+    <div class="snippet"><code>&lt;a href=&quot;https://abovergleich.com/krankenkasse/luzern/&quot;&gt;
+  &lt;img src=&quot;https://abovergleich.com/krankenkassen-rating/award/badge/kanton-luzern-concordia.svg&quot;
+       alt=&quot;abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Luzern 2027, Concordia&quot;
+       width=&quot;240&quot; height=&quot;384&quot; loading=&quot;lazy&quot;&gt;
+&lt;/a&gt;</code></div>
+    <p class="baustein-lbl">Textbaustein zum Übernehmen</p>
+    <blockquote class="baustein">Concordia ist preistreueste Krankenkasse im Kanton Luzern 2027 im Preistreue-Award 2027 von abovergleich.com. Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, allein aus den Prämiendaten des Bundesamts für Gesundheit seit 2020.</blockquote>
+  </div>
+</div><div class="win" id="kanton-neuenburg-visana">
+  <img src="/krankenkassen-rating/award/badge/kanton-neuenburg-visana.svg" alt="abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Neuenburg 2027, Visana" width="240" height="384" loading="lazy">
+  <div>
+    <h3><a class="kasse-link" href="/kasse/visana/">Visana</a></h3>
+    <p class="meta">Preistreueste Krankenkasse im Kanton Neuenburg 2027 · Preistreue 8,6 / 10</p>
+    <div class="variants">
+      <a href="/krankenkassen-rating/award/badge/kanton-neuenburg-visana.svg">Hoch hell</a><a href="/krankenkassen-rating/award/badge/kanton-neuenburg-visana-dunkel.svg">Hoch dunkel</a>
+      <a href="/krankenkassen-rating/award/badge/kanton-neuenburg-visana-quer.svg">Quer hell</a><a href="/krankenkassen-rating/award/badge/kanton-neuenburg-visana-quer-dunkel.svg">Quer dunkel</a>
+    </div>
+    <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-neuenburg-visana.svg" data-w="240" data-h="384" data-name="kanton-neuenburg-visana-hoch">Hoch</button>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-neuenburg-visana-quer.svg" data-w="375" data-h="109" data-name="kanton-neuenburg-visana-quer">Quer</button>
+    </div>
+    <div class="snippet"><code>&lt;a href=&quot;https://abovergleich.com/krankenkasse/neuenburg/&quot;&gt;
+  &lt;img src=&quot;https://abovergleich.com/krankenkassen-rating/award/badge/kanton-neuenburg-visana.svg&quot;
+       alt=&quot;abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Neuenburg 2027, Visana&quot;
+       width=&quot;240&quot; height=&quot;384&quot; loading=&quot;lazy&quot;&gt;
+&lt;/a&gt;</code></div>
+    <p class="baustein-lbl">Textbaustein zum Übernehmen</p>
+    <blockquote class="baustein">Visana ist preistreueste Krankenkasse im Kanton Neuenburg 2027 im Preistreue-Award 2027 von abovergleich.com. Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, allein aus den Prämiendaten des Bundesamts für Gesundheit seit 2020.</blockquote>
+  </div>
+</div><div class="win" id="kanton-nidwalden-agrisano">
+  <img src="/krankenkassen-rating/award/badge/kanton-nidwalden-agrisano.svg" alt="abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Nidwalden 2027, Agrisano" width="240" height="384" loading="lazy">
+  <div>
+    <h3><a class="kasse-link" href="/kasse/agrisano/">Agrisano</a></h3>
+    <p class="meta">Preistreueste Krankenkasse im Kanton Nidwalden 2027 · Preistreue 8,5 / 10</p>
+    <div class="variants">
+      <a href="/krankenkassen-rating/award/badge/kanton-nidwalden-agrisano.svg">Hoch hell</a><a href="/krankenkassen-rating/award/badge/kanton-nidwalden-agrisano-dunkel.svg">Hoch dunkel</a>
+      <a href="/krankenkassen-rating/award/badge/kanton-nidwalden-agrisano-quer.svg">Quer hell</a><a href="/krankenkassen-rating/award/badge/kanton-nidwalden-agrisano-quer-dunkel.svg">Quer dunkel</a>
+    </div>
+    <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-nidwalden-agrisano.svg" data-w="240" data-h="384" data-name="kanton-nidwalden-agrisano-hoch">Hoch</button>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-nidwalden-agrisano-quer.svg" data-w="375" data-h="109" data-name="kanton-nidwalden-agrisano-quer">Quer</button>
+    </div>
+    <div class="snippet"><code>&lt;a href=&quot;https://abovergleich.com/krankenkasse/nidwalden/&quot;&gt;
+  &lt;img src=&quot;https://abovergleich.com/krankenkassen-rating/award/badge/kanton-nidwalden-agrisano.svg&quot;
+       alt=&quot;abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Nidwalden 2027, Agrisano&quot;
+       width=&quot;240&quot; height=&quot;384&quot; loading=&quot;lazy&quot;&gt;
+&lt;/a&gt;</code></div>
+    <p class="baustein-lbl">Textbaustein zum Übernehmen</p>
+    <blockquote class="baustein">Agrisano ist preistreueste Krankenkasse im Kanton Nidwalden 2027 im Preistreue-Award 2027 von abovergleich.com. Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, allein aus den Prämiendaten des Bundesamts für Gesundheit seit 2020.</blockquote>
+  </div>
+</div><div class="win" id="kanton-obwalden-concordia">
+  <img src="/krankenkassen-rating/award/badge/kanton-obwalden-concordia.svg" alt="abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Obwalden 2027, Concordia" width="240" height="384" loading="lazy">
+  <div>
+    <h3><a class="kasse-link" href="/kasse/concordia/">Concordia</a></h3>
+    <p class="meta">Preistreueste Krankenkasse im Kanton Obwalden 2027 · Preistreue 9,4 / 10</p>
+    <div class="variants">
+      <a href="/krankenkassen-rating/award/badge/kanton-obwalden-concordia.svg">Hoch hell</a><a href="/krankenkassen-rating/award/badge/kanton-obwalden-concordia-dunkel.svg">Hoch dunkel</a>
+      <a href="/krankenkassen-rating/award/badge/kanton-obwalden-concordia-quer.svg">Quer hell</a><a href="/krankenkassen-rating/award/badge/kanton-obwalden-concordia-quer-dunkel.svg">Quer dunkel</a>
+    </div>
+    <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-obwalden-concordia.svg" data-w="240" data-h="384" data-name="kanton-obwalden-concordia-hoch">Hoch</button>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-obwalden-concordia-quer.svg" data-w="375" data-h="109" data-name="kanton-obwalden-concordia-quer">Quer</button>
+    </div>
+    <div class="snippet"><code>&lt;a href=&quot;https://abovergleich.com/krankenkasse/obwalden/&quot;&gt;
+  &lt;img src=&quot;https://abovergleich.com/krankenkassen-rating/award/badge/kanton-obwalden-concordia.svg&quot;
+       alt=&quot;abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Obwalden 2027, Concordia&quot;
+       width=&quot;240&quot; height=&quot;384&quot; loading=&quot;lazy&quot;&gt;
+&lt;/a&gt;</code></div>
+    <p class="baustein-lbl">Textbaustein zum Übernehmen</p>
+    <blockquote class="baustein">Concordia ist preistreueste Krankenkasse im Kanton Obwalden 2027 im Preistreue-Award 2027 von abovergleich.com. Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, allein aus den Prämiendaten des Bundesamts für Gesundheit seit 2020.</blockquote>
+  </div>
+</div><div class="win" id="kanton-schaffhausen-oekk">
+  <img src="/krankenkassen-rating/award/badge/kanton-schaffhausen-oekk.svg" alt="abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Schaffhausen 2027, ÖKK" width="240" height="384" loading="lazy">
+  <div>
+    <h3><a class="kasse-link" href="/kasse/oekk/">ÖKK</a></h3>
+    <p class="meta">Preistreueste Krankenkasse im Kanton Schaffhausen 2027 · Preistreue 9,0 / 10</p>
+    <div class="variants">
+      <a href="/krankenkassen-rating/award/badge/kanton-schaffhausen-oekk.svg">Hoch hell</a><a href="/krankenkassen-rating/award/badge/kanton-schaffhausen-oekk-dunkel.svg">Hoch dunkel</a>
+      <a href="/krankenkassen-rating/award/badge/kanton-schaffhausen-oekk-quer.svg">Quer hell</a><a href="/krankenkassen-rating/award/badge/kanton-schaffhausen-oekk-quer-dunkel.svg">Quer dunkel</a>
+    </div>
+    <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-schaffhausen-oekk.svg" data-w="240" data-h="384" data-name="kanton-schaffhausen-oekk-hoch">Hoch</button>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-schaffhausen-oekk-quer.svg" data-w="375" data-h="109" data-name="kanton-schaffhausen-oekk-quer">Quer</button>
+    </div>
+    <div class="snippet"><code>&lt;a href=&quot;https://abovergleich.com/krankenkasse/schaffhausen/&quot;&gt;
+  &lt;img src=&quot;https://abovergleich.com/krankenkassen-rating/award/badge/kanton-schaffhausen-oekk.svg&quot;
+       alt=&quot;abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Schaffhausen 2027, ÖKK&quot;
+       width=&quot;240&quot; height=&quot;384&quot; loading=&quot;lazy&quot;&gt;
+&lt;/a&gt;</code></div>
+    <p class="baustein-lbl">Textbaustein zum Übernehmen</p>
+    <blockquote class="baustein">ÖKK ist preistreueste Krankenkasse im Kanton Schaffhausen 2027 im Preistreue-Award 2027 von abovergleich.com. Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, allein aus den Prämiendaten des Bundesamts für Gesundheit seit 2020.</blockquote>
+  </div>
+</div><div class="win" id="kanton-schwyz-einsiedler-krankenkasse">
+  <img src="/krankenkassen-rating/award/badge/kanton-schwyz-einsiedler-krankenkasse.svg" alt="abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Schwyz 2027, Einsiedler Krankenkasse" width="240" height="384" loading="lazy">
+  <div>
+    <h3><a class="kasse-link" href="/kasse/einsiedler-krankenkasse/">Einsiedler Krankenkasse</a></h3>
+    <p class="meta">Preistreueste Krankenkasse im Kanton Schwyz 2027 · Preistreue 9,9 / 10</p>
+    <div class="variants">
+      <a href="/krankenkassen-rating/award/badge/kanton-schwyz-einsiedler-krankenkasse.svg">Hoch hell</a><a href="/krankenkassen-rating/award/badge/kanton-schwyz-einsiedler-krankenkasse-dunkel.svg">Hoch dunkel</a>
+      <a href="/krankenkassen-rating/award/badge/kanton-schwyz-einsiedler-krankenkasse-quer.svg">Quer hell</a><a href="/krankenkassen-rating/award/badge/kanton-schwyz-einsiedler-krankenkasse-quer-dunkel.svg">Quer dunkel</a>
+    </div>
+    <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-schwyz-einsiedler-krankenkasse.svg" data-w="240" data-h="384" data-name="kanton-schwyz-einsiedler-krankenkasse-hoch">Hoch</button>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-schwyz-einsiedler-krankenkasse-quer.svg" data-w="375" data-h="109" data-name="kanton-schwyz-einsiedler-krankenkasse-quer">Quer</button>
+    </div>
+    <div class="snippet"><code>&lt;a href=&quot;https://abovergleich.com/krankenkasse/schwyz/&quot;&gt;
+  &lt;img src=&quot;https://abovergleich.com/krankenkassen-rating/award/badge/kanton-schwyz-einsiedler-krankenkasse.svg&quot;
+       alt=&quot;abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Schwyz 2027, Einsiedler Krankenkasse&quot;
+       width=&quot;240&quot; height=&quot;384&quot; loading=&quot;lazy&quot;&gt;
+&lt;/a&gt;</code></div>
+    <p class="baustein-lbl">Textbaustein zum Übernehmen</p>
+    <blockquote class="baustein">Einsiedler Krankenkasse ist preistreueste Krankenkasse im Kanton Schwyz 2027 im Preistreue-Award 2027 von abovergleich.com. Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, allein aus den Prämiendaten des Bundesamts für Gesundheit seit 2020.</blockquote>
+  </div>
+</div><div class="win" id="kanton-solothurn-concordia">
+  <img src="/krankenkassen-rating/award/badge/kanton-solothurn-concordia.svg" alt="abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Solothurn 2027, Concordia" width="240" height="384" loading="lazy">
+  <div>
+    <h3><a class="kasse-link" href="/kasse/concordia/">Concordia</a></h3>
+    <p class="meta">Preistreueste Krankenkasse im Kanton Solothurn 2027 · Preistreue 9,4 / 10</p>
+    <div class="variants">
+      <a href="/krankenkassen-rating/award/badge/kanton-solothurn-concordia.svg">Hoch hell</a><a href="/krankenkassen-rating/award/badge/kanton-solothurn-concordia-dunkel.svg">Hoch dunkel</a>
+      <a href="/krankenkassen-rating/award/badge/kanton-solothurn-concordia-quer.svg">Quer hell</a><a href="/krankenkassen-rating/award/badge/kanton-solothurn-concordia-quer-dunkel.svg">Quer dunkel</a>
+    </div>
+    <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-solothurn-concordia.svg" data-w="240" data-h="384" data-name="kanton-solothurn-concordia-hoch">Hoch</button>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-solothurn-concordia-quer.svg" data-w="375" data-h="109" data-name="kanton-solothurn-concordia-quer">Quer</button>
+    </div>
+    <div class="snippet"><code>&lt;a href=&quot;https://abovergleich.com/krankenkasse/solothurn/&quot;&gt;
+  &lt;img src=&quot;https://abovergleich.com/krankenkassen-rating/award/badge/kanton-solothurn-concordia.svg&quot;
+       alt=&quot;abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Solothurn 2027, Concordia&quot;
+       width=&quot;240&quot; height=&quot;384&quot; loading=&quot;lazy&quot;&gt;
+&lt;/a&gt;</code></div>
+    <p class="baustein-lbl">Textbaustein zum Übernehmen</p>
+    <blockquote class="baustein">Concordia ist preistreueste Krankenkasse im Kanton Solothurn 2027 im Preistreue-Award 2027 von abovergleich.com. Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, allein aus den Prämiendaten des Bundesamts für Gesundheit seit 2020.</blockquote>
+  </div>
+</div><div class="win" id="kanton-st-gallen-concordia">
+  <img src="/krankenkassen-rating/award/badge/kanton-st-gallen-concordia.svg" alt="abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton St. Gallen 2027, Concordia" width="240" height="384" loading="lazy">
+  <div>
+    <h3><a class="kasse-link" href="/kasse/concordia/">Concordia</a></h3>
+    <p class="meta">Preistreueste Krankenkasse im Kanton St. Gallen 2027 · Preistreue 9,3 / 10</p>
+    <div class="variants">
+      <a href="/krankenkassen-rating/award/badge/kanton-st-gallen-concordia.svg">Hoch hell</a><a href="/krankenkassen-rating/award/badge/kanton-st-gallen-concordia-dunkel.svg">Hoch dunkel</a>
+      <a href="/krankenkassen-rating/award/badge/kanton-st-gallen-concordia-quer.svg">Quer hell</a><a href="/krankenkassen-rating/award/badge/kanton-st-gallen-concordia-quer-dunkel.svg">Quer dunkel</a>
+    </div>
+    <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-st-gallen-concordia.svg" data-w="240" data-h="384" data-name="kanton-st-gallen-concordia-hoch">Hoch</button>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-st-gallen-concordia-quer.svg" data-w="375" data-h="109" data-name="kanton-st-gallen-concordia-quer">Quer</button>
+    </div>
+    <div class="snippet"><code>&lt;a href=&quot;https://abovergleich.com/krankenkasse/st-gallen/&quot;&gt;
+  &lt;img src=&quot;https://abovergleich.com/krankenkassen-rating/award/badge/kanton-st-gallen-concordia.svg&quot;
+       alt=&quot;abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton St. Gallen 2027, Concordia&quot;
+       width=&quot;240&quot; height=&quot;384&quot; loading=&quot;lazy&quot;&gt;
+&lt;/a&gt;</code></div>
+    <p class="baustein-lbl">Textbaustein zum Übernehmen</p>
+    <blockquote class="baustein">Concordia ist preistreueste Krankenkasse im Kanton St. Gallen 2027 im Preistreue-Award 2027 von abovergleich.com. Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, allein aus den Prämiendaten des Bundesamts für Gesundheit seit 2020.</blockquote>
+  </div>
+</div><div class="win" id="kanton-tessin-concordia">
+  <img src="/krankenkassen-rating/award/badge/kanton-tessin-concordia.svg" alt="abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Tessin 2027, Concordia" width="240" height="384" loading="lazy">
+  <div>
+    <h3><a class="kasse-link" href="/kasse/concordia/">Concordia</a></h3>
+    <p class="meta">Preistreueste Krankenkasse im Kanton Tessin 2027 · Preistreue 9,4 / 10</p>
+    <div class="variants">
+      <a href="/krankenkassen-rating/award/badge/kanton-tessin-concordia.svg">Hoch hell</a><a href="/krankenkassen-rating/award/badge/kanton-tessin-concordia-dunkel.svg">Hoch dunkel</a>
+      <a href="/krankenkassen-rating/award/badge/kanton-tessin-concordia-quer.svg">Quer hell</a><a href="/krankenkassen-rating/award/badge/kanton-tessin-concordia-quer-dunkel.svg">Quer dunkel</a>
+    </div>
+    <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-tessin-concordia.svg" data-w="240" data-h="384" data-name="kanton-tessin-concordia-hoch">Hoch</button>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-tessin-concordia-quer.svg" data-w="375" data-h="109" data-name="kanton-tessin-concordia-quer">Quer</button>
+    </div>
+    <div class="snippet"><code>&lt;a href=&quot;https://abovergleich.com/krankenkasse/tessin/&quot;&gt;
+  &lt;img src=&quot;https://abovergleich.com/krankenkassen-rating/award/badge/kanton-tessin-concordia.svg&quot;
+       alt=&quot;abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Tessin 2027, Concordia&quot;
+       width=&quot;240&quot; height=&quot;384&quot; loading=&quot;lazy&quot;&gt;
+&lt;/a&gt;</code></div>
+    <p class="baustein-lbl">Textbaustein zum Übernehmen</p>
+    <blockquote class="baustein">Concordia ist preistreueste Krankenkasse im Kanton Tessin 2027 im Preistreue-Award 2027 von abovergleich.com. Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, allein aus den Prämiendaten des Bundesamts für Gesundheit seit 2020.</blockquote>
+  </div>
+</div><div class="win" id="kanton-thurgau-concordia">
+  <img src="/krankenkassen-rating/award/badge/kanton-thurgau-concordia.svg" alt="abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Thurgau 2027, Concordia" width="240" height="384" loading="lazy">
+  <div>
+    <h3><a class="kasse-link" href="/kasse/concordia/">Concordia</a></h3>
+    <p class="meta">Preistreueste Krankenkasse im Kanton Thurgau 2027 · Preistreue 9,4 / 10</p>
+    <div class="variants">
+      <a href="/krankenkassen-rating/award/badge/kanton-thurgau-concordia.svg">Hoch hell</a><a href="/krankenkassen-rating/award/badge/kanton-thurgau-concordia-dunkel.svg">Hoch dunkel</a>
+      <a href="/krankenkassen-rating/award/badge/kanton-thurgau-concordia-quer.svg">Quer hell</a><a href="/krankenkassen-rating/award/badge/kanton-thurgau-concordia-quer-dunkel.svg">Quer dunkel</a>
+    </div>
+    <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-thurgau-concordia.svg" data-w="240" data-h="384" data-name="kanton-thurgau-concordia-hoch">Hoch</button>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-thurgau-concordia-quer.svg" data-w="375" data-h="109" data-name="kanton-thurgau-concordia-quer">Quer</button>
+    </div>
+    <div class="snippet"><code>&lt;a href=&quot;https://abovergleich.com/krankenkasse/thurgau/&quot;&gt;
+  &lt;img src=&quot;https://abovergleich.com/krankenkassen-rating/award/badge/kanton-thurgau-concordia.svg&quot;
+       alt=&quot;abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Thurgau 2027, Concordia&quot;
+       width=&quot;240&quot; height=&quot;384&quot; loading=&quot;lazy&quot;&gt;
+&lt;/a&gt;</code></div>
+    <p class="baustein-lbl">Textbaustein zum Übernehmen</p>
+    <blockquote class="baustein">Concordia ist preistreueste Krankenkasse im Kanton Thurgau 2027 im Preistreue-Award 2027 von abovergleich.com. Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, allein aus den Prämiendaten des Bundesamts für Gesundheit seit 2020.</blockquote>
+  </div>
+</div><div class="win" id="kanton-uri-oekk">
+  <img src="/krankenkassen-rating/award/badge/kanton-uri-oekk.svg" alt="abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Uri 2027, ÖKK" width="240" height="384" loading="lazy">
+  <div>
+    <h3><a class="kasse-link" href="/kasse/oekk/">ÖKK</a></h3>
+    <p class="meta">Preistreueste Krankenkasse im Kanton Uri 2027 · Preistreue 9,0 / 10</p>
+    <div class="variants">
+      <a href="/krankenkassen-rating/award/badge/kanton-uri-oekk.svg">Hoch hell</a><a href="/krankenkassen-rating/award/badge/kanton-uri-oekk-dunkel.svg">Hoch dunkel</a>
+      <a href="/krankenkassen-rating/award/badge/kanton-uri-oekk-quer.svg">Quer hell</a><a href="/krankenkassen-rating/award/badge/kanton-uri-oekk-quer-dunkel.svg">Quer dunkel</a>
+    </div>
+    <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-uri-oekk.svg" data-w="240" data-h="384" data-name="kanton-uri-oekk-hoch">Hoch</button>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-uri-oekk-quer.svg" data-w="375" data-h="109" data-name="kanton-uri-oekk-quer">Quer</button>
+    </div>
+    <div class="snippet"><code>&lt;a href=&quot;https://abovergleich.com/krankenkasse/uri/&quot;&gt;
+  &lt;img src=&quot;https://abovergleich.com/krankenkassen-rating/award/badge/kanton-uri-oekk.svg&quot;
+       alt=&quot;abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Uri 2027, ÖKK&quot;
+       width=&quot;240&quot; height=&quot;384&quot; loading=&quot;lazy&quot;&gt;
+&lt;/a&gt;</code></div>
+    <p class="baustein-lbl">Textbaustein zum Übernehmen</p>
+    <blockquote class="baustein">ÖKK ist preistreueste Krankenkasse im Kanton Uri 2027 im Preistreue-Award 2027 von abovergleich.com. Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, allein aus den Prämiendaten des Bundesamts für Gesundheit seit 2020.</blockquote>
+  </div>
+</div><div class="win" id="kanton-waadt-sanitas">
+  <img src="/krankenkassen-rating/award/badge/kanton-waadt-sanitas.svg" alt="abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Waadt 2027, Sanitas" width="240" height="384" loading="lazy">
+  <div>
+    <h3><a class="kasse-link" href="/kasse/sanitas/">Sanitas</a></h3>
+    <p class="meta">Preistreueste Krankenkasse im Kanton Waadt 2027 · Preistreue 7,9 / 10</p>
+    <div class="variants">
+      <a href="/krankenkassen-rating/award/badge/kanton-waadt-sanitas.svg">Hoch hell</a><a href="/krankenkassen-rating/award/badge/kanton-waadt-sanitas-dunkel.svg">Hoch dunkel</a>
+      <a href="/krankenkassen-rating/award/badge/kanton-waadt-sanitas-quer.svg">Quer hell</a><a href="/krankenkassen-rating/award/badge/kanton-waadt-sanitas-quer-dunkel.svg">Quer dunkel</a>
+    </div>
+    <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-waadt-sanitas.svg" data-w="240" data-h="384" data-name="kanton-waadt-sanitas-hoch">Hoch</button>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-waadt-sanitas-quer.svg" data-w="375" data-h="109" data-name="kanton-waadt-sanitas-quer">Quer</button>
+    </div>
+    <div class="snippet"><code>&lt;a href=&quot;https://abovergleich.com/krankenkasse/waadt/&quot;&gt;
+  &lt;img src=&quot;https://abovergleich.com/krankenkassen-rating/award/badge/kanton-waadt-sanitas.svg&quot;
+       alt=&quot;abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Waadt 2027, Sanitas&quot;
+       width=&quot;240&quot; height=&quot;384&quot; loading=&quot;lazy&quot;&gt;
+&lt;/a&gt;</code></div>
+    <p class="baustein-lbl">Textbaustein zum Übernehmen</p>
+    <blockquote class="baustein">Sanitas ist preistreueste Krankenkasse im Kanton Waadt 2027 im Preistreue-Award 2027 von abovergleich.com. Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, allein aus den Prämiendaten des Bundesamts für Gesundheit seit 2020.</blockquote>
+  </div>
+</div><div class="win" id="kanton-wallis-concordia">
+  <img src="/krankenkassen-rating/award/badge/kanton-wallis-concordia.svg" alt="abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Wallis 2027, Concordia" width="240" height="384" loading="lazy">
+  <div>
+    <h3><a class="kasse-link" href="/kasse/concordia/">Concordia</a></h3>
+    <p class="meta">Preistreueste Krankenkasse im Kanton Wallis 2027 · Preistreue 9,2 / 10</p>
+    <div class="variants">
+      <a href="/krankenkassen-rating/award/badge/kanton-wallis-concordia.svg">Hoch hell</a><a href="/krankenkassen-rating/award/badge/kanton-wallis-concordia-dunkel.svg">Hoch dunkel</a>
+      <a href="/krankenkassen-rating/award/badge/kanton-wallis-concordia-quer.svg">Quer hell</a><a href="/krankenkassen-rating/award/badge/kanton-wallis-concordia-quer-dunkel.svg">Quer dunkel</a>
+    </div>
+    <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-wallis-concordia.svg" data-w="240" data-h="384" data-name="kanton-wallis-concordia-hoch">Hoch</button>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-wallis-concordia-quer.svg" data-w="375" data-h="109" data-name="kanton-wallis-concordia-quer">Quer</button>
+    </div>
+    <div class="snippet"><code>&lt;a href=&quot;https://abovergleich.com/krankenkasse/wallis/&quot;&gt;
+  &lt;img src=&quot;https://abovergleich.com/krankenkassen-rating/award/badge/kanton-wallis-concordia.svg&quot;
+       alt=&quot;abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Wallis 2027, Concordia&quot;
+       width=&quot;240&quot; height=&quot;384&quot; loading=&quot;lazy&quot;&gt;
+&lt;/a&gt;</code></div>
+    <p class="baustein-lbl">Textbaustein zum Übernehmen</p>
+    <blockquote class="baustein">Concordia ist preistreueste Krankenkasse im Kanton Wallis 2027 im Preistreue-Award 2027 von abovergleich.com. Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, allein aus den Prämiendaten des Bundesamts für Gesundheit seit 2020.</blockquote>
+  </div>
+</div><div class="win" id="kanton-zug-concordia">
+  <img src="/krankenkassen-rating/award/badge/kanton-zug-concordia.svg" alt="abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Zug 2027, Concordia" width="240" height="384" loading="lazy">
+  <div>
+    <h3><a class="kasse-link" href="/kasse/concordia/">Concordia</a></h3>
+    <p class="meta">Preistreueste Krankenkasse im Kanton Zug 2027 · Preistreue 9,4 / 10</p>
+    <div class="variants">
+      <a href="/krankenkassen-rating/award/badge/kanton-zug-concordia.svg">Hoch hell</a><a href="/krankenkassen-rating/award/badge/kanton-zug-concordia-dunkel.svg">Hoch dunkel</a>
+      <a href="/krankenkassen-rating/award/badge/kanton-zug-concordia-quer.svg">Quer hell</a><a href="/krankenkassen-rating/award/badge/kanton-zug-concordia-quer-dunkel.svg">Quer dunkel</a>
+    </div>
+    <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-zug-concordia.svg" data-w="240" data-h="384" data-name="kanton-zug-concordia-hoch">Hoch</button>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-zug-concordia-quer.svg" data-w="375" data-h="109" data-name="kanton-zug-concordia-quer">Quer</button>
+    </div>
+    <div class="snippet"><code>&lt;a href=&quot;https://abovergleich.com/krankenkasse/zug/&quot;&gt;
+  &lt;img src=&quot;https://abovergleich.com/krankenkassen-rating/award/badge/kanton-zug-concordia.svg&quot;
+       alt=&quot;abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Zug 2027, Concordia&quot;
+       width=&quot;240&quot; height=&quot;384&quot; loading=&quot;lazy&quot;&gt;
+&lt;/a&gt;</code></div>
+    <p class="baustein-lbl">Textbaustein zum Übernehmen</p>
+    <blockquote class="baustein">Concordia ist preistreueste Krankenkasse im Kanton Zug 2027 im Preistreue-Award 2027 von abovergleich.com. Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, allein aus den Prämiendaten des Bundesamts für Gesundheit seit 2020.</blockquote>
+  </div>
+</div><div class="win" id="kanton-zuerich-slkk">
+  <img src="/krankenkassen-rating/award/badge/kanton-zuerich-slkk.svg" alt="abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Zürich 2027, SLKK" width="240" height="384" loading="lazy">
+  <div>
+    <h3><a class="kasse-link" href="/kasse/slkk/">SLKK</a></h3>
+    <p class="meta">Preistreueste Krankenkasse im Kanton Zürich 2027 · Preistreue 8,3 / 10</p>
+    <div class="variants">
+      <a href="/krankenkassen-rating/award/badge/kanton-zuerich-slkk.svg">Hoch hell</a><a href="/krankenkassen-rating/award/badge/kanton-zuerich-slkk-dunkel.svg">Hoch dunkel</a>
+      <a href="/krankenkassen-rating/award/badge/kanton-zuerich-slkk-quer.svg">Quer hell</a><a href="/krankenkassen-rating/award/badge/kanton-zuerich-slkk-quer-dunkel.svg">Quer dunkel</a>
+    </div>
+    <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-zuerich-slkk.svg" data-w="240" data-h="384" data-name="kanton-zuerich-slkk-hoch">Hoch</button>
+      <button type="button" data-svg="/krankenkassen-rating/award/badge/kanton-zuerich-slkk-quer.svg" data-w="375" data-h="109" data-name="kanton-zuerich-slkk-quer">Quer</button>
+    </div>
+    <div class="snippet"><code>&lt;a href=&quot;https://abovergleich.com/krankenkasse/zuerich/&quot;&gt;
+  &lt;img src=&quot;https://abovergleich.com/krankenkassen-rating/award/badge/kanton-zuerich-slkk.svg&quot;
+       alt=&quot;abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse im Kanton Zürich 2027, SLKK&quot;
+       width=&quot;240&quot; height=&quot;384&quot; loading=&quot;lazy&quot;&gt;
+&lt;/a&gt;</code></div>
+    <p class="baustein-lbl">Textbaustein zum Übernehmen</p>
+    <blockquote class="baustein">SLKK ist preistreueste Krankenkasse im Kanton Zürich 2027 im Preistreue-Award 2027 von abovergleich.com. Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, allein aus den Prämiendaten des Bundesamts für Gesundheit seit 2020.</blockquote>
+  </div>
+</div>
+
+<div class="cta-box"><h3>Zahl falsch? Sag es uns.</h3><p>Wenn ein Wert nicht stimmt, korrigieren wir ihn und rechnen die Edition neu. Schreib an hello@handyabo.com.</p><a href="mailto:hello@handyabo.com">Mail schreiben &rarr;</a></div>
+</div>
+<script>
+/* PNG im Browser erzeugen, nicht im Build: die Badges nutzen Georgia und
+   Helvetica, die hat der Browser, ein Rasterer im Build nicht. */
+document.querySelectorAll('.pngrow button').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var w = +btn.dataset.w, h = +btn.dataset.h, scale = 3, label = btn.textContent;
+    btn.disabled = true; btn.textContent = 'einen Moment';
+    fetch(btn.dataset.svg).then(function (r) { return r.text(); }).then(function (svg) {
+      var img = new Image();
+      img.onload = function () {
+        var c = document.createElement('canvas'); c.width = w * scale; c.height = h * scale;
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        c.toBlob(function (blob) {
+          var a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+          a.download = btn.dataset.name + '@3x.png'; document.body.appendChild(a); a.click(); a.remove();
+          btn.disabled = false; btn.textContent = label;
+        }, 'image/png');
+      };
+      img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+    }).catch(function () { btn.disabled = false; btn.textContent = label; });
+  });
+});
+</script>
+</article>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">abo<span>vergleich</span>.com</div>
+    <div class="footer-note">Unabh&auml;ngiger Vergleich f&uuml;r die Schweiz. Pr&auml;mien: Bundesamt f&uuml;r Gesundheit (BAG).</div>
+    <div class="footer-links">
+      <a href="/krankenkasse/">Kantone</a>
+      <a href="/kasse/">Kassen</a>
+      <a href="/krankenkasse-kuendigen/">K&uuml;ndigen</a>
+      <a href="/krankenkassenpraemien-2027/">Pr&auml;mien 2027</a>
+      <a href="/krankenkassen-rating/">Rating</a>
+      <a href="/methode/">Methode</a>
+      <a href="/impressum/">Impressum</a>
+      <a href="/datenschutz/">Datenschutz</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
+</body>
+</html>

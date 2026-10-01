@@ -412,3 +412,8 @@ footer > div { max-width: 1000px; }
   .nav-right .nav-link { padding: 14px 20px; font-size: 16px; border-bottom: 1px solid var(--border); }
   .nav-right .nav-cta { margin: 12px 20px 8px; text-align: center; padding: 12px 16px; }
 }
+
+/* Kassennamen führen überall auf die Analyse der Kasse; gelbe Unterstreichung
+   zeigt das, ohne die Tabellen in Linkfarbe zu tauchen. */
+a.kasse-link { color: inherit; text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 2px; text-underline-offset: 4px; }
+a.kasse-link:hover { color: var(--accent-dark); }

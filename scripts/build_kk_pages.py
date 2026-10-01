@@ -40,6 +40,7 @@ from import_premiums import build_rows, load_env, read_csv  # noqa: E402
 from premium_analysis import INSURER_NAMES  # noqa: E402
 import kv_verzeichnis  # noqa: E402
 import site_nav  # noqa: E402
+import build_awards  # noqa: E402
 
 YEAR = 2027
 PREV = YEAR - 1
@@ -358,6 +359,8 @@ PAGE_CSS = """
   .kk-rtable td:nth-child(n+4), .kk-rtable th:nth-child(n+4) { color:var(--muted); }
   .kk-cantonlinks { display:flex; flex-wrap:wrap; gap:6px 14px; font-size:14px; margin-bottom:12px; }
   .kk-cantonlinks a { color:var(--accent-dark); }
+  .kk-awardrow { display:flex; flex-wrap:wrap; gap:10px; margin:14px 0 6px; }
+  .kk-awardrow img { height:72px; width:auto; display:block; }
   .kk-page { max-width: 820px; }
   .kk-lead { font-size: 18px !important; }
   .kk-facts { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:28px 0 8px; }
@@ -793,7 +796,10 @@ def insights_block(cantons, insurers, nat, top3_prev, top3_cur, ins_prev, nat_pr
         f'<tr style="border-bottom:1px solid var(--border);"><td style="padding:9px 12px;font-weight:600;">{kasse_link(x["id"])}</td>'
         f'<td {td}><strong style="font-size:15px;">{note_fmt(x["note"])}</strong></td>'
         f'<td {td}>{pc(x["prev"], nat_prev)}</td><td {td}>{pc(x["cur"], nat)}</td>'
-        f'<td {td}>{pc(x["tot"], tot_all)}</td></tr>' for x in big)
+        f'<td {td}>{pc(x["tot"], tot_all)}</td>'
+        f'<td {td}><a href="/kasse/{KASSE_SLUG[x["id"]]}/" style="color:var(--accent-dark);font-weight:600;">Analyse &rarr;</a></td></tr>'
+        if x["id"] in KASSE_SLUG else
+        f'<td {td}>{pc(x["tot"], tot_all)}</td><td></td></tr>' for x in big)
 
     def cli(c, v):
         return (f'<div><a href="/krankenkasse/{CANTONS[c][1]}/" style="color:var(--text);"><strong>{e(CANTONS[c][0])}</strong></a> '
@@ -827,9 +833,9 @@ def insights_block(cantons, insurers, nat, top3_prev, top3_cur, ins_prev, nat_pr
 
     <div {card}>
       <h3 style="font-size:18px;font-weight:700;margin-bottom:6px;">Preistreue-Rating {YEAR} und Anstieg pro Kasse</h3>
-      <div style="font-size:14px;color:var(--muted);margin-bottom:16px;">Note von 0 bis 10 aus Preis, Konstanz, Treue, Rabatt-Treue, Tarif-Bestand und Reserven. Daneben der Anstieg der Standardprämie, Schnitt aller Kassen {pct(nat_prev)} im {PREV} und {pct(nat)} im {YEAR}. Rot heisst über dem Schnitt.</div>
+      <div style="font-size:14px;color:var(--muted);margin-bottom:16px;">Note von 0 bis 10 aus Preis, Konstanz, Treue, Rabatt-Treue, Tarif-Bestand und Reserven. Daneben der Anstieg der Standardprämie, Schnitt aller Kassen {pct(nat_prev)} im {PREV} und {pct(nat)} im {YEAR}. Rot heisst über dem Schnitt. <strong style="color:var(--text);">Klick auf eine Kasse für die ganze Analyse:</strong> Note mit allen Teilnoten, Prämien in jedem Kanton, Modelle und Kündigungsweg.</div>
       <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:14px;">
-        <thead><tr style="border-bottom:1px solid var(--border2);"><th style="text-align:left;padding:8px 12px;">Kasse</th><th style="text-align:right;padding:8px 12px;">Note</th><th style="text-align:right;padding:8px 12px;">{PREV}</th><th style="text-align:right;padding:8px 12px;">{YEAR}</th><th style="text-align:right;padding:8px 12px;">Seit {Y0}</th></tr></thead>
+        <thead><tr style="border-bottom:1px solid var(--border2);"><th style="text-align:left;padding:8px 12px;">Kasse</th><th style="text-align:right;padding:8px 12px;">Note</th><th style="text-align:right;padding:8px 12px;">{PREV}</th><th style="text-align:right;padding:8px 12px;">{YEAR}</th><th style="text-align:right;padding:8px 12px;">Seit {Y0}</th><th></th></tr></thead>
         <tbody>{kas}</tbody>
       </table></div>
       <div style="font-size:12px;color:var(--muted);margin-top:10px;">Kassen mit mindestens {MIN_BESTAND_RANKING // 1000}'000 Versicherten, sortiert nach Note. In deiner Region kann die Reihenfolge anders sein, siehe Kantone unten. <a href="/krankenkassen-rating/" style="color:var(--accent-dark);">So rechnen wir &rarr;</a></div>
@@ -857,6 +863,8 @@ def insights_block(cantons, insurers, nat, top3_prev, top3_cur, ins_prev, nat_pr
 
 RATING = None   # wird in main() aus build_rating.compute() gefüllt
 MAIN_REGION = {}  # Kanton -> Hauptregion, in main() gefüllt
+AWARDS = []       # Preistreue-Award, in main() aus build_awards.compute() gefüllt
+AWARD_PATH = "/krankenkassen-rating/award/"
 RATING_PATH = "/krankenkassen-rating/"
 
 
@@ -909,7 +917,7 @@ def rating_kasse_card(i):
     return (f'<div class="kk-rating"><div class="kk-rating-head"><div><div class="kk-rating-label">Preistreue-Rating {YEAR}</div>'
             f'<div class="kk-rating-sub">Ist {e(n["name"])} dauerhaft günstig? Aus den BAG-Prämien seit {RATING["years"][0]}.{hint}</div></div>'
             f'<div class="kk-rating-note">{note_fmt(n["note"])}<span>/10</span></div></div>{rows}{adm_html}'
-            f'<a href="{RATING_PATH}">So rechnen wir &rarr;</a></div>')
+            f'{award_strip(i)}<a href="{RATING_PATH}">So rechnen wir &rarr;</a></div>')
 
 
 def rating_page(r):
@@ -996,6 +1004,11 @@ def rating_page(r):
 <p>Note von 0 bis 10, gewichtet aus sechs Teilnoten. Kassen mit mindestens 50'000 Versicherten, über alle Prämienregionen gerechnet. In deiner Region kann die Reihenfolge anders aussehen, siehe unten.</p>
 {table(big)}
 
+<h2>Preistreue-Award {YEAR}</h2>
+<p>Aus dem Rating vergeben wir jedes Jahr Auszeichnungen: Gesamtwertung, Kategorien wie «Dauerhaft günstig» oder «Solideste Reserven», und die preistreueste Kasse in jedem Kanton. Kassen können das Badge frei verwenden.</p>
+<div class="kk-awardrow">{"".join(f'<a href="{AWARD_PATH}#{a["id"]}"><img src="{award_badge_url(a["id"], "-quer")}" alt="{e(a["alt"])}" width="248" height="72" loading="lazy"></a>' for a in AWARDS if a["group"] == "Gesamtwertung")}</div>
+<p><a href="{AWARD_PATH}">Alle Auszeichnungen und Badges &rarr;</a></p>
+
 <h2>Regionalkassen</h2>
 <p>Kleinere Kassen, die nur in einem Teil der Schweiz tätig sind. Ihre Noten stützen sich auf wenige Regionen und sind deshalb separat aufgeführt.</p>
 {table(small, rank=False)}
@@ -1032,6 +1045,138 @@ def rating_page(r):
                       f"{top[0]['name']} schneidet am besten ab.", body, jsonld)
 
 
+AWARD_CSS = """
+  article.kk-page:has(.award-page) { max-width: 980px; }
+  .award-page .rules { list-style:none; padding:0; display:grid; gap:10px; margin:16px 0 0; }
+  .award-page .rules li { position:relative; padding-left:26px; color:var(--text2); }
+  .award-page .rules li::before { content:"✓"; position:absolute; left:0; color:var(--green); font-weight:700; }
+  .grouphead { font-family:'Plus Jakarta Sans',sans-serif; font-size:14px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin:38px 0 14px; padding-bottom:9px; border-bottom:1px solid var(--border); }
+  .win { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:22px; margin-bottom:18px; display:grid; grid-template-columns:240px 1fr; gap:24px; align-items:start; }
+  .win > * { min-width:0; }
+  .win img { display:block; max-width:100%; height:auto; }
+  .win h3 { font-size:22px; margin:0 0 6px; }
+  .win .meta { font-size:15px; color:var(--muted); margin-bottom:14px; }
+  .variants { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px; }
+  .variants a, .pngrow button { font:inherit; font-size:14px; background:none; border:1px solid var(--border2); border-radius:100px; padding:5px 13px; color:var(--text2); text-decoration:none; cursor:pointer; }
+  .pngrow { align-items:center; }
+  .pnglbl { font-size:13px; color:var(--muted); }
+  .pngrow button:hover, .variants a:hover { border-color:var(--accent-dark); color:var(--accent-dark); }
+  .snippet { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:12px 14px; overflow-x:auto; }
+  .snippet code { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:13px; line-height:1.7; color:var(--text2); white-space:pre; }
+  .baustein-lbl { font-size:14px; font-weight:600; color:var(--muted); margin:14px 0 6px; }
+  .baustein { background:var(--surface2); border-left:3px solid var(--accent); border-radius:0 8px 8px 0; padding:12px 16px; color:var(--text2); font-size:15px; line-height:1.65; margin:0; }
+  .kk-awardrow { display:flex; flex-wrap:wrap; gap:10px; margin:14px 0 6px; }
+  .kk-awardrow img { height:72px; width:auto; }
+  @media (max-width:760px) { .win { grid-template-columns:1fr; } .win img { max-width:220px; } }
+"""
+
+AWARD_PNG_JS = """<script>
+/* PNG im Browser erzeugen, nicht im Build: die Badges nutzen Georgia und
+   Helvetica, die hat der Browser, ein Rasterer im Build nicht. */
+document.querySelectorAll('.pngrow button').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var w = +btn.dataset.w, h = +btn.dataset.h, scale = 3, label = btn.textContent;
+    btn.disabled = true; btn.textContent = 'einen Moment';
+    fetch(btn.dataset.svg).then(function (r) { return r.text(); }).then(function (svg) {
+      var img = new Image();
+      img.onload = function () {
+        var c = document.createElement('canvas'); c.width = w * scale; c.height = h * scale;
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        c.toBlob(function (blob) {
+          var a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+          a.download = btn.dataset.name + '@3x.png'; document.body.appendChild(a); a.click(); a.remove();
+          btn.disabled = false; btn.textContent = label;
+        }, 'image/png');
+      };
+      img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+    }).catch(function () { btn.disabled = false; btn.textContent = label; });
+  });
+});
+</script>"""
+
+
+def award_badge_url(aid, suffix=""):
+    return f"{AWARD_PATH}badge/{aid}{suffix}.svg"
+
+
+def write_award_badges():
+    for a in AWARDS:
+        for suffix, fn, dark in build_awards.VARIANTS:
+            target = ROOT / AWARD_PATH.strip("/") / "badge" / f"{a['id']}{suffix}.svg"
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_text(fn(a, YEAR, dark), encoding="utf-8")
+
+
+def award_strip(i):
+    """Quer-Badges einer Kasse, für ihre Kassenseite."""
+    mine = [a for a in AWARDS if a["insurer"] == i]
+    if not mine:
+        return ""
+    imgs = "".join(f'<a href="{AWARD_PATH}#{a["id"]}"><img src="{award_badge_url(a["id"], "-quer")}" alt="{e(a["alt"])}" width="248" height="72" loading="lazy"></a>' for a in mine)
+    return f'<div class="kk-awardrow">{imgs}</div>'
+
+
+def award_page():
+    path = AWARD_PATH
+    groups = []
+    for g in ("Gesamtwertung", "Kategorien", "Kantone"):
+        items = [a for a in AWARDS if a["group"] == g]
+        if not items:
+            continue
+        cards = []
+        for a in items:
+            n = (RATING or {}).get("national", {}).get(a["insurer"], {})
+            cards.append(f"""<div class="win" id="{a['id']}">
+  <img src="{award_badge_url(a['id'])}" alt="{e(a['alt'])}" width="240" height="384" loading="lazy">
+  <div>
+    <h3>{kasse_link(a['insurer'], a['name'])}</h3>
+    <p class="meta">{e(a['headline'])} · {e(a['fact'])}</p>
+    <div class="variants">
+      <a href="{award_badge_url(a['id'])}">Hoch hell</a><a href="{award_badge_url(a['id'], '-dunkel')}">Hoch dunkel</a>
+      <a href="{award_badge_url(a['id'], '-quer')}">Quer hell</a><a href="{award_badge_url(a['id'], '-quer-dunkel')}">Quer dunkel</a>
+    </div>
+    <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
+      <button type="button" data-svg="{award_badge_url(a['id'])}" data-w="240" data-h="384" data-name="{a['id']}-hoch">Hoch</button>
+      <button type="button" data-svg="{award_badge_url(a['id'], '-quer')}" data-w="375" data-h="109" data-name="{a['id']}-quer">Quer</button>
+    </div>
+    <div class="snippet"><code>{e(f'<a href="{a["link"]}">' + chr(10) + f'  <img src="{SITE}{award_badge_url(a["id"])}"' + chr(10) + f'       alt="{a["alt"]}"' + chr(10) + '       width="240" height="384" loading="lazy">' + chr(10) + '</a>')}</code></div>
+    <p class="baustein-lbl">Textbaustein zum Übernehmen</p>
+    <blockquote class="baustein">{e(a['pressText'])}</blockquote>
+  </div>
+</div>""")
+        groups.append(f'<div class="grouphead">{e(g)}</div>' + "".join(cards))
+    n_awards = len(AWARDS)
+    y0 = RATING["years"][0]
+    body = f"""<div class="award-page">
+{crumbs_html([("Krankenkassen-Vergleich", "/"), ("Rating", RATING_PATH), ("Award", path)])}
+<div class="article-badge">Edition {YEAR}</div>
+<h1>abovergleich Preistreue-Award {YEAR}</h1>
+<p class="kk-lead">{n_awards} Auszeichnungen für Krankenkassen, die dauerhaft günstig bleiben. Vergeben allein aus den Prämiendaten des Bundes seit {y0}. Keine Jury, keine Einreichung, keine Gebühr.</p>
+
+<h2>Wofür ausgezeichnet wird</h2>
+<p>Grundlage ist das <a href="{RATING_PATH}">Preistreue-Rating</a>: Preis heute, wie oft eine Kasse seit {y0} in ihrer Region unter den fünf günstigsten war, wie stark sie aufschlägt, ob neue Sparmodelle ihren Rabatt halten, wie oft sie Tarife streicht und wie gut ihre Reserven sind. Die <strong>Gesamtwertung</strong> zeichnet die drei besten Noten aus, die <strong>Kategorien</strong> den Besten in je einem Teilaspekt, und in jedem <strong>Kanton</strong> die Kasse mit der besten Note in der Hauptregion, Regionalkassen eingeschlossen.</p>
+
+<h2>Die Regeln</h2>
+<ul class="rules">
+  <li>Die Auswahl folgt allein der Zahl. Es gibt keine Jury, keine Einreichung und keinen Weg, einen Award zu beeinflussen.</li>
+  <li>Der Award kostet nichts und ist an nichts gekoppelt. Ob eine Kasse das Badge einbindet oder verlinkt, ändert weder Note noch Reihenfolge auf abovergleich.com.</li>
+  <li>Ein Link ist keine Bedingung. Der Einbindungscode enthält ihn, weil eine Auszeichnung ohne Beleg wenig wert ist. Wer das Badge ohne Link nutzt, darf das.</li>
+  <li>Die Edition ist ein Stichtag: die Prämien {YEAR}. Das Badge {YEAR} behält seine Aussage, auch wenn sich die Note im nächsten Jahr ändert.</li>
+</ul>
+
+{"".join(groups)}
+
+<div class="cta-box"><h3>Zahl falsch? Sag es uns.</h3><p>Wenn ein Wert nicht stimmt, korrigieren wir ihn und rechnen die Edition neu. Schreib an hello@handyabo.com.</p><a href="mailto:hello@handyabo.com">Mail schreiben &rarr;</a></div>
+</div>
+{AWARD_PNG_JS}"""
+    jsonld = [breadcrumb([("Krankenkassen-Vergleich", "/"), ("Rating", RATING_PATH), ("Award", path)])]
+    winner = AWARDS[0]["name"] if AWARDS else ""
+    html_out = page(path, f"Preistreue-Award {YEAR}: die preistreuesten Krankenkassen",
+                    f"{n_awards} Auszeichnungen für Krankenkassen, die dauerhaft günstig bleiben, allein aus BAG-Prämien seit {y0}. Sieger {YEAR}: {winner}.",
+                    body, jsonld)
+    return path, html_out.replace("</style>", AWARD_CSS + "</style>", 1)
+
+
 # ── Kassenseiten und Kündigung ─────────────────────────────────────────────
 
 KASSE_SLUG = {}   # wird in main() gefüllt: BAG-Nummer -> Slug
@@ -1046,7 +1191,7 @@ def slugify(name):
 
 def kasse_link(i, text=None):
     text = e(text or INSURER_NAMES[str(i)])
-    return f'<a href="/kasse/{KASSE_SLUG[i]}/">{text}</a>' if i in KASSE_SLUG else text
+    return f'<a class="kasse-link" href="/kasse/{KASSE_SLUG[i]}/">{text}</a>' if i in KASSE_SLUG else text
 
 
 def people(n):
@@ -1506,7 +1651,9 @@ def main():
     global RATING
     import build_rating
     RATING = build_rating.compute()
-    (ROOT / "rating-daten.json").write_text(json.dumps(build_rating.client_json(RATING), ensure_ascii=False,
+    client = build_rating.client_json(RATING)
+    client["slug"] = {str(i): s for i, s in KASSE_SLUG.items()}   # Rechner verlinkt jede Kasse auf ihre Analyse
+    (ROOT / "rating-daten.json").write_text(json.dumps(client, ensure_ascii=False,
                                                        separators=(",", ":")), encoding="utf-8")
 
     paths, cheapest = [], {}
@@ -1519,6 +1666,12 @@ def main():
         paths.append(path)
         MAIN_REGION[c] = main_region(by_canton_cur[c], c)
         cheapest[c] = ranking(by_canton_cur[c], c, MAIN_REGION[c], 2500, prev_idx, n=1)[0]
+
+    global AWARDS
+    adm = RATING["verwaltung"]["kassen"]
+    adm_cost = {int(k): v[max(v)]["verwaltung"] for k, v in adm.items() if v}
+    AWARDS = build_awards.compute(RATING, YEAR, CANTONS, MAIN_REGION, adm_cost)
+    write_award_badges()
 
     jojo = jojo_analysis()
     model_counts = defaultdict(int)
@@ -1534,7 +1687,7 @@ def main():
         paths.append(path)
 
     for fn in (lambda: hub_page(cantons, cheapest), lambda: report_page(cantons, insurers, nat, model_counts, jojo),
-               lambda: kasse_hub(insurers, top3_cur), lambda: kuendigen_page(kv), lambda: rating_page(RATING)):
+               lambda: kasse_hub(insurers, top3_cur), lambda: kuendigen_page(kv), lambda: rating_page(RATING), award_page):
         path, content = fn()
         write(path, content)
         paths.insert(0, path)
