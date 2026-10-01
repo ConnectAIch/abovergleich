@@ -229,6 +229,7 @@ def compute(accident=True, main_f=MAIN_F, rows=None):
         parts["konstanz"] = scale("konstanz", st.mean(kv)) if kv else n["parts"]["konstanz"]
         regions[f"{reg[0]}|{reg[1]}"][i] = {
             "note": note(parts),
+            "preis": parts["preis"], "konstanz": parts["konstanz"],
             # je Franchise: [Jahre unter den 5 günstigsten, Jahre mit Angebot]
             "top5": [[sum(top[(reg, i)][F]), len(top[(reg, i)][F])] for F in FRANCHISES],
         }
@@ -277,6 +278,8 @@ def compute_all():
             tot = _wmean([(VARIANT_W[v], (x or {}).get("note")) for v, x in vs.items()])
             regions[reg][i] = {
                 "note": round(tot, 1) if tot is not None else None,
+                "preis": _wmean([(VARIANT_W[v], (x or {}).get("preis")) for v, x in vs.items()]),
+                "konstanz": _wmean([(VARIANT_W[v], (x or {}).get("konstanz")) for v, x in vs.items()]),
                 "v": [(x or {}).get("note") for x in vs.values()],
                 "top5": (vs[("mit", 300)] or vs[("mit", 2500)])["top5"],
                 "top5o": ((vs[("ohne", 300)] or vs[("ohne", 2500)] or {}).get("top5")) or (vs[("mit", 300)] or vs[("mit", 2500)])["top5"],

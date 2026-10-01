@@ -362,6 +362,9 @@ PAGE_CSS = """
   .kk-rtable td:nth-child(n+4), .kk-rtable th:nth-child(n+4) { color:var(--muted); }
   .kk-cantonlinks { display:flex; flex-wrap:wrap; gap:6px 14px; font-size:14px; margin-bottom:12px; }
   .kk-cantonlinks a { color:var(--accent-dark); }
+  .kk-canton-award { display:flex; align-items:center; gap:16px; flex-wrap:wrap; background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:14px 18px; margin:14px 0 8px; }
+  .kk-canton-award img { height:72px; width:auto; display:block; }
+  .kk-canton-award p { margin:0; font-size:15px; flex:1 1 220px; }
   .kk-awardrow { display:flex; flex-wrap:wrap; gap:10px; margin:14px 0 6px; }
   .kk-awardrow img { height:72px; width:auto; display:block; }
   .kk-page { max-width: 820px; }
@@ -895,6 +898,32 @@ def bar(v):
     return f'<span class="kk-bar"><span style="width:{w:.0f}%"></span></span>'
 
 
+HOME = {}   # Regionalkasse -> Stammgebiet: {"canton", "region", "note", "anteil"}
+
+
+def set_home(bestand):
+    """Stammgebiet einer Regionalkasse: der Kanton mit den meisten Versicherten.
+    Dort zählt ihre Note, nicht der Schnitt über Regionen, in denen sie kaum
+    Kunden hat."""
+    per = defaultdict(dict)
+    for (i, c), v in bestand.items():
+        per[i][c] = per[i].get(c, 0) + v
+    for i, n in RATING["national"].items():
+        if not n["regional"] or not per.get(i):
+            continue
+        c = max(per[i], key=per[i].get)
+        regs = {k.split("|")[1]: m[i]["note"] for k, m in RATING["regions"].items()
+                if k.startswith(c + "|") and i in m and m[i]["note"] is not None}
+        if not regs:
+            continue
+        reg = MAIN_REGION.get(c) if MAIN_REGION.get(c) in regs else max(regs, key=regs.get)
+        HOME[i] = {"canton": c, "region": reg, "note": regs[reg], "anteil": per[i][c] / sum(per[i].values())}
+
+
+def canton_award(c):
+    return next((a for a in AWARDS if a["group"] == "Kantone" and a["id"].startswith(f"kanton-{CANTONS[c][1]}-")), None)
+
+
 def rating_canton_block(c, main):
     """Die 5 Kassen mit der besten Note in der Hauptregion des Kantons."""
     if not RATING:
@@ -905,22 +934,32 @@ def rating_canton_block(c, main):
         return ""
     n_years = len(RATING["years"])
     rows = "".join(
-        f'<tr><td>{kasse_link(i)}</td><td class="num"><strong>{note_fmt(v["note"])}</strong></td>'
+        f'<tr><td>{kasse_link(i)}{"<span class=sub>Regionalkasse</span>" if RATING["national"].get(i, {}).get("regional") else ""}</td>'
+        f'<td class="num"><strong>{note_fmt(v["note"])}</strong></td>'
         f'<td class="num">{v["top5"][-1][0]} von {v["top5"][-1][1]}</td></tr>' for i, v in best)
+    aw = canton_award(c)
+    award = (f'<div class="kk-canton-award"><a href="{AWARD_PATH}#{aw["id"]}"><img src="{award_badge_url(aw["id"], "-quer")}" '
+             f'alt="{e(aw["alt"])}" width="248" height="72" loading="lazy"></a><p><strong>{e(aw["name"])}</strong> ist die preistreueste '
+             f'Krankenkasse im Kanton {e(CANTONS[c][0])} {YEAR}.</p></div>') if aw else ""
     return (f"<h2>Dauerhaft günstig im Kanton {e(CANTONS[c][0])}</h2>"
             f"<p>Nicht nur dieses Jahr günstig, sondern über die Jahre: die fünf Kassen mit der besten Note im "
             f"<a href=\"{RATING_PATH}\">Preistreue-Rating</a>, gerechnet für die Hauptregion des Kantons. "
             f"Die letzte Spalte zeigt, in wie vielen Jahren seit {RATING['years'][0]} die Kasse hier unter den 5 günstigsten war (Franchise 2'500).</p>"
             f'<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Kasse</th><th class="num">Note</th>'
-            f'<th class="num">Jahre unter den 5 günstigsten</th></tr></thead><tbody>{rows}</tbody></table></div>')
+            f'<th class="num">Jahre unter den 5 günstigsten</th></tr></thead><tbody>{rows}</tbody></table></div>{award}')
 
 
 def rating_kasse_card(i):
     if not RATING or i not in RATING["national"]:
         return ""
     n = RATING["national"][i]
-    rows = "".join(f'<div class="kk-rrow"><span>{e(RATING["labels"][k])}</span>{bar(n["parts"][k])}'
-                   f'<span class="num">{note_fmt(n["parts"][k])}</span></div>' for k in RATING["weights"])
+    parts = dict(n["parts"])
+    home = HOME.get(i)
+    if home:   # Regionalkasse: Preis und Konstanz aus dem Stammgebiet
+        hr = RATING["regions"][f"{home['canton']}|{home['region']}"][i]
+        parts.update({k: hr.get(k) if hr.get(k) is not None else parts[k] for k in ("preis", "konstanz")})
+    rows = "".join(f'<div class="kk-rrow"><span>{e(RATING["labels"][k])}</span>{bar(parts[k])}'
+                   f'<span class="num">{note_fmt(parts[k])}</span></div>' for k in RATING["weights"])
     adm = RATING["verwaltung"]["kassen"].get(str(i), {})
     mk = RATING["verwaltung"]["markt_verwaltung"]
     last = max(adm, default=None)
@@ -935,13 +974,21 @@ def rating_kasse_card(i):
         adm_html = (f'<p class="kk-rnote">Verwaltungskosten {last}: <strong>CHF {v:.0f}</strong> pro versicherte Person '
                     f'(Schnitt aller Kassen CHF {m:.0f})'
                     + (f', {first}: CHF {adm[first]["verwaltung"]:.0f}' if first != last else "") + f'.{det} Quelle: BAG.</p>')
-    hint = " Regionalkasse: die Note stützt sich auf wenige Regionen." if n["regional"] else ""
+    hint = ""
+    big_note, label = n["note"], f"Preistreue-Rating {YEAR}"
+    if home:
+        big_note = home["note"]
+        label = f"Preistreue-Rating {YEAR} · Kanton {e(CANTONS[home['canton']][0])}"
+        hint = (f" Regionalkasse: die Note gilt im Kanton {e(CANTONS[home['canton']][0])}, wo sie die meisten Versicherten hat. "
+                f"Über alle {n['regionen']} Regionen gerechnet, auch wo sie kaum Kunden hat: {note_fmt(n['note'])}.")
+    elif n["regional"]:
+        hint = " Regionalkasse: die Note stützt sich auf wenige Regionen."
     vn = n.get("varianten") or {}
     var_html = ('<div class="kk-rvar">' + " · ".join(
         f'{e(v["label"])} <strong>{note_fmt(vn.get(v["key"]))}</strong>' for v in RATING.get("varianten", [])) + "</div>") if vn else ""
-    return (f'<div class="kk-rating"><div class="kk-rating-head"><div><div class="kk-rating-label">Preistreue-Rating {YEAR}</div>'
+    return (f'<div class="kk-rating"><div class="kk-rating-head"><div><div class="kk-rating-label">{label}</div>'
             f'<div class="kk-rating-sub">Ist {e(n["name"])} dauerhaft günstig? Aus den BAG-Prämien seit {RATING["years"][0]}.{hint}</div></div>'
-            f'<div class="kk-rating-note">{note_fmt(n["note"])}<span>/10</span></div></div>{var_html}{rows}{adm_html}'
+            f'<div class="kk-rating-note">{note_fmt(big_note)}<span>/10</span></div></div>{"" if home else var_html}{rows}{adm_html}'
             f'{award_strip(i)}<a href="{RATING_PATH}">So rechnen wir &rarr;</a></div>')
 
 
@@ -965,6 +1012,13 @@ def rating_page(r):
         return (f'<div class="kk-table-wrap"><table class="kk-table kk-rtable"><thead><tr>{"<th>#</th>" if rank else ""}<th>Kasse</th>'
                 f'<th class="num">Note</th>{head}</tr></thead><tbody>{body}</tbody></table></div>')
 
+    small_h = sorted(small, key=lambda i: -(HOME[i]["note"] if i in HOME else nat[i]["note"] or 0))
+    reg_table = ('<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Kasse</th><th>Stammgebiet</th>'
+                 '<th class="num">Note dort</th><th class="num">Alle Regionen</th></tr></thead><tbody>'
+                 + "".join(f'<tr><td>{kasse_link(i)}</td><td>{e(CANTONS[HOME[i]["canton"]][0]) if i in HOME else "–"}</td>'
+                           f'<td class="num"><strong>{note_fmt(HOME[i]["note"] if i in HOME else None)}</strong></td>'
+                           f'<td class="num">{note_fmt(nat[i]["note"])}</td></tr>' for i in small_h)
+                 + "</tbody></table></div>")
     top = [nat[i] for i in big[:3]]
     koh = r["kohorten"][0] if r["kohorten"] else None
     alte = r["alte_modelle"]
@@ -1052,8 +1106,8 @@ def rating_page(r):
 <p><a href="{AWARD_PATH}">Alle Auszeichnungen und Badges &rarr;</a></p>
 
 <h2>Regionalkassen</h2>
-<p>Kleinere Kassen, die nur in einem Teil der Schweiz tätig sind. Ihre Noten stützen sich auf wenige Regionen und sind deshalb separat aufgeführt.</p>
-{table(small, rank=False)}
+<p>Kleinere Kassen mit unter 50'000 Versicherten. Gemessen werden sie dort, wo sie zu Hause sind: im Kanton mit den meisten Versicherten. Über alle Regionen gerechnet wären sie oft schlechter, weil sie ausserhalb ihres Gebiets kaum Kunden haben und dort selten günstig sind.</p>
+{reg_table}
 
 <h2>Das Rating in deiner Region</h2>
 <p>Preise und Konstanz unterscheiden sich stark zwischen den Regionen. Eine Kasse, die im Aargau vorne liegt, kann in Genf teuer sein. Auf jeder Kantonsseite steht, welche Kassen dort dauerhaft günstig sind:</p>
@@ -1405,11 +1459,15 @@ def kasse_page(i, cur, by_canton_cur, prev_idx, insurers, ic, top3_cur, kv, nu):
 def kasse_hub(insurers, top3_cur):
     path = "/kasse/"
     nat = (RATING or {}).get("national", {})
-    regio = ' <span class="sub">Regionalkasse</span>'
-    ids = sorted(KASSE_SLUG, key=lambda i: (nat.get(i, {}).get("regional", True), -(nat.get(i, {}).get("note") or 0)))
+    def regio(i):
+        h = HOME.get(i)
+        return (f' <span class="sub">Regionalkasse, Note im Kanton {e(CANTONS[h["canton"]][0])}</span>' if h
+                else ' <span class="sub">Regionalkasse</span>')
+    shown = lambda i: (HOME[i]["note"] if i in HOME else nat.get(i, {}).get("note"))
+    ids = sorted(KASSE_SLUG, key=lambda i: (nat.get(i, {}).get("regional", True), -(shown(i) or 0)))
     rows = "".join(
-        f'<tr><td>{kasse_link(i)}{regio if nat.get(i, {}).get("regional") else ""}</td>'
-        f'<td class="num"><strong>{note_fmt(nat.get(i, {}).get("note"))}</strong></td>'
+        f'<tr><td>{kasse_link(i)}{regio(i) if nat.get(i, {}).get("regional") else ""}</td>'
+        f'<td class="num"><strong>{note_fmt(shown(i))}</strong></td>'
         f'<td class="num">{people(insurers[i]["bestand"]) if i in insurers and insurers[i]["bestand"] >= 1000 else "–"}</td>'
         f'<td class="num {"kk-up" if i in insurers and insurers[i]["change_pct"] > 0 else ""}">{pct(insurers[i]["change_pct"]) if i in insurers else "–"}</td>'
         f'</tr>' for i in ids)
@@ -1848,6 +1906,15 @@ def main():
     (ROOT / "rating-daten.json").write_text(json.dumps(client, ensure_ascii=False,
                                                        separators=(",", ":")), encoding="utf-8")
 
+    for c in CANTONS:
+        MAIN_REGION[c] = main_region(by_canton_cur[c], c)
+    global AWARDS
+    adm = RATING["verwaltung"]["kassen"]
+    adm_cost = {int(k): v[max(v)]["verwaltung"] for k, v in adm.items() if v}
+    AWARDS = build_awards.compute(RATING, YEAR, CANTONS, MAIN_REGION, adm_cost)
+    write_award_badges()
+    set_home(bestand)
+
     paths, cheapest = [], {}
     for c in CANTONS:
         ins_c = [{"name": INSURER_NAMES[str(i)], "premium": sum(p for p, _ in v) / len(v),
@@ -1856,14 +1923,7 @@ def main():
         path, content = canton_page(c, by_canton_cur[c], prev_idx, cantons, ins_c, regions)
         write(path, content)
         paths.append(path)
-        MAIN_REGION[c] = main_region(by_canton_cur[c], c)
         cheapest[c] = ranking(by_canton_cur[c], c, MAIN_REGION[c], 2500, prev_idx, n=1)[0]
-
-    global AWARDS
-    adm = RATING["verwaltung"]["kassen"]
-    adm_cost = {int(k): v[max(v)]["verwaltung"] for k, v in adm.items() if v}
-    AWARDS = build_awards.compute(RATING, YEAR, CANTONS, MAIN_REGION, adm_cost)
-    write_award_badges()
 
     jojo = jojo_analysis()
     model_counts = defaultdict(int)
