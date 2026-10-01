@@ -334,6 +334,12 @@
   $('kd-send').onclick = function () {
     var email = val('kd-email');
     if (!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(email)) { $('kd-msg').textContent = 'Bitte deine E-Mail-Adresse eintragen.'; $('kd-email').focus(); return; }
+    if (!$('kd-consent').checked) {
+      $('kd-consent').parentNode.classList.add('kd-need');
+      $('kd-msg').textContent = 'Bitte das Häkchen beim Wechsel-Wecker setzen, oder das PDF ohne E-Mail herunterladen.';
+      return;
+    }
+    $('kd-consent').parentNode.classList.remove('kd-need');
     var btn = this;
     withPdf(btn, function (doc, L) {
       var pr = profile(), k = L.kasse;
@@ -342,7 +348,7 @@
       return fetch('https://zexpmaegqsayleaohiip.supabase.co/functions/v1/kuendigung-pdf', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          email: email, consent: true, pdf: b64, filename: fileName(L),
+          email: email, consent: $('kd-consent').checked, pdf: b64, filename: fileName(L),
           kasse: k.name, kanal: k.mail ? 'mail' : k.portal ? 'portal' : 'post', ziel: k.mail || k.portal || '',
           deadline: D.deadline_text, neu: neu ? neu.name : '',
           plz: plzOf() || pr.plz, jahrgang: jahrgangOf() || pr.year, franchise: pr.franchise,

@@ -1402,6 +1402,10 @@ KUENDIGEN_CSS = """
   .kd-send-row button { flex:0 0 auto; background:var(--accent); color:var(--text); border:none; border-radius:10px; padding:12px 20px; font-weight:700; cursor:pointer; font-family:inherit; font-size:15px; }
   .kd-send-row button:disabled { opacity:.6; cursor:default; }
   .kd-send .kd-hint a { color:var(--accent-dark); }
+  .kd-consent { display:flex; gap:10px; align-items:flex-start; font-size:13px; line-height:1.5; color:var(--text2); margin:4px 0 8px; cursor:pointer; }
+  .kd-consent input { width:18px; height:18px; margin-top:2px; flex:0 0 auto; accent-color:var(--accent-dark); }
+  .kd-consent a { color:var(--accent-dark); }
+  .kd-consent.kd-need { color:var(--orange); }
   .kd-ctas { display:flex; flex-wrap:wrap; align-items:center; gap:8px 20px; margin:8px 0 24px; }
   .kd-ctas .kk-cta { margin:0; }
   .kd-cta-sec { color:var(--accent-dark) !important; font-weight:600; }
@@ -1540,9 +1544,10 @@ def kuendigen_page(kv):
 <div id="kd-kanal" class="kd-kanal"></div>
 <div class="kd-send">
   <div class="kd-send-title">PDF per Mail erhalten</div>
-  <p>Wir schicken dir den fertigen Brief mit einer Anleitung, wie du ihn an deine Kasse schickst.</p>
+  <p>Wir schicken dir den fertigen Brief mit einer Anleitung, wie du ihn an deine Kasse schickst. Und nächstes Jahr, wenn die neuen Prämien kommen, die besten Kassen für dich direkt ins Postfach.</p>
   <div class="kd-send-row"><input type="email" id="kd-email" placeholder="deine@email.ch" autocomplete="email" aria-label="Deine E-Mail-Adresse"><button id="kd-send">PDF zuschicken</button></div>
-  <div class="kd-hint">Mit dem Versand schaltest du den Wechsel-Wecker ein: einmal im Jahr, wenn die neuen Prämien kommen, dein persönlicher Vergleich per Mail. Keine Werbung, keine Weitergabe, abmelden mit einem Klick. Das PDF geht dafür einmal durch unseren Server und wird nicht gespeichert. <a href="/datenschutz/">Datenschutz</a></div>
+  <label class="kd-consent"><input type="checkbox" id="kd-consent"> <span>Ja, schickt mir das PDF und einmal im Jahr meinen persönlichen Prämienvergleich (Wechsel-Wecker). Dafür speichert abovergleich.com meine E-Mail-Adresse, PLZ, Jahrgang, Franchise und Kassen. Keine Weitergabe an Krankenkassen, abmelden mit einem Klick. <a href="/datenschutz/#wecker" target="_blank">Datenschutz</a></span></label>
+  <div class="kd-hint">Das PDF geht dafür einmal durch unseren Server und wird nicht gespeichert. Ohne E-Mail? Unten einfach herunterladen.</div>
 </div>
 <div class="kd-actions"><button id="kd-pdf" class="sec">PDF herunterladen</button><button id="kd-mail" class="sec" hidden>Mail an die Kasse vorbereiten</button><button id="kd-share" class="sec" hidden>PDF teilen</button><button id="kd-copy" class="sec">Text kopieren</button></div>
 <div id="kd-msg" class="kd-msg" role="status"></div>
@@ -1612,7 +1617,9 @@ abovergleich.com hilft beim Sparen auf der Grundversicherung. Die Leistungen sin
 - [Krankenkassenprämien {YEAR}]({SITE}/krankenkassenpraemien-{YEAR}/): Auswertung, wie stark jede Kasse und jeder Kanton aufschlägt. BAG: +{BAG_OFFICIAL['change_pct']:.1f}% mittlere Prämie; Standardmodell nach unserer Auswertung {nat:+.1f}%.
 - [Günstigste Krankenkasse nach Kanton]({SITE}/krankenkasse/): Übersicht aller 26 Kantone.
 - [Alle Krankenkassen {YEAR}]({SITE}/kasse/): Prämienveränderung je Kasse, Seite pro Kasse mit Kantonen, Modellen und Kündigungsadresse.
-- [Krankenkasse kündigen]({SITE}/krankenkasse-kuendigen/): Frist {DEADLINE}, Vorlage im Browser, Adressen aller Kassen laut BAG.
+- [Preistreue-Rating {YEAR}]({SITE}/krankenkassen-rating/): Note 0 bis 10 je Kasse aus BAG-Prämien seit 2020: Preis, Konstanz unter den günstigsten, Aufschläge, Rabatt-Treue neuer Sparmodelle, Tarif-Bestand, Reserven.
+- [Preistreue-Award {YEAR}]({SITE}/krankenkassen-rating/award/): Gesamtsieger, Kategoriensieger und Sieger je Kanton, mit Regeln.
+- [Krankenkasse kündigen]({SITE}/krankenkasse-kuendigen/): Frist {DEADLINE}, Kündigungs-Editor mit Unterschrift und PDF, Kündigungsweg (Mail oder Post) und Adresse jeder Kasse laut BAG.
 - [Hausrat & Haftpflicht]({SITE}/hausratversicherung/): Bedarfsrechner und Anbieter-Vergleich.
 - [Unsere Methode]({SITE}/methode/): Wie wir vergleichen und warum wir keine Telefonnummern verlangen.
 
