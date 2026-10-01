@@ -1,6 +1,7 @@
 // Kündigungsbrief für die Grundversicherung: Formular, Unterschrift, PDF und
-// der passende Weg zur Kasse. Alles läuft im Browser, nichts wird gespeichert
-// oder von uns verschickt.
+// der passende Weg zur Kasse. Der Brief entsteht im Browser. Auf Wunsch
+// schicken wir das PDF an die Person selbst (Edge Function kuendigung-pdf,
+// schaltet den Wechsel-Wecker ein), nie an die Kasse.
 //
 // Abschicken muss der Kunde selbst. Groupe Mutuel und Sympany nehmen eine
 // Kündigung per Mail nur vom Absender an, den sie vom Kunden kennen, und bei
@@ -151,7 +152,10 @@
     var ort = val('kd-city') ? city.replace(/^\d{4}\s*/, '') || 'Ort' : 'Ort';
     var more = $('kd-more').value.split('\n').map(function (s) { return s.trim(); }).filter(Boolean);
     var subject = ['Kündigung der obligatorischen Krankenpflegeversicherung (Grundversicherung)'];
-    if (val('kd-nr')) subject.push('Versicherten-Nr. ' + val('kd-nr'));
+    var ids = [];
+    if (val('kd-nr')) ids.push('Versicherten-Nr. ' + val('kd-nr'));
+    if (val('kd-birth')) ids.push('Geburtsdatum ' + val('kd-birth'));
+    if (ids.length) subject.push(ids.join(', '));
     var body = [(more.length
       ? 'Hiermit kündige ich die obligatorische Krankenpflegeversicherung nach KVG für mich und die folgenden Personen'
       : 'Hiermit kündige ich meine obligatorische Krankenpflegeversicherung nach KVG') +
@@ -175,6 +179,7 @@
   }
   function render() {
     var L = letter(), b = $('kd-brief');
+    $('kd-city-hint').hidden = !val('kd-city') || /^\d{4}\b/.test(val('kd-city'));
     b.textContent = '';
     b.appendChild(document.createTextNode([].concat(L.sender, ['', ''], L.recipient, ['', '', L.dateLine, '', ''], L.subject,
       ['', 'Sehr geehrte Damen und Herren', ''], L.body, ['', 'Freundliche Grüsse', '']).join('\n') + '\n'));
@@ -245,7 +250,7 @@
     return pdfLib;
   }
   function makePdf(L) {
-    var doc = new window.jspdf.jsPDF({ unit: 'mm', format: 'a4' });
+    var doc = new window.jspdf.jsPDF({ unit: 'mm', format: 'a4', compress: true });
     var X = 22, W = 166, LH = 5.2;
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(10.5);
@@ -267,15 +272,21 @@
     });
     y += 7;
     doc.text('Freundliche Grüsse', X, y);
-    y += 3;
+    y += 4;
     if (sig) {
       var ip = doc.getImageProperties(sig), h = 17, w = Math.min(75, ip.width / ip.height * h);
-      doc.addImage(sig, 'PNG', X, y, w, h);
-      y += h + 3;
+      doc.addImage(sig, 'PNG', X, y, w, h, undefined, 'FAST');
+      y += h + 6;   // Grundlinie des Namens unter der Unterschrift, nicht hinein
     } else {
-      y += 20;
+      y += 22;
     }
     doc.text(L.name, X, y);
+    // Fusszeile
+    doc.setFontSize(8);
+    doc.setTextColor(150);
+    doc.text('Erstellt mit abovergleich.com, dem unabhängigen Krankenkassen-Vergleich', X, 287);
+    doc.setTextColor(0);
+    doc.setFontSize(10.5);
     doc.setProperties({ title: L.subject[0], creator: 'abovergleich.com' });
     return doc;
   }
@@ -292,7 +303,7 @@
     btn.textContent = 'Einen Moment…';
     loadPdf().then(function () {
       var L = letter();
-      fn(makePdf(L), L);
+      return fn(makePdf(L), L);   // darf ein Promise liefern, der Knopf wartet darauf
     }).catch(function () {
       $('kd-msg').textContent = 'Das PDF konnte nicht erstellt werden. Nimm «Text kopieren» oder versuch es nochmals.';
     }).then(function () {
@@ -306,6 +317,7 @@
     var L = letter();
     var body = {
       event: event, quelle: 'editor', kasse_alt: L.kasse ? L.kasse.id : null, kasse_neu: neu ? neu.id : null,
+      plz: plzOf(), jahrgang: jahrgangOf(),
       zusatz: (document.querySelector('input[name="kd-zusatz"]:checked') || {}).value,
       kanal: L.kasse ? (L.kasse.mail ? 'mail' : L.kasse.portal ? 'portal' : 'post') : null,
     };
@@ -314,6 +326,43 @@
         headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).catch(function () {});
     } catch (e) {}
   }
+  function plzOf() { var m = val('kd-city').match(/^(\d{4})\b/); return m ? parseInt(m[1], 10) : null; }
+  function jahrgangOf() { var m = val('kd-birth').match(/(19|20)\d{2}\s*$/); return m ? parseInt(m[0], 10) : null; }
+  function profile() { try { return JSON.parse(localStorage.getItem('kk-profile') || 'null') || {}; } catch (e) { return {}; } }
+
+  // PDF per Mail an die Person selbst, schaltet den Wechsel-Wecker ein
+  $('kd-send').onclick = function () {
+    var email = val('kd-email');
+    if (!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(email)) { $('kd-msg').textContent = 'Bitte deine E-Mail-Adresse eintragen.'; $('kd-email').focus(); return; }
+    var btn = this;
+    withPdf(btn, function (doc, L) {
+      var pr = profile(), k = L.kasse;
+      var b64 = doc.output('datauristring').split(',')[1];
+      btn.textContent = 'Wird verschickt…';
+      return fetch('https://zexpmaegqsayleaohiip.supabase.co/functions/v1/kuendigung-pdf', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: email, consent: true, pdf: b64, filename: fileName(L),
+          kasse: k.name, kanal: k.mail ? 'mail' : k.portal ? 'portal' : 'post', ziel: k.mail || k.portal || '',
+          deadline: D.deadline_text, neu: neu ? neu.name : '',
+          plz: plzOf() || pr.plz, jahrgang: jahrgangOf() || pr.year, franchise: pr.franchise,
+          accident_included: pr.accident === true, current_insurer_id: k.id, new_insurer_id: neu ? neu.id : null,
+          paid_monthly: (function () { try { return parseFloat((localStorage.getItem('kk-paid') || '').replace(',', '.')) || null; } catch (e) { return null; } })(),
+        }),
+      }).then(function (r) { return r.json(); }).then(function (res) {
+        if (res.ok) {
+          $('kd-msg').textContent = 'Verschickt an ' + email + '. Schau auch im Spam-Ordner nach.' +
+            (res.wecker ? ' Dein Wechsel-Wecker ist eingeschaltet.' : '');
+          track('kuendigung_pdf');
+        } else {
+          $('kd-msg').textContent = res.error || 'Der Versand hat nicht geklappt. Lade das PDF herunter.';
+        }
+      }).catch(function () {
+        $('kd-msg').textContent = 'Der Versand hat nicht geklappt. Lade das PDF herunter.';
+      });
+    });
+  };
+
   $('kd-pdf').onclick = function () {
     withPdf(this, function (doc, L) { doc.save(fileName(L)); track('kuendigung_pdf'); });
   };
@@ -350,7 +399,7 @@
       function () { $('kd-copy').textContent = 'Bitte markieren und kopieren'; });
   };
 
-  ['kd-kasse', 'kd-name', 'kd-nr', 'kd-street', 'kd-city', 'kd-more'].forEach(function (id) {
+  ['kd-kasse', 'kd-name', 'kd-birth', 'kd-nr', 'kd-street', 'kd-city', 'kd-more'].forEach(function (id) {
     $(id).addEventListener('input', render);
     $(id).addEventListener('change', render);
   });

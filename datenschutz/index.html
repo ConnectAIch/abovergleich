@@ -58,7 +58,7 @@
     <li>optional deine heutige Krankenkasse</li>
   </ul>
   <p>Deine Eingaben merkt sich dein Browser lokal (localStorage), bis du sie l&ouml;schst.</p>
-  <p><strong>Anonyme Auswertung:</strong> Nach jedem Vergleich speichern wir eine Zusammenfassung, die sich keiner Person zuordnen l&auml;sst: Kanton und Pr&auml;mienregion (nicht die PLZ), Altersklasse (Kinder, junge Erwachsene, Erwachsene, nicht den Jahrgang), Franchise, Unfalldeckung, deine heutige Kasse, die g&uuml;nstigste angezeigte Kasse, den Betrag, den du heute zahlst, auf 10 Franken gerundet, und die errechnete Ersparnis. Klickst du auf &laquo;Wechseln&raquo;, speichern wir zus&auml;tzlich die gew&auml;hlte Kasse. Kein Name, keine E-Mail, keine IP-Adresse, keine Cookies.</p>
+  <p><strong>Statistik:</strong> Nach jedem Vergleich speichern wir PLZ, Jahrgang, Kanton und Pr&auml;mienregion, Franchise, Unfalldeckung, deine heutige Kasse, die g&uuml;nstigste angezeigte Kasse, den Betrag, den du heute zahlst, auf 10 Franken gerundet, und die errechnete Ersparnis. Klickst du auf &laquo;Wechseln&raquo;, speichern wir zus&auml;tzlich die gew&auml;hlte Kasse. Wir speichern dazu keinen Namen, keine E-Mail-Adresse, keine IP-Adresse und setzen keine Cookies. Die Eintr&auml;ge sind nicht miteinander verkn&uuml;pft, wir k&ouml;nnen sie keiner Person zuordnen.</p>
   <p><strong>Zweck:</strong> Auswertungen, von welcher zu welcher Kasse gewechselt wird und wie viel sich das lohnt, sowie die Verbesserung des Rechners. Ver&ouml;ffentlicht werden nur zusammengefasste Zahlen.</p>
 
   <h3>3.2 Rechnung oder Police auslesen (freiwillig)</h3>
@@ -72,20 +72,22 @@
   <p>Wenn du das nicht m&ouml;chtest, gibst du die Angaben einfach von Hand ein.</p>
 
   <h3>3.3 K&uuml;ndigungsvorlage</h3>
-  <p>Die K&uuml;ndigungsvorlage unter <a href="/krankenkasse-kuendigen/">/krankenkasse-kuendigen/</a> entsteht vollst&auml;ndig in deinem Browser, samt Unterschrift und PDF. Name, Adresse, Versichertennummer und Unterschrift werden weder an uns &uuml;bermittelt noch gespeichert. Abschicken tust du den Brief selbst, per Mail oder Post.</p>
-  <p>Wenn du das PDF herunterl&auml;dst oder den Text kopierst, z&auml;hlen wir anonym: bisherige Kasse, neue Kasse (falls du aus dem Rechner kommst), deine Wahl bei der Zusatzversicherung und den K&uuml;ndigungsweg der Kasse. Keine Angaben zu deiner Person.</p>
+  <p>Die K&uuml;ndigungsvorlage unter <a href="/krankenkasse-kuendigen/">/krankenkasse-kuendigen/</a> entsteht in deinem Browser, samt Unterschrift und PDF. L&auml;dst du das PDF herunter oder kopierst den Text, werden Name, Adresse, Geburtsdatum, Versichertennummer und Unterschrift weder an uns &uuml;bermittelt noch gespeichert. Abschicken an die Kasse tust du selbst, per Mail oder Post.</p>
+  <p><strong>PDF per Mail:</strong> Wenn du dir das PDF zuschicken l&auml;sst, geht es einmal &uuml;ber unseren Server an unseren E-Mail-Dienst und an deine Adresse. Wir speichern das PDF nicht. Mit dem Versand schaltest du den Wechsel-Wecker ein (siehe 3.4). Dort speichern wir deine E-Mail-Adresse, PLZ und Jahrgang (aus dem Brief), Franchise und Unfalldeckung (aus dem Rechner, falls du ihn benutzt hast, sonst Franchise 2'500 ohne Unfall), deine bisherige und deine neue Kasse sowie den Zeitpunkt deiner Einwilligung. Rechtsgrundlage ist deine Einwilligung beim Klick auf &laquo;PDF zuschicken&raquo;.</p>
+  <p><strong>Statistik:</strong> Bei jedem erstellten Brief speichern wir PLZ und Jahrgang (falls im Brief angegeben), bisherige und neue Kasse, deine Wahl bei der Zusatzversicherung und den K&uuml;ndigungsweg der Kasse. Keinen Namen, keine Adresse, keine E-Mail, keine IP-Adresse.</p>
   <p>F&uuml;r das PDF l&auml;dt die Seite beim ersten Klick die Programmbibliothek jsPDF von cdnjs (Cloudflare, USA). Dabei sieht Cloudflare wie bei jedem Seitenaufruf deine IP-Adresse und deinen Browser, aber keine Angaben aus dem Brief.</p>
   <p>Bis 30. September 2026 gab es stattdessen einen Dienst, der das Schreiben per E-Mail verschickte. Die dabei erfassten Angaben (Name, Adresse, E-Mail, bisherige und neue Kasse) l&ouml;schen wir auf Anfrage an <a href="mailto:hello@handyabo.com">hello@handyabo.com</a>.</p>
 
   <h3>3.4 Wechsel-Wecker</h3>
-  <p>Wenn du den Wechsel-Wecker einschaltest, speichern wir:</p>
+  <p>Wenn du den Wechsel-Wecker im Rechner oder &uuml;ber &laquo;PDF zuschicken&raquo; im K&uuml;ndigungs-Editor einschaltest, speichern wir:</p>
   <ul>
     <li>E-Mail-Adresse</li>
     <li>PLZ, Jahrgang, Franchise, Unfalldeckung</li>
     <li>optional deine heutige Kasse und den Betrag, den du heute zahlst</li>
+    <li>aus dem K&uuml;ndigungs-Editor zus&auml;tzlich deine neue Kasse, die Herkunft der Anmeldung und den Zeitpunkt der Einwilligung</li>
   </ul>
   <p><strong>Zweck:</strong> Einmal j&auml;hrlich, wenn das BAG die neuen Pr&auml;mien ver&ouml;ffentlicht (Ende September), schicken wir dir deinen pers&ouml;nlichen Vergleich per E-Mail.<br>
-  <strong>Rechtsgrundlage:</strong> Einwilligung. Du best&auml;tigst deine Adresse &uuml;ber einen Link in einer ersten E-Mail (Double Opt-in).<br>
+  <strong>Rechtsgrundlage:</strong> Einwilligung. Im Rechner best&auml;tigst du deine Adresse &uuml;ber einen Link in einer ersten E-Mail (Double Opt-in). Im K&uuml;ndigungs-Editor gilt der Klick auf &laquo;PDF zuschicken&raquo; mit dem Hinweis daneben als Einwilligung.<br>
   <strong>Speicherdauer:</strong> Bis du dich abmeldest; jede Mail enth&auml;lt einen Abmeldelink. Unbest&auml;tigte Anmeldungen l&ouml;schen wir nach 30 Tagen.</p>
 
   <h3>3.5 Technische Zugriffsdaten</h3>
@@ -126,7 +128,7 @@
     </tr>
     <tr>
       <td><strong>E-Mail-Versand</strong></td>
-      <td>Zustellung der Wechsel-Wecker-E-Mails</td>
+      <td>Zustellung der Wechsel-Wecker-E-Mails und der K&uuml;ndigungs-PDFs, die du dir zuschicken l&auml;sst</td>
       <td>USA</td>
     </tr>
     <tr>

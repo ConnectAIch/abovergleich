@@ -1,11 +1,10 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-// Anonyme Ereignisse aus Rechner und Kündigungs-Editor (Tabelle kk_events).
-// Gespeichert wird nur, was keine Person bestimmt: Kanton und Prämienregion,
-// Altersklasse, Franchise, alte und neue Kasse, gerundete Beträge. Keine PLZ,
-// kein Jahrgang, kein Name, keine IP. Fehler schlucken wir: das Zählen darf
-// den Besuch nie stören.
+// Ereignisse aus Rechner und Kündigungs-Editor (Tabelle kk_events), ohne
+// Namen, Adresse, E-Mail oder IP: PLZ, Jahrgang, Kanton und Prämienregion,
+// Franchise, alte und neue Kasse, gerundete Beträge. Datenschutz 3.1 und 3.3.
+// Fehler schlucken wir: das Zählen darf den Besuch nie stören.
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -51,6 +50,8 @@ Deno.serve(async (req) => {
     const altersklasse = str(b.altersklasse, 3);
     const row = {
       event: b.event,
+      plz: int(b.plz, 1000, 9699),
+      jahrgang: int(b.jahrgang, 1900, 2030),
       jahr: int(b.jahr, 2025, 2040),
       canton: str(b.canton, 2, /^[A-Z]{2}$/),
       region: str(b.region, 12),

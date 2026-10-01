@@ -1528,14 +1528,17 @@ async function checkKK() {
       }
     }
 
-    // Anonym zählen, was verglichen wird (ohne PLZ, Jahrgang, Namen)
+    // Statistik ohne Namen, siehe Datenschutz 3.1. Profil merken, damit der
+    // Kündigungs-Editor den Wecker mit derselben Franchise einschalten kann.
+    try { localStorage.setItem('kk-profile', JSON.stringify({ plz: parseInt(plz), year: parseInt(year), franchise: Number(data.franchise), accident: accidentIncluded })); } catch (e) {}
     if (offers[0]) kkLog('vergleich', {
+      plz: parseInt(plz), jahrgang: parseInt(year),
       jahr: data.year, canton: data.canton, region: data.region, altersklasse: ageKey(data.age_class),
       franchise: Number(data.franchise), unfall: accidentIncluded, kasse_alt: currentId,
       kasse_neu: offers[0].insurer_id, modell_neu: offers[0].model_type, praemie_bezahlt: paid,
       ersparnis_jahr: ownPick && !ownGuessed ? (ownPick.premium - offers[0].premium) * 12 : null, quelle: 'rechner',
     });
-    window._kkLast = { jahr: data.year, canton: data.canton, region: data.region, altersklasse: ageKey(data.age_class),
+    window._kkLast = { plz: parseInt(plz), jahrgang: parseInt(year), jahr: data.year, canton: data.canton, region: data.region, altersklasse: ageKey(data.age_class),
       franchise: Number(data.franchise), unfall: accidentIncluded, kasse_alt: currentId };
 
     function bestPerInsurer(list) {

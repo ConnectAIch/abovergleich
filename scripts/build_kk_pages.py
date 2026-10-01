@@ -85,14 +85,15 @@ MIN_BESTAND_RANKING = 50_000   # Kassen-Rankings: nur Kassen mit so vielen Versi
 
 # ── Daten ──────────────────────────────────────────────────────────────────
 
-def load_year(year):
+def load_year(year, accident=True):
     names = {int(k): v for k, v in INSURER_NAMES.items()}
     # ältere Jahre enthalten Kassen, die es nicht mehr gibt (fusioniert, aufgelöst)
     for r in read_csv(DATA / f"praemien_{year}.csv"):
         names.setdefault(int(r["Versicherer"].lstrip("0")), f"Nr. {r['Versicherer'].lstrip('0')}")
     rows = build_rows(year, names)
-    # nur Erwachsene mit Unfall, das ist die Referenz für alle Tabellen
-    return [r for r in rows if r["age_class"] == "AKL-ERW" and r["accident_included"]]
+    # Erwachsene mit Unfall ist die BAG-Referenz für Anstiege und Rankings.
+    # Ohne Unfall (die Mehrheit der Erwachsenen) für die Beispielperson der Kassenseiten.
+    return [r for r in rows if r["age_class"] == "AKL-ERW" and r["accident_included"] == accident]
 
 
 def load_bestand():
@@ -1212,39 +1213,39 @@ def address_lines(kv, i):
     return [d.get("name") or INSURER_NAMES[str(i)]] + d.get("address", [])
 
 
-def kasse_page(i, cur, by_canton_cur, prev_idx, insurers, ic, top3_cur, kv):
+def kasse_page(i, cur, by_canton_cur, prev_idx, insurers, ic, top3_cur, kv, nu):
     name = INSURER_NAMES[str(i)]
     path = f"/kasse/{KASSE_SLUG[i]}/"
     own = [r for r in cur if r["insurer_id"] == i]
     cants = sorted({r["canton"] for r in own} & set(CANTONS), key=lambda c: CANTONS[c][0])
     info = insurers.get(i)
 
-    # Eine Beispielperson für die ganze Tabelle, damit jede Zahl dasselbe meint:
-    # Erwachsene, Franchise 300, mit Unfall, Prämienregion 1 des Kantons.
-    rows, first_in = [], []
+    # Beispielperson wie die Mehrheit: Erwachsene ohne Unfalldeckung (über den
+    # Arbeitgeber versichert), Prämienregion 1. Die zwei häufigsten Franchisen
+    # nebeneinander: 300 (45 % der Erwachsenen) und 2'500 (38 %), BAG KVSTAT T 7.16.
+    by_c, idx_prev = nu["by_canton"], nu["prev_idx"]
+    rows, first_in, top3_in = [], [], 0
     for c in cants:
-        reg = main_region(by_canton_cur[c], c)
-        mine = [r for r in by_canton_cur[c] if r["insurer_id"] == i and r["region"] == reg and r["franchise"] == 300]
-        std = min((r for r in mine if r["model_type"] == "standard"), key=lambda r: r["premium"], default=None)
-        before = tariff_match(prev_idx, std, 300) if std else None
-        chg = (std["premium"] / before - 1) * 100 if std and before else None
-        rk = ranking(by_canton_cur[c], c, reg, 300, prev_idx, n=999)
-        pos = next((n for n, x in enumerate(rk, 1) if x["insurer_id"] == i), None)
-        if pos == 1:
+        reg = main_region(by_c[c], c)
+        cells, pos25 = [], None
+        for fr in (300, 2500):
+            rk = ranking(by_c[c], c, reg, fr, idx_prev, n=999)
+            pos = next((n for n, x in enumerate(rk, 1) if x["insurer_id"] == i), None)
+            best = rk[pos - 1] if pos else None
+            if fr == 2500:
+                pos25 = pos
+            cells.append(f'<td class="num">{("CHF " + chf(best["premium"])) if best else "–"}'
+                         f'{("<span class=sub>" + MODEL_LABEL[best["model"]] + " · Platz " + str(pos) + " von " + str(len(rk)) + "</span>") if best else ""}</td>')
+        if pos25 == 1:
             first_in.append(c)
-        best = rk[pos - 1] if pos else None
-        rows.append(
-            f'<tr><td><a href="/krankenkasse/{CANTONS[c][1]}/">{e(CANTONS[c][0])}</a></td>'
-            f'<td class="num">{"CHF " + chf(std["premium"]) if std else "–"}'
-            f'{("<span class=sub>" + pct(chg) + " zu " + str(PREV) + "</span>") if chg is not None else ""}</td>'
-            f'<td class="num">{("CHF " + chf(best["premium"])) if best and best["model"] != "standard" else "–"}'
-            f'{("<span class=sub>" + MODEL_LABEL[best["model"]] + "</span>") if best and best["model"] != "standard" else ""}</td>'
-            f'<td class="num">{f"{pos}. von {len(rk)}" if pos else "–"}</td></tr>')
+        if pos25 and pos25 <= 3:
+            top3_in += 1
+        rows.append(f'<tr><td><a href="/krankenkasse/{CANTONS[c][1]}/">{e(CANTONS[c][0])}</a></td>{"".join(cells)}</tr>')
 
     # Modellwechsel innerhalb der Kasse: Standard gegen günstigstes anderes Modell
     by_reg = defaultdict(list)
-    for r in own:
-        if r["franchise"] == 2500:
+    for r in nu["rows"]:
+        if r["insurer_id"] == i and r["franchise"] == 2500:
             by_reg[(r["canton"], r["region"])].append(r)
     gaps = []
     for rs in by_reg.values():
@@ -1290,11 +1291,11 @@ def kasse_page(i, cur, by_canton_cur, prev_idx, insurers, ic, top3_cur, kv):
     facts = []
     if chg is not None:
         facts.append((pct(chg), f"gegenüber {PREV}"))
-    facts.append((f"{t3} von 26", 'Kantonen unter den 3 günstigsten<span class="tip" tabindex="0" aria-label="Info">i<span>'
-                  'Standardmodell, Erwachsene, Franchise 300, in Region 1 jedes Kantons.</span></span>'))
+    facts.append((f"{top3_in} von {len(cants)}", 'Kantonen unter den 3 günstigsten<span class="tip" tabindex="0" aria-label="Info">i<span>'
+                  'Günstigstes Angebot, Erwachsene ohne Unfall, Franchise 2\'500, Region 1 jedes Kantons.</span></span>'))
     if gap and gap > 0:
         facts.append((f"CHF {chf(gap, 0)}", f'pro Jahr weniger mit einem Sparmodell bei {e(name)}<span class="tip" tabindex="0" aria-label="Info">i<span>'
-                      'Hausarzt, HMO oder Telmed statt Standardmodell, gleiche Leistungen. Median über alle Regionen, Franchise 2\'500.</span></span>'))
+                      'Hausarzt, HMO oder Telmed statt Standardmodell, gleiche Leistungen. Median über alle Regionen, Franchise 2\'500, ohne Unfall.</span></span>'))
     p.append('<div class="kk-facts">' + "".join(
         f'<div class="kk-fact"><div class="kk-fact-val">{v}</div><div class="kk-fact-label">{l}</div></div>' for v, l in facts) + "</div>")
     p.append(f'<a class="kk-cta" href="/?kasse={i}#kk-rechner">Mit deiner {e(name)}-Rechnung vergleichen &rarr;</a>')
@@ -1303,13 +1304,11 @@ def kasse_page(i, cur, by_canton_cur, prev_idx, insurers, ic, top3_cur, kv):
     p.append(f"<h2>{e(name)} {YEAR} in jedem Kanton</h2>")
     tip_reg = ('<span class="tip" tabindex="0" aria-label="Info">i<span>Viele Kantone haben zwei oder drei Prämienregionen. '
                'Wir zeigen Region 1, meist die Städte. Auf dem Land ist es oft etwas günstiger. Deine genaue Prämie zeigt der Rechner.</span></span>')
-    tip_spar = ('<span class="tip" tabindex="0" aria-label="Info">i<span>Hausarzt, HMO oder Telmed: Du gehst zuerst zur Hausärztin, '
-                'in die HMO-Praxis oder rufst an. Die Leistungen sind gleich wie im Standardmodell.</span></span>')
-    tip_platz = ('<span class="tip" tabindex="0" aria-label="Info">i<span>Rang des günstigsten Angebots von ' + e(name) +
-                 ' unter allen Kassen im Kanton. 1 heisst: niemand ist günstiger.</span></span>')
-    p.append(f"<p>Beispiel: <strong>Erwachsene Person, Franchise 300, mit Unfall</strong>, Prämie pro Monat.{tip_reg}</p>")
-    p.append(f'<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Kanton</th><th class="num">Standardmodell</th>'
-             f'<th class="num">Günstigstes Sparmodell{tip_spar}</th><th class="num">Platz{tip_platz}</th></tr></thead>'
+    tip_platz = ('<span class="tip" tabindex="0" aria-label="Info">i<span>Das günstigste Angebot von ' + e(name) +
+                 ' im Kanton, meist ein Sparmodell (Hausarzt, HMO, Telmed, gleiche Leistungen). Platz unter allen Kassen: 1 heisst, niemand ist günstiger.</span></span>')
+    p.append(f"<p>Beispiel: <strong>Erwachsene Person ohne Unfalldeckung</strong> (über den Arbeitgeber versichert), günstigstes Angebot pro Monat.{tip_reg}{tip_platz}</p>")
+    p.append(f'<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Kanton</th><th class="num">Franchise 300</th>'
+             f'<th class="num">Franchise 2\'500</th></tr></thead>'
              f'<tbody>{"".join(rows)}</tbody></table></div>')
     if first_in:
         p.append(f"<p>Am günstigsten von allen Kassen ist {e(name)} {YEAR} in: "
@@ -1339,8 +1338,8 @@ def kasse_page(i, cur, by_canton_cur, prev_idx, insurers, ic, top3_cur, kv):
                    f"Die Standardprämie für Erwachsene mit Franchise 300 steigt bei {name} im Schnitt um {pct(chg)}, gewichtet nach "
                    f"Versicherten je Kanton. Laut BAG steigt die mittlere Prämie aller Kassen um {BAG_OFFICIAL['change_pct']:.1f} Prozent."))
     qa.append((f"Ist {name} günstig?",
-               f"{name} gehört {YEAR} in {t3} von 26 Kantonen zu den drei günstigsten Kassen im Standardmodell"
-               + (f" und ist in {len(first_in)} {'Kanton' if len(first_in) == 1 else 'Kantonen'} die günstigste Kasse überhaupt (Franchise 300, mit Unfall)." if first_in else ".")
+               f"Für Erwachsene ohne Unfalldeckung mit Franchise 2'500 gehört {name} {YEAR} in {top3_in} von {len(cants)} Kantonen zu den drei günstigsten Kassen"
+               + (f" und ist in {len(first_in)} {'Kanton' if len(first_in) == 1 else 'Kantonen'} die günstigste überhaupt." if first_in else ".")
                + " Wie günstig es für dich ist, hängt von Wohnort, Franchise und Modell ab."))
     qa.append((f"Bis wann kann ich {name} kündigen?",
                f"Die Kündigung muss bis am {DEADLINE} bei {name} eingetroffen sein, dann wechselst du auf den 1. Januar {YEAR}. "
@@ -1394,6 +1393,15 @@ KUENDIGEN_CSS = """
   .kd-reco { font-size:11px; font-weight:700; color:var(--green); background:rgba(22,163,74,.1); border-radius:999px; padding:1px 8px; margin-left:4px; white-space:nowrap; }
   .kd-warn { font-size:14px; line-height:1.5; color:var(--text2); background:rgba(234,88,12,.07); border-left:3px solid var(--orange); border-radius:8px; padding:12px 14px; }
   .kd-warn a { color:var(--accent-dark); }
+  .kd-hint-warn { color:var(--orange); }
+  .kd-send { background:var(--surface); border:2px solid var(--accent); border-radius:14px; padding:18px 20px; margin:18px 0 12px; }
+  .kd-send-title { font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; font-size:18px; margin-bottom:4px; }
+  .kd-send p { font-size:14px; color:var(--text2); margin:0 0 12px; }
+  .kd-send-row { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:8px; }
+  .kd-send-row input { flex:1 1 220px; min-width:0; box-sizing:border-box; padding:12px; border:1px solid var(--border2); border-radius:8px; font:inherit; font-size:16px; background:var(--surface); color:var(--text); }
+  .kd-send-row button { flex:0 0 auto; background:var(--accent); color:var(--text); border:none; border-radius:10px; padding:12px 20px; font-weight:700; cursor:pointer; font-family:inherit; font-size:15px; }
+  .kd-send-row button:disabled { opacity:.6; cursor:default; }
+  .kd-send .kd-hint a { color:var(--accent-dark); }
   .kd-ctas { display:flex; flex-wrap:wrap; align-items:center; gap:8px 20px; margin:8px 0 24px; }
   .kd-ctas .kk-cta { margin:0; }
   .kd-cta-sec { color:var(--accent-dark) !important; font-weight:600; }
@@ -1508,13 +1516,14 @@ def kuendigen_page(kv):
 <p>Wichtig: Wer bis 31. Dezember noch offene Prämien oder Kostenbeteiligungen bei der bisherigen Kasse hat, kann nicht wechseln. Offene Rechnungen vorher bezahlen.</p>
 
 <h2 id="vorlage">Kündigungsbrief erstellen</h2>
-<p>Der Brief und das PDF entstehen nur in deinem Browser. Name, Adresse und Unterschrift sehen wir nie, abschicken tust du selbst. Anonym zählen wir nur, von welcher Kasse gewechselt wird (<a href="/datenschutz/">Datenschutz</a>).</p>
+<p>Kasse wählen, Name und Adresse eintragen, unterschreiben. Der Brief entsteht in deinem Browser. Lädst du das PDF herunter, sehen wir Name, Adresse und Unterschrift nie. Abschicken an die Kasse tust du selbst (<a href="/datenschutz/">Datenschutz</a>).</p>
 <div class="kd-form">
   <div class="full"><label for="kd-kasse">Deine bisherige Kasse</label><select id="kd-kasse"></select></div>
   <div><label for="kd-name">Vorname und Name</label><input id="kd-name" autocomplete="name"></div>
-  <div><label for="kd-nr">Versicherten-Nr. <span style="text-transform:none;font-weight:400;">(empfohlen)</span></label><input id="kd-nr"></div>
+  <div><label for="kd-birth">Geburtsdatum</label><input id="kd-birth" autocomplete="bday" inputmode="numeric" placeholder="12.03.1985"></div>
   <div><label for="kd-street">Strasse und Nr.</label><input id="kd-street" autocomplete="street-address"></div>
-  <div><label for="kd-city">PLZ und Ort</label><input id="kd-city" autocomplete="address-level2" placeholder="8004 Zürich"></div>
+  <div><label for="kd-city">PLZ und Ort</label><input id="kd-city" autocomplete="postal-code" placeholder="8004 Zürich"><div class="kd-hint kd-hint-warn" id="kd-city-hint" hidden>Bitte mit Postleitzahl, z.&nbsp;B. 8004 Zürich.</div></div>
+  <div><label for="kd-nr">Versicherten-Nr. <span style="text-transform:none;font-weight:400;">(empfohlen)</span></label><input id="kd-nr"><div class="kd-hint">Steht auf der Versichertenkarte. So findet dich die Kasse sicher.</div></div>
   <div class="full"><label for="kd-more">Kinder im selben Brief <span style="text-transform:none;font-weight:400;">(optional, eine Person pro Zeile, mit Geburtsdatum)</span></label><textarea id="kd-more" rows="2" placeholder="Anna Muster, 12.03.2015"></textarea><div class="kd-hint">Erwachsene kündigen je selbst, mit eigenem Brief und eigener Unterschrift. Das verlangen mehrere Kassen.</div></div>
   <fieldset class="kd-zusatz full"><legend>Zusatzversicherung bei dieser Kasse <span class="tip" tabindex="0" aria-label="Info">i<span>Eine Zusatzversicherung zu wechseln lohnt sich selten. Die neue Kasse darf Gesundheitsfragen stellen, Vorbehalte machen oder dich ablehnen, und mit dem Alter wird der Einstieg teurer. Berater drängen trotzdem oft dazu, weil sie dafür bis zu 16 Monatsprämien Provision erhalten. <a href="/blog/provisionen-zusatzversicherung/">Mehr dazu</a></span></span></legend>
     <label class="kd-check"><input type="radio" name="kd-zusatz" value="keine"> Habe ich nicht</label>
@@ -1529,7 +1538,13 @@ def kuendigen_page(kv):
   <div class="kd-sign-row"><span id="kd-pad-hint"></span><button type="button" id="kd-pad-clear" class="kd-link">Neu zeichnen</button></div>
 </div>
 <div id="kd-kanal" class="kd-kanal"></div>
-<div class="kd-actions"><button id="kd-pdf">PDF herunterladen</button><button id="kd-mail" class="sec" hidden>Mail vorbereiten</button><button id="kd-share" class="sec" hidden>PDF teilen</button><button id="kd-copy" class="sec">Text kopieren</button></div>
+<div class="kd-send">
+  <div class="kd-send-title">PDF per Mail erhalten</div>
+  <p>Wir schicken dir den fertigen Brief mit einer Anleitung, wie du ihn an deine Kasse schickst.</p>
+  <div class="kd-send-row"><input type="email" id="kd-email" placeholder="deine@email.ch" autocomplete="email" aria-label="Deine E-Mail-Adresse"><button id="kd-send">PDF zuschicken</button></div>
+  <div class="kd-hint">Mit dem Versand schaltest du den Wechsel-Wecker ein: einmal im Jahr, wenn die neuen Prämien kommen, dein persönlicher Vergleich per Mail. Keine Werbung, keine Weitergabe, abmelden mit einem Klick. Das PDF geht dafür einmal durch unseren Server und wird nicht gespeichert. <a href="/datenschutz/">Datenschutz</a></div>
+</div>
+<div class="kd-actions"><button id="kd-pdf" class="sec">PDF herunterladen</button><button id="kd-mail" class="sec" hidden>Mail an die Kasse vorbereiten</button><button id="kd-share" class="sec" hidden>PDF teilen</button><button id="kd-copy" class="sec">Text kopieren</button></div>
 <div id="kd-msg" class="kd-msg" role="status"></div>
 <div class="kd-preview-label">Vorschau</div>
 <div id="kd-brief"></div>
@@ -1660,6 +1675,11 @@ def write(path, content):
 
 def main():
     cur, prev = load_year(YEAR), load_year(PREV)
+    # ohne Unfall: Beispielperson der Kassenseiten
+    nu_rows = load_year(YEAR, accident=False)
+    nu = {"rows": nu_rows, "prev_idx": index_rows(load_year(PREV, accident=False)), "by_canton": defaultdict(list)}
+    for r in nu_rows:
+        nu["by_canton"][r["canton"]].append(r)
     bestand = load_bestand()
     regions = load_regions()
     for c, regs in regions.items():
@@ -1718,7 +1738,7 @@ def main():
 
     top3_cur = top3_counts(cur, by_canton_cur)
     for i in KASSE_SLUG:
-        path, content = kasse_page(i, cur, by_canton_cur, prev_idx, insurers, ic, top3_cur, kv)
+        path, content = kasse_page(i, cur, by_canton_cur, prev_idx, insurers, ic, top3_cur, kv, nu)
         write(path, content)
         paths.append(path)
 
