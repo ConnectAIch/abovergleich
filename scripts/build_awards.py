@@ -52,6 +52,28 @@ def note_txt(v):
     return f"{v:.1f}".replace(".", ",")
 
 
+def press_text(group, rank, name, label, year, y0):
+    """Textbaustein, den eine Kasse übernehmen kann. Nennt die Grundversicherung,
+    weil das Rating nur sie bewertet."""
+    if group == "Gesamtwertung":
+        first = (f"{name} ist im Preistreue-Award {year} von abovergleich.com die preistreueste Krankenkasse der Schweiz in der Grundversicherung."
+                 if rank == 1 else
+                 f"{name} belegt im Preistreue-Award {year} von abovergleich.com Platz {rank} der Gesamtwertung in der Grundversicherung.")
+    elif group == "Kantone":
+        first = (f"{name} ist im Preistreue-Award {year} von abovergleich.com die preistreueste Krankenkasse im "
+                 f"{label} in der Grundversicherung.")
+    else:
+        first = f"{name} gewinnt im Preistreue-Award {year} von abovergleich.com die Kategorie «{label}» in der Grundversicherung."
+    return (first + " Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, "
+            f"allein aus den Prämiendaten des Bundesamts für Gesundheit seit {y0}.")
+
+
+def _fit(text, size, spacing, max_w):
+    """textLength-Attribut, wenn die Zeile breiter als max_w würde (grobe Schätzung)."""
+    est = len(text) * (size * 0.62 + spacing)
+    return f' textLength="{max_w}" lengthAdjust="spacingAndGlyphs"' if est > max_w else ""
+
+
 def compute(rating, year, cantons, main_region, adm_cost):
     """rating: build_rating.compute(); cantons: {code: (Name, slug)};
     main_region: {code: Region}; adm_cost: {id: Verwaltung pro Kopf, letztes Jahr}."""
@@ -61,14 +83,13 @@ def compute(rating, year, cantons, main_region, adm_cost):
 
     def add(group, cat_key, cat_label, headline, rank, i, fact, link):
         name = nat[i]["name"]
+        label_for_press = cat_label
         aid = f"{cat_key}-{slug(name)}"
         awards.append({
             "id": aid, "group": group, "rank": rank, "insurer": i, "name": name,
             "place": PLACE[rank], "category": cat_label, "headline": headline, "fact": fact, "link": link,
             "alt": f"abovergleich Preistreue-Award {year}: {headline}, {name}",
-            "pressText": (f"{name} ist {headline[0].lower() + headline[1:]} im Preistreue-Award {year} von abovergleich.com. "
-                          f"Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, "
-                          f"allein aus den Prämiendaten des Bundesamts für Gesundheit seit {rating['years'][0]}."),
+            "pressText": press_text(group, rank, name, label_for_press, year, rating["years"][0]),
         })
 
     rating_url = "https://abovergleich.com/krankenkassen-rating/"
@@ -166,7 +187,7 @@ def svg_hoch(a, year, dark=False):
   </defs>
   <rect x="0.5" y="0.5" width="209" height="335" rx="13.5" fill="{p['card']}" stroke="{p['edge']}"/>
   <rect x="6.5" y="6.5" width="197" height="323" rx="9" fill="none" stroke="{p['inner']}"/>
-  <text class="s" x="107" y="22" text-anchor="middle" font-size="9" font-weight="700" letter-spacing="2.6" fill="{p['mute']}">ABOVERGLEICH</text>
+  <text class="s" x="107" y="22" text-anchor="middle" font-size="9" font-weight="700" letter-spacing="2.2" fill="{p['mute']}">GRUNDVERSICHERUNG</text>
   <text class="s" x="106" y="40" text-anchor="middle" font-size="11.5" font-weight="700" letter-spacing="1.8" fill="{p['name']}">PREISTREUE-AWARD {year}</text>
   <line x1="6.5" y1="52" x2="203.5" y2="52" stroke="{p['line']}"/>
   <line x1="30" y1="55" x2="180" y2="55" stroke="{p['line']}"/>
@@ -176,7 +197,7 @@ def svg_hoch(a, year, dark=False):
   <circle cx="105" cy="117" r="42.5" fill="none" stroke="{p['kante']}" stroke-opacity="0.5" stroke-width="1"/>
   <text class="v" x="105" y="130" text-anchor="middle" font-size="38" fill="#171412">{a['rank']}</text>
   <text class="s" x="108" y="186" text-anchor="middle" font-size="12.5" font-weight="700" letter-spacing="3.8" fill="{p['acc']}">{a['place']}</text>
-  <text class="s" x="106" y="205" text-anchor="middle" font-size="{cat_size}" font-weight="600" letter-spacing="1.6" fill="{p['mute']}">{cat}</text>
+  <text class="s" x="106" y="205" text-anchor="middle" font-size="{cat_size}" font-weight="600" letter-spacing="1.6" fill="{p['mute']}"{_fit(cat, cat_size, 1.6, 180)}>{cat}</text>
   {name_svg}
   <line x1="30" y1="291" x2="180" y2="291" stroke="{p['line']}"/>
   <line x1="6.5" y1="294" x2="203.5" y2="294" stroke="{p['line']}"/>
@@ -190,6 +211,8 @@ def svg_quer(a, year, dark=False):
     p = _palette(a["rank"], dark)
     e = html.escape
     name_size = 22 if len(a["name"]) <= 16 else 17
+    top = f"PREISTREUE-AWARD {year} · GRUNDVERSICHERUNG"
+    bottom = f"{a['place']} · {a['category'].upper()}"
     return f"""<svg xmlns="http://www.w3.org/2000/svg" width="375" height="109" viewBox="0 0 330 96" role="img" aria-label="{e(a['alt'])}">
   <title>{e(a['alt'])}</title>
   <style>.s{{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif}}.v{{font-family:Georgia,'Times New Roman',serif}}</style>
@@ -206,9 +229,10 @@ def svg_quer(a, year, dark=False):
   </g>
   <rect x="0.5" y="0.5" width="329" height="95" rx="11.5" fill="none" stroke="{p['edge']}"/>
   <text class="v" x="39" y="59" text-anchor="middle" font-size="34" fill="#1c1917">{a['rank']}</text>
-  <text class="s" x="94" y="29" font-size="9" font-weight="700" letter-spacing="1.6" fill="{p['gold']}">ABOVERGLEICH PREISTREUE-AWARD {year}</text>
-  <text class="v" x="94" y="57" font-size="{name_size}" fill="{p['name']}">{e(a['name'])}</text>
-  <text class="s" x="94" y="78" font-size="9.5" font-weight="600" letter-spacing="1.4"><tspan fill="{p['acc']}">{a['place']}</tspan><tspan fill="{p['mute']}"> · {e(a['category'].upper())}</tspan></text>
+  <text class="s" x="94" y="22" font-size="8.5" font-weight="700" letter-spacing="1.3" fill="{p['gold']}"{_fit(top, 8.5, 1.3, 224)}>{top}</text>
+  <text class="v" x="94" y="50" font-size="{name_size}" fill="{p['name']}">{e(a['name'])}</text>
+  <text class="s" x="94" y="69" font-size="9" font-weight="600" letter-spacing="1.2"{_fit(bottom, 9, 1.2, 224)}><tspan fill="{p['acc']}">{a['place']}</tspan><tspan fill="{p['mute']}"> · {e(a['category'].upper())}</tspan></text>
+  <text class="s" x="94" y="85" font-size="8.5" font-weight="700" letter-spacing="0.2" fill="{p['gold']}">abovergleich.com</text>
 </svg>
 """
 

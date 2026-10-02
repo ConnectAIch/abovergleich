@@ -1243,12 +1243,12 @@ def award_page():
     <h3>{kasse_link(a['insurer'], a['name'])}</h3>
     <p class="meta">{e(a['headline'])} · {e(a['fact'])}</p>
     <div class="variants">
-      <a href="{award_badge_url(a['id'])}">Hoch hell</a><a href="{award_badge_url(a['id'], '-dunkel')}">Hoch dunkel</a>
-      <a href="{award_badge_url(a['id'], '-quer')}">Quer hell</a><a href="{award_badge_url(a['id'], '-quer-dunkel')}">Quer dunkel</a>
+      <a href="{award_badge_url(a['id'])}">Hochformat hell</a><a href="{award_badge_url(a['id'], '-dunkel')}">Hochformat dunkel</a>
+      <a href="{award_badge_url(a['id'], '-quer')}">Querformat hell</a><a href="{award_badge_url(a['id'], '-quer-dunkel')}">Querformat dunkel</a>
     </div>
     <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
-      <button type="button" data-svg="{award_badge_url(a['id'])}" data-w="240" data-h="384" data-name="{a['id']}-hoch">Hoch</button>
-      <button type="button" data-svg="{award_badge_url(a['id'], '-quer')}" data-w="375" data-h="109" data-name="{a['id']}-quer">Quer</button>
+      <button type="button" data-svg="{award_badge_url(a['id'])}" data-w="240" data-h="384" data-name="{a['id']}-hoch">Hochformat</button>
+      <button type="button" data-svg="{award_badge_url(a['id'], '-quer')}" data-w="375" data-h="109" data-name="{a['id']}-quer">Querformat</button>
     </div>
     <div class="snippet"><code>{e(f'<a href="{a["link"]}">' + chr(10) + f'  <img src="{SITE}{award_badge_url(a["id"])}"' + chr(10) + f'       alt="{a["alt"]}"' + chr(10) + '       width="240" height="384" loading="lazy">' + chr(10) + '</a>')}</code></div>
     <p class="baustein-lbl">Textbaustein zum Übernehmen</p>

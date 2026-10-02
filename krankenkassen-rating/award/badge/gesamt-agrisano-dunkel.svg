@@ -12,7 +12,7 @@
   </defs>
   <rect x="0.5" y="0.5" width="209" height="335" rx="13.5" fill="#1c1917" stroke="rgba(220,220,214,0.24)"/>
   <rect x="6.5" y="6.5" width="197" height="323" rx="9" fill="none" stroke="rgba(220,220,214,0.22)"/>
-  <text class="s" x="107" y="22" text-anchor="middle" font-size="9" font-weight="700" letter-spacing="2.6" fill="#a89e90">ABOVERGLEICH</text>
+  <text class="s" x="107" y="22" text-anchor="middle" font-size="9" font-weight="700" letter-spacing="2.2" fill="#a89e90">GRUNDVERSICHERUNG</text>
   <text class="s" x="106" y="40" text-anchor="middle" font-size="11.5" font-weight="700" letter-spacing="1.8" fill="#ffffff">PREISTREUE-AWARD 2027</text>
   <line x1="6.5" y1="52" x2="203.5" y2="52" stroke="#3a342c"/>
   <line x1="30" y1="55" x2="180" y2="55" stroke="#3a342c"/>
