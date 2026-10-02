@@ -1,374 +1,2002 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- generiert von scripts/build_kk_pages.py -->
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://abovergleich.com/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/"/>
   </url>
   <url>
-    <loc>https://abovergleich.com/hausratversicherung/</loc>
+    <loc>https://abovergleich.com/fr/</loc>
     <lastmod>2026-10-02</lastmod>
-    <priority>0.9</priority>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/methode/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/methode/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/methode/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/methodology/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/methode/"/>
   </url>
   <url>
-    <loc>https://abovergleich.com/blog/beste-franchise-schweiz/</loc>
+    <loc>https://abovergleich.com/fr/methode/</loc>
     <lastmod>2026-10-02</lastmod>
-    <priority>0.7</priority>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/methode/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/methode/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/methodology/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/methode/"/>
   </url>
   <url>
-    <loc>https://abovergleich.com/blog/hmo-telmed-hausarzt-erklaert/</loc>
+    <loc>https://abovergleich.com/en/methodology/</loc>
     <lastmod>2026-10-02</lastmod>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://abovergleich.com/blog/unfallversicherung-schweiz-ausland/</loc>
-    <lastmod>2026-10-02</lastmod>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://abovergleich.com/blog/provisionen-zusatzversicherung/</loc>
-    <lastmod>2026-10-02</lastmod>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://abovergleich.com/blog/krankenkasse-mit-26/</loc>
-    <lastmod>2026-10-02</lastmod>
-    <priority>0.7</priority>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/methode/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/methode/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/methodology/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/methode/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/blog/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/blog/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/guide/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/guide/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/blog/"/>
   </url>
   <url>
-    <loc>https://abovergleich.com/krankenkassen-rating/award/</loc>
+    <loc>https://abovergleich.com/fr/guide/</loc>
     <lastmod>2026-10-02</lastmod>
-    <priority>0.8</priority>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/blog/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/guide/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/guide/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/blog/"/>
   </url>
   <url>
-    <loc>https://abovergleich.com/krankenkassen-rating/</loc>
+    <loc>https://abovergleich.com/en/guide/</loc>
     <lastmod>2026-10-02</lastmod>
-    <priority>0.8</priority>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/blog/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/guide/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/guide/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/blog/"/>
   </url>
   <url>
-    <loc>https://abovergleich.com/krankenkasse-kuendigen/</loc>
+    <loc>https://abovergleich.com/hausratversicherung/</loc>
     <lastmod>2026-10-02</lastmod>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/hausratversicherung/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/assurance-menage/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/household-insurance/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/hausratversicherung/"/>
   </url>
   <url>
-    <loc>https://abovergleich.com/kasse/</loc>
+    <loc>https://abovergleich.com/fr/assurance-menage/</loc>
     <lastmod>2026-10-02</lastmod>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/hausratversicherung/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/assurance-menage/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/household-insurance/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/hausratversicherung/"/>
   </url>
   <url>
-    <loc>https://abovergleich.com/krankenkassenpraemien-2027/</loc>
+    <loc>https://abovergleich.com/en/household-insurance/</loc>
     <lastmod>2026-10-02</lastmod>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/hausratversicherung/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/assurance-menage/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/household-insurance/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/hausratversicherung/"/>
   </url>
   <url>
-    <loc>https://abovergleich.com/krankenkasse/</loc>
+    <loc>https://abovergleich.com/blog/beste-franchise-schweiz/</loc>
     <lastmod>2026-10-02</lastmod>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/blog/beste-franchise-schweiz/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/guide/meilleure-franchise-suisse/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/guide/best-deductible-switzerland/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/blog/beste-franchise-schweiz/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/guide/meilleure-franchise-suisse/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/blog/beste-franchise-schweiz/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/guide/meilleure-franchise-suisse/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/guide/best-deductible-switzerland/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/blog/beste-franchise-schweiz/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/guide/best-deductible-switzerland/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/blog/beste-franchise-schweiz/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/guide/meilleure-franchise-suisse/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/guide/best-deductible-switzerland/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/blog/beste-franchise-schweiz/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/blog/hmo-telmed-hausarzt-erklaert/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/blog/hmo-telmed-hausarzt-erklaert/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/guide/hmo-telmed-medecin-de-famille/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/guide/hmo-telmed-family-doctor-explained/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/blog/hmo-telmed-hausarzt-erklaert/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/guide/hmo-telmed-medecin-de-famille/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/blog/hmo-telmed-hausarzt-erklaert/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/guide/hmo-telmed-medecin-de-famille/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/guide/hmo-telmed-family-doctor-explained/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/blog/hmo-telmed-hausarzt-erklaert/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/guide/hmo-telmed-family-doctor-explained/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/blog/hmo-telmed-hausarzt-erklaert/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/guide/hmo-telmed-medecin-de-famille/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/guide/hmo-telmed-family-doctor-explained/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/blog/hmo-telmed-hausarzt-erklaert/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/blog/krankenkasse-mit-26/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/blog/krankenkasse-mit-26/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/guide/caisse-maladie-a-26-ans/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/guide/health-insurance-at-26/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/blog/krankenkasse-mit-26/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/guide/caisse-maladie-a-26-ans/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/blog/krankenkasse-mit-26/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/guide/caisse-maladie-a-26-ans/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/guide/health-insurance-at-26/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/blog/krankenkasse-mit-26/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/guide/health-insurance-at-26/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/blog/krankenkasse-mit-26/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/guide/caisse-maladie-a-26-ans/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/guide/health-insurance-at-26/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/blog/krankenkasse-mit-26/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/blog/provisionen-zusatzversicherung/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/blog/provisionen-zusatzversicherung/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/guide/commissions-assurance-complementaire/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/guide/supplementary-insurance-commissions/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/blog/provisionen-zusatzversicherung/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/guide/commissions-assurance-complementaire/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/blog/provisionen-zusatzversicherung/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/guide/commissions-assurance-complementaire/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/guide/supplementary-insurance-commissions/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/blog/provisionen-zusatzversicherung/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/guide/supplementary-insurance-commissions/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/blog/provisionen-zusatzversicherung/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/guide/commissions-assurance-complementaire/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/guide/supplementary-insurance-commissions/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/blog/provisionen-zusatzversicherung/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/blog/unfallversicherung-schweiz-ausland/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/blog/unfallversicherung-schweiz-ausland/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/guide/assurance-accidents-suisse-etranger/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/guide/accident-insurance-switzerland-abroad/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/blog/unfallversicherung-schweiz-ausland/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/guide/assurance-accidents-suisse-etranger/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/blog/unfallversicherung-schweiz-ausland/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/guide/assurance-accidents-suisse-etranger/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/guide/accident-insurance-switzerland-abroad/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/blog/unfallversicherung-schweiz-ausland/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/guide/accident-insurance-switzerland-abroad/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/blog/unfallversicherung-schweiz-ausland/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/guide/assurance-accidents-suisse-etranger/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/guide/accident-insurance-switzerland-abroad/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/blog/unfallversicherung-schweiz-ausland/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/krankenkasse/aargau/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/aargau/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/argovie/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/aargau/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/aargau/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisse-maladie/argovie/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/aargau/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/argovie/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/aargau/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/aargau/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/health-insurance/aargau/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/aargau/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/argovie/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/aargau/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/aargau/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/krankenkasse/appenzell-innerrhoden/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/appenzell-innerrhoden/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/appenzell-rhodes-interieures/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/appenzell-innerrhoden/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/appenzell-innerrhoden/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisse-maladie/appenzell-rhodes-interieures/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/appenzell-innerrhoden/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/appenzell-rhodes-interieures/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/appenzell-innerrhoden/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/appenzell-innerrhoden/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/health-insurance/appenzell-innerrhoden/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/appenzell-innerrhoden/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/appenzell-rhodes-interieures/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/appenzell-innerrhoden/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/appenzell-innerrhoden/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/krankenkasse/appenzell-ausserrhoden/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/appenzell-ausserrhoden/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/appenzell-rhodes-exterieures/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/appenzell-ausserrhoden/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/appenzell-ausserrhoden/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisse-maladie/appenzell-rhodes-exterieures/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/appenzell-ausserrhoden/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/appenzell-rhodes-exterieures/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/appenzell-ausserrhoden/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/appenzell-ausserrhoden/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/health-insurance/appenzell-ausserrhoden/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/appenzell-ausserrhoden/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/appenzell-rhodes-exterieures/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/appenzell-ausserrhoden/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/appenzell-ausserrhoden/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/krankenkasse/bern/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/bern/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/berne/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/bern/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/bern/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisse-maladie/berne/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/bern/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/berne/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/bern/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/bern/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/health-insurance/bern/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/bern/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/berne/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/bern/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/bern/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/krankenkasse/basel-landschaft/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/basel-landschaft/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/bale-campagne/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/basel-landschaft/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/basel-landschaft/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisse-maladie/bale-campagne/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/basel-landschaft/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/bale-campagne/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/basel-landschaft/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/basel-landschaft/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/health-insurance/basel-landschaft/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/basel-landschaft/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/bale-campagne/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/basel-landschaft/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/basel-landschaft/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/krankenkasse/basel-stadt/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/basel-stadt/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/bale-ville/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/basel-stadt/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/basel-stadt/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisse-maladie/bale-ville/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/basel-stadt/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/bale-ville/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/basel-stadt/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/basel-stadt/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/health-insurance/basel-stadt/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/basel-stadt/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/bale-ville/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/basel-stadt/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/basel-stadt/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/krankenkasse/freiburg/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/freiburg/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/fribourg/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/fribourg/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/freiburg/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisse-maladie/fribourg/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/freiburg/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/fribourg/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/fribourg/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/freiburg/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/health-insurance/fribourg/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/freiburg/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/fribourg/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/fribourg/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/freiburg/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/krankenkasse/genf/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/genf/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/geneve/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/geneva/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/genf/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisse-maladie/geneve/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/genf/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/geneve/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/geneva/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/genf/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/health-insurance/geneva/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/genf/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/geneve/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/geneva/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/genf/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/krankenkasse/glarus/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/glarus/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/glaris/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/glarus/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/glarus/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisse-maladie/glaris/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/glarus/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/glaris/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/glarus/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/glarus/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/health-insurance/glarus/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/glarus/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/glaris/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/glarus/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/glarus/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/krankenkasse/graubuenden/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/graubuenden/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/grisons/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/graubuenden/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/graubuenden/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisse-maladie/grisons/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/graubuenden/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/grisons/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/graubuenden/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/graubuenden/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/health-insurance/graubuenden/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/graubuenden/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/grisons/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/graubuenden/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/graubuenden/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/krankenkasse/jura/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/jura/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/jura/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/jura/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/jura/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisse-maladie/jura/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/jura/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/jura/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/jura/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/jura/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/health-insurance/jura/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/jura/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/jura/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/jura/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/jura/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/krankenkasse/luzern/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/luzern/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/lucerne/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/lucerne/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/luzern/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisse-maladie/lucerne/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/luzern/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/lucerne/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/lucerne/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/luzern/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/health-insurance/lucerne/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/luzern/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/lucerne/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/lucerne/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/luzern/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/krankenkasse/neuenburg/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/neuenburg/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/neuchatel/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/neuchatel/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/neuenburg/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisse-maladie/neuchatel/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/neuenburg/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/neuchatel/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/neuchatel/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/neuenburg/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/health-insurance/neuchatel/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/neuenburg/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/neuchatel/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/neuchatel/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/neuenburg/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/krankenkasse/nidwalden/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/nidwalden/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/nidwald/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/nidwalden/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/nidwalden/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisse-maladie/nidwald/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/nidwalden/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/nidwald/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/nidwalden/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/nidwalden/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/health-insurance/nidwalden/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/nidwalden/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/nidwald/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/nidwalden/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/nidwalden/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/krankenkasse/obwalden/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/obwalden/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/obwald/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/obwalden/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/obwalden/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisse-maladie/obwald/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/obwalden/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/obwald/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/obwalden/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/obwalden/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/health-insurance/obwalden/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/obwalden/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/obwald/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/obwalden/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/obwalden/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/krankenkasse/st-gallen/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/st-gallen/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/saint-gall/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/st-gallen/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/st-gallen/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisse-maladie/saint-gall/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/st-gallen/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/saint-gall/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/st-gallen/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/st-gallen/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/health-insurance/st-gallen/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/st-gallen/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/saint-gall/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/st-gallen/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/st-gallen/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/krankenkasse/schaffhausen/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/schaffhausen/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/schaffhouse/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/schaffhausen/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/schaffhausen/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisse-maladie/schaffhouse/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/schaffhausen/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/schaffhouse/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/schaffhausen/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/schaffhausen/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/health-insurance/schaffhausen/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/schaffhausen/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/schaffhouse/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/schaffhausen/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/schaffhausen/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/krankenkasse/solothurn/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/solothurn/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/soleure/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/solothurn/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/solothurn/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisse-maladie/soleure/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/solothurn/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/soleure/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/solothurn/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/solothurn/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/health-insurance/solothurn/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/solothurn/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/soleure/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/solothurn/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/solothurn/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/krankenkasse/schwyz/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/schwyz/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/schwyz/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/schwyz/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/schwyz/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisse-maladie/schwyz/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/schwyz/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/schwyz/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/schwyz/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/schwyz/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/health-insurance/schwyz/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/schwyz/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/schwyz/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/schwyz/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/schwyz/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/krankenkasse/thurgau/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/thurgau/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/thurgovie/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/thurgau/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/thurgau/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisse-maladie/thurgovie/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/thurgau/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/thurgovie/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/thurgau/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/thurgau/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/health-insurance/thurgau/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/thurgau/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/thurgovie/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/thurgau/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/thurgau/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/krankenkasse/tessin/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/tessin/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/tessin/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/ticino/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/tessin/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisse-maladie/tessin/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/tessin/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/tessin/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/ticino/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/tessin/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/health-insurance/ticino/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/tessin/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/tessin/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/ticino/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/tessin/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/krankenkasse/uri/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/uri/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/uri/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/uri/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/uri/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisse-maladie/uri/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/uri/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/uri/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/uri/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/uri/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/health-insurance/uri/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/uri/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/uri/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/uri/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/uri/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/krankenkasse/waadt/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/waadt/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/vaud/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/vaud/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/waadt/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisse-maladie/vaud/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/waadt/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/vaud/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/vaud/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/waadt/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/health-insurance/vaud/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/waadt/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/vaud/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/vaud/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/waadt/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/krankenkasse/wallis/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/wallis/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/valais/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/valais/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/wallis/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisse-maladie/valais/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/wallis/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/valais/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/valais/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/wallis/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/health-insurance/valais/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/wallis/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/valais/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/valais/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/wallis/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/krankenkasse/zug/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/zug/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/zoug/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/zug/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/zug/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisse-maladie/zoug/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/zug/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/zoug/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/zug/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/zug/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/health-insurance/zug/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/zug/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/zoug/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/zug/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/zug/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/krankenkasse/zuerich/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/zuerich/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/zurich/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/zurich/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/zuerich/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisse-maladie/zurich/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/zuerich/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/zurich/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/zurich/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/zuerich/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/health-insurance/zurich/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/zuerich/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/zurich/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/zurich/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/zuerich/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/kasse/css/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/css/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/css/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/css/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/css/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisses/css/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/css/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/css/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/css/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/css/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/insurers/css/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/css/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/css/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/css/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/css/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/kasse/aquilana/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/aquilana/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/aquilana/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/aquilana/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/aquilana/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisses/aquilana/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/aquilana/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/aquilana/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/aquilana/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/aquilana/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/insurers/aquilana/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/aquilana/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/aquilana/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/aquilana/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/aquilana/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/kasse/einsiedler-krankenkasse/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/einsiedler-krankenkasse/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/einsiedler-krankenkasse/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/einsiedler-krankenkasse/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/einsiedler-krankenkasse/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisses/einsiedler-krankenkasse/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/einsiedler-krankenkasse/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/einsiedler-krankenkasse/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/einsiedler-krankenkasse/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/einsiedler-krankenkasse/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/insurers/einsiedler-krankenkasse/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/einsiedler-krankenkasse/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/einsiedler-krankenkasse/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/einsiedler-krankenkasse/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/einsiedler-krankenkasse/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/kasse/sumiswalder/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/sumiswalder/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/sumiswalder/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/sumiswalder/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/sumiswalder/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisses/sumiswalder/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/sumiswalder/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/sumiswalder/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/sumiswalder/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/sumiswalder/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/insurers/sumiswalder/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/sumiswalder/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/sumiswalder/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/sumiswalder/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/sumiswalder/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/kasse/kk-steffisburg/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/kk-steffisburg/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/kk-steffisburg/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/kk-steffisburg/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/kk-steffisburg/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisses/kk-steffisburg/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/kk-steffisburg/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/kk-steffisburg/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/kk-steffisburg/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/kk-steffisburg/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/insurers/kk-steffisburg/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/kk-steffisburg/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/kk-steffisburg/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/kk-steffisburg/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/kk-steffisburg/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/kasse/concordia/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/concordia/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/concordia/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/concordia/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/concordia/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisses/concordia/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/concordia/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/concordia/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/concordia/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/concordia/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/insurers/concordia/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/concordia/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/concordia/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/concordia/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/concordia/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/kasse/atupri/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/atupri/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/atupri/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/atupri/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/atupri/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisses/atupri/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/atupri/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/atupri/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/atupri/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/atupri/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/insurers/atupri/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/atupri/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/atupri/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/atupri/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/atupri/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/kasse/avenir/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/avenir/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/avenir/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/avenir/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/avenir/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisses/avenir/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/avenir/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/avenir/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/avenir/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/avenir/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/insurers/avenir/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/avenir/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/avenir/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/avenir/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/avenir/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/kasse/kk-luzerner-hinterland/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/kk-luzerner-hinterland/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/kk-luzerner-hinterland/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/kk-luzerner-hinterland/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/kk-luzerner-hinterland/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisses/kk-luzerner-hinterland/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/kk-luzerner-hinterland/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/kk-luzerner-hinterland/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/kk-luzerner-hinterland/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/kk-luzerner-hinterland/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/insurers/kk-luzerner-hinterland/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/kk-luzerner-hinterland/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/kk-luzerner-hinterland/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/kk-luzerner-hinterland/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/kk-luzerner-hinterland/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/kasse/kpt/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/kpt/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/kpt/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/kpt/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/kpt/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisses/kpt/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/kpt/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/kpt/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/kpt/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/kpt/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/insurers/kpt/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/kpt/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/kpt/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/kpt/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/kpt/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/kasse/oekk/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/oekk/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/oekk/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/oekk/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/oekk/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisses/oekk/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/oekk/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/oekk/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/oekk/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/oekk/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/insurers/oekk/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/oekk/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/oekk/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/oekk/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/oekk/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/kasse/vivao-sympany/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/vivao-sympany/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/vivao-sympany/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/vivao-sympany/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/vivao-sympany/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisses/vivao-sympany/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/vivao-sympany/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/vivao-sympany/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/vivao-sympany/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/vivao-sympany/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/insurers/vivao-sympany/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/vivao-sympany/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/vivao-sympany/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/vivao-sympany/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/vivao-sympany/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/kasse/glarner/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/glarner/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/glarner/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/glarner/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/glarner/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisses/glarner/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/glarner/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/glarner/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/glarner/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/glarner/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/insurers/glarner/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/glarner/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/glarner/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/glarner/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/glarner/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/kasse/curaulta/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/curaulta/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/curaulta/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/curaulta/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/curaulta/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisses/curaulta/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/curaulta/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/curaulta/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/curaulta/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/curaulta/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/insurers/curaulta/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/curaulta/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/curaulta/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/curaulta/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/curaulta/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/kasse/egk/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/egk/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/egk/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/egk/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/egk/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisses/egk/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/egk/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/egk/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/egk/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/egk/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/insurers/egk/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/egk/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/egk/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/egk/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/egk/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/kasse/slkk/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/slkk/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/slkk/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/slkk/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/slkk/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisses/slkk/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/slkk/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/slkk/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/slkk/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/slkk/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/insurers/slkk/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/slkk/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/slkk/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/slkk/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/slkk/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/kasse/sodalis/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/sodalis/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/sodalis/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/sodalis/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/sodalis/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisses/sodalis/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/sodalis/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/sodalis/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/sodalis/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/sodalis/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/insurers/sodalis/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/sodalis/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/sodalis/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/sodalis/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/sodalis/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/kasse/vita-surselva/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/vita-surselva/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/vita-surselva/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/vita-surselva/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/vita-surselva/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisses/vita-surselva/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/vita-surselva/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/vita-surselva/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/vita-surselva/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/vita-surselva/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/insurers/vita-surselva/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/vita-surselva/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/vita-surselva/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/vita-surselva/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/vita-surselva/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/kasse/kk-visperterminen/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/kk-visperterminen/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/kk-visperterminen/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/kk-visperterminen/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/kk-visperterminen/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisses/kk-visperterminen/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/kk-visperterminen/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/kk-visperterminen/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/kk-visperterminen/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/kk-visperterminen/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/insurers/kk-visperterminen/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/kk-visperterminen/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/kk-visperterminen/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/kk-visperterminen/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/kk-visperterminen/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/kasse/kk-waedenswil/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/kk-waedenswil/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/kk-waedenswil/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/kk-waedenswil/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/kk-waedenswil/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisses/kk-waedenswil/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/kk-waedenswil/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/kk-waedenswil/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/kk-waedenswil/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/kk-waedenswil/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/insurers/kk-waedenswil/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/kk-waedenswil/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/kk-waedenswil/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/kk-waedenswil/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/kk-waedenswil/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/kasse/birchmeier/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/birchmeier/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/birchmeier/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/birchmeier/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/birchmeier/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisses/birchmeier/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/birchmeier/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/birchmeier/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/birchmeier/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/birchmeier/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/insurers/birchmeier/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/birchmeier/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/birchmeier/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/birchmeier/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/birchmeier/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/kasse/swica/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/swica/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/swica/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/swica/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/swica/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisses/swica/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/swica/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/swica/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/swica/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/swica/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/insurers/swica/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/swica/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/swica/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/swica/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/swica/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/kasse/galenos/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/galenos/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/galenos/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/galenos/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/galenos/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisses/galenos/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/galenos/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/galenos/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/galenos/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/galenos/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/insurers/galenos/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/galenos/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/galenos/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/galenos/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/galenos/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/kasse/rhenusana/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/rhenusana/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/rhenusana/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/rhenusana/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/rhenusana/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisses/rhenusana/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/rhenusana/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/rhenusana/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/rhenusana/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/rhenusana/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/insurers/rhenusana/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/rhenusana/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/rhenusana/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/rhenusana/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/rhenusana/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/kasse/mutuel/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/mutuel/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/mutuel/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/mutuel/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/mutuel/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisses/mutuel/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/mutuel/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/mutuel/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/mutuel/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/mutuel/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/insurers/mutuel/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/mutuel/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/mutuel/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/mutuel/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/mutuel/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/kasse/sanitas/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/sanitas/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/sanitas/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/sanitas/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/sanitas/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisses/sanitas/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/sanitas/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/sanitas/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/sanitas/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/sanitas/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/insurers/sanitas/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/sanitas/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/sanitas/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/sanitas/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/sanitas/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/kasse/philos/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/philos/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/philos/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/philos/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/philos/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisses/philos/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/philos/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/philos/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/philos/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/philos/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/insurers/philos/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/philos/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/philos/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/philos/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/philos/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/kasse/assura/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/assura/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/assura/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/assura/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/assura/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisses/assura/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/assura/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/assura/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/assura/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/assura/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/insurers/assura/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/assura/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/assura/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/assura/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/assura/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/kasse/visana/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/visana/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/visana/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/visana/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/visana/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisses/visana/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/visana/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/visana/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/visana/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/visana/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/insurers/visana/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/visana/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/visana/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/visana/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/visana/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/kasse/agrisano/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/agrisano/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/agrisano/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/agrisano/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/agrisano/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisses/agrisano/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/agrisano/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/agrisano/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/agrisano/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/agrisano/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/insurers/agrisano/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/agrisano/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/agrisano/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/agrisano/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/agrisano/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/kasse/helsana/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/helsana/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/helsana/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/helsana/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/helsana/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisses/helsana/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/helsana/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/helsana/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/helsana/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/helsana/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/insurers/helsana/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/helsana/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/helsana/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/helsana/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/helsana/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/kasse/sana24/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/sana24/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/sana24/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/sana24/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/sana24/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisses/sana24/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/sana24/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/sana24/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/sana24/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/sana24/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/insurers/sana24/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/sana24/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/sana24/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/sana24/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/sana24/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/krankenkasse/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisse-maladie/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/health-insurance/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisse-maladie/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/krankenkassenpraemien-2027/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkassenpraemien-2027/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/primes-caisse-maladie-2027/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance-premiums-2027/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkassenpraemien-2027/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/primes-caisse-maladie-2027/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkassenpraemien-2027/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/primes-caisse-maladie-2027/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance-premiums-2027/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkassenpraemien-2027/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/health-insurance-premiums-2027/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkassenpraemien-2027/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/primes-caisse-maladie-2027/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance-premiums-2027/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkassenpraemien-2027/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/kasse/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/caisses/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/insurers/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/kasse/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/caisses/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/insurers/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/kasse/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/krankenkasse-kuendigen/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse-kuendigen/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/resilier-caisse-maladie/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/cancel-health-insurance/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse-kuendigen/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/resilier-caisse-maladie/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse-kuendigen/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/resilier-caisse-maladie/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/cancel-health-insurance/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse-kuendigen/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/cancel-health-insurance/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse-kuendigen/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/resilier-caisse-maladie/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/cancel-health-insurance/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse-kuendigen/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/krankenkassen-rating/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkassen-rating/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/constance-des-primes/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance-rating/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkassen-rating/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/constance-des-primes/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkassen-rating/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/constance-des-primes/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance-rating/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkassen-rating/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/health-insurance-rating/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkassen-rating/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/constance-des-primes/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance-rating/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkassen-rating/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/krankenkassen-rating/award/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkassen-rating/award/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/constance-des-primes/prix/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance-rating/award/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkassen-rating/award/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/constance-des-primes/prix/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkassen-rating/award/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/constance-des-primes/prix/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance-rating/award/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkassen-rating/award/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/health-insurance-rating/award/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkassen-rating/award/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/constance-des-primes/prix/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/health-insurance-rating/award/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkassen-rating/award/"/>
   </url>
   <url>
     <loc>https://abovergleich.com/blog/verwaltungskosten-krankenkassen/</loc>
     <lastmod>2026-10-02</lastmod>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/blog/verwaltungskosten-krankenkassen/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/guide/frais-administratifs-caisses-maladie/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/guide/health-insurer-admin-costs/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/blog/verwaltungskosten-krankenkassen/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/fr/guide/frais-administratifs-caisses-maladie/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/blog/verwaltungskosten-krankenkassen/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/guide/frais-administratifs-caisses-maladie/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/guide/health-insurer-admin-costs/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/blog/verwaltungskosten-krankenkassen/"/>
+  </url>
+  <url>
+    <loc>https://abovergleich.com/en/guide/health-insurer-admin-costs/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/blog/verwaltungskosten-krankenkassen/"/>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/guide/frais-administratifs-caisses-maladie/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://abovergleich.com/en/guide/health-insurer-admin-costs/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://abovergleich.com/blog/verwaltungskosten-krankenkassen/"/>
   </url>
 </urlset>

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="384" viewBox="0 0 210 336" role="img" aria-label="abovergleich Prix Constance des primes 2027 : Vainqueur « Administration la plus légère » 2027, sodalis">
+  <title>abovergleich Prix Constance des primes 2027 : Vainqueur « Administration la plus légère » 2027, sodalis</title>
+  <style>.s{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif}.v{font-family:Georgia,'Times New Roman',serif}</style>
+  <defs>
+    <linearGradient id="metall" x1="0.18" y1="0" x2="0.72" y2="1">
+      <stop offset="0%" stop-color="#ffeea6"/><stop offset="30%" stop-color="#fed001"/>
+      <stop offset="58%" stop-color="#eab900"/><stop offset="100%" stop-color="#c49400"/>
+    </linearGradient>
+    <linearGradient id="glanz" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.42"/><stop offset="52%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect x="0.5" y="0.5" width="209" height="335" rx="13.5" fill="#1c1917" stroke="rgba(254,208,1,0.26)"/>
+  <rect x="6.5" y="6.5" width="197" height="323" rx="9" fill="none" stroke="rgba(254,208,1,0.24)"/>
+  <text class="s" x="107" y="22" text-anchor="middle" font-size="9" font-weight="700" letter-spacing="2.2" fill="#a89e90">ASSURANCE DE BASE</text>
+  <text class="s" x="106" y="40" text-anchor="middle" font-size="9.5" font-weight="700" letter-spacing="1.0" fill="#ffffff" textLength="190" lengthAdjust="spacingAndGlyphs">PRIX CONSTANCE DES PRIMES 2027</text>
+  <line x1="6.5" y1="52" x2="203.5" y2="52" stroke="#3a342c"/>
+  <line x1="30" y1="55" x2="180" y2="55" stroke="#3a342c"/>
+  <circle cx="105" cy="117" r="50.5" fill="none" stroke="rgba(254,208,1,0.42)" stroke-width="0.9"/>
+  <circle cx="105" cy="117" r="43" fill="url(#metall)"/>
+  <circle cx="105" cy="117" r="43" fill="url(#glanz)"/>
+  <circle cx="105" cy="117" r="42.5" fill="none" stroke="#a97f00" stroke-opacity="0.5" stroke-width="1"/>
+  <text class="v" x="105" y="130" text-anchor="middle" font-size="38" fill="#171412">1</text>
+  <text class="s" x="108" y="186" text-anchor="middle" font-size="12.5" font-weight="700" letter-spacing="3.8" fill="#fed001">VAINQUEUR</text>
+  <text class="s" x="106" y="205" text-anchor="middle" font-size="9.5" font-weight="600" letter-spacing="1.6" fill="#a89e90" textLength="180" lengthAdjust="spacingAndGlyphs">ADMINISTRATION LA PLUS LÉGÈRE</text>
+  <text class="v" x="105" y="252" text-anchor="middle" font-size="28" fill="#ffffff">sodalis</text>
+  <line x1="30" y1="291" x2="180" y2="291" stroke="#3a342c"/>
+  <line x1="6.5" y1="294" x2="203.5" y2="294" stroke="#3a342c"/>
+  <text class="s" x="106" y="312" text-anchor="middle" font-size="8.5" font-weight="700" letter-spacing="1.2" fill="#a89e90">CHF 129 PAR ASSURÉ</text>
+  <text class="s" x="105" y="326" text-anchor="middle" font-size="9" font-weight="700" letter-spacing="0.2" fill="#fed001">abovergleich.com</text>
+</svg>

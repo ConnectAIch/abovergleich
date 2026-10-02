@@ -7,6 +7,10 @@
 <title>Deine Kündigung herunterladen</title>
 <meta name="description" content="Kündigungsbrief für die Grundversicherung herunterladen.">
 <link rel="canonical" href="https://abovergleich.com/krankenkasse-kuendigen/pdf/">
+<link rel="alternate" hreflang="de-CH" href="https://abovergleich.com/krankenkasse-kuendigen/pdf/">
+<link rel="alternate" hreflang="fr-CH" href="https://abovergleich.com/fr/resilier-caisse-maladie/pdf/">
+<link rel="alternate" hreflang="en" href="https://abovergleich.com/en/cancel-health-insurance/pdf/">
+<link rel="alternate" hreflang="x-default" href="https://abovergleich.com/krankenkasse-kuendigen/pdf/">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="alternate icon" href="/favicon.ico">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -22,7 +26,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles/shared.css?v=6feca67a">
+<link rel="stylesheet" href="/styles/shared.css?v=2c0760ee">
 <style>
   .kk-rating { background:var(--surface); border:1px solid var(--border2); border-radius:14px; padding:20px 22px; margin:20px 0; }
   .kk-rating-head { display:flex; justify-content:space-between; gap:16px; align-items:flex-start; margin-bottom:12px; }
@@ -90,6 +94,7 @@
     <a href="/krankenkasse-kuendigen/" class="nav-link active">Kündigen</a>
     <a href="/blog/" class="nav-link">Ratgeber</a>
     <a href="https://handyabo.com/" class="nav-link">Handy-Abo</a>
+    <span class="nav-lang" aria-label="Sprache"><a href="/krankenkasse-kuendigen/pdf/" hreflang="de-CH" lang="de" aria-current="true">DE</a> <a href="/fr/resilier-caisse-maladie/pdf/" hreflang="fr-CH" lang="fr">FR</a> <a href="/en/cancel-health-insurance/pdf/" hreflang="en" lang="en">EN</a></span>
     <a href="/#kk-rechner" class="nav-cta">Prämien vergleichen</a>
   </div>
   <button class="nav-burger" id="nav-burger" onclick="document.getElementById('nav-menu').classList.toggle('open');this.classList.toggle('open')" aria-label="Menü">
@@ -107,59 +112,59 @@
 <div id="kp-msg" class="kk-note" role="status"></div>
 <script>
 (function () {
+  var S = {"incomplete": "Dieser Link ist unvollständig. Öffne ihn direkt aus der Mail.", "wait": "Einen Moment…", "fail": "Das hat nicht geklappt.", "btn": "PDF herunterladen", "w_mail": "Schick das PDF als Anhang an {z}, von der Mail-Adresse, die {k} von dir kennt.", "w_nosig_mail": " Im PDF fehlt die Unterschrift: ausdrucken, unterschreiben, einscannen, oder neu erstellen mit Unterschrift.", "w_portal": "Lade das PDF in {z} hoch oder schick es per Post.", "w_post": "Druck das PDF aus und schick es per Post an {k}.", "w_nosig_post": " Vorher von Hand unterschreiben, im PDF fehlt die Unterschrift.", "neu_named": "<strong>Bei {n} anmelden<\/strong>, online in etwa 10 Minuten.", "go": "Zu {n}", "neu_any": "<strong>Bei der neuen Kasse anmelden<\/strong>, online in etwa 10 Minuten.", "find": "Günstigste Kasse finden", "list": "<li>Beginn: 1. Januar<\/li><li>AHV-Nummer (756…, steht auf deiner Versichertenkarte)<\/li><li>Franchise und Modell, das du gewählt hast<\/li><li>beim Hausarzt- oder HMO-Modell: deine Praxis<\/li>", "list_short": "<li>Beginn: 1. Januar<\/li><li>AHV-Nummer (756…, steht auf deiner Versichertenkarte)<\/li><li>Franchise und Modell<\/li><li>beim Hausarzt- oder HMO-Modell: deine Praxis<\/li>", "health": "Gesundheitsfragen gibt es in der Grundversicherung keine. Fragt das Formular danach, geht es um eine Zusatzversicherung, die du nicht abschliessen musst.", "ok": "<strong>E-Mail-Adresse bestätigt.<\/strong> Dein PDF wird heruntergeladen.", "notstarted": "Nicht gestartet?", "next": "So geht es weiter", "send": "<strong>Abschicken:<\/strong> ", "arrive": " Eintreffen muss die Kündigung bis {d}.", "soon": " Spätestens bis Ende Dezember, am besten gleich jetzt.", "confirm": "<strong>Bestätigung abwarten.<\/strong> Die neue Kasse meldet der alten, dass du bei ihr versichert bist. Bis dahin bleibst du bei der alten versichert.", "nonet": "Keine Verbindung. Bitte nochmals versuchen.", "thanks": "Danke für deine Antwort", "the_new": "der neuen Kasse", "a_yes": "<strong>Super.<\/strong> Jetzt fehlt nur noch die Bestätigung: Die neue Kasse meldet sich bei {k}. Wir fragen Mitte Dezember nach, ob alles geklappt hat.", "a_no": "Kein Problem, das geht online in etwa 10 Minuten.", "b_yes": "<strong>Perfekt, dein Wechsel ist durch.<\/strong> Ab 1. Januar bist du bei {n} versichert.", "b_no": "Ruf {k} an und frag nach, ob die Kündigung angekommen ist. Hast du sie per Mail geschickt, ist deine gesendete Mail der Beweis, per Einschreiben der Beleg der Post. Und frag bei {n} nach, ob die Anmeldung durch ist: Erst wenn die neue Kasse sich bei der alten meldet, endet die alte Versicherung.", "stop": "Erledigt, du bekommst zu diesem Brief keine Erinnerungen mehr.", "saved": "Gespeichert.", "reopen": "Keine Verbindung. Bitte Link nochmals öffnen.", "calc": "/#kk-rechner", "lang": "de"};
+  var f = function (s, v) { return s.replace(/\{(\w)\}/g, function (_, x) { return v[x] != null ? v[x] : ''; }); };
   var API = 'https://zexpmaegqsayleaohiip.supabase.co/functions/v1/kuendigung-pdf';
   var t = new URLSearchParams(location.search).get('t') || '';
   var box = document.getElementById('kp'), msg = document.getElementById('kp-msg');
   var esc = function (s) { return String(s || '').replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
-  if (!t) { box.innerHTML = '<p class="kk-lead">Dieser Link ist unvollständig. Öffne ihn direkt aus der Mail.</p>'; return; }
+  if (!t) { box.innerHTML = '<p class="kk-lead">' + S.incomplete + '</p>'; return; }
   function go(btn) {
-    btn.disabled = true; btn.textContent = 'Einen Moment…'; msg.textContent = '';
-    fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'abholen', t: t }) })
+    btn.disabled = true; btn.textContent = S.wait; msg.textContent = '';
+    fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'abholen', t: t, lang: S.lang }) })
       .then(function (r) { return r.json(); })
       .then(function (d) {
-        if (!d.ok) { msg.textContent = d.error || 'Das hat nicht geklappt.'; btn.disabled = false; btn.textContent = 'PDF herunterladen'; return; }
+        if (!d.ok) { msg.textContent = d.error || S.fail; btn.disabled = false; btn.textContent = S.btn; return; }
         var weg = d.kanal === 'mail'
-          ? 'Schick das PDF als Anhang an <a href="mailto:' + esc(d.ziel) + '">' + esc(d.ziel) + '</a>, von der Mail-Adresse, die ' + esc(d.kasse) + ' von dir kennt.' + (d.signiert ? '' : ' Im PDF fehlt die Unterschrift: ausdrucken, unterschreiben, einscannen, oder neu erstellen mit Unterschrift.')
-          : d.kanal === 'portal' ? 'Lade das PDF in ' + esc(d.ziel) + ' hoch oder schick es per Post.'
-          : 'Druck das PDF aus und schick es per Post an ' + esc(d.kasse) + '.' + (d.signiert ? '' : ' Vorher von Hand unterschreiben, im PDF fehlt die Unterschrift.');
+          ? f(S.w_mail, { z: '<a href="mailto:' + esc(d.ziel) + '">' + esc(d.ziel) + '</a>', k: esc(d.kasse) }) + (d.signiert ? '' : S.w_nosig_mail)
+          : d.kanal === 'portal' ? f(S.w_portal, { z: esc(d.ziel) })
+          : f(S.w_post, { k: esc(d.kasse) }) + (d.signiert ? '' : S.w_nosig_post);
         var neu = (d.neu
-          ? '<strong>Bei ' + esc(d.neu) + ' anmelden</strong>, online in etwa 10 Minuten.' + (d.neu_url ? ' <a href="' + esc(d.neu_url) + '?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=kk-wechsel" target="_blank" rel="noopener sponsored">Zu ' + esc(d.neu) + ' &rarr;</a>' : '')
-          : '<strong>Bei der neuen Kasse anmelden</strong>, online in etwa 10 Minuten. <a href="/#kk-rechner">Günstigste Kasse finden &rarr;</a>') +
-          '<ul class="kp-list"><li>Beginn: 1. Januar</li><li>AHV-Nummer (756…, steht auf deiner Versichertenkarte)</li>' +
-          '<li>Franchise und Modell, das du gewählt hast</li><li>beim Hausarzt- oder HMO-Modell: deine Praxis</li></ul>' +
-          'Gesundheitsfragen gibt es in der Grundversicherung keine. Fragt das Formular danach, geht es um eine Zusatzversicherung, die du nicht abschliessen musst.';
-        box.innerHTML = '<p class="kk-lead"><strong>E-Mail-Adresse bestätigt.</strong> Dein PDF wird heruntergeladen. <a href="' + esc(d.url) + '">Nicht gestartet?</a></p>' +
-          '<h2>So geht es weiter</h2><ol>' +
-          '<li><strong>Abschicken:</strong> ' + weg + ' Eintreffen muss die Kündigung bis ' + esc(d.deadline) + '.</li>' +
-          '<li>' + neu + ' Spätestens bis Ende Dezember, am besten gleich jetzt.</li>' +
-          '<li><strong>Bestätigung abwarten.</strong> Die neue Kasse meldet der alten, dass du bei ihr versichert bist. Bis dahin bleibst du bei der alten versichert.</li></ol>';
+          ? f(S.neu_named, { n: esc(d.neu) }) + (d.neu_url ? ' <a href="' + esc(d.neu_url) + '?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=kk-wechsel" target="_blank" rel="noopener sponsored">' + f(S.go, { n: esc(d.neu) }) + ' &rarr;</a>' : '')
+          : S.neu_any + ' <a href="' + S.calc + '">' + S.find + ' &rarr;</a>') +
+          '<ul class="kp-list">' + S.list + '</ul>' + S.health;
+        box.innerHTML = '<p class="kk-lead">' + S.ok + ' <a href="' + esc(d.url) + '">' + S.notstarted + '</a></p>' +
+          '<h2>' + S.next + '</h2><ol>' +
+          '<li>' + S.send + weg + f(S.arrive, { d: esc(d.deadline) }) + '</li>' +
+          '<li>' + neu + S.soon + '</li>' +
+          '<li>' + S.confirm + '</li></ol>';
         location.href = d.url;
       })
-      .catch(function () { msg.textContent = 'Keine Verbindung. Bitte nochmals versuchen.'; btn.disabled = false; btn.textContent = 'PDF herunterladen'; });
+      .catch(function () { msg.textContent = S.nonet; btn.disabled = false; btn.textContent = S.btn; });
   }
   document.getElementById('kp-go').onclick = function () { go(this); };
 
   // Antworten aus den Erinnerungsmails: ?frage=anmeldung|bestaetigung|stopp&a=ja|nein
   var frage = new URLSearchParams(location.search).get('frage'), a = new URLSearchParams(location.search).get('a') || '';
   if (frage) {
-    document.querySelector('h1').textContent = 'Danke für deine Antwort';
-    box.innerHTML = '<p class="kk-lead">Einen Moment…</p>';
-    fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'antwort', t: t, frage: frage, a: a }) })
+    document.querySelector('h1').textContent = S.thanks;
+    box.innerHTML = '<p class="kk-lead">' + S.wait + '</p>';
+    fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'antwort', t: t, frage: frage, a: a, lang: S.lang }) })
       .then(function (r) { return r.json(); })
       .then(function (d) {
-        if (!d.ok) { box.innerHTML = '<p class="kk-lead">' + esc(d.error || 'Das hat nicht geklappt.') + '</p>'; return; }
-        var neu = d.neu ? esc(d.neu) : 'der neuen Kasse';
+        if (!d.ok) { box.innerHTML = '<p class="kk-lead">' + esc(d.error || S.fail) + '</p>'; return; }
+        var neu = d.neu ? esc(d.neu) : S.the_new;
         var html = {
-          'anmeldung|ja': '<p class="kk-lead"><strong>Super.</strong> Jetzt fehlt nur noch die Bestätigung: Die neue Kasse meldet sich bei ' + esc(d.kasse) + '. Wir fragen Mitte Dezember nach, ob alles geklappt hat.</p>',
-          'anmeldung|nein': '<p class="kk-lead">Kein Problem, das geht online in etwa 10 Minuten.</p><ul class="kp-list"><li>Beginn: 1. Januar</li><li>AHV-Nummer (756…, steht auf deiner Versichertenkarte)</li><li>Franchise und Modell</li><li>beim Hausarzt- oder HMO-Modell: deine Praxis</li></ul>' +
-            (d.neu_url ? '<a class="kk-cta" href="' + esc(d.neu_url) + '?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=kk-wechsel" target="_blank" rel="noopener sponsored">Zu ' + neu + ' &rarr;</a>' : '<a class="kk-cta" href="/#kk-rechner">Günstigste Kasse finden &rarr;</a>'),
-          'bestaetigung|ja': '<p class="kk-lead"><strong>Perfekt, dein Wechsel ist durch.</strong> Ab 1. Januar bist du bei ' + neu + ' versichert.</p>',
-          'bestaetigung|nein': '<p class="kk-lead">Ruf ' + esc(d.kasse) + ' an und frag nach, ob die Kündigung angekommen ist. Hast du sie per Mail geschickt, ist deine gesendete Mail der Beweis, per Einschreiben der Beleg der Post. Und frag bei ' + neu + ' nach, ob die Anmeldung durch ist: Erst wenn die neue Kasse sich bei der alten meldet, endet die alte Versicherung.</p>',
-          'stopp|': '<p class="kk-lead">Erledigt, du bekommst zu diesem Brief keine Erinnerungen mehr.</p>'
-        }[frage + '|' + (frage === 'stopp' ? '' : a)] || '<p class="kk-lead">Gespeichert.</p>';
+          'anmeldung|ja': '<p class="kk-lead">' + f(S.a_yes, { k: esc(d.kasse) }) + '</p>',
+          'anmeldung|nein': '<p class="kk-lead">' + S.a_no + '</p><ul class="kp-list">' + S.list_short + '</ul>' +
+            (d.neu_url ? '<a class="kk-cta" href="' + esc(d.neu_url) + '?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=kk-wechsel" target="_blank" rel="noopener sponsored">' + f(S.go, { n: neu }) + ' &rarr;</a>' : '<a class="kk-cta" href="' + S.calc + '">' + S.find + ' &rarr;</a>'),
+          'bestaetigung|ja': '<p class="kk-lead">' + f(S.b_yes, { n: neu }) + '</p>',
+          'bestaetigung|nein': '<p class="kk-lead">' + f(S.b_no, { k: esc(d.kasse), n: neu }) + '</p>',
+          'stopp|': '<p class="kk-lead">' + S.stop + '</p>'
+        }[frage + '|' + (frage === 'stopp' ? '' : a)] || '<p class="kk-lead">' + S.saved + '</p>';
         box.innerHTML = html;
       })
-      .catch(function () { box.innerHTML = '<p class="kk-lead">Keine Verbindung. Bitte Link nochmals öffnen.</p>'; });
+      .catch(function () { box.innerHTML = '<p class="kk-lead">' + S.reopen + '</p>'; });
   }
 })();
 </script>
