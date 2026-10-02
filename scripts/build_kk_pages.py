@@ -2777,7 +2777,8 @@ def bust_assets():
     Ändert sich die Datei, ändert sich die URL, und Browser laden sie neu."""
     import hashlib
     assets = {}
-    for rel in ("styles/shared.css", "js/combobox.js", "js/kuendigung.js", "js/rechner.js", "rating-daten.json"):
+    for rel in ("styles/shared.css", "js/combobox.js", "js/kuendigung.js", "js/rechner.js", "rating-daten.json",
+                "favicon.svg", "favicon.ico", "apple-touch-icon.png"):
         f = ROOT / rel
         if f.exists():
             assets["/" + rel] = hashlib.md5(f.read_bytes()).hexdigest()[:8]
