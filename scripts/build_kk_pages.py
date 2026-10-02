@@ -381,9 +381,11 @@ def chf(v, dec=2):
 
 def pct(v, sign=True):
     if v is None:
-        return "neu"
+        return L("neu", "nouveau", "new")
     s = f"{v:+.1f}" if sign else f"{v:.1f}"
-    return s.replace("-", "−") + " %"
+    if i18n.LANG == "fr":
+        s = s.replace(".", ",")
+    return s.replace("-", "−") + ("%" if i18n.LANG == "en" else " %")
 
 
 def e(s):
