@@ -1271,7 +1271,7 @@ def vorjahr_block(c):
         f'<tr><td>{lab(x)}</td><td>{e(x["insurer"])}<span class="sub">{e(MODEL_LABEL.get(x["model"], x["model"]))} · {e(x["tariff"])}</span></td>'
         f'<td class="num">CHF {chf(x["before"])}</td><td class="num">CHF {chf(x["after"])}</td>'
         f'<td class="num {"kk-up" if x["change"] > x["market"] else "kk-down"}">{pct(x["change"])}<span class="sub">{L("Markt", "Marché", "Market")} {pct(x["market"])}</span></td>'
-        f'<td class="num">{x["rank_after"]}{L(".", "e", "")} {of} {x["n_after"]}</td></tr>' for x in rows)
+        f'<td class="num">{x["rank_after"]}{L(".", "er" if x["rank_after"] == 1 else "e", "")} {of} {x["n_after"]}</td></tr>' for x in rows)
     still = sum(1 for x in rows if x["rank_after"] == 1)
     if still == len(rows):
         lead = L(f"Der günstigste Tarif vom letzten Jahr ist auch {YEAR} noch der günstigste.",
