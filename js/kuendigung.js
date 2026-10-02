@@ -12,9 +12,109 @@
 // Die Daten kommen vom Generator (scripts/build_kk_pages.py) im Block
 // #kd-data: Adressen aus dem BAG-Verzeichnis, Kündigungswege aus
 // scripts/data/kuendigung_kanaele.json.
+//
+// Sprachen: die Oberfläche folgt der Seite (de, fr, en, aus #kd-data). Der
+// Brief selbst geht an eine Schweizer Kasse und ist deutsch oder französisch,
+// wählbar im Feld «Sprache des Briefs».
 (function () {
   var D = JSON.parse(document.getElementById('kd-data').textContent);
   var KASSEN = D.kassen, END = D.end, DEADLINE = new Date(D.deadline + 'T23:59:59');
+  var UI = D.lang || 'de';
+  var T = {
+    choose: { de: 'Bitte wählen', fr: 'Veuillez choisir', en: 'Please choose' },
+    search: { de: 'Kasse suchen…', fr: 'Chercher une caisse…', en: 'Search insurer…' },
+    sw_h: { de: 'Wechsel zu {n} in zwei Schritten', fr: 'Passer à {n} en deux étapes', en: 'Switching to {n} in two steps' },
+    sw_1: { de: '<strong>Bei {n} anmelden</strong>, für den {d}. Online in etwa 10 Minuten, ohne Gesundheitsfragen. Halte deine AHV-Nummer bereit (steht auf der Versichertenkarte).',
+            fr: '<strong>S’inscrire chez {n}</strong>, pour le {d}. En ligne en 10 minutes environ, sans questions de santé. Ayez votre numéro AVS sous la main (il figure sur la carte d’assuré).',
+            en: '<strong>Sign up with {n}</strong>, starting {d}. Online in about 10 minutes, no health questions. Have your AHV number ready (it is on your insurance card).' },
+    sw_go: { de: 'Zu {n}', fr: 'Vers {n}', en: 'Go to {n}' },
+    sw_2: { de: '<strong>Deine bisherige Kasse kündigen</strong>, bis {d}. Der Brief ist unten schon vorbereitet. <a href="#vorlage">Zum Brief &darr;</a>',
+            fr: '<strong>Résilier votre caisse actuelle</strong>, d’ici au {d}. La lettre est déjà préparée ci-dessous. <a href="#vorlage">Vers la lettre &darr;</a>',
+            en: '<strong>Cancel your current insurer</strong>, by {d}. The letter is already prepared below. <a href="#vorlage">Go to the letter &darr;</a>' },
+    last: { de: 'Heute ist der letzte Tag.', fr: 'C’est le dernier jour.', en: 'Today is the last day.' },
+    left: { de: 'Noch {n} Tage.', fr: 'Encore {n} jours.', en: '{n} days left.' },
+    pad_ok: { de: 'Sieht gut aus?', fr: 'Ça vous convient ?', en: 'Looks good?' },
+    pad_go: { de: 'Mit Maus, Finger oder Stift unterschreiben.', fr: 'Signez avec la souris, le doigt ou un stylet.', en: 'Sign with your mouse, finger or stylus.' },
+    sig_alt: { de: 'Unterschrift', fr: 'Signature', en: 'Signature' },
+    src: { de: 'Laut <a href="{u}" target="_blank" rel="noopener">Website der Kasse</a>, Stand {d}.', fr: 'Selon le <a href="{u}" target="_blank" rel="noopener">site de la caisse</a>, état au {d}.', en: 'According to the <a href="{u}" target="_blank" rel="noopener">insurer’s website</a>, as of {d}.' },
+    k_mail: { de: '<strong>{n} nimmt die Kündigung per Mail an.</strong> Unterschreib oben, lass dir das PDF zuschicken und leite es an {m}',
+              fr: '<strong>{n} accepte la résiliation par e-mail.</strong> Signez ci-dessus, faites-vous envoyer le PDF et transférez-le à {m}',
+              en: '<strong>{n} accepts cancellation by email.</strong> Sign above, have the PDF sent to you and forward it to {m}' },
+    k_own: { de: ', <strong>von der Mail-Adresse, die {n} von dir kennt</strong>. Von einer anderen Adresse gilt die Kündigung nicht.',
+             fr: ', <strong>depuis l’adresse e-mail que {n} connaît</strong>. Depuis une autre adresse, la résiliation n’est pas valable.',
+             en: ', <strong>from the email address {n} has on file for you</strong>. From any other address the cancellation is not valid.' },
+    k_any: { de: ', am besten von der Mail-Adresse, die deine Kasse von dir kennt.', fr: ', de préférence depuis l’adresse e-mail que votre caisse connaît.', en: ', ideally from the email address your insurer has on file.' },
+    k_proof: { de: ' Die Eingangsbestätigung der Kasse ist dein Beweis, heb sie auf.', fr: ' La confirmation de réception de la caisse est votre preuve : conservez-la.', en: ' The insurer’s confirmation of receipt is your proof, so keep it.' },
+    k_portal: { de: '<strong>{n} nimmt die Kündigung per Mail oder im Kundenportal {p} an,</strong> nennt aber keine Mail-Adresse. Lass dir das PDF zuschicken und lade es in {p} hoch, oder schick es per Post.',
+                fr: '<strong>{n} accepte la résiliation par e-mail ou dans l’espace client {p},</strong> mais n’indique pas d’adresse e-mail. Faites-vous envoyer le PDF et téléversez-le dans {p}, ou envoyez-le par la poste.',
+                en: '<strong>{n} accepts cancellation by email or in the customer portal {p},</strong> but gives no email address. Have the PDF sent to you and upload it to {p}, or send it by post.' },
+    k_reg: { de: '<strong>Per eingeschriebenem Brief.</strong> {n} verlangt das ausdrücklich. Lass dir das PDF zuschicken, druck es aus und bring es spätestens eine Woche vor dem {d} zur Post.',
+             fr: '<strong>Par lettre recommandée.</strong> {n} l’exige expressément. Faites-vous envoyer le PDF, imprimez-le et déposez-le à la poste au plus tard une semaine avant le {d}.',
+             en: '<strong>By registered letter.</strong> {n} explicitly requires this. Have the PDF sent to you, print it and take it to the post office at least one week before {d}.' },
+    k_post: { de: '<strong>Per Post an die Adresse im Brief.</strong> {n} nennt auf der eigenen Website keinen Mail-Weg für die Grundversicherung. Lass dir das PDF zuschicken, druck es aus und schick es spätestens eine Woche vor dem {d} ab. Ein Einschreiben ist nicht vorgeschrieben, aber dein Beweis, dass der Brief rechtzeitig ankam.',
+              fr: '<strong>Par la poste, à l’adresse de la lettre.</strong> {n} n’indique sur son site aucune voie par e-mail pour l’assurance de base. Faites-vous envoyer le PDF, imprimez-le et envoyez-le au plus tard une semaine avant le {d}. Le recommandé n’est pas obligatoire, mais prouve que la lettre est arrivée à temps.',
+              en: '<strong>By post to the address in the letter.</strong> {n} gives no email route for basic insurance on its website. Have the PDF sent to you, print it and post it at least one week before {d}. Registered mail is not required, but proves the letter arrived on time.' },
+    wait: { de: 'Einen Moment…', fr: 'Un instant…', en: 'One moment…' },
+    fail: { de: 'Das hat nicht geklappt. Versuch es nochmals oder nimm «Text kopieren».', fr: 'Cela n’a pas fonctionné. Réessayez ou utilisez « Copier le texte ».', en: 'That didn’t work. Try again or use “Copy text”.' },
+    again: { de: 'Nochmals senden', fr: 'Renvoyer', en: 'Send again' },
+    f_name: { de: 'Name', fr: 'Nom', en: 'Name' }, f_birth: { de: 'Geburtsdatum', fr: 'Date de naissance', en: 'Date of birth' },
+    f_street: { de: 'Strasse', fr: 'Rue', en: 'Street' }, f_plz: { de: 'PLZ', fr: 'NPA', en: 'Postcode' },
+    f_ort: { de: 'Ort', fr: 'Localité', en: 'Town' }, f_email: { de: 'E-Mail', fr: 'E-mail', en: 'Email' },
+    no_kasse: { de: 'Bitte zuerst deine Kasse wählen.', fr: 'Veuillez d’abord choisir votre caisse.', en: 'Please choose your insurer first.' },
+    missing: { de: 'Bitte noch ausfüllen: {f}.', fr: 'Veuillez encore remplir : {f}.', en: 'Please still fill in: {f}.' },
+    sent_txt: { de: 'Mail ist unterwegs an {m}. Klick dort auf «Kündigung herunterladen», damit bestätigst du auch deine Adresse. Nichts da? Schau im Spam-Ordner.',
+                fr: 'L’e-mail est en route vers {m}. Cliquez sur « Télécharger la résiliation » : cela confirme aussi votre adresse. Rien reçu ? Regardez dans les spams.',
+                en: 'The email is on its way to {m}. Click “Download your cancellation” in it; that also confirms your address. Nothing there? Check your spam folder.' },
+    done_t: { de: 'Verschickt!', fr: 'C’est envoyé !', en: 'Sent!' },
+    done_1: { de: 'Die Mail ist unterwegs an <b>{m}</b>. Öffne sie und klick auf «Kündigung herunterladen».', fr: 'L’e-mail est en route vers <b>{m}</b>. Ouvrez-le et cliquez sur « Télécharger la résiliation ».', en: 'The email is on its way to <b>{m}</b>. Open it and click “Download your cancellation”.' },
+    done_2: { de: 'Nach 5 Minuten nichts da? Schau im Spam-Ordner nach oder prüf die Adresse oben.', fr: 'Rien après 5 minutes ? Regardez dans les spams ou vérifiez l’adresse ci-dessus.', en: 'Nothing after 5 minutes? Check your spam folder or the address above.' },
+    send_fail: { de: 'Der Versand hat nicht geklappt. Bitte nochmals versuchen.', fr: 'L’envoi n’a pas fonctionné. Veuillez réessayer.', en: 'Sending didn’t work. Please try again.' },
+    attach: { de: ' Das PDF hängst du dann an die Mail an die Kasse an.', fr: ' Joignez ensuite le PDF à l’e-mail destiné à la caisse.', en: ' Then attach the PDF to the email to your insurer.' },
+    copied: { de: 'Kopiert', fr: 'Copié', en: 'Copied' },
+    copy_manual: { de: 'Bitte markieren und kopieren', fr: 'Veuillez sélectionner et copier', en: 'Please select and copy' },
+    copied_msg: { de: 'Text kopiert. ', fr: 'Texte copié. ', en: 'Text copied. ' },
+  };
+  function t(k, v) {
+    var s = (T[k] || {})[UI] || (T[k] || {}).de || k;
+    return s.replace(/\{(\w)\}/g, function (_, x) { return v && v[x] != null ? v[x] : ''; });
+  }
+  // Texte des Briefs, deutsch oder französisch
+  var MONTHS = { de: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
+                 fr: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'] };
+  function longDate(d, lang) { return (lang === 'fr' ? (d.getDate() === 1 ? '1er' : d.getDate()) : d.getDate() + '.') + ' ' + MONTHS[lang][d.getMonth()] + ' ' + d.getFullYear(); }
+  var B = {
+    de: { name: 'Vorname Name', city: 'PLZ Ort', ort: 'Ort', street: 'Strasse Nr.', kasse: ['Name der Krankenkasse', 'Adresse'],
+          subject: 'Kündigung der obligatorischen Krankenpflegeversicherung (Grundversicherung)', nr: 'Versicherten-Nr. ', birth: 'Geburtsdatum ',
+          more: 'Hiermit kündige ich die obligatorische Krankenpflegeversicherung nach KVG für mich und die folgenden Personen',
+          one: 'Hiermit kündige ich meine obligatorische Krankenpflegeversicherung nach KVG', on: ' fristgerecht auf den ',
+          keep: 'Meine Zusatzversicherungen sind von dieser Kündigung nicht betroffen und laufen weiter.',
+          also: 'Zusätzlich kündige ich meine Zusatzversicherungen nach VVG auf den nächstmöglichen Termin.',
+          confirm: 'Bitte bestätigen Sie mir den Eingang der Kündigung schriftlich.', hello: 'Sehr geehrte Damen und Herren', bye: 'Freundliche Grüsse',
+          dateSep: ', ', footer: 'Erstellt mit abovergleich.com, dem unabhängigen Krankenkassen-Vergleich',
+          m_body: 'Im Anhang sende ich Ihnen meine unterschriebene Kündigung der Grundversicherung auf den ', m_name: 'Name: ', m_nr: 'Versicherten-Nr.: ',
+          m_confirm: 'Bitte bestätigen Sie mir den Eingang.', m_subject: 'Kündigung Grundversicherung, ', m_vnr: ', Vers.-Nr. ',
+          file: 'Kuendigung-Grundversicherung-', fallbackKasse: 'Krankenkasse' },
+    fr: { name: 'Prénom Nom', city: 'NPA Localité', ort: 'Localité', street: 'Rue et n°', kasse: ['Nom de la caisse-maladie', 'Adresse'],
+          subject: 'Résiliation de l’assurance obligatoire des soins (assurance de base)', nr: 'N° d’assuré ', birth: 'Date de naissance ',
+          more: 'Par la présente, je résilie dans les délais l’assurance obligatoire des soins selon la LAMal pour moi-même et pour les personnes suivantes',
+          one: 'Par la présente, je résilie dans les délais mon assurance obligatoire des soins selon la LAMal', on: ' pour le ',
+          keep: 'Mes assurances complémentaires ne sont pas concernées par cette résiliation et sont maintenues.',
+          also: 'Je résilie en outre mes assurances complémentaires selon la LCA pour la prochaine échéance possible.',
+          confirm: 'Je vous prie de bien vouloir me confirmer par écrit la réception de cette résiliation.', hello: 'Madame, Monsieur,',
+          bye: 'Veuillez agréer, Madame, Monsieur, mes salutations distinguées.', dateSep: ', le ',
+          footer: 'Créé avec abovergleich.com, le comparatif indépendant des caisses-maladie',
+          m_body: 'Vous trouverez en pièce jointe ma résiliation signée de l’assurance de base pour le ', m_name: 'Nom : ', m_nr: 'N° d’assuré : ',
+          m_confirm: 'Je vous prie de bien vouloir m’en confirmer la réception.', m_subject: 'Résiliation assurance de base, ', m_vnr: ', n° d’assuré ',
+          file: 'Resiliation-assurance-de-base-', fallbackKasse: 'caisse-maladie' },
+  };
+  var lsel = document.getElementById('kd-lang'), langTouched = false;
+  if (lsel) {
+    lsel.value = UI === 'fr' ? 'fr' : 'de';
+    lsel.addEventListener('change', function () { langTouched = true; });
+  }
+  function LL() { return lsel && lsel.value === 'fr' ? 'fr' : 'de'; }
+  function b(k) { return B[LL()][k]; }
+  function endText() { return D.end_iso ? longDate(new Date(D.end_iso + 'T12:00:00'), LL()) : END; }
   var JSPDF_SRC = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/4.2.1/jspdf.umd.min.js';
   var JSPDF_SRI = 'sha512-plOdviVmws4Y3JAvbnpfKb2hVxKM1lCwsi3vmElYRj+tiDLffZ4FVUj5a8vyKJ9pIgl8JCAHEJ4D1iUKBecswg==';
   var $ = function (id) { return document.getElementById(id); };
@@ -22,7 +122,7 @@
 
   // ── Kasse und Vorausfüllung ────────────────────────────────────────────
   var sel = $('kd-kasse');
-  sel.add(new Option('Bitte wählen', ''));
+  sel.add(new Option(t('choose'), ''));
   KASSEN.forEach(function (k) { sel.add(new Option(k.name, k.id)); });
   var q = new URLSearchParams(location.search).get('kasse');
   if (q) sel.value = q;
@@ -36,7 +136,7 @@
       if (pc && !$('kd-plz').value) { $('kd-plz').value = pc[1]; $('kd-ort').value = pc[2]; }
     }
   } catch (e) {}
-  if (window.Combobox) Combobox.enhance(sel, { search: true, placeholder: 'Kasse suchen…' });
+  if (window.Combobox) Combobox.enhance(sel, { search: true, placeholder: t('search') });
 
   // Aus dem Rechner mit «Wechseln»: zuerst bei der neuen Kasse anmelden, dann
   // die bisherige kündigen. Die Reihenfolge ist egal (die alte Versicherung
@@ -45,16 +145,16 @@
   if (neu && String(neu.id) !== sel.value) {
     var w = $('wechsel');
     var go = neu.url ? neu.url + '?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=kk-wechsel' : null;
-    w.innerHTML = '<h2>Wechsel zu ' + esc(neu.name) + ' in zwei Schritten</h2><ol>' +
-      '<li><strong>Bei ' + esc(neu.name) + ' anmelden</strong>, für den ' + esc(D.start) + '. Online in etwa 10 Minuten, ohne Gesundheitsfragen. Halte deine AHV-Nummer bereit (steht auf der Versichertenkarte).' +
-      (go ? '<br><a class="kd-go" href="' + esc(go) + '" target="_blank" rel="noopener sponsored">Zu ' + esc(neu.name) + ' &rarr;</a>' : '') + '</li>' +
-      '<li><strong>Deine bisherige Kasse kündigen</strong>, bis ' + esc(D.deadline_text) + '. Der Brief ist unten schon vorbereitet. <a href="#vorlage">Zum Brief &darr;</a></li></ol>';
+    w.innerHTML = '<h2>' + t('sw_h', { n: esc(neu.name) }) + '</h2><ol>' +
+      '<li>' + t('sw_1', { n: esc(neu.name), d: esc(D.start) }) +
+      (go ? '<br><a class="kd-go" href="' + esc(go) + '" target="_blank" rel="noopener sponsored">' + t('sw_go', { n: esc(neu.name) }) + ' &rarr;</a>' : '') + '</li>' +
+      '<li>' + t('sw_2', { d: esc(D.deadline_text) }) + '</li></ol>';
     w.hidden = false;
     $('kd-compare').hidden = true;
   }
 
   var days = Math.floor((DEADLINE - new Date()) / 86400000);
-  if (days >= 0) $('kd-left').textContent = days === 0 ? 'Heute ist der letzte Tag.' : 'Noch ' + days + ' Tage.';
+  if (days >= 0) $('kd-left').textContent = days === 0 ? t('last') : t('left', { n: days });
 
   function kasse() { return KASSEN.find(function (x) { return String(x.id) === sel.value; }) || null; }
   function val(id) { return $(id).value.trim(); }
@@ -104,7 +204,7 @@
     return out.toDataURL('image/png');
   }
   function padState() {
-    $('kd-pad-hint').textContent = sig ? 'Sieht gut aus?' : 'Mit Maus, Finger oder Stift unterschreiben.';
+    $('kd-pad-hint').textContent = sig ? t('pad_ok') : t('pad_go');
     $('kd-pad-clear').disabled = !sig;
   }
   setupPad();
@@ -145,49 +245,46 @@
 
   // ── Der Brief ──────────────────────────────────────────────────────────
   function today() {
-    return new Date().toLocaleDateString('de-CH', { day: 'numeric', month: 'long', year: 'numeric' });
+    return longDate(new Date(), LL());
   }
   function letter() {
     var k = kasse();
-    var name = val('kd-name') || 'Vorname Name';
-    var city = (val('kd-plz') + ' ' + val('kd-ort')).trim() || 'PLZ Ort';
-    var ort = val('kd-ort') || 'Ort';
+    var name = val('kd-name') || b('name');
+    var city = (val('kd-plz') + ' ' + val('kd-ort')).trim() || b('city');
+    var ort = val('kd-ort') || b('ort');
     var more = $('kd-more').value.split('\n').map(function (s) { return s.trim(); }).filter(Boolean);
-    var subject = ['Kündigung der obligatorischen Krankenpflegeversicherung (Grundversicherung)'];
+    var subject = [b('subject')];
     var ids = [];
-    if (val('kd-nr')) ids.push('Versicherten-Nr. ' + val('kd-nr'));
-    if (val('kd-birth')) ids.push('Geburtsdatum ' + val('kd-birth'));
+    if (val('kd-nr')) ids.push(b('nr') + val('kd-nr'));
+    if (val('kd-birth')) ids.push(b('birth') + val('kd-birth'));
     if (ids.length) subject.push(ids.join(', '));
-    var body = [(more.length
-      ? 'Hiermit kündige ich die obligatorische Krankenpflegeversicherung nach KVG für mich und die folgenden Personen'
-      : 'Hiermit kündige ich meine obligatorische Krankenpflegeversicherung nach KVG') +
-      ' fristgerecht auf den ' + END + (more.length ? ':' : '.')];
+    var body = [(more.length ? b('more') : b('one')) + b('on') + endText() + (more.length ? (LL() === 'fr' ? ' :' : ':') : '.')];
     more.forEach(function (m) { body.push('- ' + m); });
     var zusatz = (document.querySelector('input[name="kd-zusatz"]:checked') || {}).value;
-    if (zusatz === 'behalten') body.push('', 'Meine Zusatzversicherungen sind von dieser Kündigung nicht betroffen und laufen weiter.');
-    if (zusatz === 'kuendigen') body.push('', 'Zusätzlich kündige ich meine Zusatzversicherungen nach VVG auf den nächstmöglichen Termin.');
-    body.push('', 'Bitte bestätigen Sie mir den Eingang der Kündigung schriftlich.');
+    if (zusatz === 'behalten') body.push('', b('keep'));
+    if (zusatz === 'kuendigen') body.push('', b('also'));
+    body.push('', b('confirm'));
     return {
       kasse: k, name: name,
-      sender: [name, val('kd-street') || 'Strasse Nr.', city],
-      recipient: k ? k.address : ['Name der Krankenkasse', 'Adresse'],
-      dateLine: ort + ', ' + today(),
-      subject: subject, body: body,
+      sender: [name, val('kd-street') || b('street'), city],
+      recipient: k ? k.address : b('kasse'),
+      dateLine: ort + b('dateSep') + today(),
+      subject: subject, body: body, hello: b('hello'), bye: b('bye'), footer: b('footer'),
     };
   }
   function plain(L) {
     return [].concat(L.sender, ['', ''], L.recipient, ['', '', L.dateLine, '', ''], L.subject,
-      ['', 'Sehr geehrte Damen und Herren', ''], L.body, ['', 'Freundliche Grüsse', '', '', '', L.name]).join('\n');
+      ['', L.hello, ''], L.body, ['', L.bye, '', '', '', L.name]).join('\n');
   }
   function render() {
     var L = letter(), b = $('kd-brief');
     b.textContent = '';
     b.appendChild(document.createTextNode([].concat(L.sender, ['', ''], L.recipient, ['', '', L.dateLine, '', ''], L.subject,
-      ['', 'Sehr geehrte Damen und Herren', ''], L.body, ['', 'Freundliche Grüsse', '']).join('\n') + '\n'));
+      ['', L.hello, ''], L.body, ['', L.bye, '']).join('\n') + '\n'));
     if (sig) {
       var im = new Image();
       im.src = sig;
-      im.alt = 'Unterschrift';
+      im.alt = t('sig_alt');
       im.className = 'kd-sig-img';
       b.appendChild(im);
     } else {
@@ -199,38 +296,29 @@
 
   // ── Der Weg zur Kasse ──────────────────────────────────────────────────
   function mailBody(L) {
-    var lines = ['Sehr geehrte Damen und Herren', '',
-      'Im Anhang sende ich Ihnen meine unterschriebene Kündigung der Grundversicherung auf den ' + END + '.', '',
-      'Name: ' + L.name];
-    if (val('kd-nr')) lines.push('Versicherten-Nr.: ' + val('kd-nr'));
-    lines.push('', 'Bitte bestätigen Sie mir den Eingang.', '', 'Freundliche Grüsse', L.name);
+    var lines = [b('hello'), '',
+      b('m_body') + endText() + '.', '',
+      b('m_name') + L.name];
+    if (val('kd-nr')) lines.push(b('m_nr') + val('kd-nr'));
+    lines.push('', b('m_confirm'), '', LL() === 'fr' ? 'Meilleures salutations' : 'Freundliche Grüsse', L.name);
     return lines.join('\n');
   }
   function mailSubject(L) {
-    return 'Kündigung Grundversicherung, ' + L.name + (val('kd-nr') ? ', Vers.-Nr. ' + val('kd-nr') : '');
+    return b('m_subject') + L.name + (val('kd-nr') ? b('m_vnr') + val('kd-nr') : '');
   }
   function channel(L) {
     var k = L.kasse, el = $('kd-kanal');
     $('kd-mail').hidden = !(k && k.mail);
     if (!k) { el.innerHTML = ''; return; }
-    var src = k.src ? '<div class="kd-src">Laut <a href="' + esc(k.src) + '" target="_blank" rel="noopener">Website der Kasse</a>, Stand ' + esc(D.stand) + '.</div>' : '';
+    var src = k.src ? '<div class="kd-src">' + t('src', { u: esc(k.src), d: esc(D.stand) }) + '</div>' : '';
     var nm = esc(k.name);
     if (k.mail) {
-      el.innerHTML = '<strong>' + nm + ' nimmt die Kündigung per Mail an.</strong> ' +
-        'Unterschreib oben, lass dir das PDF zuschicken und leite es an <a href="mailto:' + esc(k.mail) + '">' + esc(k.mail) + '</a>' +
-        (k.own ? ', <strong>von der Mail-Adresse, die ' + nm + ' von dir kennt</strong>. Von einer anderen Adresse gilt die Kündigung nicht.'
-               : ', am besten von der Mail-Adresse, die deine Kasse von dir kennt.') +
-        ' Die Eingangsbestätigung der Kasse ist dein Beweis, heb sie auf.' + src;
+      el.innerHTML = t('k_mail', { n: nm, m: '<a href="mailto:' + esc(k.mail) + '">' + esc(k.mail) + '</a>' }) +
+        (k.own ? t('k_own', { n: nm }) : t('k_any')) + t('k_proof') + src;
     } else if (k.portal) {
-      el.innerHTML = '<strong>' + nm + ' nimmt die Kündigung per Mail oder im Kundenportal ' + esc(k.portal) + ' an,</strong> nennt aber keine Mail-Adresse. ' +
-        'Lass dir das PDF zuschicken und lade es in ' + esc(k.portal) + ' hoch, oder schick es per Post.' + src;
+      el.innerHTML = t('k_portal', { n: nm, p: esc(k.portal) }) + src;
     } else {
-      el.innerHTML = k.post_only
-        ? '<strong>Per eingeschriebenem Brief.</strong> ' + nm + ' verlangt das ausdrücklich. ' +
-          'Lass dir das PDF zuschicken, druck es aus und bring es spätestens eine Woche vor dem ' + esc(D.deadline_text) + ' zur Post.' + src
-        : '<strong>Per Post an die Adresse im Brief.</strong> ' + nm + ' nennt auf der eigenen Website keinen Mail-Weg für die Grundversicherung. ' +
-          'Lass dir das PDF zuschicken, druck es aus und schick es spätestens eine Woche vor dem ' + esc(D.deadline_text) + ' ab. ' +
-          'Ein Einschreiben ist nicht vorgeschrieben, aber dein Beweis, dass der Brief rechtzeitig ankam.' + src;
+      el.innerHTML = (k.post_only ? t('k_reg', { n: nm, d: esc(D.deadline_text) }) : t('k_post', { n: nm, d: esc(D.deadline_text) })) + src;
     }
   }
 
@@ -267,12 +355,12 @@
     L.subject.forEach(function (s) { doc.splitTextToSize(s, W).forEach(function (l) { doc.text(l, X, y); y += LH; }); });
     doc.setFont('helvetica', 'normal');
     y += 6;
-    ['Sehr geehrte Damen und Herren', ''].concat(L.body).forEach(function (p) {
+    [L.hello, ''].concat(L.body).forEach(function (p) {
       if (!p) { y += 3; return; }
       doc.splitTextToSize(p, W).forEach(function (l) { doc.text(l, X, y); y += LH; });
     });
     y += 7;
-    doc.text('Freundliche Grüsse', X, y);
+    doc.splitTextToSize(L.bye, W).forEach(function (l, n) { if (n) y += LH; doc.text(l, X, y); });
     y += 4;
     if (sig) {
       var ip = doc.getImageProperties(sig), h = 17, w = Math.min(75, ip.width / ip.height * h);
@@ -285,51 +373,51 @@
     // Fusszeile
     doc.setFontSize(8);
     doc.setTextColor(150);
-    doc.text('Erstellt mit abovergleich.com, dem unabhängigen Krankenkassen-Vergleich', X, 287);
+    doc.text(L.footer, X, 287);
     doc.setTextColor(0);
     doc.setFontSize(10.5);
     doc.setProperties({ title: L.subject[0], creator: 'abovergleich.com' });
     return doc;
   }
   function fileName(L) {
-    var k = L.kasse ? L.kasse.name : 'Krankenkasse';
-    return 'Kuendigung-Grundversicherung-' + k.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^A-Za-z0-9]+/g, '-') + '.pdf';
+    var k = L.kasse ? L.kasse.name : b('fallbackKasse');
+    return b('file') + k.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^A-Za-z0-9]+/g, '-') + '.pdf';
   }
   function withPdf(btn, fn) {
     var label = btn.textContent;
     if (!check()) return;
     $('kd-msg').textContent = '';
     btn.disabled = true;
-    btn.textContent = 'Einen Moment…';
+    btn.textContent = t('wait');
     loadPdf().then(function () {
       var L = letter();
       return fn(makePdf(L), L);   // darf ein Promise liefern, der Knopf wartet darauf
     }).catch(function () {
-      $('kd-msg').textContent = 'Das hat nicht geklappt. Versuch es nochmals oder nimm «Text kopieren».';
+      $('kd-msg').textContent = t('fail');
     }).then(function () {
       btn.disabled = false;
-      btn.textContent = btn.id === 'kd-send' && !$('kd-done').hidden ? 'Nochmals senden' : label;
+      btn.textContent = btn.id === 'kd-send' && !$('kd-done').hidden ? t('again') : label;
     });
   }
 
   // Pflichtfelder: ohne sie findet die Kasse dich nicht sicher, und ohne
   // E-Mail können wir das PDF nicht zuschicken.
-  var REQUIRED = [['kd-name', 'Name'], ['kd-birth', 'Geburtsdatum'], ['kd-street', 'Strasse'],
-    ['kd-plz', 'PLZ'], ['kd-ort', 'Ort'], ['kd-email', 'E-Mail']];
+  var REQUIRED = [['kd-name', t('f_name')], ['kd-birth', t('f_birth')], ['kd-street', t('f_street')],
+    ['kd-plz', t('f_plz')], ['kd-ort', t('f_ort')], ['kd-email', t('f_email')]];
   var OK = {
     'kd-birth': /^\d{1,2}\.\d{1,2}\.(19|20)\d{2}$/,
     'kd-plz': /^\d{4}$/,
     'kd-email': /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i,
   };
   function check() {
-    if (!kasse()) { $('kd-msg').textContent = 'Bitte zuerst deine Kasse wählen.'; return false; }
+    if (!kasse()) { $('kd-msg').textContent = t('no_kasse'); return false; }
     var bad = REQUIRED.filter(function (f) {
       var v = val(f[0]), ok = v && (!OK[f[0]] || OK[f[0]].test(v));
       $(f[0]).classList.toggle('kd-invalid', !ok);
       return !ok;
     });
     if (bad.length) {
-      $('kd-msg').textContent = 'Bitte noch ausfüllen: ' + bad.map(function (f) { return f[1]; }).join(', ') + '.';
+      $('kd-msg').textContent = t('missing', { f: bad.map(function (f) { return f[1]; }).join(', ') });
       $(bad[0][0]).focus();
       return false;
     }
@@ -368,7 +456,7 @@
       body: JSON.stringify({
         email: email, wecker: $('kd-wecker').checked, pdf: b64, filename: fileName(L), signiert: !!sig,
         kasse: k.name, kanal: k.mail ? 'mail' : k.portal ? 'portal' : 'post', ziel: k.mail || k.portal || '',
-        deadline: D.deadline_text, neu: neu ? neu.name : '', neu_url: neu && neu.url ? neu.url : '',
+        deadline: D.deadline_text, neu: neu ? neu.name : '', neu_url: neu && neu.url ? neu.url : '', lang: UI,
         plz: plzOf() || pr.plz, jahrgang: jahrgangOf() || pr.year, franchise: pr.franchise,
         accident_included: pr.accident === true, current_insurer_id: k.id, new_insurer_id: neu ? neu.id : null,
         paid_monthly: (function () { try { return parseFloat((localStorage.getItem('kk-paid') || '').replace(',', '.')) || null; } catch (e) { return null; } })(),
@@ -381,25 +469,25 @@
     return sent[key];
   }
   function sentText() {
-    return 'Mail ist unterwegs an ' + val('kd-email') + '. Klick dort auf «Kündigung herunterladen», damit bestätigst du auch deine Adresse. Nichts da? Schau im Spam-Ordner.';
+    return t('sent_txt', { m: val('kd-email') });
   }
 
   // Gut sichtbare Bestätigung statt einer Textzeile
   function done() {
     var box = $('kd-done');
-    box.innerHTML = '<div class="kd-done-icon">✓</div><div><strong>Verschickt!</strong>' +
-      '<p>Die Mail ist unterwegs an <b>' + esc(val('kd-email')) + '</b>. Öffne sie und klick auf «Kündigung herunterladen».</p>' +
-      '<p style="font-size:13px;color:var(--muted);margin-top:6px;">Nach 5 Minuten nichts da? Schau im Spam-Ordner nach oder prüf die Adresse oben.</p></div>';
+    box.innerHTML = '<div class="kd-done-icon">✓</div><div><strong>' + t('done_t') + '</strong>' +
+      '<p>' + t('done_1', { m: esc(val('kd-email')) }) + '</p>' +
+      '<p style="font-size:13px;color:var(--muted);margin-top:6px;">' + t('done_2') + '</p></div>';
     box.hidden = false;
     $('kd-msg').textContent = '';
-    $('kd-send').textContent = 'Nochmals senden';
+    $('kd-send').textContent = t('again');
     $('kd-send').classList.add('sec');
     box.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
   $('kd-send').onclick = function () {
     withPdf(this, function (doc, L) {
       return sendCopy(doc, L, !$('kd-done').hidden).then(function () { done(); },
-        function (err) { $('kd-msg').textContent = (err && err.message !== 'Versand' && err.message) || 'Der Versand hat nicht geklappt. Bitte nochmals versuchen.'; });
+        function (err) { $('kd-msg').textContent = (err && err.message !== 'Versand' && err.message) || t('send_fail'); });
     });
   };
   // Mail an die Kasse: zuerst die Kopie mit PDF an dich, dann das Mailprogramm
@@ -409,9 +497,9 @@
     withPdf(this, function (doc, L) {
       return sendCopy(doc, L).then(function (res) {
         track('kuendigung_mail');
-        $('kd-msg').textContent = sentText(res) + ' Das PDF hängst du dann an die Mail an die Kasse an.';
+        $('kd-msg').textContent = sentText(res) + t('attach');
         location.href = 'mailto:' + encodeURIComponent(L.kasse.mail) + '?subject=' + encodeURIComponent(mailSubject(L)) + '&body=' + encodeURIComponent(mailBody(L));
-      }, function () { $('kd-msg').textContent = 'Der Versand hat nicht geklappt. Bitte nochmals versuchen.'; });
+      }, function () { $('kd-msg').textContent = t('send_fail'); });
     });
   };
   $('kd-copy').onclick = function () {
@@ -419,14 +507,22 @@
     var btn = this, t = plain(letter());
     track('kuendigung_text');
     (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(
-      function () { btn.textContent = 'Kopiert'; },
-      function () { btn.textContent = 'Bitte markieren und kopieren'; });
+      function () { btn.textContent = t('copied'); },
+      function () { btn.textContent = t('copy_manual'); });
     // Kopie mit PDF trotzdem an die Mail-Adresse
     loadPdf().then(function () { var L = letter(); return sendCopy(makePdf(L), L); })
-      .then(function (res) { $('kd-msg').textContent = 'Text kopiert. ' + sentText(res); }, function () {});
+      .then(function (res) { $('kd-msg').textContent = t('copied_msg') + sentText(res); }, function () {});
   };
 
-  ['kd-kasse', 'kd-name', 'kd-birth', 'kd-nr', 'kd-street', 'kd-plz', 'kd-ort', 'kd-more'].forEach(function (id) {
+  // Auf der englischen Seite richtet sich die Briefsprache nach der PLZ,
+  // bis jemand sie von Hand wählt: 1xxx und 2xxx sind fast ganz Romandie.
+  if (lsel && UI === 'en') {
+    $('kd-plz').addEventListener('input', function () {
+      if (!langTouched && /^\d{4}$/.test(val('kd-plz'))) lsel.value = /^[12]/.test(val('kd-plz')) ? 'fr' : 'de';
+    });
+  }
+  ['kd-kasse', 'kd-name', 'kd-birth', 'kd-nr', 'kd-street', 'kd-plz', 'kd-ort', 'kd-more', 'kd-lang'].forEach(function (id) {
+    if (!$(id)) return;
     $(id).addEventListener('input', render);
     $(id).addEventListener('change', render);
   });

@@ -400,6 +400,10 @@ footer > div { max-width: 1000px; }
   padding: 9px 16px; border-radius: 10px; transition: background .2s;
 }
 .nav-cta:hover { background: var(--accent-hover); }
+.nav-lang { display: flex; gap: 2px; font-size: 12px; font-weight: 600; letter-spacing: .04em; }
+.nav-lang a { color: var(--muted); padding: 4px 5px; border-radius: 6px; }
+.nav-lang a:hover { color: var(--text); }
+.nav-lang a[aria-current] { color: var(--text); background: var(--surface2); }
 @media (max-width: 1100px) {
   .nav-burger { display: flex; }
   .nav-right {
@@ -411,6 +415,7 @@ footer > div { max-width: 1000px; }
   .nav-right.open { display: flex; }
   .nav-right .nav-link { padding: 14px 20px; font-size: 16px; border-bottom: 1px solid var(--border); }
   .nav-right .nav-cta { margin: 12px 20px 8px; text-align: center; padding: 12px 16px; }
+  .nav-right .nav-lang { padding: 12px 15px 4px; font-size: 14px; gap: 6px; }
 }
 
 /* Kassennamen führen überall auf die Analyse der Kasse; gelbe Unterstreichung

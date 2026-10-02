@@ -41,11 +41,19 @@ from premium_analysis import INSURER_NAMES  # noqa: E402
 import kv_verzeichnis  # noqa: E402
 import site_nav  # noqa: E402
 import build_awards  # noqa: E402
+import i18n  # noqa: E402
+from i18n import L  # noqa: E402
 
 YEAR = 2027
 PREV = YEAR - 1
-DEADLINE = "30. November 2026"   # Kündigung Grundversicherung, Eingang bei der Kasse
+DEADLINE_ISO = f"{PREV}-11-30"   # Kündigung Grundversicherung, Eingang bei der Kasse
 PUBLISHED = "2026-09-30"
+
+
+def deadline(short=False):
+    """«30. November 2026», mit short=True ohne Jahr, in der aktuellen Sprache."""
+    t = i18n.date_long(DEADLINE_ISO)
+    return t.rsplit(" ", 1)[0] if short else t
 
 # Offizielle BAG-Werte zur Einordnung, Medienmitteilung vom 29.09.2026
 BAG_OFFICIAL = {
@@ -75,10 +83,48 @@ CANTONS = {
     "ZG": ("Zug", "zug"), "ZH": ("Zürich", "zuerich"),
 }
 
-MODEL_LABEL = {
-    "standard": "Standard", "family_doctor": "Hausarzt", "hmo": "HMO",
-    "telmed": "Telmed", "diverse": "Alternativ", "apotheke": "Apotheke",
+_MODEL_LABEL = {
+    "standard": ("Standard", "Standard", "Standard"), "family_doctor": ("Hausarzt", "Médecin de famille", "Family doctor"),
+    "hmo": ("HMO", "HMO", "HMO"), "telmed": ("Telmed", "Telmed", "Telmed"),
+    "diverse": ("Alternativ", "Alternatif", "Alternative"), "apotheke": ("Apotheke", "Pharmacie", "Pharmacy"),
 }
+
+
+class _ModelLabel(dict):
+    """MODEL_LABEL[m] in der aktuellen Sprache."""
+    def __getitem__(self, m):
+        return L(*_MODEL_LABEL[m])
+
+    def get(self, m, default=None):
+        return self[m] if m in _MODEL_LABEL else default
+
+
+MODEL_LABEL = _ModelLabel()
+
+
+def cname(c):
+    """Kantonsname in der aktuellen Sprache."""
+    return CANTONS[c][0] if i18n.LANG == "de" else i18n.CANTON_I18N[c][i18n.LANG][0]
+
+
+def canton_url(c):
+    slug = CANTONS[c][1] if i18n.LANG == "de" else i18n.CANTON_I18N[c][i18n.LANG][1]
+    return f"{i18n.url('cantons')}{slug}/"
+
+
+def im_kanton(c):
+    """«im Kanton Zürich» / «dans le canton de Zurich» / «in the canton of Zurich»."""
+    n = cname(c)
+    if i18n.LANG == "fr":
+        if c in i18n.FR_DANS:
+            return i18n.FR_DANS[c]
+        return f"dans le canton de {n}"
+    return L(f"im Kanton {n}", "", f"in the canton of {n}")
+
+
+def sorted_cantons():
+    """(Code, Name, URL) alphabetisch nach dem Namen in der aktuellen Sprache."""
+    return sorted(((c, cname(c), canton_url(c)) for c in CANTONS), key=lambda x: x[1])
 
 MIN_BESTAND_RANKING = 50_000   # Kassen-Rankings: nur Kassen mit so vielen Versicherten
 
@@ -403,13 +449,30 @@ ANALYTICS = """<script>
 <script defer src="/_vercel/speed-insights/script.js"></script>"""
 
 
-def page(path, title, description, body, jsonld):
+def page(path, title, description, body, jsonld, alts=None):
+    """alts: {Sprache: Pfad} derselben Seite, für hreflang und die Sprachwahl."""
     url = f"{SITE}{path}"
+    lang = i18n.LANG
     if len(description) > 160 or len(title) > 70:
         print(f"! {path}: Titel {len(title)} / Beschreibung {len(description)} Zeichen, Google kürzt ab")
     ld = "\n".join(f'<script type="application/ld+json">\n{json.dumps(x, ensure_ascii=False, indent=1)}\n</script>' for x in jsonld)
+    alt_links = (site_nav.hreflang_html(alts) + "\n") if alts else ""
+    u = i18n.url
+    footer_links = "\n      ".join(f'<a href="{h}">{t}</a>' for h, t in [
+        (u("cantons"), L("Kantone", "Cantons", "Cantons")),
+        (u("kassen"), L("Kassen", "Caisses", "Insurers")),
+        (u("kuendigen"), L("K&uuml;ndigen", "R&eacute;silier", "Cancel")),
+        (u("report"), L(f"Pr&auml;mien {YEAR}", f"Primes {YEAR}", f"Premiums {YEAR}")),
+        (u("rating"), L("Rating", "Constance des primes", "Rating")),
+        (u("methode"), L("Methode", "M&eacute;thode", "Methodology")),
+        (u("impressum"), L("Impressum", "Mentions l&eacute;gales", "Imprint")),
+        (u("datenschutz"), L("Datenschutz", "Protection des donn&eacute;es", "Privacy")),
+    ])
+    note = L("Unabh&auml;ngiger Vergleich f&uuml;r die Schweiz. Pr&auml;mien: Bundesamt f&uuml;r Gesundheit (BAG).",
+             "Comparatif ind&eacute;pendant pour la Suisse. Primes&nbsp;: Office f&eacute;d&eacute;ral de la sant&eacute; publique (OFSP).",
+             "Independent comparison for Switzerland. Premiums: Federal Office of Public Health (FOPH).")
     return f"""<!DOCTYPE html>
-<html lang="de">
+<html lang="{lang}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -417,7 +480,7 @@ def page(path, title, description, body, jsonld):
 <title>{e(title)}</title>
 <meta name="description" content="{e(description)}">
 <link rel="canonical" href="{url}">
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+{alt_links}<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="alternate icon" href="/favicon.ico">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="robots" content="index, follow">
@@ -426,7 +489,7 @@ def page(path, title, description, body, jsonld):
 <meta property="og:title" content="{e(title)}">
 <meta property="og:description" content="{e(description)}">
 <meta property="og:site_name" content="abovergleich.com">
-<meta property="og:locale" content="de_CH">
+<meta property="og:locale" content="{i18n.OG_LOCALE[lang]}">
 <meta property="og:image" content="{SITE}/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 {ld}
@@ -437,7 +500,7 @@ def page(path, title, description, body, jsonld):
 </head>
 <body>
 
-{site_nav.nav_html(path)}
+{site_nav.nav_html(path, alts)}
 
 <article class="article kk-page">
 {body}
@@ -446,16 +509,9 @@ def page(path, title, description, body, jsonld):
 <footer>
   <div class="footer-inner">
     <div class="footer-logo">abo<span>vergleich</span>.com</div>
-    <div class="footer-note">Unabh&auml;ngiger Vergleich f&uuml;r die Schweiz. Pr&auml;mien: Bundesamt f&uuml;r Gesundheit (BAG).</div>
+    <div class="footer-note">{note}</div>
     <div class="footer-links">
-      <a href="/krankenkasse/">Kantone</a>
-      <a href="/kasse/">Kassen</a>
-      <a href="/krankenkasse-kuendigen/">K&uuml;ndigen</a>
-      <a href="/krankenkassenpraemien-{YEAR}/">Pr&auml;mien {YEAR}</a>
-      <a href="/krankenkassen-rating/">Rating</a>
-      <a href="/methode/">Methode</a>
-      <a href="/impressum/">Impressum</a>
-      <a href="/datenschutz/">Datenschutz</a>
+      {footer_links}
     </div>
   </div>
 </footer>
@@ -464,6 +520,15 @@ def page(path, title, description, body, jsonld):
 </body>
 </html>
 """
+
+
+def alts_of(fn):
+    """{Sprache: Pfad} aus einer Funktion, die den Pfad in der aktuellen Sprache liefert."""
+    return i18n.each_lang(fn)
+
+
+def home_crumb():
+    return (L("Krankenkassen-Vergleich", "Comparatif caisses-maladie", "Health insurance comparison"), i18n.url("home"))
 
 
 def breadcrumb(items):
@@ -492,8 +557,8 @@ def crumbs_html(items):
 
 
 def rank_table(rows, show_model=True):
-    head = "<tr><th>#</th><th>Kasse</th><th class=\"num\">Prämie / Mt.</th>" \
-           f"<th class=\"num\">vs. {PREV}</th></tr>"
+    head = (f"<tr><th>#</th><th>{L('Kasse', 'Caisse', 'Insurer')}</th><th class=\"num\">{L('Prämie / Mt.', 'Prime / mois', 'Premium / month')}</th>"
+            f"<th class=\"num\">vs. {PREV}</th></tr>")
     body = []
     for n, r in enumerate(rows, 1):
         cls = "kk-up" if (r["change"] or 0) > 0 else "kk-down"
@@ -510,8 +575,8 @@ REGION_GEMEINDEN = {}   # wird in main() gefüllt: (canton, region) -> Gemeinden
 
 def region_label(reg, n_regions, canton=None):
     if n_regions == 1:
-        return "ganzer Kanton"
-    label = f"Prämienregion {reg[-1]}"
+        return L("ganzer Kanton", "tout le canton", "whole canton")
+    label = L(f"Prämienregion {reg[-1]}", f"région de primes {reg[-1]}", f"premium region {reg[-1]}")
     gem = REGION_GEMEINDEN.get((canton, reg), [])
     if 0 < len(gem) <= 3:
         label += f" ({', '.join(gem)})"
@@ -521,65 +586,116 @@ def region_label(reg, n_regions, canton=None):
 # ── Seiten ─────────────────────────────────────────────────────────────────
 
 def canton_page(c, cur, prev_idx, cantons, insurers_c, regions):
-    name, slug = CANTONS[c]
-    path = f"/krankenkasse/{slug}/"
+    name = cname(c)
+    path = canton_url(c)
     rows_c = [r for r in cur if r["canton"] == c]
     regs = sorted({r["region"] for r in rows_c})
     info = cantons[c]
     main = main_region(rows_c, c)
+    ik = im_kanton(c)
 
     any_2500 = ranking(rows_c, c, main, 2500, prev_idx)
     std_300 = ranking(rows_c, c, main, 300, prev_idx, standard_only=True, n=40)
     cheapest = any_2500[0]
     spread = (std_300[-1]["premium"] - std_300[0]["premium"]) * 12 if len(std_300) > 1 else 0
-    where = f"in der {region_label(main, len(regs), c)}" if len(regs) > 1 else "im ganzen Kanton"
+    if len(regs) > 1:
+        where = L(f"in der {region_label(main, len(regs), c)}", f"dans la {region_label(main, len(regs), c)}",
+                  f"in {region_label(main, len(regs), c)}")
+    else:
+        where = L("im ganzen Kanton", "dans tout le canton", "across the whole canton")
 
-    title = f"Günstigste Krankenkasse {name} {YEAR}: Prämien im Vergleich"
+    title = L(f"Günstigste Krankenkasse {name} {YEAR}: Prämien im Vergleich",
+              f"Caisse-maladie {name} {YEAR} : les primes les moins chères",
+              f"Cheapest health insurance {name} {YEAR}: premiums compared")
     if len(title) > 65:
-        title = f"Krankenkasse {name} {YEAR}: die günstigsten Prämien"
-    desc = (f"Krankenkasse {name} {YEAR}: ab CHF {chf(cheapest['premium'])} ({cheapest['insurer']}, Franchise 2'500), "
-            f"Prämien im Schnitt {pct(info['change_pct'])}. Alle Kassen, BAG-Daten, Preistreue-Rating.")
+        title = L(f"Krankenkasse {name} {YEAR}: die günstigsten Prämien",
+                  f"Caisse-maladie {name} {YEAR} : les primes les moins chères",
+                  f"Health insurance {name} {YEAR}: cheapest premiums")
+    desc = L(f"Krankenkasse {name} {YEAR}: ab CHF {chf(cheapest['premium'])} ({cheapest['insurer']}, Franchise 2'500), "
+             f"Prämien im Schnitt {pct(info['change_pct'])}. Alle Kassen, BAG-Daten, Preistreue-Rating.",
+             f"Caisse-maladie {name} {YEAR} : dès CHF {chf(cheapest['premium'])} ({cheapest['insurer']}, franchise 2'500), "
+             f"primes en moyenne {pct(info['change_pct'])}. Toutes les caisses, données OFSP.",
+             f"Health insurance {name} {YEAR}: from CHF {chf(cheapest['premium'])} ({cheapest['insurer']}, deductible 2'500), "
+             f"premiums {pct(info['change_pct'])} on average. All insurers, FOPH data.")
 
-    parts = [crumbs_html([("Krankenkassen-Vergleich", "/"), ("Kantone", "/krankenkasse/"), (name, path)])]
-    parts.append(f'<div class="article-badge">Prämien {YEAR}</div>')
-    parts.append(f"<h1>Krankenkasse {e(name)}: die günstigsten Prämien {YEAR}</h1>")
-    parts.append(f'<div class="article-meta">Offizielle Prämien des BAG für {YEAR} · Stand {date.fromisoformat(PUBLISHED).strftime("%d.%m.%Y")}</div>')
-    parts.append(
+    crumbs = [home_crumb(), (L("Kantone", "Cantons", "Cantons"), i18n.url("cantons")), (name, path)]
+    parts = [crumbs_html(crumbs)]
+    parts.append(f'<div class="article-badge">{L("Prämien", "Primes", "Premiums")} {YEAR}</div>')
+    parts.append(L(f"<h1>Krankenkasse {e(name)}: die günstigsten Prämien {YEAR}</h1>",
+                   f"<h1>Caisse-maladie {e(name)} : les primes les moins chères {YEAR}</h1>",
+                   f"<h1>Health insurance {e(name)}: the cheapest premiums {YEAR}</h1>"))
+    parts.append(f'<div class="article-meta">{L(f"Offizielle Prämien des BAG für {YEAR}", f"Primes officielles de l’OFSP pour {YEAR}", f"Official FOPH premiums for {YEAR}")}'
+                 f' · {L("Stand", "État au", "As of")} {i18n.date_short(PUBLISHED)}</div>')
+    ch_txt = f'{e(cheapest["insurer"])}, {MODEL_LABEL[cheapest["model"]]}'
+    parts.append(L(
         f'<p class="kk-lead">Die günstigste Grundversicherung für Erwachsene im Kanton {e(name)} kostet {YEAR} '
-        f'<strong>CHF {chf(cheapest["premium"])} pro Monat</strong> ({e(cheapest["insurer"])}, {MODEL_LABEL[cheapest["model"]]}, '
-        f'Franchise 2\'500, {where}). Die Leistungen sind bei allen Kassen gesetzlich gleich, du zahlst nur einen anderen Preis.</p>')
+        f'<strong>CHF {chf(cheapest["premium"])} pro Monat</strong> ({ch_txt}, '
+        f'Franchise 2\'500, {where}). Die Leistungen sind bei allen Kassen gesetzlich gleich, du zahlst nur einen anderen Preis.</p>',
+        f'<p class="kk-lead">L’assurance de base la moins chère pour les adultes {e(ik)} coûte en {YEAR} '
+        f'<strong>CHF {chf(cheapest["premium"])} par mois</strong> ({ch_txt}, '
+        f'franchise 2\'500, {where}). Les prestations sont fixées par la loi et identiques dans toutes les caisses : seul le prix change.</p>',
+        f'<p class="kk-lead">The cheapest basic health insurance for adults {e(ik)} costs '
+        f'<strong>CHF {chf(cheapest["premium"])} per month</strong> in {YEAR} ({ch_txt}, '
+        f'deductible 2\'500, {where}). Benefits are set by law and identical at every insurer, you only pay a different price.</p>'))
+    lbl1 = L(f"Prämienveränderung {e(name)} {PREV} auf {YEAR} (Standardmodell, Franchise 300)",
+             f"Évolution des primes {e(name)} de {PREV} à {YEAR} (modèle standard, franchise 300)",
+             f"Premium change {e(name)} {PREV} to {YEAR} (standard model, deductible 300)")
+    lbl2 = L("Durchschnittliche Standardprämie pro Monat, Franchise 300",
+             "Prime standard moyenne par mois, franchise 300",
+             "Average standard premium per month, deductible 300")
+    lbl3 = L("pro Jahr zwischen teuerster und günstigster Kasse, gleiches Modell und gleiche Franchise",
+             "par an entre la caisse la plus chère et la moins chère, même modèle et même franchise",
+             "per year between the most expensive and the cheapest insurer, same model and deductible")
     parts.append(f"""<div class="kk-facts">
-  <div class="kk-fact"><div class="kk-fact-val">{pct(info['change_pct'])}</div><div class="kk-fact-label">Prämienveränderung {e(name)} {PREV} auf {YEAR} (Standardmodell, Franchise 300)</div></div>
-  <div class="kk-fact"><div class="kk-fact-val">CHF {chf(info['avg_standard'], 0)}</div><div class="kk-fact-label">Durchschnittliche Standardprämie pro Monat, Franchise 300</div></div>
-  <div class="kk-fact"><div class="kk-fact-val">CHF {chf(spread, 0)}</div><div class="kk-fact-label">pro Jahr zwischen teuerster und günstigster Kasse, gleiches Modell und gleiche Franchise</div></div>
+  <div class="kk-fact"><div class="kk-fact-val">{pct(info['change_pct'])}</div><div class="kk-fact-label">{lbl1}</div></div>
+  <div class="kk-fact"><div class="kk-fact-val">CHF {chf(info['avg_standard'], 0)}</div><div class="kk-fact-label">{lbl2}</div></div>
+  <div class="kk-fact"><div class="kk-fact-val">CHF {chf(spread, 0)}</div><div class="kk-fact-label">{lbl3}</div></div>
 </div>""")
-    parts.append(f'<a class="kk-cta" href="/#kk-rechner">Deine Prämie mit PLZ berechnen &rarr;</a>')
+    parts.append(f'<a class="kk-cta" href="{i18n.url("home")}#kk-rechner">'
+                 f'{L("Deine Prämie mit PLZ berechnen", "Calculer votre prime avec votre NPA", "Calculate your premium by postcode")} &rarr;</a>')
 
-    parts.append(f"<h2>Die 10 günstigsten Krankenkassen im Kanton {e(name)} {YEAR}</h2>")
-    parts.append(f"<p>Erwachsene ab 26, Franchise CHF 2'500, mit Unfalldeckung, {where}. Pro Kasse der günstigste Tarif. "
-                 f"Die Veränderung vergleicht denselben Tarif mit {PREV}.</p>")
+    parts.append(L(f"<h2>Die 10 günstigsten Krankenkassen im Kanton {e(name)} {YEAR}</h2>",
+                   f"<h2>Les 10 caisses-maladie les moins chères {e(ik)} en {YEAR}</h2>",
+                   f"<h2>The 10 cheapest health insurers {e(ik)} {YEAR}</h2>"))
+    parts.append(L(f"<p>Erwachsene ab 26, Franchise CHF 2'500, mit Unfalldeckung, {where}. Pro Kasse der günstigste Tarif. "
+                   f"Die Veränderung vergleicht denselben Tarif mit {PREV}.</p>",
+                   f"<p>Adultes dès 26 ans, franchise CHF 2'500, avec couverture accidents, {where}. Pour chaque caisse, le tarif le moins cher. "
+                   f"L’évolution compare le même tarif avec {PREV}.</p>",
+                   f"<p>Adults aged 26 and over, deductible CHF 2'500, with accident cover, {where}. The cheapest tariff of each insurer. "
+                   f"The change compares the same tariff with {PREV}.</p>"))
     parts.append(rank_table(any_2500))
 
-    parts.append(f"<h2>Standardmodell mit freier Arztwahl</h2>")
-    parts.append(f"<p>Wer keine Einschränkung bei der Arztwahl will: die günstigsten Kassen im Standardmodell, "
-                 f"Franchise CHF 300, {where}.</p>")
+    parts.append(L("<h2>Standardmodell mit freier Arztwahl</h2>", "<h2>Modèle standard avec libre choix du médecin</h2>",
+                   "<h2>Standard model with free choice of doctor</h2>"))
+    parts.append(L(f"<p>Wer keine Einschränkung bei der Arztwahl will: die günstigsten Kassen im Standardmodell, "
+                   f"Franchise CHF 300, {where}.</p>",
+                   f"<p>Pour qui ne veut aucune restriction dans le choix du médecin : les caisses les moins chères en modèle standard, "
+                   f"franchise CHF 300, {where}.</p>",
+                   f"<p>If you want no restriction on your choice of doctor: the cheapest insurers in the standard model, "
+                   f"deductible CHF 300, {where}.</p>"))
     parts.append(rank_table(std_300[:10], show_model=False))
 
     if len(regs) > 1:
-        parts.append(f"<h2>Prämienregionen im Kanton {e(name)}</h2>")
-        parts.append(f"<p>Der Kanton {e(name)} ist in {len(regs)} Prämienregionen aufgeteilt. Die Tabellen oben gelten für "
-                     f"{region_label(main, len(regs), c)}. In den anderen Regionen ist die günstigste Kasse:</p><ul>")
+        parts.append(L(f"<h2>Prämienregionen im Kanton {e(name)}</h2>", f"<h2>Régions de primes {e(ik)}</h2>",
+                       f"<h2>Premium regions {e(ik)}</h2>"))
+        ml = region_label(main, len(regs), c)
+        parts.append(L(f"<p>Der Kanton {e(name)} ist in {len(regs)} Prämienregionen aufgeteilt. Die Tabellen oben gelten für "
+                       f"{ml}. In den anderen Regionen ist die günstigste Kasse:</p><ul>",
+                       f"<p>Le canton est divisé en {len(regs)} régions de primes. Les tableaux ci-dessus valent pour la "
+                       f"{ml}. Dans les autres régions, la caisse la moins chère est :</p><ul>",
+                       f"<p>The canton is divided into {len(regs)} premium regions. The tables above apply to "
+                       f"{ml}. In the other regions, the cheapest insurer is:</p><ul>"))
         for reg in regs:
             if reg == main:
                 continue
             best = ranking(rows_c, c, reg, 2500, prev_idx, n=1)[0]
             parts.append(f"<li><strong>{region_label(reg, len(regs), c)}:</strong> {e(best['insurer'])} "
-                         f"({MODEL_LABEL[best['model']]}), CHF {chf(best['premium'])} pro Monat</li>")
+                         f"({MODEL_LABEL[best['model']]}), CHF {chf(best['premium'])} {L('pro Monat', 'par mois', 'per month')}</li>")
         parts.append("</ul>")
         for reg in regs:
             gem = regions.get(c, {}).get(reg)
             if gem:
-                parts.append(f'<details class="kk-gemeinden"><summary>Gemeinden in {region_label(reg, len(regs))} ({len(gem)})</summary>'
+                parts.append(f'<details class="kk-gemeinden"><summary>{L("Gemeinden in", "Communes de la", "Municipalities in")} {region_label(reg, len(regs))} ({len(gem)})</summary>'
                              f'<p>{e(", ".join(gem))}</p></details>')
 
     parts.append(rating_canton_block(c, main))
@@ -587,161 +703,296 @@ def canton_page(c, cur, prev_idx, cantons, insurers_c, regions):
 
     ranked = sorted(insurers_c, key=lambda x: x["change"])
     if len(ranked) >= 4:
-        parts.append(f"<h2>So stark schlägt jede Kasse im Kanton {e(name)} auf</h2>")
-        parts.append(f"<p>Veränderung der Standardprämie von {PREV} auf {YEAR}, Franchise 300, Erwachsene, Mittel über die Prämienregionen. Wer am wenigsten aufschlägt, steht oben. "
-                     f"Durchschnitt im Kanton: <strong>{pct(info['change_pct'])}</strong>.</p>")
+        parts.append(L(f"<h2>So stark schlägt jede Kasse im Kanton {e(name)} auf</h2>",
+                       f"<h2>La hausse de chaque caisse {e(ik)}</h2>",
+                       f"<h2>How much each insurer raises premiums {e(ik)}</h2>"))
+        parts.append(L(f"<p>Veränderung der Standardprämie von {PREV} auf {YEAR}, Franchise 300, Erwachsene, Mittel über die Prämienregionen. Wer am wenigsten aufschlägt, steht oben. "
+                       f"Durchschnitt im Kanton: <strong>{pct(info['change_pct'])}</strong>.</p>",
+                       f"<p>Évolution de la prime standard de {PREV} à {YEAR}, franchise 300, adultes, moyenne des régions de primes. La caisse qui augmente le moins figure en tête. "
+                       f"Moyenne du canton : <strong>{pct(info['change_pct'])}</strong>.</p>",
+                       f"<p>Change in the standard premium from {PREV} to {YEAR}, deductible 300, adults, average across premium regions. The smallest increase is at the top. "
+                       f"Canton average: <strong>{pct(info['change_pct'])}</strong>.</p>"))
         rows_html = "".join(
             f'<tr><td><strong>{e(x["name"])}</strong></td><td class="num">CHF {chf(x["premium"], 0)}</td>'
             f'<td class="num {"kk-up" if x["change"] > 0 else "kk-down"}">{pct(x["change"])}</td></tr>'
             for x in ranked)
-        parts.append(f'<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Kasse</th>'
+        parts.append(f'<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>{L("Kasse", "Caisse", "Insurer")}</th>'
                      f'<th class="num">Ø Standard {YEAR}</th><th class="num">vs. {PREV}</th></tr></thead>'
                      f'<tbody>{rows_html}</tbody></table></div>')
 
     qa = [
-        (f"Welche Krankenkasse ist {YEAR} im Kanton {name} am günstigsten?",
-         f"Für Erwachsene mit Franchise 2'500 und Unfalldeckung ist {cheapest['insurer']} "
-         f"({MODEL_LABEL[cheapest['model']]}) mit CHF {chf(cheapest['premium'])} pro Monat am günstigsten, {where}. "
-         f"Im Standardmodell mit Franchise 300 ist es {std_300[0]['insurer']} mit CHF {chf(std_300[0]['premium'])}."),
-        (f"Wie stark steigen die Krankenkassenprämien {YEAR} im Kanton {name}?",
-         f"Die Standardprämie für Erwachsene mit Franchise 300 steigt im Kanton {name} im Schnitt um "
-         f"{pct(info['change_pct'])}, gewichtet nach Versichertenzahl der Kassen. Schweizweit steigt die mittlere "
-         f"Prämie laut BAG um {BAG_OFFICIAL['change_pct']:.1f} Prozent."),
-        (f"Bis wann kann ich die Krankenkasse für {YEAR} wechseln?",
-         f"Die Kündigung der Grundversicherung muss bis am {DEADLINE} bei deiner Kasse eingetroffen sein. "
-         f"Die neue Kasse muss dich ohne Gesundheitsfragen aufnehmen, der Wechsel gilt ab 1. Januar {YEAR}."),
+        (L(f"Welche Krankenkasse ist {YEAR} im Kanton {name} am günstigsten?",
+           f"Quelle est la caisse-maladie la moins chère {ik} en {YEAR} ?",
+           f"Which health insurer is cheapest {ik} in {YEAR}?"),
+         L(f"Für Erwachsene mit Franchise 2'500 und Unfalldeckung ist {cheapest['insurer']} "
+           f"({MODEL_LABEL[cheapest['model']]}) mit CHF {chf(cheapest['premium'])} pro Monat am günstigsten, {where}. "
+           f"Im Standardmodell mit Franchise 300 ist es {std_300[0]['insurer']} mit CHF {chf(std_300[0]['premium'])}.",
+           f"Pour les adultes avec une franchise de 2'500 et la couverture accidents, {cheapest['insurer']} "
+           f"({MODEL_LABEL[cheapest['model']]}) est la moins chère avec CHF {chf(cheapest['premium'])} par mois, {where}. "
+           f"En modèle standard avec franchise 300, c’est {std_300[0]['insurer']} avec CHF {chf(std_300[0]['premium'])}.",
+           f"For adults with a 2'500 deductible and accident cover, {cheapest['insurer']} "
+           f"({MODEL_LABEL[cheapest['model']]}) is the cheapest at CHF {chf(cheapest['premium'])} per month, {where}. "
+           f"In the standard model with a 300 deductible it is {std_300[0]['insurer']} at CHF {chf(std_300[0]['premium'])}.")),
+        (L(f"Wie stark steigen die Krankenkassenprämien {YEAR} im Kanton {name}?",
+           f"De combien les primes augmentent-elles en {YEAR} {ik} ?",
+           f"How much are health insurance premiums rising in {YEAR} {ik}?"),
+         L(f"Die Standardprämie für Erwachsene mit Franchise 300 steigt im Kanton {name} im Schnitt um "
+           f"{pct(info['change_pct'])}, gewichtet nach Versichertenzahl der Kassen. Schweizweit steigt die mittlere "
+           f"Prämie laut BAG um {BAG_OFFICIAL['change_pct']:.1f} Prozent.",
+           f"La prime standard des adultes avec franchise 300 augmente en moyenne de {pct(info['change_pct'])} {ik}, "
+           f"pondérée selon le nombre d’assurés des caisses. Pour toute la Suisse, la prime moyenne augmente de "
+           f"{i18n.dec(BAG_OFFICIAL['change_pct'])} % selon l’OFSP.",
+           f"The standard premium for adults with a 300 deductible rises by {pct(info['change_pct'])} on average {ik}, "
+           f"weighted by each insurer’s number of insured persons. Across Switzerland, the average premium rises by "
+           f"{i18n.dec(BAG_OFFICIAL['change_pct'])}% according to the FOPH.")),
+        (L(f"Bis wann kann ich die Krankenkasse für {YEAR} wechseln?",
+           f"Jusqu’à quand puis-je changer de caisse-maladie pour {YEAR} ?",
+           f"When is the deadline to switch health insurer for {YEAR}?"),
+         L(f"Die Kündigung der Grundversicherung muss bis am {deadline()} bei deiner Kasse eingetroffen sein. "
+           f"Die neue Kasse muss dich ohne Gesundheitsfragen aufnehmen, der Wechsel gilt ab 1. Januar {YEAR}.",
+           f"La résiliation de l’assurance de base doit parvenir à votre caisse au plus tard le {deadline()}. "
+           f"La nouvelle caisse doit vous accepter sans questions de santé, le changement prend effet le 1er janvier {YEAR}.",
+           f"Your cancellation of basic insurance must reach your insurer by {deadline()}. "
+           f"The new insurer must accept you without health questions, and the switch takes effect on 1 January {YEAR}.")),
     ]
-    parts.append('<div class="kk-faq"><h2>Häufige Fragen</h2>')
+    parts.append(f'<div class="kk-faq"><h2>{L("Häufige Fragen", "Questions fréquentes", "Frequently asked questions")}</h2>')
     for q, a in qa:
         parts.append(f"<h3>{e(q)}</h3><p>{e(a)}</p>")
     parts.append("</div>")
-    parts.append(f'<p class="kk-note">Quelle: Bundesamt für Gesundheit (BAG), Prämien {YEAR} und {PREV} '
-                 f'(<a href="https://opendata.swiss/de/dataset/health-insurance-premiums">opendata.swiss</a>). '
-                 f'Angaben ohne Gewähr. So rechnen wir: <a href="/krankenkassenpraemien-{YEAR}/#methode">Methode</a>. '
-                 f'Alle Kantone: <a href="/krankenkasse/">Übersicht</a>.</p>')
+    rep = i18n.url("report")
+    parts.append(L(
+        f'<p class="kk-note">Quelle: Bundesamt für Gesundheit (BAG), Prämien {YEAR} und {PREV} '
+        f'(<a href="https://opendata.swiss/de/dataset/health-insurance-premiums">opendata.swiss</a>). '
+        f'Angaben ohne Gewähr. So rechnen wir: <a href="{rep}#methode">Methode</a>. '
+        f'Alle Kantone: <a href="{i18n.url("cantons")}">Übersicht</a>.</p>',
+        f'<p class="kk-note">Source : Office fédéral de la santé publique (OFSP), primes {YEAR} et {PREV} '
+        f'(<a href="https://opendata.swiss/fr/dataset/health-insurance-premiums">opendata.swiss</a>). '
+        f'Sans garantie. Notre calcul : <a href="{rep}#methode">méthode</a>. '
+        f'Tous les cantons : <a href="{i18n.url("cantons")}">vue d’ensemble</a>.</p>',
+        f'<p class="kk-note">Source: Federal Office of Public Health (FOPH), premiums {YEAR} and {PREV} '
+        f'(<a href="https://opendata.swiss/en/dataset/health-insurance-premiums">opendata.swiss</a>). '
+        f'No liability for accuracy. How we calculate: <a href="{rep}#methode">methodology</a>. '
+        f'All cantons: <a href="{i18n.url("cantons")}">overview</a>.</p>'))
 
-    jsonld = [breadcrumb([("Krankenkassen-Vergleich", "/"), ("Kantone", "/krankenkasse/"), (name, path)]), faq(qa)]
-    return path, page(path, title, desc, "\n".join(parts), jsonld)
+    jsonld = [breadcrumb(crumbs), faq(qa)]
+    return path, page(path, title, desc, "\n".join(parts), jsonld, alts_of(lambda: canton_url(c)))
 
 
 def hub_page(cantons, cheapest_by_canton):
-    path = "/krankenkasse/"
-    title = f"Günstigste Krankenkasse {YEAR} nach Kanton: alle 26 Kantone"
-    desc = (f"Krankenkassenprämien {YEAR} für alle 26 Kantone: günstigste Kasse, durchschnittliche Standardprämie "
-            f"und Veränderung zu {PREV}. Offizielle BAG-Daten.")
+    path = i18n.url("cantons")
+    title = L(f"Günstigste Krankenkasse {YEAR} nach Kanton: alle 26 Kantone",
+              f"Caisse-maladie la moins chère {YEAR} par canton : les 26 cantons",
+              f"Cheapest health insurer {YEAR} by canton: all 26 cantons")
+    desc = L(f"Krankenkassenprämien {YEAR} für alle 26 Kantone: günstigste Kasse, durchschnittliche Standardprämie "
+             f"und Veränderung zu {PREV}. Offizielle BAG-Daten.",
+             f"Primes d’assurance-maladie {YEAR} pour les 26 cantons : caisse la moins chère, prime standard moyenne "
+             f"et évolution par rapport à {PREV}. Données officielles de l’OFSP.",
+             f"Health insurance premiums {YEAR} for all 26 cantons: cheapest insurer, average standard premium "
+             f"and change since {PREV}. Official FOPH data.")
     rows = []
-    for c, (name, slug) in sorted(CANTONS.items(), key=lambda x: x[1][0]):
+    for c, name, curl in sorted_cantons():
         ch = cheapest_by_canton[c]
         reg = (RATING or {}).get("regions", {}).get(f"{c}|{MAIN_REGION.get(c)}", {})
         top = max(reg.items(), key=lambda x: x[1]["note"] or 0, default=None)
-        durable = (f'{e(INSURER_NAMES[str(top[0])])}<span class="sub">Note {note_fmt(top[1]["note"])}</span>' if top else "–")
+        durable = (f'{e(INSURER_NAMES[str(top[0])])}<span class="sub">{L("Note", "Note", "Score")} {note_fmt(top[1]["note"])}</span>' if top else "–")
         rows.append(
-            f'<tr><td><a href="/krankenkasse/{slug}/"><strong>{e(name)}</strong></a></td>'
-            f'<td>{e(ch["insurer"])}<span class="sub">CHF {chf(ch["premium"])}, Franchise 2\'500</span></td>'
+            f'<tr><td><a href="{curl}"><strong>{e(name)}</strong></a></td>'
+            f'<td>{e(ch["insurer"])}<span class="sub">CHF {chf(ch["premium"])}, {L("Franchise", "franchise", "deductible")} 2\'500</span></td>'
             f'<td>{durable}</td>'
             f'<td class="num">CHF {chf(cantons[c]["avg_standard"], 0)}</td>'
             f'<td class="num kk-up">{pct(cantons[c]["change_pct"])}</td></tr>')
+    crumbs = [home_crumb(), (L("Kantone", "Cantons", "Cantons"), path)]
+    calc = f'{i18n.url("home")}#kk-rechner'
+    rep = i18n.url("report")
     body = [
-        crumbs_html([("Krankenkassen-Vergleich", "/"), ("Kantone", path)]),
-        f'<div class="article-badge">Prämien {YEAR}</div>',
-        f"<h1>Günstigste Krankenkasse {YEAR} in jedem Kanton</h1>",
-        f'<div class="article-meta">Offizielle Prämien des BAG · alle 26 Kantone</div>',
-        f"<p class=\"kk-lead\">Wie teuer die Grundversicherung ist, hängt vor allem vom Wohnort ab. "
-        f"Hier siehst du für jeden Kanton die günstigste Kasse {YEAR}, die durchschnittliche Standardprämie und wie stark sie steigt.</p>",
-        f'<a class="kk-cta" href="/#kk-rechner">Prämie für deine PLZ berechnen &rarr;</a>',
-        f'<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Kanton</th><th>Günstigste Kasse</th><th>Dauerhaft günstig</th>'
+        crumbs_html(crumbs),
+        f'<div class="article-badge">{L("Prämien", "Primes", "Premiums")} {YEAR}</div>',
+        L(f"<h1>Günstigste Krankenkasse {YEAR} in jedem Kanton</h1>",
+          f"<h1>La caisse-maladie la moins chère {YEAR} dans chaque canton</h1>",
+          f"<h1>The cheapest health insurer {YEAR} in every canton</h1>"),
+        L('<div class="article-meta">Offizielle Prämien des BAG · alle 26 Kantone</div>',
+          '<div class="article-meta">Primes officielles de l’OFSP · les 26 cantons</div>',
+          '<div class="article-meta">Official FOPH premiums · all 26 cantons</div>'),
+        L(f"<p class=\"kk-lead\">Wie teuer die Grundversicherung ist, hängt vor allem vom Wohnort ab. "
+          f"Hier siehst du für jeden Kanton die günstigste Kasse {YEAR}, die durchschnittliche Standardprämie und wie stark sie steigt.</p>",
+          f"<p class=\"kk-lead\">Le prix de l’assurance de base dépend surtout du lieu de domicile. "
+          f"Voici pour chaque canton la caisse la moins chère en {YEAR}, la prime standard moyenne et sa hausse.</p>",
+          f"<p class=\"kk-lead\">What you pay for basic health insurance depends mostly on where you live. "
+          f"Here you can see the cheapest insurer {YEAR} in each canton, the average standard premium and how much it rises.</p>"),
+        f'<a class="kk-cta" href="{calc}">{L("Prämie für deine PLZ berechnen", "Calculer la prime pour votre NPA", "Calculate the premium for your postcode")} &rarr;</a>',
+        f'<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>{L("Kanton", "Canton", "Canton")}</th>'
+        f'<th>{L("Günstigste Kasse", "Caisse la moins chère", "Cheapest insurer")}</th><th>{L("Dauerhaft günstig", "Durablement avantageuse", "Consistently cheap")}</th>'
         f'<th class="num">Ø Standard</th><th class="num">vs. {PREV}</th></tr></thead><tbody>{"".join(rows)}</tbody></table></div>',
-        f'<p class="kk-note">Günstigste Kasse: Erwachsene, Franchise 2\'500, mit Unfall, alle Modelle, Hauptregion des Kantons. '
-        f'Dauerhaft günstig: beste Note im <a href="{RATING_PATH}">Preistreue-Rating</a> in der Hauptregion. '
-        f'Ø Standard und Veränderung: Standardmodell, Franchise 300, gewichtet nach Versichertenzahl. '
-        f'Details zur Rechnung: <a href="/krankenkassenpraemien-{YEAR}/#methode">Methode</a>.</p>',
+        L(f'<p class="kk-note">Günstigste Kasse: Erwachsene, Franchise 2\'500, mit Unfall, alle Modelle, Hauptregion des Kantons. '
+          f'Dauerhaft günstig: beste Note im <a href="{RATING_PATH}">Preistreue-Rating</a> in der Hauptregion. '
+          f'Ø Standard und Veränderung: Standardmodell, Franchise 300, gewichtet nach Versichertenzahl. '
+          f'Details zur Rechnung: <a href="{rep}#methode">Methode</a>.</p>',
+          f'<p class="kk-note">Caisse la moins chère : adultes, franchise 2\'500, avec accidents, tous les modèles, région principale du canton. '
+          f'Durablement avantageuse : meilleure note de la <a href="{i18n.url("rating")}">notation Constance des primes</a> dans la région principale. '
+          f'Ø standard et évolution : modèle standard, franchise 300, pondéré selon le nombre d’assurés. '
+          f'Détails du calcul : <a href="{rep}#methode">méthode</a>.</p>',
+          f'<p class="kk-note">Cheapest insurer: adults, deductible 2\'500, with accident cover, all models, main region of the canton. '
+          f'Consistently cheap: best score in the <a href="{i18n.url("rating")}">Price Consistency Rating</a> in the main region. '
+          f'Ø standard and change: standard model, deductible 300, weighted by number of insured persons. '
+          f'Calculation details: <a href="{rep}#methode">methodology</a>.</p>'),
     ]
-    jsonld = [breadcrumb([("Krankenkassen-Vergleich", "/"), ("Kantone", path)])]
-    return path, page(path, title, desc, "\n".join(body), jsonld)
+    jsonld = [breadcrumb(crumbs)]
+    return path, page(path, title, desc, "\n".join(body), jsonld, dict(i18n.ROUTES["cantons"]))
 
 
 def report_page(cantons, insurers, nat, model_counts, jojo):
-    path = f"/krankenkassenpraemien-{YEAR}/"
+    path = i18n.url("report")
     by_change = sorted(cantons.items(), key=lambda x: -x[1]["change_pct"])
     big = sorted([x for x in insurers.values() if x["bestand"] >= MIN_BESTAND_RANKING], key=lambda x: x["change_pct"])
-    title = f"Krankenkassenprämien {YEAR}: So stark steigen sie in deinem Kanton"
-    desc = (f"Prämien {YEAR}: +{BAG_OFFICIAL['change_pct']:.1f}% im Schnitt (BAG). Unsere Auswertung aller Kassen und "
-            f"Kantone: wer am stärksten aufschlägt, wer günstig bleibt, und bis wann du wechseln kannst.")
+    bag = BAG_OFFICIAL["change_pct"]
+    bag_t = i18n.dec(bag)
+    title = L(f"Krankenkassenprämien {YEAR}: So stark steigen sie in deinem Kanton",
+              f"Primes d’assurance-maladie {YEAR} : la hausse dans votre canton",
+              f"Health insurance premiums {YEAR}: how much they rise in your canton")
+    desc = L(f"Prämien {YEAR}: +{bag:.1f}% im Schnitt (BAG). Unsere Auswertung aller Kassen und "
+             f"Kantone: wer am stärksten aufschlägt, wer günstig bleibt, und bis wann du wechseln kannst.",
+             f"Primes {YEAR} : +{bag_t} % en moyenne (OFSP). Notre analyse de toutes les caisses et de tous les cantons : "
+             f"qui augmente le plus, qui reste avantageux et jusqu’à quand changer.",
+             f"Premiums {YEAR}: +{bag_t}% on average (FOPH). Our analysis of all insurers and cantons: "
+             f"who raises most, who stays cheap, and the deadline to switch.")
     hi, lo = by_change[0], by_change[-1]
     canton_rows = "".join(
-        f'<tr><td><a href="/krankenkasse/{CANTONS[c][1]}/">{e(CANTONS[c][0])}</a></td>'
+        f'<tr><td><a href="{canton_url(c)}">{e(cname(c))}</a></td>'
         f'<td class="num">CHF {chf(v["avg_standard"], 0)}</td><td class="num kk-up">{pct(v["change_pct"])}</td></tr>'
         for c, v in by_change)
     ins_rows = "".join(
-        f'<tr><td><strong>{e(x["name"])}</strong><span class="sub">{x["cantons"]} Kantone, '
-        f'{chf(x["bestand"] / 1000, 0)}k Versicherte</span></td>'
+        f'<tr><td><strong>{e(x["name"])}</strong><span class="sub">{x["cantons"]} {L("Kantone", "cantons", "cantons")}, '
+        f'{chf(x["bestand"] / 1000, 0)}k {L("Versicherte", "assurés", "insured")}</span></td>'
         f'<td class="num {"kk-up" if x["change_pct"] > 0 else "kk-down"}">{pct(x["change_pct"])}</td></tr>'
         for x in big)
-    models = "".join(f"<li><strong>{MODEL_LABEL[m]}:</strong> {n} Kantone</li>"
+    models = "".join(f"<li><strong>{MODEL_LABEL[m]}:</strong> {n} {L('Kantone', 'cantons', 'cantons')}</li>"
                      for m, n in sorted(model_counts.items(), key=lambda x: -x[1]))
+    mx, mn = BAG_OFFICIAL["max_canton"], BAG_OFFICIAL["min_canton"]
     qa = [
-        (f"Wie stark steigen die Krankenkassenprämien {YEAR}?",
-         f"Die mittlere Prämie steigt laut BAG um {BAG_OFFICIAL['change_pct']:.1f} Prozent. Erwachsene zahlen im Schnitt "
-         f"CHF {chf(BAG_OFFICIAL['adult_mean'])} pro Monat, CHF {chf(BAG_OFFICIAL['adult_delta'])} mehr als {PREV}."),
-        (f"In welchem Kanton steigen die Prämien {YEAR} am stärksten?",
-         f"Laut BAG im Kanton {CANTONS[BAG_OFFICIAL['max_canton'][0]][0]} (+{BAG_OFFICIAL['max_canton'][1]:.1f}%), am "
-         f"schwächsten in {CANTONS[BAG_OFFICIAL['min_canton'][0]][0]} (+{BAG_OFFICIAL['min_canton'][1]:.1f}%). "
-         f"Im Standardmodell mit Franchise 300 steigt die Prämie nach unserer Auswertung in {CANTONS[hi[0]][0]} am stärksten "
-         f"({pct(hi[1]['change_pct'])}) und in {CANTONS[lo[0]][0]} am wenigsten ({pct(lo[1]['change_pct'])})."),
-        (f"Bis wann muss ich die Krankenkasse kündigen?",
-         f"Die Kündigung der Grundversicherung muss bis am {DEADLINE} bei der Kasse eingetroffen sein. "
-         f"Die neue Kasse gilt dann ab 1. Januar {YEAR}."),
+        (L(f"Wie stark steigen die Krankenkassenprämien {YEAR}?", f"De combien les primes augmentent-elles en {YEAR} ?",
+           f"How much are health insurance premiums rising in {YEAR}?"),
+         L(f"Die mittlere Prämie steigt laut BAG um {bag:.1f} Prozent. Erwachsene zahlen im Schnitt "
+           f"CHF {chf(BAG_OFFICIAL['adult_mean'])} pro Monat, CHF {chf(BAG_OFFICIAL['adult_delta'])} mehr als {PREV}.",
+           f"Selon l’OFSP, la prime moyenne augmente de {bag_t} %. Les adultes paient en moyenne "
+           f"CHF {chf(BAG_OFFICIAL['adult_mean'])} par mois, soit CHF {chf(BAG_OFFICIAL['adult_delta'])} de plus qu’en {PREV}.",
+           f"According to the FOPH, the average premium rises by {bag_t}%. Adults pay CHF {chf(BAG_OFFICIAL['adult_mean'])} "
+           f"per month on average, CHF {chf(BAG_OFFICIAL['adult_delta'])} more than in {PREV}.")),
+        (L(f"In welchem Kanton steigen die Prämien {YEAR} am stärksten?", f"Dans quel canton les primes augmentent-elles le plus en {YEAR} ?",
+           f"In which canton are premiums rising most in {YEAR}?"),
+         L(f"Laut BAG im Kanton {CANTONS[mx[0]][0]} (+{mx[1]:.1f}%), am "
+           f"schwächsten in {CANTONS[mn[0]][0]} (+{mn[1]:.1f}%). "
+           f"Im Standardmodell mit Franchise 300 steigt die Prämie nach unserer Auswertung in {CANTONS[hi[0]][0]} am stärksten "
+           f"({pct(hi[1]['change_pct'])}) und in {CANTONS[lo[0]][0]} am wenigsten ({pct(lo[1]['change_pct'])}).",
+           f"Selon l’OFSP, {im_kanton(mx[0])} (+{i18n.dec(mx[1])} %), et le moins {im_kanton(mn[0])} (+{i18n.dec(mn[1])} %). "
+           f"En modèle standard avec franchise 300, notre analyse montre la plus forte hausse {im_kanton(hi[0])} "
+           f"({pct(hi[1]['change_pct'])}) et la plus faible {im_kanton(lo[0])} ({pct(lo[1]['change_pct'])}).",
+           f"According to the FOPH, {im_kanton(mx[0])} (+{i18n.dec(mx[1])}%), and least {im_kanton(mn[0])} (+{i18n.dec(mn[1])}%). "
+           f"In the standard model with a 300 deductible, our analysis shows the largest rise {im_kanton(hi[0])} "
+           f"({pct(hi[1]['change_pct'])}) and the smallest {im_kanton(lo[0])} ({pct(lo[1]['change_pct'])}).")),
+        (L("Bis wann muss ich die Krankenkasse kündigen?", "Jusqu’à quand dois-je résilier ma caisse-maladie ?",
+           "What is the deadline to cancel my health insurance?"),
+         L(f"Die Kündigung der Grundversicherung muss bis am {deadline()} bei der Kasse eingetroffen sein. "
+           f"Die neue Kasse gilt dann ab 1. Januar {YEAR}.",
+           f"La résiliation de l’assurance de base doit parvenir à la caisse au plus tard le {deadline()}. "
+           f"La nouvelle caisse vous assure alors dès le 1er janvier {YEAR}.",
+           f"Your cancellation of basic insurance must reach the insurer by {deadline()}. "
+           f"The new insurer then covers you from 1 January {YEAR}.")),
     ]
+    crumbs = [home_crumb(), (L(f"Prämien {YEAR}", f"Primes {YEAR}", f"Premiums {YEAR}"), path)]
+    calc = f'{i18n.url("home")}#kk-rechner'
+    insurer = L("Kasse", "Caisse", "Insurer")
+    od = L("de", "fr", "en")
     body = [
-        crumbs_html([("Krankenkassen-Vergleich", "/"), (f"Prämien {YEAR}", path)]),
-        f'<div class="article-badge">Auswertung</div>',
-        f"<h1>Krankenkassenprämien {YEAR}: wer wie stark aufschlägt</h1>",
-        f'<div class="article-meta">Veröffentlicht {date.fromisoformat(PUBLISHED).strftime("%d.%m.%Y")} · Daten: BAG, Prämien {PREV} und {YEAR}</div>',
-        f"<p class=\"kk-lead\">Die Krankenkassenprämien steigen {YEAR} erneut. Die mittlere Prämie legt laut Bundesamt für Gesundheit um "
-        f"<strong>{BAG_OFFICIAL['change_pct']:.1f} Prozent</strong> zu (<a href=\"{BAG_OFFICIAL['source_url']}\">SRF</a>). "
-        f"Wir haben die Prämien aller Kassen in allen Kantonen verglichen: Der Durchschnitt verdeckt, wie unterschiedlich die Kassen aufschlagen.</p>",
+        crumbs_html(crumbs),
+        f'<div class="article-badge">{L("Auswertung", "Analyse", "Analysis")}</div>',
+        L(f"<h1>Krankenkassenprämien {YEAR}: wer wie stark aufschlägt</h1>",
+          f"<h1>Primes d’assurance-maladie {YEAR} : qui augmente de combien</h1>",
+          f"<h1>Health insurance premiums {YEAR}: who raises them by how much</h1>"),
+        L(f'<div class="article-meta">Veröffentlicht {i18n.date_short(PUBLISHED)} · Daten: BAG, Prämien {PREV} und {YEAR}</div>',
+          f'<div class="article-meta">Publié le {i18n.date_short(PUBLISHED)} · Données : OFSP, primes {PREV} et {YEAR}</div>',
+          f'<div class="article-meta">Published {i18n.date_short(PUBLISHED)} · Data: FOPH, premiums {PREV} and {YEAR}</div>'),
+        L(f"<p class=\"kk-lead\">Die Krankenkassenprämien steigen {YEAR} erneut. Die mittlere Prämie legt laut Bundesamt für Gesundheit um "
+          f"<strong>{bag:.1f} Prozent</strong> zu (<a href=\"{BAG_OFFICIAL['source_url']}\">SRF</a>). "
+          f"Wir haben die Prämien aller Kassen in allen Kantonen verglichen: Der Durchschnitt verdeckt, wie unterschiedlich die Kassen aufschlagen.</p>",
+          f"<p class=\"kk-lead\">Les primes d’assurance-maladie augmentent encore en {YEAR}. Selon l’Office fédéral de la santé publique, la prime moyenne progresse de "
+          f"<strong>{bag_t} %</strong> (<a href=\"{BAG_OFFICIAL['source_url']}\">SRF</a>). "
+          f"Nous avons comparé les primes de toutes les caisses dans tous les cantons : la moyenne cache de grandes différences entre les caisses.</p>",
+          f"<p class=\"kk-lead\">Health insurance premiums are rising again in {YEAR}. According to the Federal Office of Public Health, the average premium goes up by "
+          f"<strong>{bag_t}%</strong> (<a href=\"{BAG_OFFICIAL['source_url']}\">SRF</a>). "
+          f"We compared the premiums of every insurer in every canton: the average hides how differently insurers raise their prices.</p>"),
         f"""<div class="kk-facts">
-  <div class="kk-fact"><div class="kk-fact-val">+{BAG_OFFICIAL['change_pct']:.1f}&#8239;%</div><div class="kk-fact-label">mittlere Prämie {YEAR} laut BAG</div></div>
-  <div class="kk-fact"><div class="kk-fact-val">{pct(nat)}</div><div class="kk-fact-label">Standardmodell, Franchise 300, unsere Auswertung</div></div>
-  <div class="kk-fact"><div class="kk-fact-val">{DEADLINE.replace(' 2026', '')}</div><div class="kk-fact-label">Kündigung muss bei der Kasse sein</div></div>
+  <div class="kk-fact"><div class="kk-fact-val">+{bag_t}&#8239;%</div><div class="kk-fact-label">{L(f"mittlere Prämie {YEAR} laut BAG", f"prime moyenne {YEAR} selon l’OFSP", f"average premium {YEAR} according to the FOPH")}</div></div>
+  <div class="kk-fact"><div class="kk-fact-val">{pct(nat)}</div><div class="kk-fact-label">{L("Standardmodell, Franchise 300, unsere Auswertung", "modèle standard, franchise 300, notre analyse", "standard model, deductible 300, our analysis")}</div></div>
+  <div class="kk-fact"><div class="kk-fact-val">{deadline(short=True)}</div><div class="kk-fact-label">{L("Kündigung muss bei der Kasse sein", "la résiliation doit être parvenue à la caisse", "cancellation must reach the insurer")}</div></div>
 </div>""",
-        f'<a class="kk-cta" href="/#kk-rechner">Jetzt deine Prämie {YEAR} vergleichen &rarr;</a>',
-        f"<h2>Prämienveränderung {YEAR} nach Kanton</h2>",
-        f"<p>Durchschnittliche Standardprämie für Erwachsene, Franchise 300, mit Unfall, gewichtet nach Versichertenzahl der Kassen. "
-        f"Ein Klick auf den Kanton zeigt die günstigsten Kassen.</p>",
-        f'<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Kanton</th><th class="num">Ø Standard {YEAR}</th>'
+        f'<a class="kk-cta" href="{calc}">{L(f"Jetzt deine Prämie {YEAR} vergleichen", f"Comparer votre prime {YEAR}", f"Compare your {YEAR} premium now")} &rarr;</a>',
+        L(f"<h2>Prämienveränderung {YEAR} nach Kanton</h2>", f"<h2>Évolution des primes {YEAR} par canton</h2>", f"<h2>Premium change {YEAR} by canton</h2>"),
+        L("<p>Durchschnittliche Standardprämie für Erwachsene, Franchise 300, mit Unfall, gewichtet nach Versichertenzahl der Kassen. "
+          "Ein Klick auf den Kanton zeigt die günstigsten Kassen.</p>",
+          "<p>Prime standard moyenne des adultes, franchise 300, avec accidents, pondérée selon le nombre d’assurés des caisses. "
+          "Un clic sur le canton affiche les caisses les moins chères.</p>",
+          "<p>Average standard premium for adults, deductible 300, with accident cover, weighted by each insurer’s number of insured persons. "
+          "Click a canton to see the cheapest insurers.</p>"),
+        f'<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>{L("Kanton", "Canton", "Canton")}</th><th class="num">Ø Standard {YEAR}</th>'
         f'<th class="num">vs. {PREV}</th></tr></thead><tbody>{canton_rows}</tbody></table></div>',
-        f"<h2>Prämienveränderung {YEAR} nach Kasse</h2>",
-        f"<p>Veränderung der Standardprämie, Franchise 300, über alle Kantone gewichtet nach Versichertenzahl. "
-        f"Aufgeführt sind Kassen mit mindestens {chf(MIN_BESTAND_RANKING, 0)} Versicherten. Wer am wenigsten aufschlägt, steht oben.</p>",
-        f'<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Kasse</th><th class="num">vs. {PREV}</th></tr></thead>'
+        L(f"<h2>Prämienveränderung {YEAR} nach Kasse</h2>", f"<h2>Évolution des primes {YEAR} par caisse</h2>", f"<h2>Premium change {YEAR} by insurer</h2>"),
+        L(f"<p>Veränderung der Standardprämie, Franchise 300, über alle Kantone gewichtet nach Versichertenzahl. "
+          f"Aufgeführt sind Kassen mit mindestens {chf(MIN_BESTAND_RANKING, 0)} Versicherten. Wer am wenigsten aufschlägt, steht oben.</p>",
+          f"<p>Évolution de la prime standard, franchise 300, sur tous les cantons, pondérée selon le nombre d’assurés. "
+          f"Seules les caisses d’au moins {chf(MIN_BESTAND_RANKING, 0)} assurés figurent ici. La plus faible hausse est en tête.</p>",
+          f"<p>Change in the standard premium, deductible 300, across all cantons weighted by number of insured persons. "
+          f"Listed are insurers with at least {chf(MIN_BESTAND_RANKING, 0)} insured persons. The smallest increase is at the top.</p>"),
+        f'<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>{insurer}</th><th class="num">vs. {PREV}</th></tr></thead>'
         f'<tbody>{ins_rows}</tbody></table></div>',
         *jojo_html(jojo),
-        f"<h2>Welches Modell ist {YEAR} am günstigsten?</h2>",
-        f"<p>In wie vielen Kantonen stellt welches Modell die günstigste Prämie (Erwachsene, Franchise 300, Hauptregion)? "
-        f"Das BAG teilt die Modelle ab {YEAR} neu ein: Alternativ steht für flexible Modelle, bei denen du zwischen Hausarzt, "
-        f"Telmed und Apotheke wählst.</p><ul>{models}</ul>",
-        '<div class="kk-faq"><h2>Häufige Fragen</h2>',
+        L(f"<h2>Welches Modell ist {YEAR} am günstigsten?</h2>", f"<h2>Quel modèle est le moins cher en {YEAR} ?</h2>",
+          f"<h2>Which model is cheapest in {YEAR}?</h2>"),
+        L(f"<p>In wie vielen Kantonen stellt welches Modell die günstigste Prämie (Erwachsene, Franchise 300, Hauptregion)? "
+          f"Das BAG teilt die Modelle ab {YEAR} neu ein: Alternativ steht für flexible Modelle, bei denen du zwischen Hausarzt, "
+          f"Telmed und Apotheke wählst.</p><ul>{models}</ul>",
+          f"<p>Dans combien de cantons chaque modèle offre-t-il la prime la moins chère (adultes, franchise 300, région principale) ? "
+          f"Dès {YEAR}, l’OFSP classe les modèles autrement : « alternatif » désigne les modèles flexibles où vous choisissez entre "
+          f"médecin de famille, Telmed et pharmacie.</p><ul>{models}</ul>",
+          f"<p>In how many cantons does each model offer the cheapest premium (adults, deductible 300, main region)? "
+          f"From {YEAR} the FOPH groups models differently: alternative stands for flexible models where you choose between "
+          f"family doctor, Telmed and pharmacy.</p><ul>{models}</ul>"),
+        f'<div class="kk-faq"><h2>{L("Häufige Fragen", "Questions fréquentes", "Frequently asked questions")}</h2>',
         *[f"<h3>{e(q)}</h3><p>{e(a)}</p>" for q, a in qa],
         "</div>",
-        '<h2 id="methode">So rechnen wir</h2>',
-        f"<p>Grundlage sind die Prämiendaten des BAG für {PREV} und {YEAR} "
-        f"(<a href=\"https://opendata.swiss/de/dataset/health-insurance-premiums\">opendata.swiss</a>) und der Versichertenbestand je Kasse und Kanton. "
-        f"Als Referenz nehmen wir Erwachsene ab 26, Franchise 300, mit Unfalldeckung, Standardmodell. Die Veränderung je Kasse "
-        f"und Kanton ist der Mittelwert über die Prämienregionen. Durchschnitte über mehrere Kassen gewichten wir mit der Zahl "
-        f"der Versicherten. Das BAG rechnet über alle Modelle und Franchisen, daher weichen unsere Werte leicht ab.</p>",
-        f"<p>Veränderungen einzelner Tarife vergleichen denselben Tarif einer Kasse in beiden Jahren. "
-        f"Ist ein Tarif neu, steht «neu». Die Namen der Kassen stammen aus dem "
-        f"<a href=\"https://www.bag.admin.ch/de/verzeichnisse-der-zugelassenen-kranken-und-rueckversicherer\">Verzeichnis der zugelassenen Krankenversicherer</a>.</p>",
+        f'<h2 id="methode">{L("So rechnen wir", "Notre méthode de calcul", "How we calculate")}</h2>',
+        L(f"<p>Grundlage sind die Prämiendaten des BAG für {PREV} und {YEAR} "
+          f"(<a href=\"https://opendata.swiss/de/dataset/health-insurance-premiums\">opendata.swiss</a>) und der Versichertenbestand je Kasse und Kanton. "
+          f"Als Referenz nehmen wir Erwachsene ab 26, Franchise 300, mit Unfalldeckung, Standardmodell. Die Veränderung je Kasse "
+          f"und Kanton ist der Mittelwert über die Prämienregionen. Durchschnitte über mehrere Kassen gewichten wir mit der Zahl "
+          f"der Versicherten. Das BAG rechnet über alle Modelle und Franchisen, daher weichen unsere Werte leicht ab.</p>",
+          f"<p>Nous nous basons sur les données de primes de l’OFSP pour {PREV} et {YEAR} "
+          f"(<a href=\"https://opendata.swiss/fr/dataset/health-insurance-premiums\">opendata.swiss</a>) et sur l’effectif des assurés par caisse et par canton. "
+          f"La référence est un adulte dès 26 ans, franchise 300, avec couverture accidents, modèle standard. L’évolution par caisse "
+          f"et par canton est la moyenne des régions de primes. Les moyennes sur plusieurs caisses sont pondérées selon le nombre "
+          f"d’assurés. L’OFSP calcule sur tous les modèles et toutes les franchises, d’où de légers écarts avec nos valeurs.</p>",
+          f"<p>We use the FOPH premium data for {PREV} and {YEAR} "
+          f"(<a href=\"https://opendata.swiss/en/dataset/health-insurance-premiums\">opendata.swiss</a>) and the number of insured persons per insurer and canton. "
+          f"Our reference is an adult aged 26 or over, deductible 300, with accident cover, standard model. The change per insurer "
+          f"and canton is the mean across premium regions. Averages across several insurers are weighted by number of "
+          f"insured persons. The FOPH calculates across all models and deductibles, so our figures differ slightly.</p>"),
+        L(f"<p>Veränderungen einzelner Tarife vergleichen denselben Tarif einer Kasse in beiden Jahren. "
+          f"Ist ein Tarif neu, steht «neu». Die Namen der Kassen stammen aus dem "
+          f"<a href=\"https://www.bag.admin.ch/de/verzeichnisse-der-zugelassenen-kranken-und-rueckversicherer\">Verzeichnis der zugelassenen Krankenversicherer</a>.</p>",
+          f"<p>L’évolution d’un tarif compare le même tarif d’une caisse sur les deux années. "
+          f"Un tarif nouveau est signalé « nouveau ». Les noms des caisses proviennent de la "
+          f"<a href=\"https://www.bag.admin.ch/fr/verzeichnisse-der-zugelassenen-kranken-und-rueckversicherer\">liste des assureurs-maladie autorisés</a>.</p>",
+          f"<p>Changes in individual tariffs compare the same tariff of an insurer in both years. "
+          f"A new tariff is marked “new”. Insurer names come from the FOPH "
+          f"<a href=\"https://www.bag.admin.ch/en/verzeichnisse-der-zugelassenen-kranken-und-rueckversicherer\">list of licensed health insurers</a>.</p>"),
     ]
-    jsonld = [breadcrumb([("Krankenkassen-Vergleich", "/"), (f"Prämien {YEAR}", path)]), faq(qa), {
+    jsonld = [breadcrumb(crumbs), faq(qa), {
         "@context": "https://schema.org", "@type": "Article",
         "headline": title, "datePublished": PUBLISHED, "dateModified": date.today().isoformat(),
         "author": {"@type": "Organization", "name": "abovergleich.com"},
         "publisher": {"@type": "Organization", "name": "abovergleich.com"},
-        "mainEntityOfPage": f"{SITE}{path}", "inLanguage": "de-CH",
+        "mainEntityOfPage": f"{SITE}{path}", "inLanguage": i18n.HREFLANG[i18n.LANG],
     }]
-    return path, page(path, title, desc, "\n".join(body), jsonld)
+    return path, page(path, title, desc, "\n".join(body), jsonld, dict(i18n.ROUTES["report"]))
 
 
 def jojo_html(jojo):
@@ -749,30 +1000,57 @@ def jojo_html(jojo):
     if not cur:
         return []
     prev = jojo.get(f"{YEAR - 2}-{PREV}")
+    whole = L("ganzer Kanton", "tout le canton", "whole canton")
     rows = "".join(
-        f'<tr><td><a href="/krankenkasse/{CANTONS[x["canton"]][1]}/">{e(CANTONS[x["canton"]][0])}</a>'
-        f'<span class="sub">{"Region " + x["region"][-1] if x["region"][-1] != "0" else "ganzer Kanton"}</span></td>'
+        f'<tr><td><a href="{canton_url(x["canton"])}">{e(cname(x["canton"]))}</a>'
+        f'<span class="sub">{L("Region", "Région", "Region") + " " + x["region"][-1] if x["region"][-1] != "0" else whole}</span></td>'
         f'<td><strong>{e(x["insurer"])}</strong><span class="sub">{MODEL_LABEL[x["model"]]} · {e(x["tariff"])}</span></td>'
         f'<td class="num">CHF {chf(x["before"])}<span class="sub">→ CHF {chf(x["after"])}</span></td>'
-        f'<td class="num kk-up">{pct(x["change"])}<span class="sub">Markt {pct(x["market"])}</span></td>'
+        f'<td class="num kk-up">{pct(x["change"])}<span class="sub">{L("Markt", "Marché", "Market")} {pct(x["market"])}</span></td>'
         f'<td class="num">{x["rank_after"]} / {x["n_after"]}</td></tr>'
         for x in cur["rows"][:10])
-    prev_txt = (f" Im Jahr davor war es gleich: Die Sieger von {YEAR - 2} stiegen um {pct(prev['winner_change'])}, "
-                f"der Markt um {pct(prev['market_change'])}." if prev else "")
+    prev_txt = L(f" Im Jahr davor war es gleich: Die Sieger von {YEAR - 2} stiegen um {pct(prev['winner_change'])}, "
+                 f"der Markt um {pct(prev['market_change'])}.",
+                 f" L’année précédente, c’était pareil : les moins chères de {YEAR - 2} ont augmenté de {pct(prev['winner_change'])}, "
+                 f"le marché de {pct(prev['market_change'])}.",
+                 f" The year before was the same: the {YEAR - 2} winners rose by {pct(prev['winner_change'])}, "
+                 f"the market by {pct(prev['market_change'])}.") if prev else ""
+    gap = chf(jojo['model_switch_median'], 0)
     return [
-        f'<h2 id="vorjahressieger">Der günstigste Tarif vom letzten Jahr schlägt am stärksten auf</h2>',
-        f"<p>Wir haben in jeder Prämienregion den günstigsten Tarif von {PREV} genommen und geschaut, was er {YEAR} kostet "
-        f"(Erwachsene, Franchise 2'500, ohne Unfall). Ergebnis über {cur['regions']} Regionen: Der Vorjahressieger steigt im Schnitt um "
-        f"<strong>{pct(cur['winner_change'])}</strong>, der Median aller Tarife in derselben Region um {pct(cur['market_change'])}. "
-        f"Nur in {cur['still_first']} von {cur['regions']} Regionen ist er noch der günstigste, in {cur['out_of_top5']} fällt er aus den Top 5.{prev_txt}</p>",
-        f"<p>Wer einmal zur günstigsten Kasse wechselt und dann bleibt, verliert den Vorsprung also oft schon im nächsten Jahr. "
-        f"Es lohnt sich, jedes Jahr neu zu vergleichen. Oft reicht auch ein anderes Modell bei der eigenen Kasse: "
-        f"Der Wechsel vom Standardmodell ins günstigste andere Modell derselben Kasse spart im Median "
-        f"<strong>CHF {chf(jojo['model_switch_median'], 0)} pro Jahr</strong>.</p>",
-        f'<p>Die zehn stärksten Aufschläge bei Vorjahressiegern:</p>',
-        f'<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Region</th><th>Sieger {PREV}</th>'
-        f'<th class="num">Prämie</th><th class="num">{YEAR}</th><th class="num">Rang {YEAR}</th></tr></thead><tbody>{rows}</tbody></table></div>',
-        f'<p class="kk-note">Regionen, in denen der Siegertarif {YEAR} nicht mehr angeboten wird oder umbenannt wurde, sind nicht mitgezählt.</p>',
+        L('<h2 id="vorjahressieger">Der günstigste Tarif vom letzten Jahr schlägt am stärksten auf</h2>',
+          '<h2 id="vorjahressieger">Le tarif le moins cher de l’an dernier augmente le plus</h2>',
+          '<h2 id="vorjahressieger">Last year’s cheapest tariff rises the most</h2>'),
+        L(f"<p>Wir haben in jeder Prämienregion den günstigsten Tarif von {PREV} genommen und geschaut, was er {YEAR} kostet "
+          f"(Erwachsene, Franchise 2'500, ohne Unfall). Ergebnis über {cur['regions']} Regionen: Der Vorjahressieger steigt im Schnitt um "
+          f"<strong>{pct(cur['winner_change'])}</strong>, der Median aller Tarife in derselben Region um {pct(cur['market_change'])}. "
+          f"Nur in {cur['still_first']} von {cur['regions']} Regionen ist er noch der günstigste, in {cur['out_of_top5']} fällt er aus den Top 5.{prev_txt}</p>",
+          f"<p>Dans chaque région de primes, nous avons pris le tarif le moins cher de {PREV} et regardé ce qu’il coûte en {YEAR} "
+          f"(adultes, franchise 2'500, sans accidents). Résultat sur {cur['regions']} régions : la moins chère de l’an dernier augmente en moyenne de "
+          f"<strong>{pct(cur['winner_change'])}</strong>, la médiane de tous les tarifs de la même région de {pct(cur['market_change'])}. "
+          f"Elle n’est plus la moins chère que dans {cur['still_first']} régions sur {cur['regions']}, et sort du top 5 dans {cur['out_of_top5']}.{prev_txt}</p>",
+          f"<p>In every premium region we took the cheapest tariff of {PREV} and checked what it costs in {YEAR} "
+          f"(adults, deductible 2'500, without accident cover). Result across {cur['regions']} regions: last year’s cheapest rises by "
+          f"<strong>{pct(cur['winner_change'])}</strong> on average, the median of all tariffs in the same region by {pct(cur['market_change'])}. "
+          f"It is still the cheapest in only {cur['still_first']} of {cur['regions']} regions, and drops out of the top 5 in {cur['out_of_top5']}.{prev_txt}</p>"),
+        L(f"<p>Wer einmal zur günstigsten Kasse wechselt und dann bleibt, verliert den Vorsprung also oft schon im nächsten Jahr. "
+          f"Es lohnt sich, jedes Jahr neu zu vergleichen. Oft reicht auch ein anderes Modell bei der eigenen Kasse: "
+          f"Der Wechsel vom Standardmodell ins günstigste andere Modell derselben Kasse spart im Median "
+          f"<strong>CHF {gap} pro Jahr</strong>.</p>",
+          f"<p>Qui change une fois pour la caisse la moins chère puis y reste perd donc souvent son avantage dès l’année suivante. "
+          f"Comparer chaque année en vaut la peine. Souvent, un autre modèle auprès de votre propre caisse suffit : "
+          f"passer du modèle standard au modèle le moins cher de la même caisse fait économiser en médiane "
+          f"<strong>CHF {gap} par an</strong>.</p>",
+          f"<p>So if you switch to the cheapest insurer once and then stay, you often lose the advantage the very next year. "
+          f"It pays to compare every year. Often a different model with your current insurer is enough: "
+          f"moving from the standard model to the cheapest other model of the same insurer saves a median of "
+          f"<strong>CHF {gap} per year</strong>.</p>"),
+        L('<p>Die zehn stärksten Aufschläge bei Vorjahressiegern:</p>', '<p>Les dix plus fortes hausses chez les moins chères de l’an dernier :</p>',
+          '<p>The ten largest increases among last year’s cheapest:</p>'),
+        f'<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Region</th><th>{L("Sieger", "La moins chère", "Cheapest")} {PREV}</th>'
+        f'<th class="num">{L("Prämie", "Prime", "Premium")}</th><th class="num">{YEAR}</th><th class="num">{L("Rang", "Rang", "Rank")} {YEAR}</th></tr></thead><tbody>{rows}</tbody></table></div>',
+        L(f'<p class="kk-note">Regionen, in denen der Siegertarif {YEAR} nicht mehr angeboten wird oder umbenannt wurde, sind nicht mitgezählt.</p>',
+          f'<p class="kk-note">Les régions où ce tarif n’est plus proposé en {YEAR} ou a été renommé ne sont pas comptées.</p>',
+          f'<p class="kk-note">Regions where the winning tariff is no longer offered in {YEAR} or was renamed are not counted.</p>'),
     ]
 
 
@@ -793,77 +1071,88 @@ def insights_block(cantons, insurers, nat, top3_prev, top3_cur, ins_prev, nat_pr
     by_change = sorted(cantons.items(), key=lambda x: -x[1]["change_pct"])
     cons = sorted(set(top3_prev2) | set(top3_prev) | set(top3_cur),
                   key=lambda i: -(top3_prev2.get(i, 0) + top3_prev.get(i, 0) + top3_cur.get(i, 0)))[:6]
+    u = i18n.url
 
     def pc(v, ref):
         cls = "var(--red)" if v > ref else "var(--green)"
         return f'<span style="color:{cls};font-weight:600;">{pct(v)}</span>'
 
     td = 'style="text-align:right;padding:9px 12px;white-space:nowrap;"'
+    ana = L("Analyse", "Analyse", "Analysis")
     kas = "".join(
         f'<tr style="border-bottom:1px solid var(--border);"><td style="padding:9px 12px;font-weight:600;">{kasse_link(x["id"])}</td>'
         f'<td {td}><strong style="font-size:15px;">{note_fmt(x["note"])}</strong></td>'
         f'<td {td}>{pc(x["prev"], nat_prev)}</td><td {td}>{pc(x["cur"], nat)}</td>'
         f'<td {td}>{pc(x["tot"], tot_all)}</td>'
-        f'<td {td}><a href="/kasse/{KASSE_SLUG[x["id"]]}/" style="color:var(--accent-dark);font-weight:600;">Analyse &rarr;</a></td></tr>'
+        f'<td {td}><a href="{kasse_url(x["id"])}" style="color:var(--accent-dark);font-weight:600;">{ana} &rarr;</a></td></tr>'
         if x["id"] in KASSE_SLUG else
         f'<td {td}>{pc(x["tot"], tot_all)}</td><td></td></tr>' for x in big)
 
     def cli(c, v):
-        return (f'<div><a href="/krankenkasse/{CANTONS[c][1]}/" style="color:var(--text);"><strong>{e(CANTONS[c][0])}</strong></a> '
+        return (f'<div><a href="{canton_url(c)}" style="color:var(--text);"><strong>{e(cname(c))}</strong></a> '
                 f'<span style="color:var(--muted);font-weight:600;">{pct(v["change_pct"])}</span></div>')
 
     canton_links = "".join(
-        f'<a href="/krankenkasse/{slug}/" style="color:var(--accent-dark);">{e(name)}</a>'
-        for name, slug in sorted(CANTONS.values()))
-    trs = "".join(
-        f'<tr style="border-bottom:1px solid var(--border);"><td style="padding:10px 12px;font-weight:600;">{kasse_link(i)}</td>'
-        f'<td style="text-align:center;padding:10px 12px;">{top3_prev2.get(i, 0)} / 26</td>'
-        f'<td style="text-align:center;padding:10px 12px;">{top3_prev.get(i, 0)} / 26</td>'
-        f'<td style="text-align:center;padding:10px 12px;">{top3_cur.get(i, 0)} / 26</td></tr>' for i in cons)
+        f'<a href="{curl}" style="color:var(--accent-dark);">{e(name)}</a>'
+        for c, name, curl in sorted_cantons())
 
     example = ""
     rows = ((jojo or {}).get(f"{PREV}-{YEAR}") or {}).get("rows") or []
     if rows:
         x = rows[0]
-        chg = f"{x['change']:.1f}".replace(".", ",")
-        example = (f"Ein Beispiel aus {e(CANTONS[x['canton']][0])}: {e(x['insurer'])} war {PREV} die günstigste Kasse. "
-                   f"{YEAR} kostet derselbe Tarif <strong>{chg} Prozent mehr</strong>, die Kasse ist nur noch auf Platz {x['rank_after']}.")
+        chg = i18n.dec(x["change"])
+        example = L(f"Ein Beispiel aus {e(cname(x['canton']))}: {e(x['insurer'])} war {PREV} die günstigste Kasse. "
+                    f"{YEAR} kostet derselbe Tarif <strong>{chg} Prozent mehr</strong>, die Kasse ist nur noch auf Platz {x['rank_after']}.",
+                    f"Un exemple {e(im_kanton(x['canton']))} : {e(x['insurer'])} était la caisse la moins chère en {PREV}. "
+                    f"En {YEAR}, le même tarif coûte <strong>{chg} % de plus</strong> et la caisse n’est plus qu’au rang {x['rank_after']}.",
+                    f"An example from {e(cname(x['canton']))}: {e(x['insurer'])} was the cheapest insurer in {PREV}. "
+                    f"In {YEAR} the same tariff costs <strong>{chg}% more</strong>, and the insurer is down to rank {x['rank_after']}.")
     card = 'style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:20px;"'
     col = 'style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:10px;"'
+    y_first = (RATING or {}).get("years", [Y0])[0]
+    ac = 'style="color:var(--accent-dark);"'
+    rating_name = L("Preistreue-Rating", "notation Constance des primes", "Price Consistency Rating")
     return f"""<!-- INSIGHTS:START (generiert von scripts/build_kk_pages.py) -->
 <section class="insights-section" style="padding:80px 40px;background:var(--bg);">
   <div style="max-width:900px;margin:0 auto;">
-    <div class="section-label">Datenanalyse</div>
-    <h2 class="section-headline" style="margin-bottom:8px;">Die Billigste von heute ist oft die Teuerste von morgen</h2>
+    <div class="section-label">{L("Datenanalyse", "Analyse des données", "Data analysis")}</div>
+    <h2 class="section-headline" style="margin-bottom:8px;">{L("Die Billigste von heute ist oft die Teuerste von morgen", "La moins chère d’aujourd’hui est souvent la plus chère de demain", "Today’s cheapest is often tomorrow’s most expensive")}</h2>
     <p style="color:var(--text2);font-size:17px;line-height:1.6;margin-bottom:10px;">{example}</p>
-    <p style="color:var(--muted);margin-bottom:32px;">Wer jedes Jahr zur Billigsten wechselt, landet oft genau dort. Unser <a href="/krankenkassen-rating/" style="color:var(--accent-dark);">Preistreue-Rating</a> zeigt, welche Kassen seit {(RATING or {}).get("years", [Y0])[0]} günstig bleiben.</p>
+    <p style="color:var(--muted);margin-bottom:32px;">{L(f'Wer jedes Jahr zur Billigsten wechselt, landet oft genau dort. Unser <a href="{u("rating")}" {ac}>Preistreue-Rating</a> zeigt, welche Kassen seit {y_first} günstig bleiben.',
+        f'Qui change chaque année pour la moins chère finit souvent exactement là. Notre <a href="{u("rating")}" {ac}>notation Constance des primes</a> montre quelles caisses restent avantageuses depuis {y_first}.',
+        f'Switching to the cheapest every year often lands you right there. Our <a href="{u("rating")}" {ac}>Price Consistency Rating</a> shows which insurers have stayed cheap since {y_first}.')}</p>
 
     <div {card}>
-      <h3 style="font-size:18px;font-weight:700;margin-bottom:6px;">Preistreue-Rating {YEAR} und Anstieg pro Kasse</h3>
-      <div style="font-size:14px;color:var(--muted);margin-bottom:16px;">Note von 0 bis 10 aus Preis, Konstanz, Treue, Rabatt-Treue, Tarif-Bestand und Reserven. Daneben der Anstieg der Standardprämie, Schnitt aller Kassen {pct(nat_prev)} im {PREV} und {pct(nat)} im {YEAR}. Rot heisst über dem Schnitt. <strong style="color:var(--text);">Klick auf eine Kasse für die ganze Analyse:</strong> Note mit allen Teilnoten, Prämien in jedem Kanton, Modelle und Kündigungsweg.</div>
+      <h3 style="font-size:18px;font-weight:700;margin-bottom:6px;">{L(f"Preistreue-Rating {YEAR} und Anstieg pro Kasse", f"Constance des primes {YEAR} et hausse par caisse", f"Price Consistency Rating {YEAR} and increase per insurer")}</h3>
+      <div style="font-size:14px;color:var(--muted);margin-bottom:16px;">{L(
+        f'Note von 0 bis 10 aus Preis, Konstanz, Treue, Rabatt-Treue, Tarif-Bestand und Reserven. Daneben der Anstieg der Standardprämie, Schnitt aller Kassen {pct(nat_prev)} im {PREV} und {pct(nat)} im {YEAR}. Rot heisst über dem Schnitt. <strong style="color:var(--text);">Klick auf eine Kasse für die ganze Analyse:</strong> Note mit allen Teilnoten, Prämien in jedem Kanton, Modelle und Kündigungsweg.',
+        f'Note de 0 à 10 basée sur le prix, la constance, la fidélité, le rabais durable, la pérennité des tarifs et les réserves. À côté, la hausse de la prime standard, moyenne de toutes les caisses {pct(nat_prev)} en {PREV} et {pct(nat)} en {YEAR}. En rouge : au-dessus de la moyenne. <strong style="color:var(--text);">Cliquez sur une caisse pour l’analyse complète :</strong> note détaillée, primes dans chaque canton, modèles et voie de résiliation.',
+        f'Score from 0 to 10 based on price, consistency, loyalty, discount retention, tariff continuity and reserves. Next to it, the rise in the standard premium; average of all insurers {pct(nat_prev)} in {PREV} and {pct(nat)} in {YEAR}. Red means above average. <strong style="color:var(--text);">Click an insurer for the full analysis:</strong> score with all components, premiums in every canton, models and how to cancel.')}</div>
       <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:14px;">
-        <thead><tr style="border-bottom:1px solid var(--border2);"><th style="text-align:left;padding:8px 12px;">Kasse</th><th style="text-align:right;padding:8px 12px;">Note</th><th style="text-align:right;padding:8px 12px;">{PREV}</th><th style="text-align:right;padding:8px 12px;">{YEAR}</th><th style="text-align:right;padding:8px 12px;">Seit {Y0}</th><th></th></tr></thead>
+        <thead><tr style="border-bottom:1px solid var(--border2);"><th style="text-align:left;padding:8px 12px;">{L("Kasse", "Caisse", "Insurer")}</th><th style="text-align:right;padding:8px 12px;">{L("Note", "Note", "Score")}</th><th style="text-align:right;padding:8px 12px;">{PREV}</th><th style="text-align:right;padding:8px 12px;">{YEAR}</th><th style="text-align:right;padding:8px 12px;">{L("Seit", "Depuis", "Since")} {Y0}</th><th></th></tr></thead>
         <tbody>{kas}</tbody>
       </table></div>
-      <div style="font-size:12px;color:var(--muted);margin-top:10px;">Kassen mit mindestens {MIN_BESTAND_RANKING // 1000}'000 Versicherten, sortiert nach Note. In deiner Region kann die Reihenfolge anders sein, siehe Kantone unten. <a href="/krankenkassen-rating/" style="color:var(--accent-dark);">So rechnen wir &rarr;</a></div>
+      <div style="font-size:12px;color:var(--muted);margin-top:10px;">{L(
+        f"Kassen mit mindestens {MIN_BESTAND_RANKING // 1000}'000 Versicherten, sortiert nach Note. In deiner Region kann die Reihenfolge anders sein, siehe Kantone unten.",
+        f"Caisses d’au moins {MIN_BESTAND_RANKING // 1000}'000 assurés, triées par note. Dans votre région, l’ordre peut être différent, voir les cantons ci-dessous.",
+        f"Insurers with at least {MIN_BESTAND_RANKING // 1000}'000 insured persons, sorted by score. The order may differ in your region, see the cantons below.")} <a href="{u("rating")}" {ac}>{L("So rechnen wir", "Notre méthode", "How we calculate")} &rarr;</a></div>
     </div>
 
     <div {card}>
-      <h3 style="font-size:18px;font-weight:700;margin-bottom:6px;">Nach Kanton</h3>
+      <h3 style="font-size:18px;font-weight:700;margin-bottom:6px;">{L("Nach Kanton", "Par canton", "By canton")}</h3>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;font-size:15px;line-height:2;">
-        <div><div {col}>Stärkster Anstieg</div>{"".join(cli(c, v) for c, v in by_change[:3])}</div>
-        <div><div {col}>Schwächster Anstieg</div>{"".join(cli(c, v) for c, v in by_change[-3:][::-1])}</div>
+        <div><div {col}>{L("Stärkster Anstieg", "Plus forte hausse", "Largest increase")}</div>{"".join(cli(c, v) for c, v in by_change[:3])}</div>
+        <div><div {col}>{L("Schwächster Anstieg", "Plus faible hausse", "Smallest increase")}</div>{"".join(cli(c, v) for c, v in by_change[-3:][::-1])}</div>
       </div>
-      <div style="margin-top:18px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);">Dauerhaft günstig in deinem Kanton</div>
+      <div style="margin-top:18px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);">{L("Dauerhaft günstig in deinem Kanton", "Durablement avantageuses dans votre canton", "Consistently cheap in your canton")}</div>
       <div style="display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px;font-size:14px;">{canton_links}</div>
     </div>
 
 
-    <div style="font-size:12px;color:var(--muted);text-align:center;">Quelle: BAG · Erwachsene, Franchise 300, mit Unfall · <a href="/krankenkassenpraemien-{YEAR}/" style="color:var(--accent-dark);">Ganze Auswertung {YEAR}</a> · <a href="/krankenkassen-rating/" style="color:var(--accent-dark);">Preistreue-Rating</a> · <a href="/kasse/" style="color:var(--accent-dark);">Alle Kassen</a> · <a href="/krankenkasse-kuendigen/" style="color:var(--accent-dark);">Kündigen bis {DEADLINE}</a></div>
+    <div style="font-size:12px;color:var(--muted);text-align:center;">{L("Quelle: BAG · Erwachsene, Franchise 300, mit Unfall", "Source : OFSP · adultes, franchise 300, avec accidents", "Source: FOPH · adults, deductible 300, with accident cover")} · <a href="{u("report")}" {ac}>{L(f"Ganze Auswertung {YEAR}", f"Analyse complète {YEAR}", f"Full analysis {YEAR}")}</a> · <a href="{u("rating")}" {ac}>{rating_name[0].upper() + rating_name[1:]}</a> · <a href="{u("kassen")}" {ac}>{L("Alle Kassen", "Toutes les caisses", "All insurers")}</a> · <a href="{u("kuendigen")}" {ac}>{L(f"Kündigen bis {deadline()}", f"Résilier d’ici au {deadline()}", f"Cancel by {deadline()}")}</a></div>
   </div>
 </section>
 <!-- INSIGHTS:END -->"""
-
 
 
 # ── Preistreue-Rating ──────────────────────────────────────────────────────
@@ -873,6 +1162,39 @@ MAIN_REGION = {}  # Kanton -> Hauptregion, in main() gefüllt
 AWARDS = []       # Preistreue-Award, in main() aus build_awards.compute() gefüllt
 AWARD_PATH = "/krankenkassen-rating/award/"
 RATING_PATH = "/krankenkassen-rating/"
+
+# Teilnoten und Varianten des Ratings in drei Sprachen (build_rating kennt nur Deutsch)
+PART_LABEL = {
+    "preis": ("Preis heute", "Prix actuel", "Price today"),
+    "konstanz": ("Konstanz", "Constance", "Consistency"),
+    "treue": ("Treue", "Fidélité", "Loyalty"),
+    "rabatt": ("Rabatt-Treue", "Rabais durable", "Discount retention"),
+    "tarife": ("Tarif-Bestand", "Pérennité des tarifs", "Tariff continuity"),
+    "solvenz": ("Finanzpolster", "Réserves", "Reserves"),
+}
+
+
+def part_label(k):
+    return L(*PART_LABEL[k])
+
+
+def variant_label(key):
+    """'ohne-2500' -> 'Ohne Unfall, Franchise 2'500' in der aktuellen Sprache."""
+    acc, fr = key.split("-")
+    fr_t = "2'500" if fr == "2500" else fr
+    if acc == "mit":
+        return L(f"Mit Unfall, Franchise {fr_t}", f"Avec accidents, franchise {fr_t}", f"With accident cover, deductible {fr_t}")
+    return L(f"Ohne Unfall, Franchise {fr_t}", f"Sans accidents, franchise {fr_t}", f"Without accident cover, deductible {fr_t}")
+
+
+def rating_name(cap=True):
+    n = L("Preistreue-Rating", "notation Constance des primes", "Price Consistency Rating")
+    return n[0].upper() + n[1:] if cap else n
+
+
+def award_name():
+    return L("Preistreue-Award", "Prix Constance des primes", "Price Consistency Award")
+
 
 # Aufschlüsselung der Verwaltungskosten (scripts/extract_verwaltung.py)
 _VD = DATA / "verwaltung_detail.json"
@@ -886,12 +1208,17 @@ def vdet(i):
     return (y, d[y]) if y else (None, None)
 
 
-GRUPPE_HINWEIS = ("ohne eigenes Personal: die Verwaltung wird als Gebühr bei einer Konzern- oder Partnerfirma "
-                  "eingekauft, wie sie sich auf die Konzernkassen verteilt, bestimmt der Konzern")
+def gruppe_hinweis():
+    return L("ohne eigenes Personal: die Verwaltung wird als Gebühr bei einer Konzern- oder Partnerfirma "
+             "eingekauft, wie sie sich auf die Konzernkassen verteilt, bestimmt der Konzern",
+             "sans personnel propre : l’administration est achetée sous forme de frais à une société du groupe ou partenaire, "
+             "et c’est le groupe qui décide comment elle se répartit entre ses caisses",
+             "no staff of its own: administration is bought in as a fee from a group or partner company, "
+             "and the group decides how it is split among its insurers")
 
 
 def note_fmt(v):
-    return f"{v:.1f}".replace(".", ",") if v is not None else "–"
+    return i18n.dec(v) if v is not None else "–"
 
 
 def bar(v):
@@ -935,22 +1262,38 @@ def vorjahr_block(c):
     rows = sorted((x for x in JOJO_ROWS if x["canton"] == c), key=lambda x: x["region"])
     if not rows:
         return ""
-    n = len({x["region"] for x in JOJO_ROWS if x["canton"] == c})
     def lab(x):
-        return "ganzer Kanton" if x["region"].endswith("0") else f"Region {x['region'][-1]}"
+        return L("ganzer Kanton", "tout le canton", "whole canton") if x["region"].endswith("0") else f"{L('Region', 'Région', 'Region')} {x['region'][-1]}"
+    of = L("von", "sur", "of")
     trs = "".join(
         f'<tr><td>{lab(x)}</td><td>{e(x["insurer"])}<span class="sub">{e(MODEL_LABEL.get(x["model"], x["model"]))} · {e(x["tariff"])}</span></td>'
         f'<td class="num">CHF {chf(x["before"])}</td><td class="num">CHF {chf(x["after"])}</td>'
-        f'<td class="num {"kk-up" if x["change"] > x["market"] else "kk-down"}">{pct(x["change"])}<span class="sub">Markt {pct(x["market"])}</span></td>'
-        f'<td class="num">{x["rank_after"]}. von {x["n_after"]}</td></tr>' for x in rows)
+        f'<td class="num {"kk-up" if x["change"] > x["market"] else "kk-down"}">{pct(x["change"])}<span class="sub">{L("Markt", "Marché", "Market")} {pct(x["market"])}</span></td>'
+        f'<td class="num">{x["rank_after"]}{L(".", "e", "")} {of} {x["n_after"]}</td></tr>' for x in rows)
     still = sum(1 for x in rows if x["rank_after"] == 1)
-    lead = ("Der günstigste Tarif vom letzten Jahr ist auch {y} noch der günstigste." if still == len(rows) else
-            "Wer letztes Jahr zur günstigsten Kasse gewechselt hat, sollte dieses Jahr wieder vergleichen.").format(y=YEAR)
-    return (f"<h2>Letztes Jahr die Günstigste, und heute?</h2>"
-            f"<p>Der günstigste Tarif {PREV} in {'jeder Prämienregion' if len(rows) > 1 else 'der Prämienregion'} des Kantons und was derselbe Tarif {YEAR} kostet. "
-            f"Erwachsene, Franchise 2'500, ohne Unfall, pro Monat. {lead}</p>"
-            f'<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Region</th><th>Sieger {PREV}</th><th class="num">{PREV}</th>'
-            f'<th class="num">{YEAR}</th><th class="num">Veränderung</th><th class="num">Rang {YEAR}</th></tr></thead><tbody>{trs}</tbody></table></div>')
+    if still == len(rows):
+        lead = L(f"Der günstigste Tarif vom letzten Jahr ist auch {YEAR} noch der günstigste.",
+                 f"Le tarif le moins cher de l’an dernier l’est encore en {YEAR}.",
+                 f"Last year’s cheapest tariff is still the cheapest in {YEAR}.")
+    else:
+        lead = L("Wer letztes Jahr zur günstigsten Kasse gewechselt hat, sollte dieses Jahr wieder vergleichen.",
+                 "Si vous avez choisi la caisse la moins chère l’an dernier, comparez à nouveau cette année.",
+                 "If you switched to the cheapest insurer last year, compare again this year.")
+    multi = len(rows) > 1
+    return (L("<h2>Letztes Jahr die Günstigste, und heute?</h2>", "<h2>La moins chère l’an dernier, et aujourd’hui ?</h2>",
+              "<h2>Cheapest last year, and now?</h2>")
+            + L(f"<p>Der günstigste Tarif {PREV} in {'jeder Prämienregion' if multi else 'der Prämienregion'} des Kantons und was derselbe Tarif {YEAR} kostet. "
+                f"Erwachsene, Franchise 2'500, ohne Unfall, pro Monat. {lead}</p>",
+                f"<p>Le tarif le moins cher de {PREV} dans {'chaque région de primes' if multi else 'la région de primes'} du canton, et ce que coûte le même tarif en {YEAR}. "
+                f"Adultes, franchise 2'500, sans accidents, par mois. {lead}</p>",
+                f"<p>The cheapest tariff of {PREV} in {'each premium region' if multi else 'the premium region'} of the canton and what the same tariff costs in {YEAR}. "
+                f"Adults, deductible 2'500, without accident cover, per month. {lead}</p>")
+            + f'<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Region</th><th>{L("Sieger", "La moins chère", "Cheapest")} {PREV}</th><th class="num">{PREV}</th>'
+            f'<th class="num">{YEAR}</th><th class="num">{L("Veränderung", "Évolution", "Change")}</th><th class="num">{L("Rang", "Rang", "Rank")} {YEAR}</th></tr></thead><tbody>{trs}</tbody></table></div>')
+
+
+def award_url(aid, lang=None):
+    return f"{i18n.url('award', lang)}#{aid}"
 
 
 def rating_canton_block(c, main):
@@ -961,21 +1304,37 @@ def rating_canton_block(c, main):
     best = sorted(((i, v) for i, v in reg.items() if v["note"] is not None), key=lambda x: -x[1]["note"])[:5]
     if not best:
         return ""
-    n_years = len(RATING["years"])
+    of = L("von", "sur", "of")
     rows = "".join(
-        f'<tr><td>{kasse_link(i)}{"<span class=sub>Regionalkasse</span>" if RATING["national"].get(i, {}).get("regional") else ""}</td>'
+        f'<tr><td>{kasse_link(i)}{"<span class=sub>" + L("Regionalkasse", "Caisse régionale", "Regional insurer") + "</span>" if RATING["national"].get(i, {}).get("regional") else ""}</td>'
         f'<td class="num"><strong>{note_fmt(v["note"])}</strong></td>'
-        f'<td class="num">{v["top5"][-1][0]} von {v["top5"][-1][1]}</td></tr>' for i, v in best)
+        f'<td class="num">{v["top5"][-1][0]} {of} {v["top5"][-1][1]}</td></tr>' for i, v in best)
     aw = canton_award(c)
-    award = (f'<div class="kk-canton-award"><a href="{AWARD_PATH}#{aw["id"]}"><img src="{award_badge_url(aw["id"], "-quer")}" '
-             f'alt="{e(aw["alt"])}" width="248" height="72" loading="lazy"></a><p><strong>{e(aw["name"])}</strong> ist die preistreueste '
-             f'Krankenkasse im Kanton {e(CANTONS[c][0])} {YEAR}.</p></div>') if aw else ""
-    return (f"<h2>Dauerhaft günstig im Kanton {e(CANTONS[c][0])}</h2>"
-            f"<p>Nicht nur dieses Jahr günstig, sondern über die Jahre: die fünf Kassen mit der besten Note im "
-            f"<a href=\"{RATING_PATH}\">Preistreue-Rating</a>, gerechnet für die Hauptregion des Kantons. "
-            f"Die letzte Spalte zeigt, in wie vielen Jahren seit {RATING['years'][0]} die Kasse hier unter den 5 günstigsten war (Franchise 2'500).</p>"
-            f'<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Kasse</th><th class="num">Note</th>'
-            f'<th class="num">Jahre unter den 5 günstigsten</th></tr></thead><tbody>{rows}</tbody></table></div>{award}')
+    if aw:
+        loc = award_loc(aw)
+        award = (f'<div class="kk-canton-award"><a href="{award_url(aw["id"])}"><img src="{award_badge_url(aw["id"], "-quer")}" '
+                 f'alt="{e(loc["alt"])}" width="248" height="72" loading="lazy"></a><p>'
+                 + L(f'<strong>{e(aw["name"])}</strong> ist die preistreueste Krankenkasse im Kanton {e(cname(c))} {YEAR}.',
+                     f'<strong>{e(aw["name"])}</strong> est la caisse-maladie aux primes les plus constantes {e(im_kanton(c))} en {YEAR}.',
+                     f'<strong>{e(aw["name"])}</strong> is the most price-consistent health insurer {e(im_kanton(c))} in {YEAR}.')
+                 + '</p></div>')
+    else:
+        award = ""
+    y0 = RATING['years'][0]
+    rl = f'<a href="{i18n.url("rating")}">{rating_name(cap=i18n.LANG != "fr")}</a>'
+    return (L(f"<h2>Dauerhaft günstig im Kanton {e(cname(c))}</h2>", f"<h2>Durablement avantageuses {e(im_kanton(c))}</h2>",
+              f"<h2>Consistently cheap {e(im_kanton(c))}</h2>")
+            + L(f"<p>Nicht nur dieses Jahr günstig, sondern über die Jahre: die fünf Kassen mit der besten Note im "
+                f"{rl}, gerechnet für die Hauptregion des Kantons. "
+                f"Die letzte Spalte zeigt, in wie vielen Jahren seit {y0} die Kasse hier unter den 5 günstigsten war (Franchise 2'500).</p>",
+                f"<p>Pas seulement cette année, mais sur la durée : les cinq caisses les mieux notées dans la "
+                f"{rl}, calculée pour la région principale du canton. "
+                f"La dernière colonne indique pendant combien d’années depuis {y0} la caisse a figuré ici parmi les 5 moins chères (franchise 2'500).</p>",
+                f"<p>Not just cheap this year, but over the years: the five insurers with the best score in the "
+                f"{rl}, calculated for the canton’s main region. "
+                f"The last column shows in how many years since {y0} the insurer was among the 5 cheapest here (deductible 2'500).</p>")
+            + f'<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>{L("Kasse", "Caisse", "Insurer")}</th><th class="num">{L("Note", "Note", "Score")}</th>'
+            f'<th class="num">{L("Jahre unter den 5 günstigsten", "Années parmi les 5 moins chères", "Years among the 5 cheapest")}</th></tr></thead><tbody>{rows}</tbody></table></div>{award}')
 
 
 def rating_kasse_card(i):
@@ -987,7 +1346,7 @@ def rating_kasse_card(i):
     if home:   # Regionalkasse: Preis und Konstanz aus dem Stammgebiet
         hr = RATING["regions"][f"{home['canton']}|{home['region']}"][i]
         parts.update({k: hr.get(k) if hr.get(k) is not None else parts[k] for k in ("preis", "konstanz")})
-    rows = "".join(f'<div class="kk-rrow"><span>{e(RATING["labels"][k])}</span>{bar(parts[k])}'
+    rows = "".join(f'<div class="kk-rrow"><span>{e(part_label(k))}</span>{bar(parts[k])}'
                    f'<span class="num">{note_fmt(parts[k])}</span></div>' for k in RATING["weights"])
     adm = RATING["verwaltung"]["kassen"].get(str(i), {})
     mk = RATING["verwaltung"]["markt_verwaltung"]
@@ -997,54 +1356,78 @@ def rating_kasse_card(i):
     if last:
         v, m = adm[last]["verwaltung"], mk[last]
         vy, vd = vdet(i)
-        det = (f' {vy}: Werbung CHF {vd["werbung"]:.0f}, Provisionen an Vermittler CHF {vd["provisionen"]:.0f}.'
-               + (' Die Kasse hat kein eigenes Personal und kauft ihre Verwaltung als Gebühr bei einer Konzern- oder Partnerfirma ein.'
-                  if vd["ohne_personal"] else "")) if vd else ""
-        adm_html = (f'<p class="kk-rnote">Verwaltungskosten {last}: <strong>CHF {v:.0f}</strong> pro versicherte Person '
-                    f'(Schnitt aller Kassen CHF {m:.0f})'
-                    + (f', {first}: CHF {adm[first]["verwaltung"]:.0f}' if first != last else "") + f'.{det} Quelle: BAG. <a href="{BLOG_VERWALTUNG}">Alle Kassen im Vergleich</a></p>')
+        if vd:
+            det = L(f' {vy}: Werbung CHF {vd["werbung"]:.0f}, Provisionen an Vermittler CHF {vd["provisionen"]:.0f}.',
+                    f' {vy} : publicité CHF {vd["werbung"]:.0f}, commissions aux intermédiaires CHF {vd["provisionen"]:.0f}.',
+                    f' {vy}: advertising CHF {vd["werbung"]:.0f}, broker commissions CHF {vd["provisionen"]:.0f}.')
+            if vd["ohne_personal"]:
+                det += L(' Die Kasse hat kein eigenes Personal und kauft ihre Verwaltung als Gebühr bei einer Konzern- oder Partnerfirma ein.',
+                         ' La caisse n’a pas de personnel propre et achète son administration sous forme de frais à une société du groupe ou partenaire.',
+                         ' The insurer has no staff of its own and buys in its administration as a fee from a group or partner company.')
+        else:
+            det = ""
+        since = (f', {first}: CHF {adm[first]["verwaltung"]:.0f}' if first != last else "")
+        adm_html = L(f'<p class="kk-rnote">Verwaltungskosten {last}: <strong>CHF {v:.0f}</strong> pro versicherte Person '
+                     f'(Schnitt aller Kassen CHF {m:.0f}){since}.{det} Quelle: BAG. <a href="{i18n.url(BLOG_VERWALTUNG_KEY)}">Alle Kassen im Vergleich</a></p>',
+                     f'<p class="kk-rnote">Frais administratifs {last} : <strong>CHF {v:.0f}</strong> par assuré '
+                     f'(moyenne de toutes les caisses CHF {m:.0f}){since}.{det} Source : OFSP. <a href="{i18n.url(BLOG_VERWALTUNG_KEY)}">Toutes les caisses comparées</a></p>',
+                     f'<p class="kk-rnote">Administrative costs {last}: <strong>CHF {v:.0f}</strong> per insured person '
+                     f'(average of all insurers CHF {m:.0f}){since}.{det} Source: FOPH. <a href="{i18n.url(BLOG_VERWALTUNG_KEY)}">All insurers compared</a></p>')
     hint = ""
-    big_note, label = n["note"], f"Preistreue-Rating {YEAR}"
+    big_note, label = n["note"], f"{rating_name()} {YEAR}"
     if home:
+        hc = home['canton']
         big_note = home["note"]
-        label = f"Preistreue-Rating {YEAR} · Kanton {e(CANTONS[home['canton']][0])}"
-        hint = (f" Regionalkasse: die Note gilt im Kanton {e(CANTONS[home['canton']][0])}, wo sie die meisten Versicherten hat. "
-                f"Über alle {n['regionen']} Regionen gerechnet, auch wo sie kaum Kunden hat: {note_fmt(n['note'])}.")
+        label = f"{rating_name()} {YEAR} · {L('Kanton', 'Canton', 'Canton')} {e(cname(hc))}"
+        hint = L(f" Regionalkasse: die Note gilt im Kanton {e(cname(hc))}, wo sie die meisten Versicherten hat. "
+                 f"Über alle {n['regionen']} Regionen gerechnet, auch wo sie kaum Kunden hat: {note_fmt(n['note'])}.",
+                 f" Caisse régionale : la note vaut {e(im_kanton(hc))}, où elle compte le plus d’assurés. "
+                 f"Calculée sur les {n['regionen']} régions, y compris là où elle n’a presque pas de clients : {note_fmt(n['note'])}.",
+                 f" Regional insurer: the score applies {e(im_kanton(hc))}, where it has the most insured persons. "
+                 f"Calculated across all {n['regionen']} regions, including where it has hardly any customers: {note_fmt(n['note'])}.")
     elif n["regional"]:
-        hint = " Regionalkasse: die Note stützt sich auf wenige Regionen."
+        hint = L(" Regionalkasse: die Note stützt sich auf wenige Regionen.", " Caisse régionale : la note repose sur peu de régions.",
+                 " Regional insurer: the score is based on few regions.")
     vn = n.get("varianten") or {}
     var_html = ('<div class="kk-rvar">' + " · ".join(
-        f'{e(v["label"])} <strong>{note_fmt(vn.get(v["key"]))}</strong>' for v in RATING.get("varianten", [])) + "</div>") if vn else ""
+        f'{e(variant_label(v["key"]))} <strong>{note_fmt(vn.get(v["key"]))}</strong>' for v in RATING.get("varianten", [])) + "</div>") if vn else ""
+    y0 = RATING["years"][0]
+    sub = L(f'Ist {e(n["name"])} dauerhaft günstig? Aus den BAG-Prämien seit {y0}.',
+            f'{e(n["name"])} est-elle durablement avantageuse ? D’après les primes de l’OFSP depuis {y0}.',
+            f'Is {e(n["name"])} consistently cheap? Based on FOPH premiums since {y0}.')
     return (f'<div class="kk-rating"><div class="kk-rating-head"><div><div class="kk-rating-label">{label}</div>'
-            f'<div class="kk-rating-sub">Ist {e(n["name"])} dauerhaft günstig? Aus den BAG-Prämien seit {RATING["years"][0]}.{hint}</div></div>'
+            f'<div class="kk-rating-sub">{sub}{hint}</div></div>'
             f'<div class="kk-rating-note">{note_fmt(big_note)}<span>/10</span></div></div>{"" if home else var_html}{rows}{adm_html}'
-            f'{award_strip(i)}<a href="{RATING_PATH}">So rechnen wir &rarr;</a></div>')
+            f'{award_strip(i)}<a href="{i18n.url("rating")}">{L("So rechnen wir", "Notre méthode", "How we calculate")} &rarr;</a></div>')
 
 
 def rating_page(r):
-    path = RATING_PATH
+    path = i18n.url("rating")
     nat = r["national"]
     big = sorted((i for i in nat if not nat[i]["regional"] and nat[i]["note"] is not None), key=lambda i: -nat[i]["note"])
     small = sorted((i for i in nat if nat[i]["regional"] and nat[i]["note"] is not None), key=lambda i: -nat[i]["note"])
     keys = list(r["weights"])
     y0 = r["years"][0]
+    insurer = L("Kasse", "Caisse", "Insurer")
+    note_h = L("Note", "Note", "Score")
 
     def table(ids, rank=True):
-        short = {"preis": "Preis", "konstanz": "Konstanz", "treue": "Treue", "rabatt": "Rabatt",
-                 "tarife": "Tarife", "solvenz": "Reserven"}
-        head = "".join(f'<th class="num" title="{e(r["labels"][k])}">{short[k]}</th>' for k in keys)
+        short = {"preis": ("Preis", "Prix", "Price"), "konstanz": ("Konstanz", "Constance", "Consistency"),
+                 "treue": ("Treue", "Fidélité", "Loyalty"), "rabatt": ("Rabatt", "Rabais", "Discount"),
+                 "tarife": ("Tarife", "Tarifs", "Tariffs"), "solvenz": ("Reserven", "Réserves", "Reserves")}
+        head = "".join(f'<th class="num" title="{e(part_label(k))}">{L(*short[k])}</th>' for k in keys)
         body = "".join(
             f'<tr>{"<td>" + str(n + 1) + "</td>" if rank else ""}<td>{kasse_link(i)}</td>'
             f'<td class="num"><strong>{note_fmt(nat[i]["note"])}</strong></td>'
             + "".join(f'<td class="num">{note_fmt(nat[i]["parts"][k])}</td>' for k in keys) + "</tr>"
             for n, i in enumerate(ids))
-        return (f'<div class="kk-table-wrap"><table class="kk-table kk-rtable"><thead><tr>{"<th>#</th>" if rank else ""}<th>Kasse</th>'
-                f'<th class="num">Note</th>{head}</tr></thead><tbody>{body}</tbody></table></div>')
+        return (f'<div class="kk-table-wrap"><table class="kk-table kk-rtable"><thead><tr>{"<th>#</th>" if rank else ""}<th>{insurer}</th>'
+                f'<th class="num">{note_h}</th>{head}</tr></thead><tbody>{body}</tbody></table></div>')
 
     small_h = sorted(small, key=lambda i: -(HOME[i]["note"] if i in HOME else nat[i]["note"] or 0))
-    reg_table = ('<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Kasse</th><th>Stammgebiet</th>'
-                 '<th class="num">Note dort</th><th class="num">Alle Regionen</th></tr></thead><tbody>'
-                 + "".join(f'<tr><td>{kasse_link(i)}</td><td>{e(CANTONS[HOME[i]["canton"]][0]) if i in HOME else "–"}</td>'
+    reg_table = (f'<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>{insurer}</th><th>{L("Stammgebiet", "Région d’origine", "Home region")}</th>'
+                 f'<th class="num">{L("Note dort", "Note sur place", "Score there")}</th><th class="num">{L("Alle Regionen", "Toutes les régions", "All regions")}</th></tr></thead><tbody>'
+                 + "".join(f'<tr><td>{kasse_link(i)}</td><td>{e(cname(HOME[i]["canton"])) if i in HOME else "–"}</td>'
                            f'<td class="num"><strong>{note_fmt(HOME[i]["note"] if i in HOME else None)}</strong></td>'
                            f'<td class="num">{note_fmt(nat[i]["note"])}</td></tr>' for i in small_h)
                  + "</tbody></table></div>")
@@ -1070,105 +1453,195 @@ def rating_page(r):
     adm_html = "".join(
         f'<tr><td>{kasse_link(i)}{"&nbsp;¹" if (vdet(i)[1] or {}).get("ohne_personal") else ""}</td><td class="num">CHF {v0:.0f}</td><td class="num"><strong>CHF {v1:.0f}</strong></td>'
         f'<td class="num">{pct((v1 / v0 - 1) * 100, sign=True)}</td>{adm_extra(i)}</tr>' for v1, i, v0 in adm_rows)
-    cantons = "".join(f'<a href="/krankenkasse/{slug}/">{e(nm)}</a>' for nm, slug in sorted(CANTONS.values()))
+    cantons = "".join(f'<a href="{curl}">{e(nm)}</a>' for c, nm, curl in sorted_cantons())
+    pc = lambda x: i18n.dec(x) if i18n.LANG != "de" else str(x).replace(".", ",")
 
     method = [
-        ("preis", "Preis heute", "Position des günstigsten Tarifs der Kasse unter allen Kassen der Prämienregion, "
-         f"{YEAR}. Unter den günstigsten 20 % = 10 Punkte, ab 80 % = 0."),
-        ("konstanz", "Konstanz", f"In wie vielen Jahren seit {y0} war die Kasse in der Region unter den 5 günstigsten? "
-         "Ab 30 % der Jahre = 10 Punkte."),
-        ("treue", "Treue", "Wie stark stieg der günstigste Tarif der Kasse, wenn man in ihm blieb, verglichen mit dem Median "
-         "aller Tarife der Region? Mittel über alle Jahre. 0,3 Punkte pro Jahr unter dem Markt = 10, 1,5 Punkte darüber = 0."),
-        ("rabatt", "Rabatt-Treue", f"Behalten neue Modelle ihren Rabatt gegenüber dem Standardmodell derselben Kasse? "
-         "Gemessen an denselben Tarifen vom Startjahr bis heute. Kein Verlust = 10, 2 Punkte Verlust pro Jahr = 0. "
-         "Kassen ohne neue Modelle seit 2021 werden hier nicht bewertet."),
-        ("tarife", "Tarif-Bestand", "Anteil der Tarife, die im Folgejahr unter gleichem Tarifcode weiterlaufen. "
-         "100 % = 10 Punkte, 80 % = 0. Wer Tarife streicht oder umbenennt, zwingt Versicherte zum Wechseln."),
-        ("solvenz", "Finanzpolster", "Solvenzquote laut BAG per 1. Januar 2026: vorhandene Reserven im Verhältnis zur "
-         "gesetzlichen Mindesthöhe. 200 % = 10 Punkte, 100 % = 0. Knappe Reserven gehen oft höheren Aufschlägen voraus."),
+        ("preis", L("Position des günstigsten Tarifs der Kasse unter allen Kassen der Prämienregion, "
+                    f"{YEAR}. Unter den günstigsten 20 % = 10 Punkte, ab 80 % = 0.",
+                    f"Position du tarif le moins cher de la caisse parmi toutes les caisses de la région de primes, {YEAR}. "
+                    "Parmi les 20 % les moins chères = 10 points, dès 80 % = 0.",
+                    f"Position of the insurer’s cheapest tariff among all insurers in the premium region, {YEAR}. "
+                    "Among the cheapest 20% = 10 points, from 80% = 0.")),
+        ("konstanz", L(f"In wie vielen Jahren seit {y0} war die Kasse in der Region unter den 5 günstigsten? "
+                       "Ab 30 % der Jahre = 10 Punkte.",
+                       f"Pendant combien d’années depuis {y0} la caisse a-t-elle figuré parmi les 5 moins chères de la région ? "
+                       "Dès 30 % des années = 10 points.",
+                       f"In how many years since {y0} was the insurer among the 5 cheapest in the region? "
+                       "From 30% of years = 10 points.")),
+        ("treue", L("Wie stark stieg der günstigste Tarif der Kasse, wenn man in ihm blieb, verglichen mit dem Median "
+                    "aller Tarife der Region? Mittel über alle Jahre. 0,3 Punkte pro Jahr unter dem Markt = 10, 1,5 Punkte darüber = 0.",
+                    "De combien le tarif le moins cher de la caisse a-t-il augmenté pour qui y est resté, comparé à la médiane "
+                    "de tous les tarifs de la région ? Moyenne sur toutes les années. 0,3 point par an sous le marché = 10, 1,5 point au-dessus = 0.",
+                    "How much did the insurer’s cheapest tariff rise for those who stayed in it, compared with the median "
+                    "of all tariffs in the region? Average over all years. 0.3 points a year below market = 10, 1.5 points above = 0.")),
+        ("rabatt", L("Behalten neue Modelle ihren Rabatt gegenüber dem Standardmodell derselben Kasse? "
+                     "Gemessen an denselben Tarifen vom Startjahr bis heute. Kein Verlust = 10, 2 Punkte Verlust pro Jahr = 0. "
+                     "Kassen ohne neue Modelle seit 2021 werden hier nicht bewertet.",
+                     "Les nouveaux modèles conservent-ils leur rabais par rapport au modèle standard de la même caisse ? "
+                     "Mesuré sur les mêmes tarifs de l’année de lancement à aujourd’hui. Aucune perte = 10, 2 points de perte par an = 0. "
+                     "Les caisses sans nouveau modèle depuis 2021 ne sont pas notées ici.",
+                     "Do new models keep their discount compared with the same insurer’s standard model? "
+                     "Measured on the same tariffs from launch year to today. No loss = 10, 2 points lost per year = 0. "
+                     "Insurers without new models since 2021 are not scored here.")),
+        ("tarife", L("Anteil der Tarife, die im Folgejahr unter gleichem Tarifcode weiterlaufen. "
+                     "100 % = 10 Punkte, 80 % = 0. Wer Tarife streicht oder umbenennt, zwingt Versicherte zum Wechseln.",
+                     "Part des tarifs qui continuent l’année suivante sous le même code. "
+                     "100 % = 10 points, 80 % = 0. Supprimer ou renommer des tarifs oblige les assurés à changer.",
+                     "Share of tariffs that continue the following year under the same tariff code. "
+                     "100% = 10 points, 80% = 0. Dropping or renaming tariffs forces customers to switch.")),
+        ("solvenz", L("Solvenzquote laut BAG per 1. Januar 2026: vorhandene Reserven im Verhältnis zur "
+                      "gesetzlichen Mindesthöhe. 200 % = 10 Punkte, 100 % = 0. Knappe Reserven gehen oft höheren Aufschlägen voraus.",
+                      "Taux de solvabilité selon l’OFSP au 1er janvier 2026 : réserves disponibles par rapport au minimum "
+                      "légal. 200 % = 10 points, 100 % = 0. Des réserves serrées précèdent souvent de plus fortes hausses.",
+                      "Solvency ratio according to the FOPH as of 1 January 2026: available reserves relative to the legal "
+                      "minimum. 200% = 10 points, 100% = 0. Thin reserves often come before larger increases.")),
     ]
-    meth_rows = "".join(f'<tr><td><strong>{e(t)}</strong></td><td class="num">{int(r["weights"][k] * 100)} %</td><td>{e(d)}</td></tr>'
-                        for k, t, d in method)
+    meth_rows = "".join(f'<tr><td><strong>{e(part_label(k))}</strong></td><td class="num">{int(r["weights"][k] * 100)}{"%" if i18n.LANG == "en" else " %"}</td><td>{e(d)}</td></tr>'
+                        for k, d in method)
+    rn = rating_name()
     qa = [
-        ("Welche Krankenkasse ist dauerhaft günstig?",
-         f"Laut unserem Preistreue-Rating {YEAR} schneiden {top[0]['name']}, {top[1]['name']} und {top[2]['name']} am besten ab. "
-         "Sie sind heute günstig und waren es auch in den Jahren davor. Welche Kasse in deiner Region vorne liegt, zeigt die Seite deines Kantons."),
-        ("Warum ist die günstigste Kasse von heute oft nicht die beste Wahl?",
-         "Manche Kassen sind ein Jahr günstig und schlagen danach überdurchschnittlich auf. Neue Sparmodelle starten mit viel Rabatt "
-         "und verlieren ihn in den Folgejahren. Wer nicht jedes Jahr wechseln will, fährt mit einer konstant günstigen Kasse besser."),
-        ("Fliessen Kundenbewertungen ins Rating ein?",
-         "Nein. Das Rating stützt sich nur auf harte Zahlen des Bundesamts für Gesundheit: Prämien seit "
-         f"{y0}, Solvenzquoten und Aufsichtsdaten. Jede Zahl lässt sich nachrechnen."),
-        ("Bezahlen Kassen für eine gute Note?",
-         "Nein. abovergleich.com nimmt keine Provisionen von Krankenkassen. Die Note entsteht aus einer festen Formel, die hier offengelegt ist."),
+        (L("Welche Krankenkasse ist dauerhaft günstig?", "Quelle caisse-maladie est durablement avantageuse ?", "Which health insurer is consistently cheap?"),
+         L(f"Laut unserem Preistreue-Rating {YEAR} schneiden {top[0]['name']}, {top[1]['name']} und {top[2]['name']} am besten ab. "
+           "Sie sind heute günstig und waren es auch in den Jahren davor. Welche Kasse in deiner Region vorne liegt, zeigt die Seite deines Kantons.",
+           f"Selon notre notation Constance des primes {YEAR}, {top[0]['name']}, {top[1]['name']} et {top[2]['name']} obtiennent les meilleurs résultats. "
+           "Elles sont avantageuses aujourd’hui et l’étaient aussi les années précédentes. La page de votre canton montre quelle caisse est en tête dans votre région.",
+           f"According to our Price Consistency Rating {YEAR}, {top[0]['name']}, {top[1]['name']} and {top[2]['name']} come out best. "
+           "They are cheap today and were in previous years too. Your canton’s page shows which insurer leads in your region.")),
+        (L("Warum ist die günstigste Kasse von heute oft nicht die beste Wahl?", "Pourquoi la caisse la moins chère aujourd’hui n’est-elle souvent pas le meilleur choix ?",
+           "Why is today’s cheapest insurer often not the best choice?"),
+         L("Manche Kassen sind ein Jahr günstig und schlagen danach überdurchschnittlich auf. Neue Sparmodelle starten mit viel Rabatt "
+           "und verlieren ihn in den Folgejahren. Wer nicht jedes Jahr wechseln will, fährt mit einer konstant günstigen Kasse besser.",
+           "Certaines caisses sont avantageuses une année puis augmentent plus que la moyenne. Les nouveaux modèles alternatifs démarrent avec un gros rabais "
+           "et le perdent les années suivantes. Si vous ne voulez pas changer chaque année, une caisse constamment avantageuse est le meilleur choix.",
+           "Some insurers are cheap for one year and then raise prices more than average. New savings models start with a big discount "
+           "and lose it in the following years. If you don’t want to switch every year, a consistently cheap insurer serves you better.")),
+        (L("Fliessen Kundenbewertungen ins Rating ein?", "Les avis de clients entrent-ils dans la notation ?", "Do customer reviews count in the rating?"),
+         L("Nein. Das Rating stützt sich nur auf harte Zahlen des Bundesamts für Gesundheit: Prämien seit "
+           f"{y0}, Solvenzquoten und Aufsichtsdaten. Jede Zahl lässt sich nachrechnen.",
+           "Non. La notation repose uniquement sur des chiffres de l’Office fédéral de la santé publique : primes depuis "
+           f"{y0}, taux de solvabilité et données de surveillance. Chaque chiffre peut être vérifié.",
+           "No. The rating relies only on hard figures from the Federal Office of Public Health: premiums since "
+           f"{y0}, solvency ratios and supervisory data. Every number can be recalculated.")),
+        (L("Bezahlen Kassen für eine gute Note?", "Les caisses paient-elles pour une bonne note ?", "Do insurers pay for a good score?"),
+         L("Nein. abovergleich.com nimmt keine Provisionen von Krankenkassen. Die Note entsteht aus einer festen Formel, die hier offengelegt ist.",
+           "Non. abovergleich.com ne perçoit aucune commission des caisses-maladie. La note résulte d’une formule fixe, publiée ici.",
+           "No. abovergleich.com takes no commissions from health insurers. The score comes from a fixed formula, published here.")),
     ]
     vkeys = [v["key"] for v in r["varianten"]]
-    vhead = "".join(f'<th class="num">{e(v["label"].replace("Franchise ", "F "))}</th>' for v in r["varianten"])
-    var_table = (f'<div class="kk-table-wrap"><table class="kk-table kk-rtable"><thead><tr><th>Kasse</th><th class="num">Gesamt</th>{vhead}</tr></thead><tbody>'
+    vhead = "".join(f'<th class="num">{e(variant_label(v["key"]).replace("Franchise ", "F ").replace("franchise ", "F ").replace("deductible ", "D "))}</th>' for v in r["varianten"])
+    var_table = (f'<div class="kk-table-wrap"><table class="kk-table kk-rtable"><thead><tr><th>{insurer}</th><th class="num">{L("Gesamt", "Total", "Overall")}</th>{vhead}</tr></thead><tbody>'
                  + "".join(f'<tr><td>{kasse_link(i)}</td><td class="num"><strong>{note_fmt(nat[i]["note"])}</strong></td>'
                            + "".join(f'<td class="num">{note_fmt(nat[i]["varianten"].get(k))}</td>' for k in vkeys) + "</tr>" for i in big)
                  + "</tbody></table></div>")
-    wtxt = ", ".join(f'{v["label"]} {round(v["gewicht"] * 100)} %' for v in r["varianten"])
-    body = f"""{crumbs_html([("Krankenkassen-Vergleich", "/"), ("Rating", path)])}
-<div class="article-badge">Preistreue-Rating {YEAR}</div>
-<h1>Krankenkassen-Rating {YEAR}: Welche Kasse ist dauerhaft günstig?</h1>
-<div class="article-meta">Aus den BAG-Prämien {y0} bis {YEAR} · nur harte Zahlen, keine Bewertungen</div>
-<p class="kk-lead">Die günstigste Kasse von heute ist nicht automatisch eine gute Wahl. Manche sind ein Jahr günstig und schlagen danach kräftig auf, andere streichen Tarife und zwingen dich zum Wechseln. Unser Rating zeigt, welche Kassen <strong>über die Jahre</strong> günstig bleiben.</p>
+    wtxt = ", ".join(f'{variant_label(v["key"])} {round(v["gewicht"] * 100)}{"%" if i18n.LANG == "en" else " %"}' for v in r["varianten"])
+    gw = [a for a in AWARDS if a["group"] == "Gesamtwertung"]
+    award_row = "".join(f'<a href="{award_url(a["id"])}"><img src="{award_badge_url(a["id"], "-quer")}" alt="{e(award_loc(a)["alt"])}" width="248" height="72" loading="lazy"></a>' for a in gw)
+    blog_v = i18n.url(BLOG_VERWALTUNG_KEY)
+    blog_a = f'<a href="{blog_v}">'
+    calc = f'{i18n.url("home")}#kk-rechner'
+    P = "%" if i18n.LANG == "en" else " %"
+    kohtxt = ""
+    if koh:
+        kj = koh["jahr"]
+        kohtxt = (f'<div class="kk-fact"><div class="kk-fact-val">{pc(koh["start"])}{P} &rarr; {pc(koh["heute"])}{P}</div>'
+                  f'<div class="kk-fact-label">' + L(f"Rabatt der {kj} eingeführten Sparmodelle gegenüber Standard, damals und heute",
+                                                     f"rabais des modèles alternatifs lancés en {kj} par rapport au standard, alors et aujourd’hui",
+                                                     f"discount of the savings models launched in {kj} versus standard, then and now") + '</div></div>')
+    koh_rows = "".join(f'<tr><td>{k["jahr"]}</td><td class="num">{pc(k["start"])}{P}</td><td class="num">{pc(k["heute"])}{P}</td><td class="num">{k["tarife"]}</td></tr>' for k in r["kohorten"])
+    T = lambda de, fr, en: L(de, fr, en)
+    body = f"""{crumbs_html([home_crumb(), ("Rating" if i18n.LANG != "fr" else "Constance des primes", path)])}
+<div class="article-badge">{rn} {YEAR}</div>
+<h1>{T(f"Krankenkassen-Rating {YEAR}: Welche Kasse ist dauerhaft günstig?", f"Constance des primes {YEAR} : quelle caisse-maladie reste avantageuse ?", f"Health insurance rating {YEAR}: which insurer stays cheap?")}</h1>
+<div class="article-meta">{T(f"Aus den BAG-Prämien {y0} bis {YEAR} · nur harte Zahlen, keine Bewertungen", f"D’après les primes de l’OFSP de {y0} à {YEAR} · uniquement des chiffres, aucun avis", f"From FOPH premiums {y0} to {YEAR} · hard numbers only, no reviews")}</div>
+<p class="kk-lead">{T("Die günstigste Kasse von heute ist nicht automatisch eine gute Wahl. Manche sind ein Jahr günstig und schlagen danach kräftig auf, andere streichen Tarife und zwingen dich zum Wechseln. Unser Rating zeigt, welche Kassen <strong>über die Jahre</strong> günstig bleiben.",
+  "La caisse la moins chère aujourd’hui n’est pas forcément un bon choix. Certaines sont avantageuses une année puis augmentent fortement, d’autres suppriment des tarifs et vous obligent à changer. Notre notation montre quelles caisses restent avantageuses <strong>au fil des ans</strong>.",
+  "Today’s cheapest insurer is not automatically a good choice. Some are cheap for a year and then raise prices sharply, others drop tariffs and force you to switch. Our rating shows which insurers stay cheap <strong>over the years</strong>.")}</p>
 <div class="kk-facts">
-  <div class="kk-fact"><div class="kk-fact-val">{e(top[0]['name'])}</div><div class="kk-fact-label">beste Note {YEAR}: {note_fmt(top[0]['note'])} von 10</div></div>
-  <div class="kk-fact"><div class="kk-fact-val">{len(r['years'])} Jahre</div><div class="kk-fact-label">Prämiendaten des BAG, {y0} bis {YEAR}, in jeder Prämienregion</div></div>
-  {f'<div class="kk-fact"><div class="kk-fact-val">{str(koh["start"]).replace(".", ",")} % &rarr; {str(koh["heute"]).replace(".", ",")} %</div><div class="kk-fact-label">Rabatt der {koh["jahr"]} eingeführten Sparmodelle gegenüber Standard, damals und heute</div></div>' if koh else ''}
+  <div class="kk-fact"><div class="kk-fact-val">{e(top[0]['name'])}</div><div class="kk-fact-label">{T(f"beste Note {YEAR}: {note_fmt(top[0]['note'])} von 10", f"meilleure note {YEAR} : {note_fmt(top[0]['note'])} sur 10", f"best score {YEAR}: {note_fmt(top[0]['note'])} out of 10")}</div></div>
+  <div class="kk-fact"><div class="kk-fact-val">{len(r['years'])} {T("Jahre", "ans", "years")}</div><div class="kk-fact-label">{T(f"Prämiendaten des BAG, {y0} bis {YEAR}, in jeder Prämienregion", f"données de primes de l’OFSP, {y0} à {YEAR}, dans chaque région de primes", f"FOPH premium data, {y0} to {YEAR}, in every premium region")}</div></div>
+  {kohtxt}
 </div>
-<a class="kk-cta" href="/#kk-rechner">Die Note deiner Kasse im Rechner sehen &rarr;</a>
+<a class="kk-cta" href="{calc}">{T("Die Note deiner Kasse im Rechner sehen", "Voir la note de votre caisse dans le calculateur", "See your insurer’s score in the calculator")} &rarr;</a>
 
-<h2>Das Rating {YEAR}</h2>
-<p>Note von 0 bis 10, gewichtet aus sechs Teilnoten. Kassen mit mindestens 50'000 Versicherten, über alle Prämienregionen gerechnet. In deiner Region kann die Reihenfolge anders aussehen, siehe unten.</p>
+<h2>{T(f"Das Rating {YEAR}", f"La notation {YEAR}", f"The rating {YEAR}")}</h2>
+<p>{T("Note von 0 bis 10, gewichtet aus sechs Teilnoten. Kassen mit mindestens 50'000 Versicherten, über alle Prämienregionen gerechnet. In deiner Region kann die Reihenfolge anders aussehen, siehe unten.",
+  "Note de 0 à 10, pondérée à partir de six notes partielles. Caisses d’au moins 50'000 assurés, calculée sur toutes les régions de primes. Dans votre région, l’ordre peut être différent, voir plus bas.",
+  "Score from 0 to 10, weighted from six component scores. Insurers with at least 50'000 insured persons, calculated across all premium regions. The order may look different in your region, see below.")}</p>
 {table(big)}
 
-<h2>Je nach Situation: mit oder ohne Unfall, Franchise 300 oder 2'500</h2>
-<p>Die Kassen rechnen den Unfallzuschlag und die Franchisen unterschiedlich. Deshalb gibt es vier Einzelnoten. Die Gesamtnote oben gewichtet sie danach, wie viele Erwachsene welche Variante haben (BAG: rund 56 % ohne Unfalldeckung über die Kasse; Franchise 300 etwas häufiger als 2'500). Im Rechner siehst du die Note für deine Situation.</p>
+<h2>{T("Je nach Situation: mit oder ohne Unfall, Franchise 300 oder 2'500", "Selon votre situation : avec ou sans accidents, franchise 300 ou 2'500", "Depending on your situation: with or without accident cover, deductible 300 or 2'500")}</h2>
+<p>{T("Die Kassen rechnen den Unfallzuschlag und die Franchisen unterschiedlich. Deshalb gibt es vier Einzelnoten. Die Gesamtnote oben gewichtet sie danach, wie viele Erwachsene welche Variante haben (BAG: rund 56 % ohne Unfalldeckung über die Kasse; Franchise 300 etwas häufiger als 2'500). Im Rechner siehst du die Note für deine Situation.",
+  "Les caisses calculent différemment le supplément accidents et les franchises. Il y a donc quatre notes distinctes. La note globale ci-dessus les pondère selon le nombre d’adultes dans chaque cas (OFSP : environ 56 % sans couverture accidents auprès de la caisse ; franchise 300 un peu plus fréquente que 2'500). Le calculateur affiche la note correspondant à votre situation.",
+  "Insurers price accident cover and deductibles differently. That is why there are four separate scores. The overall score above weights them by how many adults have each option (FOPH: around 56% without accident cover through the insurer; deductible 300 slightly more common than 2'500). The calculator shows the score for your situation.")}</p>
 {var_table}
 
-<h2>Preistreue-Award {YEAR}</h2>
-<p>Aus dem Rating vergeben wir jedes Jahr Auszeichnungen: Gesamtwertung, Kategorien wie «Dauerhaft günstig» oder «Solideste Reserven», und die preistreueste Kasse in jedem Kanton. Kassen können das Badge frei verwenden.</p>
-<div class="kk-awardrow">{"".join(f'<a href="{AWARD_PATH}#{a["id"]}"><img src="{award_badge_url(a["id"], "-quer")}" alt="{e(a["alt"])}" width="248" height="72" loading="lazy"></a>' for a in AWARDS if a["group"] == "Gesamtwertung")}</div>
-<p><a href="{AWARD_PATH}">Alle Auszeichnungen und Badges &rarr;</a></p>
+<h2>{award_name()} {YEAR}</h2>
+<p>{T("Aus dem Rating vergeben wir jedes Jahr Auszeichnungen: Gesamtwertung, Kategorien wie «Dauerhaft günstig» oder «Solideste Reserven», und die preistreueste Kasse in jedem Kanton. Kassen können das Badge frei verwenden.",
+  "Chaque année, nous décernons des distinctions issues de la notation : classement général, catégories comme « Durablement avantageuse » ou « Réserves les plus solides », et la caisse aux primes les plus constantes dans chaque canton. Les caisses peuvent utiliser le badge librement.",
+  "Every year we give awards based on the rating: an overall ranking, categories such as “Consistently cheap” or “Strongest reserves”, and the most price-consistent insurer in every canton. Insurers may use the badge freely.")}</p>
+<div class="kk-awardrow">{award_row}</div>
+<p><a href="{i18n.url("award")}">{T("Alle Auszeichnungen und Badges", "Toutes les distinctions et badges", "All awards and badges")} &rarr;</a></p>
 
-<h2>Regionalkassen</h2>
-<p>Kleinere Kassen mit unter 50'000 Versicherten. Gemessen werden sie dort, wo sie zu Hause sind: im Kanton mit den meisten Versicherten. Über alle Regionen gerechnet wären sie oft schlechter, weil sie ausserhalb ihres Gebiets kaum Kunden haben und dort selten günstig sind.</p>
+<h2>{T("Regionalkassen", "Caisses régionales", "Regional insurers")}</h2>
+<p>{T("Kleinere Kassen mit unter 50'000 Versicherten. Gemessen werden sie dort, wo sie zu Hause sind: im Kanton mit den meisten Versicherten. Über alle Regionen gerechnet wären sie oft schlechter, weil sie ausserhalb ihres Gebiets kaum Kunden haben und dort selten günstig sind.",
+  "Petites caisses de moins de 50'000 assurés. Elles sont évaluées là où elles sont chez elles : dans le canton où elles comptent le plus d’assurés. Calculées sur toutes les régions, elles s’en sortiraient souvent moins bien, car hors de leur territoire elles n’ont presque pas de clients et y sont rarement avantageuses.",
+  "Smaller insurers with fewer than 50'000 insured persons. They are measured where they are at home: in the canton where they have the most insured persons. Calculated across all regions they would often look worse, because outside their area they have hardly any customers and are rarely cheap there.")}</p>
 {reg_table}
 
-<h2>Das Rating in deiner Region</h2>
-<p>Preise und Konstanz unterscheiden sich stark zwischen den Regionen. Eine Kasse, die im Aargau vorne liegt, kann in Genf teuer sein. Auf jeder Kantonsseite steht, welche Kassen dort dauerhaft günstig sind:</p>
+<h2>{T("Das Rating in deiner Region", "La notation dans votre région", "The rating in your region")}</h2>
+<p>{T("Preise und Konstanz unterscheiden sich stark zwischen den Regionen. Eine Kasse, die im Aargau vorne liegt, kann in Genf teuer sein. Auf jeder Kantonsseite steht, welche Kassen dort dauerhaft günstig sind:",
+  "Les prix et la constance varient fortement d’une région à l’autre. Une caisse en tête en Argovie peut être chère à Genève. Chaque page cantonale indique les caisses durablement avantageuses sur place :",
+  "Prices and consistency vary a lot between regions. An insurer that leads in Aargau can be expensive in Geneva. Each canton page shows which insurers are consistently cheap there:")}</p>
 <div class="kk-cantonlinks">{cantons}</div>
 
-<h2>Die Sparmodell-Falle</h2>
-<p>Neue Sparmodelle dürfen ohne Kostenzahlen aus fünf Jahren bis zu 20 % unter dem Standardmodell starten (Art. 101 KVV). Danach muss der Rabatt aus echten Kosten belegt sein. In den Daten sieht man, was das heisst:</p>
-<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Neue Modelle ab</th><th class="num">Rabatt im Startjahr</th><th class="num">Rabatt {YEAR}</th><th class="num">Tarife × Regionen</th></tr></thead><tbody>
-{"".join(f'<tr><td>{k["jahr"]}</td><td class="num">{str(k["start"]).replace(".", ",")} %</td><td class="num">{str(k["heute"]).replace(".", ",")} %</td><td class="num">{k["tarife"]}</td></tr>' for k in r["kohorten"])}
-<tr><td>Modelle, die es {y0} schon gab</td><td class="num">{str(alte["start"]).replace(".", ",")} %</td><td class="num">{str(alte["heute"]).replace(".", ",")} %</td><td class="num"></td></tr>
+<h2>{T("Die Sparmodell-Falle", "Le piège des modèles alternatifs", "The savings model trap")}</h2>
+<p>{T("Neue Sparmodelle dürfen ohne Kostenzahlen aus fünf Jahren bis zu 20 % unter dem Standardmodell starten (Art. 101 KVV). Danach muss der Rabatt aus echten Kosten belegt sein. In den Daten sieht man, was das heisst:",
+  "Sans données de coûts sur cinq ans, les nouveaux modèles alternatifs peuvent démarrer jusqu’à 20 % sous le modèle standard (art. 101 OAMal). Ensuite, le rabais doit être justifié par des coûts réels. Les données montrent ce que cela signifie :",
+  "Without five years of cost data, new savings models may start up to 20% below the standard model (Art. 101 KVV). After that, the discount must be backed by real costs. The data show what that means:")}</p>
+<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>{T("Neue Modelle ab", "Nouveaux modèles dès", "New models from")}</th><th class="num">{T("Rabatt im Startjahr", "Rabais l’année du lancement", "Discount in launch year")}</th><th class="num">{T("Rabatt", "Rabais", "Discount")} {YEAR}</th><th class="num">{T("Tarife × Regionen", "Tarifs × régions", "Tariffs × regions")}</th></tr></thead><tbody>
+{koh_rows}
+<tr><td>{T(f"Modelle, die es {y0} schon gab", f"Modèles qui existaient déjà en {y0}", f"Models that already existed in {y0}")}</td><td class="num">{pc(alte["start"])}{P}</td><td class="num">{pc(alte["heute"])}{P}</td><td class="num"></td></tr>
 </tbody></table></div>
-<p>Rabatt gegenüber dem Standardmodell derselben Kasse, Franchise 2'500, Median. Dieselben Tarife vom Startjahr bis {YEAR} verfolgt. Wer in ein neues Modell wechselt und bleibt, zahlt also Jahr für Jahr etwas mehr als beim Standard. Die Teilnote «Rabatt-Treue» misst, wie stark das bei jeder Kasse passiert.</p>
+<p>{T(f"Rabatt gegenüber dem Standardmodell derselben Kasse, Franchise 2'500, Median. Dieselben Tarife vom Startjahr bis {YEAR} verfolgt. Wer in ein neues Modell wechselt und bleibt, zahlt also Jahr für Jahr etwas mehr als beim Standard. Die Teilnote «Rabatt-Treue» misst, wie stark das bei jeder Kasse passiert.",
+  f"Rabais par rapport au modèle standard de la même caisse, franchise 2'500, médiane. Les mêmes tarifs suivis de l’année de lancement à {YEAR}. Qui passe à un nouveau modèle et y reste paie donc chaque année un peu plus par rapport au standard. La note partielle « Rabais durable » mesure l’ampleur de ce phénomène dans chaque caisse.",
+  f"Discount versus the same insurer’s standard model, deductible 2'500, median. The same tariffs tracked from launch year to {YEAR}. So if you switch to a new model and stay, you pay a little more each year relative to standard. The “Discount retention” component measures how strongly this happens at each insurer.")}</p>
 
-<h2>Verwaltungskosten: wer viel für sich selbst ausgibt</h2>
-<p>Das BAG veröffentlicht für jede Kasse, was sie pro versicherte Person für die Verwaltung der Grundversicherung ausgibt: Löhne, Informatik, Werbung und Provisionen. Werbung und Provisionen an Vermittler weist es separat aus. Die Zahl fliesst nicht in die Note ein, weil sie schon im Preis steckt, aber sie zeigt, wo Prämiengeld hängen bleibt. Schnitt aller Kassen {a1}: <strong>CHF {mk[a1]:.0f}</strong>. <a href="{BLOG_VERWALTUNG}">Mehr dazu: was jede Kasse für Werbung und Vermittler ausgibt &rarr;</a></p>
-<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Kasse</th><th class="num">{a0}</th><th class="num">{a1}</th><th class="num">Veränderung</th><th class="num">Werbung {vjahr}</th><th class="num">Provisionen {vjahr}</th></tr></thead><tbody>{adm_html}</tbody></table></div>
-<p class="kk-note">Pro versicherte Person und Jahr, nur Grundversicherung. Gesamtkosten aus den Aufsichtsdaten des BAG, Werbung und Provisionen aus der BAG-Auswertung der Verwaltungskosten. ¹ {GRUPPE_HINWEIS}. Der Gesamtbetrag ist trotzdem vergleichbar.</p>
+<h2>{T("Verwaltungskosten: wer viel für sich selbst ausgibt", "Frais administratifs : qui dépense beaucoup pour lui-même", "Administrative costs: who spends a lot on itself")}</h2>
+<p>{T(f"Das BAG veröffentlicht für jede Kasse, was sie pro versicherte Person für die Verwaltung der Grundversicherung ausgibt: Löhne, Informatik, Werbung und Provisionen. Werbung und Provisionen an Vermittler weist es separat aus. Die Zahl fliesst nicht in die Note ein, weil sie schon im Preis steckt, aber sie zeigt, wo Prämiengeld hängen bleibt. Schnitt aller Kassen {a1}: <strong>CHF {mk[a1]:.0f}</strong>. {blog_a}Mehr dazu: was jede Kasse für Werbung und Vermittler ausgibt &rarr;</a>",
+  f"L’OFSP publie pour chaque caisse ce qu’elle dépense par assuré pour administrer l’assurance de base : salaires, informatique, publicité et commissions. La publicité et les commissions aux intermédiaires sont indiquées séparément. Ce chiffre n’entre pas dans la note, car il est déjà compris dans le prix, mais il montre où reste l’argent des primes. Moyenne de toutes les caisses {a1} : <strong>CHF {mk[a1]:.0f}</strong>. {blog_a}En savoir plus : ce que chaque caisse dépense en publicité et en intermédiaires &rarr;</a>",
+  f"The FOPH publishes, for every insurer, what it spends per insured person on administering basic insurance: salaries, IT, advertising and commissions. Advertising and broker commissions are shown separately. The figure does not count towards the score because it is already in the price, but it shows where premium money stays. Average of all insurers {a1}: <strong>CHF {mk[a1]:.0f}</strong>. {blog_a}More: what each insurer spends on advertising and brokers &rarr;</a>")}</p>
+<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>{insurer}</th><th class="num">{a0}</th><th class="num">{a1}</th><th class="num">{T("Veränderung", "Évolution", "Change")}</th><th class="num">{T("Werbung", "Publicité", "Advertising")} {vjahr}</th><th class="num">{T("Provisionen", "Commissions", "Commissions")} {vjahr}</th></tr></thead><tbody>{adm_html}</tbody></table></div>
+<p class="kk-note">{T(f"Pro versicherte Person und Jahr, nur Grundversicherung. Gesamtkosten aus den Aufsichtsdaten des BAG, Werbung und Provisionen aus der BAG-Auswertung der Verwaltungskosten. ¹ {gruppe_hinweis()}. Der Gesamtbetrag ist trotzdem vergleichbar.",
+  f"Par assuré et par an, assurance de base uniquement. Coûts totaux selon les données de surveillance de l’OFSP, publicité et commissions selon l’analyse des frais administratifs de l’OFSP. ¹ {gruppe_hinweis()}. Le montant total reste comparable.",
+  f"Per insured person and year, basic insurance only. Total costs from FOPH supervisory data, advertising and commissions from the FOPH analysis of administrative costs. ¹ {gruppe_hinweis()}. The total is still comparable.")}</p>
 
-<h2>So rechnen wir</h2>
-<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Teilnote</th><th class="num">Gewicht</th><th>Was sie misst</th></tr></thead><tbody>{meth_rows}</tbody></table></div>
-<p>Grundlage sind die Prämien aller Kassen {y0} bis {YEAR} für Erwachsene, je mit und ohne Unfalldeckung und mit Franchise 300 und 2'500. Daraus entstehen vier Einzelnoten; die Gesamtnote gewichtet sie nach dem Bestand laut BAG ({wtxt}). Tarife, die eine Kasse umbenennt, verfolgen wir über den Namen weiter. Fehlt eine Teilnote, verteilt sich ihr Gewicht auf die übrigen. Die Formel gilt für alle Kassen gleich, und keine Kasse bezahlt uns etwas.</p>
+<h2>{T("So rechnen wir", "Notre méthode de calcul", "How we calculate")}</h2>
+<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>{T("Teilnote", "Note partielle", "Component")}</th><th class="num">{T("Gewicht", "Poids", "Weight")}</th><th>{T("Was sie misst", "Ce qu’elle mesure", "What it measures")}</th></tr></thead><tbody>{meth_rows}</tbody></table></div>
+<p>{T(f"Grundlage sind die Prämien aller Kassen {y0} bis {YEAR} für Erwachsene, je mit und ohne Unfalldeckung und mit Franchise 300 und 2'500. Daraus entstehen vier Einzelnoten; die Gesamtnote gewichtet sie nach dem Bestand laut BAG ({wtxt}). Tarife, die eine Kasse umbenennt, verfolgen wir über den Namen weiter. Fehlt eine Teilnote, verteilt sich ihr Gewicht auf die übrigen. Die Formel gilt für alle Kassen gleich, und keine Kasse bezahlt uns etwas.",
+  f"La base, ce sont les primes de toutes les caisses de {y0} à {YEAR} pour les adultes, avec et sans couverture accidents, et avec franchise 300 et 2'500. On obtient quatre notes distinctes ; la note globale les pondère selon l’effectif d’après l’OFSP ({wtxt}). Les tarifs renommés par une caisse sont suivis par leur nom. S’il manque une note partielle, son poids est réparti sur les autres. La formule est la même pour toutes les caisses, et aucune caisse ne nous paie quoi que ce soit.",
+  f"We use the premiums of all insurers from {y0} to {YEAR} for adults, with and without accident cover and with deductibles of 300 and 2'500. This gives four separate scores; the overall score weights them by FOPH enrolment figures ({wtxt}). Tariffs an insurer renames are followed by name. If a component is missing, its weight is spread over the others. The formula is the same for every insurer, and no insurer pays us anything.")}</p>
 
-<div class="kk-faq"><h2>Häufige Fragen</h2>{"".join(f"<h3>{e(q)}</h3><p>{e(a)}</p>" for q, a in qa)}</div>
-<p class="kk-note">Quellen: BAG, Prämien der obligatorischen Krankenversicherung {y0} bis {YEAR} (opendata.swiss); BAG über priminfo.admin.ch, Solvenzquoten per 1.1.2026; BAG, Aufsichtsdaten OKP; KVV Art. 101. Angaben ohne Gewähr.</p>"""
-    jsonld = [breadcrumb([("Krankenkassen-Vergleich", "/"), ("Rating", path)]), faq(qa),
-              {"@context": "https://schema.org", "@type": "Article", "headline": f"Krankenkassen-Rating {YEAR}: Welche Kasse ist dauerhaft günstig?",
+<div class="kk-faq"><h2>{T("Häufige Fragen", "Questions fréquentes", "Frequently asked questions")}</h2>{"".join(f"<h3>{e(q)}</h3><p>{e(a)}</p>" for q, a in qa)}</div>
+<p class="kk-note">{T(f"Quellen: BAG, Prämien der obligatorischen Krankenversicherung {y0} bis {YEAR} (opendata.swiss); BAG über priminfo.admin.ch, Solvenzquoten per 1.1.2026; BAG, Aufsichtsdaten OKP; KVV Art. 101. Angaben ohne Gewähr.",
+  f"Sources : OFSP, primes de l’assurance obligatoire des soins {y0} à {YEAR} (opendata.swiss) ; OFSP via priminfo.admin.ch, taux de solvabilité au 1.1.2026 ; OFSP, données de surveillance AOS ; OAMal art. 101. Sans garantie.",
+  f"Sources: FOPH, compulsory health insurance premiums {y0} to {YEAR} (opendata.swiss); FOPH via priminfo.admin.ch, solvency ratios as of 1 January 2026; FOPH supervisory data; KVV Art. 101. No liability for accuracy.")}</p>"""
+    h1 = T(f"Krankenkassen-Rating {YEAR}: Welche Kasse ist dauerhaft günstig?", f"Constance des primes {YEAR} : quelle caisse-maladie reste avantageuse ?",
+           f"Health insurance rating {YEAR}: which insurer stays cheap?")
+    jsonld = [breadcrumb([home_crumb(), ("Rating" if i18n.LANG != "fr" else "Constance des primes", path)]), faq(qa),
+              {"@context": "https://schema.org", "@type": "Article", "headline": h1,
                "datePublished": f"{YEAR - 1}-10-01", "dateModified": date.today().isoformat(),
                "author": {"@type": "Organization", "name": "abovergleich.com"},
                "publisher": {"@type": "Organization", "name": "abovergleich.com", "url": SITE}, "mainEntityOfPage": f"{SITE}{path}"}]
-    return path, page(path, f"Krankenkassen-Rating {YEAR}: Welche Kasse ist dauerhaft günstig?",
-                      f"Preistreue-Rating aller Krankenkassen aus den BAG-Prämien {y0} bis {YEAR}: Preis, Konstanz, Treue, Tarife und Reserven. "
-                      f"{top[0]['name']} schneidet am besten ab.", body, jsonld)
+    desc = T(f"Preistreue-Rating aller Krankenkassen aus den BAG-Prämien {y0} bis {YEAR}: Preis, Konstanz, Treue, Tarife und Reserven. "
+             f"{top[0]['name']} schneidet am besten ab.",
+             f"Notation Constance des primes de toutes les caisses-maladie, d’après les primes de l’OFSP {y0} à {YEAR} : prix, constance, tarifs, réserves. "
+             f"{top[0]['name']} arrive en tête.",
+             f"Price Consistency Rating of all Swiss health insurers from FOPH premiums {y0} to {YEAR}: price, consistency, tariffs and reserves. "
+             f"{top[0]['name']} comes out best.")
+    if i18n.LANG != "de":
+        jsonld[2]["inLanguage"] = i18n.HREFLANG[i18n.LANG]
+    return path, page(path, h1, desc, body, jsonld, dict(i18n.ROUTES["rating"]))
 
 
 AWARD_CSS = """
@@ -1202,7 +1675,7 @@ AWARD_PNG_JS = """<script>
 document.querySelectorAll('.pngrow button').forEach(function (btn) {
   btn.addEventListener('click', function () {
     var w = +btn.dataset.w, h = +btn.dataset.h, scale = 3, label = btn.textContent;
-    btn.disabled = true; btn.textContent = 'einen Moment';
+    btn.disabled = true; btn.textContent = btn.dataset.wait || 'einen Moment';
     fetch(btn.dataset.svg).then(function (r) { return r.text(); }).then(function (svg) {
       var img = new Image();
       img.onload = function () {
@@ -1221,23 +1694,31 @@ document.querySelectorAll('.pngrow button').forEach(function (btn) {
 </script>"""
 
 
+def award_loc(a):
+    """Award mit den Texten der aktuellen Sprache."""
+    return build_awards.loc(a, i18n.LANG)
+
+
 def award_badge_url(aid, suffix=""):
-    return f"{AWARD_PATH}badge/{aid}{suffix}.svg"
+    return f"{i18n.url('award')}badge/{aid}{suffix}.svg"
 
 
 def write_award_badges():
-    # Badges früherer Sieger dieser Edition entfernen (Rating neu gerechnet).
-    # Ab der Vergabe-Mitteilung an die Kassen nicht mehr löschen, sondern einfrieren.
-    folder = ROOT / AWARD_PATH.strip("/") / "badge"
-    keep = {f"{a['id']}{suffix}.svg" for a in AWARDS for suffix, _, _ in build_awards.VARIANTS}
-    for f in folder.glob("*.svg") if folder.exists() else []:
-        if f.name not in keep:
-            f.unlink()
-    for a in AWARDS:
-        for suffix, fn, dark in build_awards.VARIANTS:
-            target = ROOT / AWARD_PATH.strip("/") / "badge" / f"{a['id']}{suffix}.svg"
-            target.parent.mkdir(parents=True, exist_ok=True)
-            target.write_text(fn(a, YEAR, dark), encoding="utf-8")
+    """Badges je Sprache. Die deutschen Badges der Edition sind seit der
+    Mitteilung an die Kassen (02.10.2026) eingefroren: hier nicht mehr löschen,
+    nur noch schreiben, wenn sich am Inhalt nichts ändert (siehe main)."""
+    for lang in i18n.LANGS:
+        folder = ROOT / i18n.url("award", lang).strip("/") / "badge"
+        keep = {f"{a['id']}{suffix}.svg" for a in AWARDS for suffix, _, _ in build_awards.VARIANTS}
+        for f in folder.glob("*.svg") if folder.exists() else []:
+            if f.name not in keep:
+                f.unlink()
+        for a in AWARDS:
+            la = build_awards.loc(a, lang)
+            for suffix, fn, dark in build_awards.VARIANTS:
+                target = folder / f"{a['id']}{suffix}.svg"
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_text(fn(la, YEAR, dark), encoding="utf-8")
 
 
 def award_strip(i):
@@ -1250,72 +1731,94 @@ def award_strip(i):
     kant = [a for a in mine if a["group"] == "Kantone"]
     if not show:
         show, kant = kant[:1], kant[1:]
-    imgs = "".join(f'<a href="{AWARD_PATH}#{a["id"]}"><img src="{award_badge_url(a["id"], "-quer")}" alt="{e(a["alt"])}" width="248" height="72" loading="lazy"></a>' for a in show[:3])
-    more = (f'<div class="kk-rnote">Dazu Sieger in {len(kant)} {"Kanton" if len(kant) == 1 else "Kantonen"}. '
-            f'<a href="{AWARD_PATH}">Alle Auszeichnungen</a></div>') if kant else ""
+    imgs = "".join(f'<a href="{award_url(a["id"])}"><img src="{award_badge_url(a["id"], "-quer")}" alt="{e(award_loc(a)["alt"])}" width="248" height="72" loading="lazy"></a>' for a in show[:3])
+    n = len(kant)
+    more = (f'<div class="kk-rnote">'
+            + L(f'Dazu Sieger in {n} {"Kanton" if n == 1 else "Kantonen"}. ', f'Également en tête dans {n} canton{"" if n == 1 else "s"}. ',
+                f'Also top in {n} canton{"" if n == 1 else "s"}. ')
+            + f'<a href="{i18n.url("award")}">{L("Alle Auszeichnungen", "Toutes les distinctions", "All awards")}</a></div>') if kant else ""
     return f'<div class="kk-awardrow">{imgs}</div>{more}'
 
 
+GROUP_LABEL = {"Gesamtwertung": ("Gesamtwertung", "Classement général", "Overall ranking"),
+               "Kategorien": ("Kategorien", "Catégories", "Categories"),
+               "Kantone": ("Kantone", "Cantons", "Cantons")}
+
+
 def award_page():
-    path = AWARD_PATH
+    path = i18n.url("award")
     groups = []
+    T = L
     for g in ("Gesamtwertung", "Kategorien", "Kantone"):
         items = [a for a in AWARDS if a["group"] == g]
         if not items:
             continue
         cards = []
         for a in items:
-            n = (RATING or {}).get("national", {}).get(a["insurer"], {})
+            la = award_loc(a)
+            snippet = (f'<a href="{la["link"]}">' + chr(10) + f'  <img src="{SITE}{award_badge_url(a["id"])}"' + chr(10)
+                       + f'       alt="{la["alt"]}"' + chr(10) + '       width="240" height="384" loading="lazy">' + chr(10) + '</a>')
             cards.append(f"""<div class="win" id="{a['id']}">
-  <img src="{award_badge_url(a['id'])}" alt="{e(a['alt'])}" width="240" height="384" loading="lazy">
+  <img src="{award_badge_url(a['id'])}" alt="{e(la['alt'])}" width="240" height="384" loading="lazy">
   <div>
     <h3>{kasse_link(a['insurer'], a['name'])}</h3>
-    <p class="meta">{e(a['headline'])} · {e(a['fact'])}</p>
+    <p class="meta">{e(la['headline'])} · {e(la['fact'])}</p>
     <div class="variants">
-      <a href="{award_badge_url(a['id'])}">Hochformat hell</a><a href="{award_badge_url(a['id'], '-dunkel')}">Hochformat dunkel</a>
-      <a href="{award_badge_url(a['id'], '-quer')}">Querformat hell</a><a href="{award_badge_url(a['id'], '-quer-dunkel')}">Querformat dunkel</a>
+      <a href="{award_badge_url(a['id'])}">{T("Hochformat hell", "Portrait clair", "Portrait light")}</a><a href="{award_badge_url(a['id'], '-dunkel')}">{T("Hochformat dunkel", "Portrait sombre", "Portrait dark")}</a>
+      <a href="{award_badge_url(a['id'], '-quer')}">{T("Querformat hell", "Paysage clair", "Landscape light")}</a><a href="{award_badge_url(a['id'], '-quer-dunkel')}">{T("Querformat dunkel", "Paysage sombre", "Landscape dark")}</a>
     </div>
-    <div class="variants pngrow"><span class="pnglbl">Als PNG:</span>
-      <button type="button" data-svg="{award_badge_url(a['id'])}" data-w="240" data-h="384" data-name="{a['id']}-hoch">Hochformat</button>
-      <button type="button" data-svg="{award_badge_url(a['id'], '-quer')}" data-w="375" data-h="109" data-name="{a['id']}-quer">Querformat</button>
+    <div class="variants pngrow"><span class="pnglbl">{T("Als PNG:", "En PNG :", "As PNG:")}</span>
+      <button type="button" data-svg="{award_badge_url(a['id'])}" data-w="240" data-h="384" data-name="{a['id']}-hoch"{"" if i18n.LANG == "de" else ' data-wait="' + T("", "un instant", "one moment") + '"'}>{T("Hochformat", "Portrait", "Portrait")}</button>
+      <button type="button" data-svg="{award_badge_url(a['id'], '-quer')}" data-w="375" data-h="109" data-name="{a['id']}-quer"{"" if i18n.LANG == "de" else ' data-wait="' + T("", "un instant", "one moment") + '"'}>{T("Querformat", "Paysage", "Landscape")}</button>
     </div>
-    <div class="snippet"><code>{e(f'<a href="{a["link"]}">' + chr(10) + f'  <img src="{SITE}{award_badge_url(a["id"])}"' + chr(10) + f'       alt="{a["alt"]}"' + chr(10) + '       width="240" height="384" loading="lazy">' + chr(10) + '</a>')}</code></div>
-    <p class="baustein-lbl">Textbaustein zum Übernehmen</p>
-    <blockquote class="baustein">{e(a['pressText'])}</blockquote>
+    <div class="snippet"><code>{e(snippet)}</code></div>
+    <p class="baustein-lbl">{T("Textbaustein zum Übernehmen", "Texte à reprendre", "Text you can use")}</p>
+    <blockquote class="baustein">{e(la['pressText'])}</blockquote>
   </div>
 </div>""")
-        groups.append(f'<div class="grouphead">{e(g)}</div>' + "".join(cards))
+        groups.append(f'<div class="grouphead">{e(L(*GROUP_LABEL[g]))}</div>' + "".join(cards))
     n_awards = len(AWARDS)
     y0 = RATING["years"][0]
+    an = award_name()
+    rl = f'<a href="{i18n.url("rating")}">{rating_name(cap=i18n.LANG != "fr")}</a>'
+    crumbs = [home_crumb(), ("Rating" if i18n.LANG != "fr" else "Constance des primes", i18n.url("rating")),
+              (L("Award", "Prix", "Award"), path)]
     body = f"""<div class="award-page">
-{crumbs_html([("Krankenkassen-Vergleich", "/"), ("Rating", RATING_PATH), ("Award", path)])}
-<div class="article-badge">Edition {YEAR}</div>
-<h1>abovergleich Preistreue-Award {YEAR}</h1>
-<p class="kk-lead">{n_awards} Auszeichnungen für Krankenkassen, die dauerhaft günstig bleiben. Vergeben allein aus den Prämiendaten des Bundes seit {y0}. Keine Jury, keine Einreichung, keine Gebühr.</p>
+{crumbs_html(crumbs)}
+<div class="article-badge">{T("Edition", "Édition", "Edition")} {YEAR}</div>
+<h1>abovergleich {an} {YEAR}</h1>
+<p class="kk-lead">{T(f"{n_awards} Auszeichnungen für Krankenkassen, die dauerhaft günstig bleiben. Vergeben allein aus den Prämiendaten des Bundes seit {y0}. Keine Jury, keine Einreichung, keine Gebühr.",
+  f"{n_awards} distinctions pour des caisses-maladie qui restent durablement avantageuses. Décernées uniquement à partir des données de primes de la Confédération depuis {y0}. Pas de jury, pas de candidature, pas de frais.",
+  f"{n_awards} awards for health insurers that stay cheap over time. Given solely on the basis of federal premium data since {y0}. No jury, no entry, no fee.")}</p>
 
-<h2>Wofür ausgezeichnet wird</h2>
-<p>Grundlage ist das <a href="{RATING_PATH}">Preistreue-Rating</a>: Preis heute, wie oft eine Kasse seit {y0} in ihrer Region unter den fünf günstigsten war, wie stark sie aufschlägt, ob neue Sparmodelle ihren Rabatt halten, wie oft sie Tarife streicht und wie gut ihre Reserven sind. Die <strong>Gesamtwertung</strong> zeichnet die drei besten Noten aus, die <strong>Kategorien</strong> den Besten in je einem Teilaspekt, und in jedem <strong>Kanton</strong> die Kasse mit der besten Note in der Hauptregion, Regionalkassen eingeschlossen.</p>
+<h2>{T("Wofür ausgezeichnet wird", "Ce qui est récompensé", "What is rewarded")}</h2>
+<p>{T(f"Grundlage ist das {rl}: Preis heute, wie oft eine Kasse seit {y0} in ihrer Region unter den fünf günstigsten war, wie stark sie aufschlägt, ob neue Sparmodelle ihren Rabatt halten, wie oft sie Tarife streicht und wie gut ihre Reserven sind. Die <strong>Gesamtwertung</strong> zeichnet die drei besten Noten aus, die <strong>Kategorien</strong> den Besten in je einem Teilaspekt, und in jedem <strong>Kanton</strong> die Kasse mit der besten Note in der Hauptregion, Regionalkassen eingeschlossen.",
+  f"La base est la {rl} : prix actuel, fréquence à laquelle une caisse a figuré depuis {y0} parmi les cinq moins chères de sa région, ampleur de ses hausses, maintien du rabais des nouveaux modèles alternatifs, fréquence des suppressions de tarifs et solidité des réserves. Le <strong>classement général</strong> distingue les trois meilleures notes, les <strong>catégories</strong> la meilleure caisse sur un aspect précis, et dans chaque <strong>canton</strong> la caisse la mieux notée dans la région principale, caisses régionales comprises.",
+  f"It is based on the {rl}: price today, how often an insurer has been among the five cheapest in its region since {y0}, how much it raises prices, whether new savings models keep their discount, how often it drops tariffs and how strong its reserves are. The <strong>overall ranking</strong> rewards the three best scores, the <strong>categories</strong> the best in one aspect each, and in every <strong>canton</strong> the insurer with the best score in the main region, regional insurers included.")}</p>
 
-<h2>Die Regeln</h2>
+<h2>{T("Die Regeln", "Les règles", "The rules")}</h2>
 <ul class="rules">
-  <li>Die Auswahl folgt allein der Zahl. Es gibt keine Jury, keine Einreichung und keinen Weg, einen Award zu beeinflussen.</li>
-  <li>Der Award kostet nichts und ist an nichts gekoppelt. Ob eine Kasse das Badge einbindet oder verlinkt, ändert weder Note noch Reihenfolge auf abovergleich.com.</li>
-  <li>Ein Link ist keine Bedingung. Der Einbindungscode enthält ihn, weil eine Auszeichnung ohne Beleg wenig wert ist. Wer das Badge ohne Link nutzt, darf das.</li>
-  <li>Die Edition ist ein Stichtag: die Prämien {YEAR}. Das Badge {YEAR} behält seine Aussage, auch wenn sich die Note im nächsten Jahr ändert.</li>
-  <li>Gesamtwertung und Kategorien: Kassen mit mindestens 50'000 Versicherten. Bei Gleichstand gewinnen alle. Die Note rechnen wir für vier Situationen (mit oder ohne Unfall, Franchise 300 oder 2'500) und gewichten sie nach dem Bestand laut BAG.</li>
-  <li>«Schlankste Verwaltung»: die gesamten Verwaltungskosten pro versicherte Person laut BAG, letztes verfügbares Jahr, auch was eine Kasse bei einer Konzernfirma einkauft.</li>
+  <li>{T("Die Auswahl folgt allein der Zahl. Es gibt keine Jury, keine Einreichung und keinen Weg, einen Award zu beeinflussen.", "La sélection suit uniquement les chiffres. Il n’y a ni jury, ni candidature, ni moyen d’influencer une distinction.", "Selection follows the numbers alone. There is no jury, no entry and no way to influence an award.")}</li>
+  <li>{T("Der Award kostet nichts und ist an nichts gekoppelt. Ob eine Kasse das Badge einbindet oder verlinkt, ändert weder Note noch Reihenfolge auf abovergleich.com.", "La distinction est gratuite et sans condition. Qu’une caisse intègre le badge ou crée un lien ne change ni la note ni le classement sur abovergleich.com.", "The award costs nothing and comes with no strings. Whether an insurer uses or links the badge changes neither its score nor its ranking on abovergleich.com.")}</li>
+  <li>{T("Ein Link ist keine Bedingung. Der Einbindungscode enthält ihn, weil eine Auszeichnung ohne Beleg wenig wert ist. Wer das Badge ohne Link nutzt, darf das.", "Un lien n’est pas obligatoire. Le code d’intégration en contient un, car une distinction sans preuve vaut peu. Utiliser le badge sans lien est permis.", "A link is not required. The embed code includes one because an award without evidence is worth little. Using the badge without a link is allowed.")}</li>
+  <li>{T(f"Die Edition ist ein Stichtag: die Prämien {YEAR}. Das Badge {YEAR} behält seine Aussage, auch wenn sich die Note im nächsten Jahr ändert.", f"L’édition correspond à une date de référence : les primes {YEAR}. Le badge {YEAR} reste valable même si la note change l’année suivante.", f"Each edition has a cut-off: the {YEAR} premiums. The {YEAR} badge keeps its meaning even if the score changes next year.")}</li>
+  <li>{T("Gesamtwertung und Kategorien: Kassen mit mindestens 50'000 Versicherten. Bei Gleichstand gewinnen alle. Die Note rechnen wir für vier Situationen (mit oder ohne Unfall, Franchise 300 oder 2'500) und gewichten sie nach dem Bestand laut BAG.", "Classement général et catégories : caisses d’au moins 50'000 assurés. En cas d’égalité, toutes gagnent. La note est calculée pour quatre situations (avec ou sans accidents, franchise 300 ou 2'500) et pondérée selon l’effectif d’après l’OFSP.", "Overall ranking and categories: insurers with at least 50'000 insured persons. In a tie, all win. The score is calculated for four situations (with or without accident cover, deductible 300 or 2'500) and weighted by FOPH enrolment figures.")}</li>
+  <li>{T("«Schlankste Verwaltung»: die gesamten Verwaltungskosten pro versicherte Person laut BAG, letztes verfügbares Jahr, auch was eine Kasse bei einer Konzernfirma einkauft.", "« Administration la plus légère » : l’ensemble des frais administratifs par assuré selon l’OFSP, dernière année disponible, y compris ce qu’une caisse achète à une société de son groupe.", "“Leanest administration”: total administrative costs per insured person according to the FOPH, latest available year, including what an insurer buys in from a group company.")}</li>
 </ul>
 
 {"".join(groups)}
 
-<div class="cta-box"><h3>Zahl falsch? Sag es uns.</h3><p>Wenn ein Wert nicht stimmt, korrigieren wir ihn und rechnen die Edition neu. Schreib an hello@handyabo.com.</p><a href="mailto:hello@handyabo.com">Mail schreiben &rarr;</a></div>
+<div class="cta-box"><h3>{T("Zahl falsch? Sag es uns.", "Un chiffre est faux ? Dites-le-nous.", "Wrong number? Tell us.")}</h3><p>{T("Wenn ein Wert nicht stimmt, korrigieren wir ihn und rechnen die Edition neu. Schreib an hello@handyabo.com.", "Si une valeur est inexacte, nous la corrigeons et recalculons l’édition. Écrivez à hello@handyabo.com.", "If a value is wrong, we correct it and recalculate the edition. Write to hello@handyabo.com.")}</p><a href="mailto:hello@handyabo.com">{T("Mail schreiben", "Écrire un e-mail", "Send an email")} &rarr;</a></div>
 </div>
 {AWARD_PNG_JS}"""
-    jsonld = [breadcrumb([("Krankenkassen-Vergleich", "/"), ("Rating", RATING_PATH), ("Award", path)])]
+    jsonld = [breadcrumb(crumbs)]
     winner = AWARDS[0]["name"] if AWARDS else ""
-    html_out = page(path, f"Preistreue-Award {YEAR}: die preistreuesten Krankenkassen",
-                    f"{n_awards} Auszeichnungen für Krankenkassen, die dauerhaft günstig bleiben, allein aus BAG-Prämien seit {y0}. Sieger {YEAR}: {winner}.",
-                    body, jsonld)
+    html_out = page(path, T(f"Preistreue-Award {YEAR}: die preistreuesten Krankenkassen", f"Prix Constance des primes {YEAR} : les caisses-maladie lauréates",
+                            f"Price Consistency Award {YEAR}: the winning health insurers"),
+                    T(f"{n_awards} Auszeichnungen für Krankenkassen, die dauerhaft günstig bleiben, allein aus BAG-Prämien seit {y0}. Sieger {YEAR}: {winner}.",
+                      f"{n_awards} distinctions pour des caisses-maladie durablement avantageuses, uniquement d’après les primes de l’OFSP depuis {y0}. Lauréate {YEAR} : {winner}.",
+                      f"{n_awards} awards for health insurers that stay cheap over time, based solely on FOPH premiums since {y0}. Winner {YEAR}: {winner}."),
+                    body, jsonld, dict(i18n.ROUTES["award"]))
     return path, html_out.replace("</style>", AWARD_CSS + "</style>", 1)
 
 
@@ -1331,14 +1834,18 @@ def slugify(name):
     return re.sub(r"[^a-z0-9]+", "-", s).strip("-")
 
 
+def kasse_url(i):
+    return f"{i18n.url('kassen')}{KASSE_SLUG[i]}/"
+
+
 def kasse_link(i, text=None):
     text = e(text or INSURER_NAMES[str(i)])
-    return f'<a class="kasse-link" href="/kasse/{KASSE_SLUG[i]}/">{text}</a>' if i in KASSE_SLUG else text
+    return f'<a class="kasse-link" href="{kasse_url(i)}">{text}</a>' if i in KASSE_SLUG else text
 
 
 def people(n):
     if n >= 1_000_000:
-        return f"{n / 1_000_000:.1f}".replace(".", ",") + " Mio."
+        return i18n.dec(n / 1_000_000) + L(" Mio.", " mio", "m")
     return chf(round(n, -3), 0)
 
 
@@ -1347,12 +1854,17 @@ def address_lines(kv, i):
     return [d.get("name") or INSURER_NAMES[str(i)]] + d.get("address", [])
 
 
+def tip(text):
+    return f'<span class="tip" tabindex="0" aria-label="Info">i<span>{text}</span></span>'
+
+
 def kasse_page(i, cur, by_canton_cur, prev_idx, insurers, ic, top3_cur, kv, nu):
     name = INSURER_NAMES[str(i)]
-    path = f"/kasse/{KASSE_SLUG[i]}/"
+    path = kasse_url(i)
     own = [r for r in cur if r["insurer_id"] == i]
-    cants = sorted({r["canton"] for r in own} & set(CANTONS), key=lambda c: CANTONS[c][0])
+    cants = sorted({r["canton"] for r in own} & set(CANTONS), key=lambda c: cname(c))
     info = insurers.get(i)
+    of = L("von", "sur", "of")
 
     # Beispielperson wie die Mehrheit: Erwachsene ohne Unfalldeckung (über den
     # Arbeitgeber versichert), Prämienregion 1. Die zwei häufigsten Franchisen
@@ -1369,12 +1881,12 @@ def kasse_page(i, cur, by_canton_cur, prev_idx, insurers, ic, top3_cur, kv, nu):
             if fr == 2500:
                 pos25 = pos
             cells.append(f'<td class="num">{("CHF " + chf(best["premium"])) if best else "–"}'
-                         f'{("<span class=sub>" + MODEL_LABEL[best["model"]] + " · Platz " + str(pos) + " von " + str(len(rk)) + "</span>") if best else ""}</td>')
+                         f'{("<span class=sub>" + MODEL_LABEL[best["model"]] + " · " + L("Platz", "Rang", "Rank") + " " + str(pos) + " " + of + " " + str(len(rk)) + "</span>") if best else ""}</td>')
         if pos25 == 1:
             first_in.append(c)
         if pos25 and pos25 <= 3:
             top3_in += 1
-        rows.append(f'<tr><td><a href="/krankenkasse/{CANTONS[c][1]}/">{e(CANTONS[c][0])}</a></td>{"".join(cells)}</tr>')
+        rows.append(f'<tr><td><a href="{canton_url(c)}">{e(cname(c))}</a></td>{"".join(cells)}</tr>')
 
     # Modellwechsel innerhalb der Kasse: Standard gegen günstigstes anderes Modell
     by_reg = defaultdict(list)
@@ -1397,101 +1909,177 @@ def kasse_page(i, cur, by_canton_cur, prev_idx, insurers, ic, top3_cur, kv, nu):
                          for m, t in sorted(models.items(), key=lambda x: MODEL_LABEL[x[0]]))
 
     chg = info["change_pct"] if info else None
-    rel = ""
-    if chg is not None:
-        rel = ("weniger als" if chg < BAG_OFFICIAL["change_pct"] else "mehr als")
     t3 = top3_cur.get(i, 0)
     group = (kv.get(i) or {}).get("group")
     group_name = group.split(" (")[0] if group else None
     siblings = [j for j in KASSE_SLUG if j != i and ((kv.get(j) or {}).get("group") or "").split(" (")[0] == group_name] if group_name else []
 
-    title = f"{name} Prämien {YEAR}: Erhöhung, Modelle und Rating"
-    desc = (f"{name} {YEAR}: Standardprämie {pct(chg)} gegenüber {PREV}. Alle Kantone und Modelle, "
-            f"Preistreue-Note und Kündigungsadresse. Offizielle BAG-Daten.") if chg is not None else \
-           (f"{name} {YEAR}: Prämien in allen Kantonen, Modelle, Preistreue-Note und Kündigungsadresse. BAG-Daten.")
-
-    p = [crumbs_html([("Krankenkassen-Vergleich", "/"), ("Kassen", "/kasse/"), (name, path)])]
-    p.append(f'<div class="article-badge">Prämien {YEAR}</div>')
-    p.append(f"<h1>{e(name)} Prämien {YEAR}</h1>")
-    p.append(f'<div class="article-meta">Offizielle Prämien des BAG · {len(cants)} {"Kanton" if len(cants) == 1 else "Kantone"}'
-             f'{" · rund " + people(info["bestand"]) + " Versicherte" if info and info["bestand"] >= 1000 else ""}</div>')
+    title = L(f"{name} Prämien {YEAR}: Erhöhung, Modelle und Rating", f"{name} primes {YEAR} : hausse, modèles et notation",
+              f"{name} premiums {YEAR}: increase, models and rating")
     if chg is not None:
-        tip_chg = ('<span class="tip" tabindex="0" aria-label="Info">i<span>Standardmodell, Erwachsene, Franchise 300, mit Unfall. '
-                   'Schnitt über alle Kantone, gewichtet nach Versicherten. Der Schnitt aller Kassen ist die mittlere Prämie laut BAG.</span></span>')
-        verb = (f"im Schnitt <strong>{pct(chg, sign=False)}</strong> teurer" if chg >= 0
-                else f"im Schnitt <strong>{pct(-chg, sign=False)}</strong> günstiger")
-        p.append(f'<p class="kk-lead">{e(name)} wird {YEAR} {verb}. '
-                 f'Alle Kassen zusammen: {pct(BAG_OFFICIAL["change_pct"])}.{tip_chg}</p>')
+        desc = L(f"{name} {YEAR}: Standardprämie {pct(chg)} gegenüber {PREV}. Alle Kantone und Modelle, "
+                 f"Preistreue-Note und Kündigungsadresse. Offizielle BAG-Daten.",
+                 f"{name} {YEAR} : prime standard {pct(chg)} par rapport à {PREV}. Tous les cantons et modèles, "
+                 f"note de constance et adresse de résiliation. Données de l’OFSP.",
+                 f"{name} {YEAR}: standard premium {pct(chg)} versus {PREV}. All cantons and models, "
+                 f"price consistency score and cancellation address. Official FOPH data.")
+    else:
+        desc = L(f"{name} {YEAR}: Prämien in allen Kantonen, Modelle, Preistreue-Note und Kündigungsadresse. BAG-Daten.",
+                 f"{name} {YEAR} : primes dans tous les cantons, modèles, note de constance et adresse de résiliation. Données OFSP.",
+                 f"{name} {YEAR}: premiums in all cantons, models, price consistency score and cancellation address. FOPH data.")
+
+    crumbs = [home_crumb(), (L("Kassen", "Caisses", "Insurers"), i18n.url("kassen")), (name, path)]
+    p = [crumbs_html(crumbs)]
+    p.append(f'<div class="article-badge">{L("Prämien", "Primes", "Premiums")} {YEAR}</div>')
+    p.append(f"<h1>{e(name)} {L('Prämien', 'primes', 'premiums')} {YEAR}</h1>")
+    nc = len(cants)
+    meta = L(f'Offizielle Prämien des BAG · {nc} {"Kanton" if nc == 1 else "Kantone"}',
+             f'Primes officielles de l’OFSP · {nc} canton{"" if nc == 1 else "s"}',
+             f'Official FOPH premiums · {nc} canton{"" if nc == 1 else "s"}')
+    if info and info["bestand"] >= 1000:
+        meta += L(f" · rund {people(info['bestand'])} Versicherte", f" · environ {people(info['bestand'])} assurés",
+                  f" · around {people(info['bestand'])} insured")
+    p.append(f'<div class="article-meta">{meta}</div>')
+    if chg is not None:
+        tip_chg = tip(L("Standardmodell, Erwachsene, Franchise 300, mit Unfall. "
+                        "Schnitt über alle Kantone, gewichtet nach Versicherten. Der Schnitt aller Kassen ist die mittlere Prämie laut BAG.",
+                        "Modèle standard, adultes, franchise 300, avec accidents. "
+                        "Moyenne de tous les cantons, pondérée selon les assurés. La moyenne de toutes les caisses est la prime moyenne selon l’OFSP.",
+                        "Standard model, adults, deductible 300, with accident cover. "
+                        "Average across all cantons, weighted by insured persons. The all-insurer average is the FOPH mean premium."))
+        if chg >= 0:
+            verb = L(f"im Schnitt <strong>{pct(chg, sign=False)}</strong> teurer", f"en moyenne <strong>{pct(chg, sign=False)}</strong> plus chère",
+                     f"<strong>{pct(chg, sign=False)}</strong> more expensive on average")
+        else:
+            verb = L(f"im Schnitt <strong>{pct(-chg, sign=False)}</strong> günstiger", f"en moyenne <strong>{pct(-chg, sign=False)}</strong> moins chère",
+                     f"<strong>{pct(-chg, sign=False)}</strong> cheaper on average")
+        allk = pct(BAG_OFFICIAL["change_pct"])
+        p.append(L(f'<p class="kk-lead">{e(name)} wird {YEAR} {verb}. Alle Kassen zusammen: {allk}.{tip_chg}</p>',
+                   f'<p class="kk-lead">En {YEAR}, {e(name)} devient {verb}. Toutes caisses confondues : {allk}.{tip_chg}</p>',
+                   f'<p class="kk-lead">In {YEAR}, {e(name)} becomes {verb}. All insurers together: {allk}.{tip_chg}</p>'))
     facts = []
     if chg is not None:
-        facts.append((pct(chg), f"gegenüber {PREV}"))
-    facts.append((f"{top3_in} von {len(cants)}", 'Kantonen unter den 3 günstigsten<span class="tip" tabindex="0" aria-label="Info">i<span>'
-                  'Günstigstes Angebot, Erwachsene ohne Unfall, Franchise 2\'500, Region 1 jedes Kantons.</span></span>'))
+        facts.append((pct(chg), L(f"gegenüber {PREV}", f"par rapport à {PREV}", f"versus {PREV}")))
+    tip_top3 = tip(L("Günstigstes Angebot, Erwachsene ohne Unfall, Franchise 2'500, Region 1 jedes Kantons.",
+                     "Offre la moins chère, adultes sans accidents, franchise 2'500, région 1 de chaque canton.",
+                     "Cheapest offer, adults without accident cover, deductible 2'500, region 1 of each canton."))
+    facts.append((f"{top3_in} {of} {nc}", L("Kantonen unter den 3 günstigsten", "cantons parmi les 3 moins chères", "cantons among the 3 cheapest") + tip_top3))
     if gap and gap > 0:
-        facts.append((f"CHF {chf(gap, 0)}", f'pro Jahr weniger mit einem Sparmodell bei {e(name)}<span class="tip" tabindex="0" aria-label="Info">i<span>'
-                      'Hausarzt, HMO oder Telmed statt Standardmodell, gleiche Leistungen. Median über alle Regionen, Franchise 2\'500, ohne Unfall.</span></span>'))
+        tip_gap = tip(L("Hausarzt, HMO oder Telmed statt Standardmodell, gleiche Leistungen. Median über alle Regionen, Franchise 2'500, ohne Unfall.",
+                        "Médecin de famille, HMO ou Telmed au lieu du modèle standard, mêmes prestations. Médiane de toutes les régions, franchise 2'500, sans accidents.",
+                        "Family doctor, HMO or Telmed instead of the standard model, same benefits. Median across all regions, deductible 2'500, without accident cover."))
+        facts.append((f"CHF {chf(gap, 0)}", L(f"pro Jahr weniger mit einem Sparmodell bei {e(name)}", f"de moins par an avec un modèle alternatif chez {e(name)}",
+                                              f"less per year with a savings model at {e(name)}") + tip_gap))
     p.append('<div class="kk-facts">' + "".join(
         f'<div class="kk-fact"><div class="kk-fact-val">{v}</div><div class="kk-fact-label">{l}</div></div>' for v, l in facts) + "</div>")
-    p.append(f'<a class="kk-cta" href="/?kasse={i}#kk-rechner">Mit deiner {e(name)}-Rechnung vergleichen &rarr;</a>')
+    p.append(f'<a class="kk-cta" href="{i18n.url("home")}?kasse={i}#kk-rechner">'
+             + L(f"Mit deiner {e(name)}-Rechnung vergleichen", f"Comparer avec votre facture {e(name)}", f"Compare with your {e(name)} bill") + " &rarr;</a>")
     p.append(rating_kasse_card(i))
 
-    p.append(f"<h2>{e(name)} {YEAR} in jedem Kanton</h2>")
-    tip_reg = ('<span class="tip" tabindex="0" aria-label="Info">i<span>Viele Kantone haben zwei oder drei Prämienregionen. '
-               'Wir zeigen Region 1, meist die Städte. Auf dem Land ist es oft etwas günstiger. Deine genaue Prämie zeigt der Rechner.</span></span>')
-    tip_platz = ('<span class="tip" tabindex="0" aria-label="Info">i<span>Das günstigste Angebot von ' + e(name) +
-                 ' im Kanton, meist ein Sparmodell (Hausarzt, HMO, Telmed, gleiche Leistungen). Platz unter allen Kassen: 1 heisst, niemand ist günstiger.</span></span>')
-    p.append(f"<p>Beispiel: <strong>Erwachsene Person ohne Unfalldeckung</strong> (über den Arbeitgeber versichert), günstigstes Angebot pro Monat.{tip_reg}{tip_platz}</p>")
-    p.append(f'<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Kanton</th><th class="num">Franchise 300</th>'
-             f'<th class="num">Franchise 2\'500</th></tr></thead>'
+    p.append(L(f"<h2>{e(name)} {YEAR} in jedem Kanton</h2>", f"<h2>{e(name)} {YEAR} dans chaque canton</h2>", f"<h2>{e(name)} {YEAR} in every canton</h2>"))
+    tip_reg = tip(L("Viele Kantone haben zwei oder drei Prämienregionen. "
+                    "Wir zeigen Region 1, meist die Städte. Auf dem Land ist es oft etwas günstiger. Deine genaue Prämie zeigt der Rechner.",
+                    "De nombreux cantons ont deux ou trois régions de primes. "
+                    "Nous montrons la région 1, généralement les villes. À la campagne, c’est souvent un peu moins cher. Le calculateur affiche votre prime exacte.",
+                    "Many cantons have two or three premium regions. "
+                    "We show region 1, usually the cities. In rural areas it is often a little cheaper. The calculator shows your exact premium."))
+    tip_platz = tip(L(f"Das günstigste Angebot von {e(name)} im Kanton, meist ein Sparmodell (Hausarzt, HMO, Telmed, gleiche Leistungen). Platz unter allen Kassen: 1 heisst, niemand ist günstiger.",
+                      f"L’offre la moins chère de {e(name)} dans le canton, le plus souvent un modèle alternatif (médecin de famille, HMO, Telmed, mêmes prestations). Rang parmi toutes les caisses : 1 signifie que personne n’est moins cher.",
+                      f"The cheapest offer from {e(name)} in the canton, usually a savings model (family doctor, HMO, Telmed, same benefits). Rank among all insurers: 1 means nobody is cheaper."))
+    p.append(L(f"<p>Beispiel: <strong>Erwachsene Person ohne Unfalldeckung</strong> (über den Arbeitgeber versichert), günstigstes Angebot pro Monat.{tip_reg}{tip_platz}</p>",
+               f"<p>Exemple : <strong>adulte sans couverture accidents</strong> (assuré par l’employeur), offre la moins chère par mois.{tip_reg}{tip_platz}</p>",
+               f"<p>Example: <strong>adult without accident cover</strong> (insured through the employer), cheapest offer per month.{tip_reg}{tip_platz}</p>"))
+    fw = L("Franchise", "Franchise", "Deductible")
+    p.append(f'<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>{L("Kanton", "Canton", "Canton")}</th><th class="num">{fw} 300</th>'
+             f'<th class="num">{fw} 2\'500</th></tr></thead>'
              f'<tbody>{"".join(rows)}</tbody></table></div>')
     if first_in:
-        p.append(f"<p>Am günstigsten von allen Kassen ist {e(name)} {YEAR} in: "
-                 + ", ".join(f'<a href="/krankenkasse/{CANTONS[c][1]}/">{e(CANTONS[c][0])}</a>' for c in first_in) + ".</p>")
+        links = ", ".join(f'<a href="{canton_url(c)}">{e(cname(c))}</a>' for c in first_in)
+        p.append(L(f"<p>Am günstigsten von allen Kassen ist {e(name)} {YEAR} in: {links}.</p>",
+                   f"<p>En {YEAR}, {e(name)} est la moins chère de toutes les caisses dans : {links}.</p>",
+                   f"<p>In {YEAR}, {e(name)} is the cheapest of all insurers in: {links}.</p>"))
 
     if model_html:
-        p.append(f"<h2>Modelle von {e(name)}</h2>")
-        p.append(f"<p>Neben dem Standardmodell mit freier Arztwahl bietet {e(name)} {YEAR} diese Tarife an "
-                 f"(nicht jeder in jedem Kanton). Die Leistungen sind in allen Modellen gleich, nur die erste Anlaufstelle unterscheidet sich.</p>")
+        p.append(L(f"<h2>Modelle von {e(name)}</h2>", f"<h2>Modèles de {e(name)}</h2>", f"<h2>{e(name)} models</h2>"))
+        p.append(L(f"<p>Neben dem Standardmodell mit freier Arztwahl bietet {e(name)} {YEAR} diese Tarife an "
+                   f"(nicht jeder in jedem Kanton). Die Leistungen sind in allen Modellen gleich, nur die erste Anlaufstelle unterscheidet sich.</p>",
+                   f"<p>Outre le modèle standard avec libre choix du médecin, {e(name)} propose en {YEAR} ces tarifs "
+                   f"(pas tous dans chaque canton). Les prestations sont les mêmes dans tous les modèles, seul le premier interlocuteur change.</p>",
+                   f"<p>Besides the standard model with free choice of doctor, {e(name)} offers these tariffs in {YEAR} "
+                   f"(not every one in every canton). Benefits are the same in all models, only your first point of contact differs.</p>"))
         p.append(f"<ul>{model_html}</ul>")
 
     if siblings:
-        p.append(f"<h2>Gruppe {e(group_name)}</h2>")
-        p.append(f"<p>{e(name)} gehört zur Gruppe {e(group_name)}. Weitere Kassen der Gruppe mit eigenen Prämien: "
-                 + ", ".join(kasse_link(j) for j in sorted(siblings, key=lambda j: INSURER_NAMES[str(j)])) + ".</p>")
+        sib = ", ".join(kasse_link(j) for j in sorted(siblings, key=lambda j: INSURER_NAMES[str(j)]))
+        p.append(L(f"<h2>Gruppe {e(group_name)}</h2>", f"<h2>Groupe {e(group_name)}</h2>", f"<h2>{e(group_name)} group</h2>"))
+        p.append(L(f"<p>{e(name)} gehört zur Gruppe {e(group_name)}. Weitere Kassen der Gruppe mit eigenen Prämien: {sib}.</p>",
+                   f"<p>{e(name)} fait partie du groupe {e(group_name)}. Autres caisses du groupe avec leurs propres primes : {sib}.</p>",
+                   f"<p>{e(name)} belongs to the {e(group_name)} group. Other insurers in the group with their own premiums: {sib}.</p>"))
 
     addr = address_lines(kv, i)
-    p.append(f"<h2>{e(name)} kündigen</h2>")
-    p.append(f"<p>Die Kündigung der Grundversicherung muss bis am <strong>{DEADLINE}</strong> bei {e(name)} eingetroffen sein, "
-             f"der Poststempel zählt nicht. Adresse laut BAG-Verzeichnis der zugelassenen Krankenversicherer:</p>")
+    p.append(L(f"<h2>{e(name)} kündigen</h2>", f"<h2>Résilier {e(name)}</h2>", f"<h2>Cancel {e(name)}</h2>"))
+    p.append(L(f"<p>Die Kündigung der Grundversicherung muss bis am <strong>{deadline()}</strong> bei {e(name)} eingetroffen sein, "
+               f"der Poststempel zählt nicht. Adresse laut BAG-Verzeichnis der zugelassenen Krankenversicherer:</p>",
+               f"<p>La résiliation de l’assurance de base doit parvenir à {e(name)} au plus tard le <strong>{deadline()}</strong>, "
+               f"le cachet de la poste ne compte pas. Adresse selon la liste de l’OFSP des assureurs-maladie autorisés :</p>",
+               f"<p>Your cancellation of basic insurance must reach {e(name)} by <strong>{deadline()}</strong>; "
+               f"the postmark does not count. Address according to the FOPH list of licensed health insurers:</p>"))
     p.append(f'<blockquote>{"<br>".join(e(l) for l in addr)}</blockquote>')
-    p.append(f'<p><a href="/krankenkasse-kuendigen/?kasse={i}">Kündigungsbrief an {e(name)} erstellen</a>, fertig zum Ausdrucken.</p>')
+    kd = f'{i18n.url("kuendigen")}?kasse={i}'
+    p.append(L(f'<p><a href="{kd}">Kündigungsbrief an {e(name)} erstellen</a>, fertig zum Ausdrucken.</p>',
+               f'<p><a href="{kd}">Créer la lettre de résiliation pour {e(name)}</a>, prête à imprimer.</p>',
+               f'<p><a href="{kd}">Create a cancellation letter to {e(name)}</a>, ready to print.</p>'))
 
     qa = []
     if chg is not None:
-        qa.append((f"Wie stark steigen die Prämien von {name} {YEAR}?",
-                   f"Die Standardprämie für Erwachsene mit Franchise 300 steigt bei {name} im Schnitt um {pct(chg)}, gewichtet nach "
-                   f"Versicherten je Kanton. Laut BAG steigt die mittlere Prämie aller Kassen um {BAG_OFFICIAL['change_pct']:.1f} Prozent."))
-    qa.append((f"Ist {name} günstig?",
-               f"Für Erwachsene ohne Unfalldeckung mit Franchise 2'500 gehört {name} {YEAR} in {top3_in} von {len(cants)} Kantonen zu den drei günstigsten Kassen"
-               + (f" und ist in {len(first_in)} {'Kanton' if len(first_in) == 1 else 'Kantonen'} die günstigste überhaupt." if first_in else ".")
-               + " Wie günstig es für dich ist, hängt von Wohnort, Franchise und Modell ab."))
-    qa.append((f"Bis wann kann ich {name} kündigen?",
-               f"Die Kündigung muss bis am {DEADLINE} bei {name} eingetroffen sein, dann wechselst du auf den 1. Januar {YEAR}. "
-               f"Adresse: {', '.join(addr)}."))
-    p.append('<div class="kk-faq"><h2>Häufige Fragen</h2>' + "".join(f"<h3>{e(q)}</h3><p>{e(a)}</p>" for q, a in qa) + "</div>")
-    p.append(f'<p class="kk-note">Quelle: Bundesamt für Gesundheit (BAG), Prämien {YEAR} und {PREV}; Versichertenbestand {YEAR - 2}. '
-             f'Angaben ohne Gewähr. <a href="/kasse/">Alle Kassen</a> · <a href="/krankenkassenpraemien-{YEAR}/#methode">Methode</a></p>')
-    return path, page(path, title, desc, "\n".join(p),
-                      [breadcrumb([("Krankenkassen-Vergleich", "/"), ("Kassen", "/kasse/"), (name, path)]), faq(qa)])
+        qa.append((L(f"Wie stark steigen die Prämien von {name} {YEAR}?", f"De combien les primes de {name} augmentent-elles en {YEAR} ?",
+                     f"How much are {name} premiums rising in {YEAR}?"),
+                   L(f"Die Standardprämie für Erwachsene mit Franchise 300 steigt bei {name} im Schnitt um {pct(chg)}, gewichtet nach "
+                     f"Versicherten je Kanton. Laut BAG steigt die mittlere Prämie aller Kassen um {BAG_OFFICIAL['change_pct']:.1f} Prozent.",
+                     f"La prime standard des adultes avec franchise 300 augmente chez {name} de {pct(chg)} en moyenne, pondérée selon "
+                     f"les assurés par canton. Selon l’OFSP, la prime moyenne de toutes les caisses augmente de {i18n.dec(BAG_OFFICIAL['change_pct'])} %.",
+                     f"The standard premium for adults with a 300 deductible rises at {name} by {pct(chg)} on average, weighted by "
+                     f"insured persons per canton. According to the FOPH, the average premium of all insurers rises by {i18n.dec(BAG_OFFICIAL['change_pct'])}%.")))
+    nf = len(first_in)
+    qa.append((L(f"Ist {name} günstig?", f"{name} est-elle avantageuse ?", f"Is {name} cheap?"),
+               L(f"Für Erwachsene ohne Unfalldeckung mit Franchise 2'500 gehört {name} {YEAR} in {top3_in} von {nc} Kantonen zu den drei günstigsten Kassen"
+                 + (f" und ist in {nf} {'Kanton' if nf == 1 else 'Kantonen'} die günstigste überhaupt." if first_in else ".")
+                 + " Wie günstig es für dich ist, hängt von Wohnort, Franchise und Modell ab.",
+                 f"Pour les adultes sans couverture accidents avec franchise 2'500, {name} figure en {YEAR} parmi les trois caisses les moins chères dans {top3_in} cantons sur {nc}"
+                 + (f" et elle est la moins chère de toutes dans {nf} canton{'' if nf == 1 else 's'}." if first_in else ".")
+                 + " Ce qu’elle vous coûte dépend de votre domicile, de votre franchise et du modèle.",
+                 f"For adults without accident cover and a 2'500 deductible, {name} is among the three cheapest insurers in {top3_in} of {nc} cantons in {YEAR}"
+                 + (f" and the cheapest of all in {nf} canton{'' if nf == 1 else 's'}." if first_in else ".")
+                 + " How cheap it is for you depends on where you live, your deductible and the model.")))
+    qa.append((L(f"Bis wann kann ich {name} kündigen?", f"Jusqu’à quand puis-je résilier {name} ?", f"When is the deadline to cancel {name}?"),
+               L(f"Die Kündigung muss bis am {deadline()} bei {name} eingetroffen sein, dann wechselst du auf den 1. Januar {YEAR}. "
+                 f"Adresse: {', '.join(addr)}.",
+                 f"La résiliation doit parvenir à {name} au plus tard le {deadline()}, vous changez alors au 1er janvier {YEAR}. "
+                 f"Adresse : {', '.join(addr)}.",
+                 f"Your cancellation must reach {name} by {deadline()}; you then switch on 1 January {YEAR}. "
+                 f"Address: {', '.join(addr)}.")))
+    p.append(f'<div class="kk-faq"><h2>{L("Häufige Fragen", "Questions fréquentes", "Frequently asked questions")}</h2>' + "".join(f"<h3>{e(q)}</h3><p>{e(a)}</p>" for q, a in qa) + "</div>")
+    rep = i18n.url("report")
+    p.append(L(f'<p class="kk-note">Quelle: Bundesamt für Gesundheit (BAG), Prämien {YEAR} und {PREV}; Versichertenbestand {YEAR - 2}. '
+               f'Angaben ohne Gewähr. <a href="{i18n.url("kassen")}">Alle Kassen</a> · <a href="{rep}#methode">Methode</a></p>',
+               f'<p class="kk-note">Source : Office fédéral de la santé publique (OFSP), primes {YEAR} et {PREV} ; effectif des assurés {YEAR - 2}. '
+               f'Sans garantie. <a href="{i18n.url("kassen")}">Toutes les caisses</a> · <a href="{rep}#methode">Méthode</a></p>',
+               f'<p class="kk-note">Source: Federal Office of Public Health (FOPH), premiums {YEAR} and {PREV}; insured persons {YEAR - 2}. '
+               f'No liability for accuracy. <a href="{i18n.url("kassen")}">All insurers</a> · <a href="{rep}#methode">Methodology</a></p>'))
+    return path, page(path, title, desc, "\n".join(p), [breadcrumb(crumbs), faq(qa)], alts_of(lambda: kasse_url(i)))
 
 
 def kasse_hub(insurers, top3_cur):
-    path = "/kasse/"
+    path = i18n.url("kassen")
     nat = (RATING or {}).get("national", {})
+    rk = L("Regionalkasse", "Caisse régionale", "Regional insurer")
     def regio(i):
         h = HOME.get(i)
-        return (f' <span class="sub">Regionalkasse, Note im Kanton {e(CANTONS[h["canton"]][0])}</span>' if h
-                else ' <span class="sub">Regionalkasse</span>')
+        if h:
+            return ' <span class="sub">' + L(f"Regionalkasse, Note im Kanton {e(cname(h['canton']))}",
+                                              f"Caisse régionale, note {e(im_kanton(h['canton']))}",
+                                              f"Regional insurer, score {e(im_kanton(h['canton']))}") + '</span>'
+        return f' <span class="sub">{rk}</span>'
     shown = lambda i: (HOME[i]["note"] if i in HOME else nat.get(i, {}).get("note"))
     ids = sorted(KASSE_SLUG, key=lambda i: (nat.get(i, {}).get("regional", True), -(shown(i) or 0)))
     rows = "".join(
@@ -1500,22 +2088,41 @@ def kasse_hub(insurers, top3_cur):
         f'<td class="num">{people(insurers[i]["bestand"]) if i in insurers and insurers[i]["bestand"] >= 1000 else "–"}</td>'
         f'<td class="num {"kk-up" if i in insurers and insurers[i]["change_pct"] > 0 else ""}">{pct(insurers[i]["change_pct"]) if i in insurers else "–"}</td>'
         f'</tr>' for i in ids)
+    crumbs = [home_crumb(), (L("Kassen", "Caisses", "Insurers"), path)]
+    rl = f'<a href="{i18n.url("rating")}">{rating_name(cap=i18n.LANG != "fr")}</a>'
     body = [
-        crumbs_html([("Krankenkassen-Vergleich", "/"), ("Kassen", path)]),
-        f'<div class="article-badge">Prämien {YEAR}</div>',
-        f"<h1>Alle Krankenkassen: Prämien {YEAR} im Vergleich</h1>",
-        f'<div class="article-meta">{len(ids)} Kassen mit Grundversicherung · Offizielle BAG-Daten</div>',
-        f'<p class="kk-lead">Welche Kasse dauerhaft günstig ist und wie stark sie {YEAR} aufschlägt. '
-        f'Ein Klick auf die Kasse zeigt alle Kantone, Modelle und die Kündigungsadresse.</p>',
-        f'<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Kasse</th><th class="num">Preistreue</th><th class="num">Versicherte</th>'
-        f'<th class="num">vs. {PREV}</th></tr></thead><tbody>{rows}</tbody></table></div>',
-        f'<p class="kk-note">Preistreue: Note von 0 bis 10 aus dem <a href="{RATING_PATH}">Preistreue-Rating</a>, sortiert nach Note, Regionalkassen am Schluss. '
-        f'Veränderung: Standardmodell, Franchise 300, gewichtet nach Versicherten je Kanton. '
-        f'Versicherte: Durchschnittsbestand {YEAR - 2} laut BAG.</p>',
+        crumbs_html(crumbs),
+        f'<div class="article-badge">{L("Prämien", "Primes", "Premiums")} {YEAR}</div>',
+        L(f"<h1>Alle Krankenkassen: Prämien {YEAR} im Vergleich</h1>", f"<h1>Toutes les caisses-maladie : primes {YEAR} comparées</h1>",
+          f"<h1>All health insurers: {YEAR} premiums compared</h1>"),
+        L(f'<div class="article-meta">{len(ids)} Kassen mit Grundversicherung · Offizielle BAG-Daten</div>',
+          f'<div class="article-meta">{len(ids)} caisses proposant l’assurance de base · Données officielles de l’OFSP</div>',
+          f'<div class="article-meta">{len(ids)} insurers offering basic insurance · Official FOPH data</div>'),
+        L(f'<p class="kk-lead">Welche Kasse dauerhaft günstig ist und wie stark sie {YEAR} aufschlägt. '
+          f'Ein Klick auf die Kasse zeigt alle Kantone, Modelle und die Kündigungsadresse.</p>',
+          f'<p class="kk-lead">Quelle caisse est durablement avantageuse et de combien elle augmente en {YEAR}. '
+          f'Un clic sur la caisse affiche tous les cantons, les modèles et l’adresse de résiliation.</p>',
+          f'<p class="kk-lead">Which insurer is consistently cheap and how much it raises premiums in {YEAR}. '
+          f'Click an insurer to see all cantons, models and the cancellation address.</p>'),
+        f'<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>{L("Kasse", "Caisse", "Insurer")}</th><th class="num">{L("Preistreue", "Constance", "Consistency")}</th>'
+        f'<th class="num">{L("Versicherte", "Assurés", "Insured")}</th><th class="num">vs. {PREV}</th></tr></thead><tbody>{rows}</tbody></table></div>',
+        L(f'<p class="kk-note">Preistreue: Note von 0 bis 10 aus dem {rl}, sortiert nach Note, Regionalkassen am Schluss. '
+          f'Veränderung: Standardmodell, Franchise 300, gewichtet nach Versicherten je Kanton. '
+          f'Versicherte: Durchschnittsbestand {YEAR - 2} laut BAG.</p>',
+          f'<p class="kk-note">Constance : note de 0 à 10 issue de la {rl}, triée par note, caisses régionales à la fin. '
+          f'Évolution : modèle standard, franchise 300, pondérée selon les assurés par canton. '
+          f'Assurés : effectif moyen {YEAR - 2} selon l’OFSP.</p>',
+          f'<p class="kk-note">Consistency: score from 0 to 10 from the {rl}, sorted by score, regional insurers last. '
+          f'Change: standard model, deductible 300, weighted by insured persons per canton. '
+          f'Insured: average number in {YEAR - 2} according to the FOPH.</p>'),
     ]
-    return path, page(path, f"Alle Krankenkassen {YEAR}: Prämienerhöhung je Kasse im Vergleich",
-                      f"Alle {len(ids)} Krankenkassen mit Grundversicherung {YEAR}: Prämienveränderung, Versicherte und wo sie günstig sind. Offizielle BAG-Daten.",
-                      "\n".join(body), [breadcrumb([("Krankenkassen-Vergleich", "/"), ("Kassen", path)])])
+    return path, page(path, L(f"Alle Krankenkassen {YEAR}: Prämienerhöhung je Kasse im Vergleich",
+                              f"Toutes les caisses-maladie {YEAR} : hausse des primes par caisse",
+                              f"All health insurers {YEAR}: premium increase per insurer"),
+                      L(f"Alle {len(ids)} Krankenkassen mit Grundversicherung {YEAR}: Prämienveränderung, Versicherte und wo sie günstig sind. Offizielle BAG-Daten.",
+                        f"Les {len(ids)} caisses-maladie de l’assurance de base {YEAR} : évolution des primes, assurés et où elles sont avantageuses. Données OFSP.",
+                        f"All {len(ids)} health insurers offering basic insurance {YEAR}: premium change, insured persons and where they are cheap. FOPH data."),
+                      "\n".join(body), [breadcrumb(crumbs)], dict(i18n.ROUTES["kassen"]))
 
 
 KUENDIGEN_CSS = """
@@ -1592,7 +2199,7 @@ KUENDIGEN_CSS = """
 
 
 def kuendigen_page(kv):
-    path = "/krankenkasse-kuendigen/"
+    path = i18n.url("kuendigen")
     ids = sorted(KASSE_SLUG, key=lambda i: INSURER_NAMES[str(i)].lower())
     # Kündigungswege je Kasse, recherchiert auf den Seiten der Kassen selbst
     kan_doc = json.loads((DATA / "kuendigung_kanaele.json").read_text(encoding="utf-8"))
@@ -1611,111 +2218,178 @@ def kuendigen_page(kv):
             "url": f"https://www.{x['web']}" if x.get("web") else None,
         }
 
-    stand = ".".join(str(int(t)) for t in reversed(kan_doc["stand"].split("-")))
+    stand = i18n.date_short(kan_doc["stand"]) if i18n.LANG == "en" else ".".join(str(int(t)) for t in reversed(kan_doc["stand"].split("-")))
     data = [{"id": i, "name": INSURER_NAMES[str(i)], "address": address_lines(kv, i), **weg(i)} for i in ids]
-    end = f"31. Dezember {PREV}"
+    end = i18n.date_long(f"{PREV}-12-31")
     deadline_iso = f"{PREV}-11-30"
-    kd_data = json.dumps({"kassen": data, "end": end, "start": f"1. Januar {YEAR}", "deadline": deadline_iso, "deadline_text": DEADLINE,
-                          "stand": stand}, ensure_ascii=False).replace("</", "<\\/")
+    kd_data = json.dumps({"kassen": data, "end": end, "end_iso": f"{PREV}-12-31", "start": i18n.date_long(f"{YEAR}-01-01"),
+                          "deadline": deadline_iso, "deadline_text": deadline(), "stand": stand,
+                          "lang": i18n.LANG, "calc": f'{i18n.url("home")}#kk-rechner',
+                          "privacy": f'{i18n.url("datenschutz")}#kuendigung'}, ensure_ascii=False).replace("</", "<\\/")
 
+    post = L("Post", "Poste", "Post")
     def weg_cell(i):
         w = weg(i)
         if w["mail"]:
             return e(w["mail"]) + (" *" if w["own"] else "")
         if w["portal"]:
             return e(w["portal"])
-        return "Post"
+        return post
     addr_rows = "".join(f'<tr><td>{kasse_link(i)}</td><td>{e(", ".join(address_lines(kv, i)))}</td><td>{weg_cell(i)}</td></tr>' for i in ids)
     n_mail = sum(1 for i in ids if weg(i)["mail"] or weg(i)["portal"])
+    dl, dls = deadline(), deadline(short=True)
     qa = [
-        (f"Bis wann muss ich die Krankenkasse kündigen?",
-         f"Die Kündigung der Grundversicherung muss bis am {DEADLINE} bei der Kasse eingetroffen sein. "
-         f"Massgebend ist das Datum, an dem die Kasse den Brief erhält, nicht der Poststempel. Der Wechsel gilt ab 1. Januar {YEAR}."),
-        ("Muss ich per Einschreiben kündigen?",
-         "Nein. Das Gesetz schreibt keine Form vor, entscheidend ist, dass die Kündigung rechtzeitig ankommt. "
-         f"{n_mail} von {len(ids)} Kassen nehmen sie laut eigener Website auch per Mail an, die Tabelle unten zeigt welche. "
-         "Per Post ist das Einschreiben der sicherste Beweis, per Mail die Eingangsbestätigung der Kasse."),
-        ("Kann die neue Krankenkasse mich ablehnen?",
-         "Nein. In der Grundversicherung muss jede Kasse in ihrem Tätigkeitsgebiet alle Personen aufnehmen, ohne Gesundheitsfragen. "
-         "Bei Zusatzversicherungen ist das anders."),
-        ("Was passiert mit meiner Zusatzversicherung?",
-         "Nichts, wenn du sie nicht selbst kündigst. Die Zusatzversicherung kann bei der bisherigen Kasse bleiben, auch wenn du "
-         "die Grundversicherung wechselst. Für sie gelten eigene Fristen im Vertrag. Ein Wechsel lohnt sich selten: Die neue Kasse "
-         "darf Gesundheitsfragen stellen und Vorbehalte machen. Berater empfehlen ihn trotzdem oft, weil sie dafür Provision erhalten."),
-        ("Kann ich auch auf Ende Juni wechseln?",
-         "Nur im Standardmodell mit Franchise 300. Dann muss die Kündigung bis 31. März eintreffen, der Wechsel gilt ab 1. Juli."),
+        (L("Bis wann muss ich die Krankenkasse kündigen?", "Jusqu’à quand dois-je résilier ma caisse-maladie ?", "What is the deadline to cancel my health insurance?"),
+         L(f"Die Kündigung der Grundversicherung muss bis am {dl} bei der Kasse eingetroffen sein. "
+           f"Massgebend ist das Datum, an dem die Kasse den Brief erhält, nicht der Poststempel. Der Wechsel gilt ab 1. Januar {YEAR}.",
+           f"La résiliation de l’assurance de base doit parvenir à la caisse au plus tard le {dl}. "
+           f"C’est la date de réception par la caisse qui compte, pas le cachet de la poste. Le changement prend effet le 1er janvier {YEAR}.",
+           f"Your cancellation of basic insurance must reach the insurer by {dl}. "
+           f"What counts is the date the insurer receives the letter, not the postmark. The switch takes effect on 1 January {YEAR}.")),
+        (L("Muss ich per Einschreiben kündigen?", "Dois-je résilier par lettre recommandée ?", "Do I have to cancel by registered mail?"),
+         L("Nein. Das Gesetz schreibt keine Form vor, entscheidend ist, dass die Kündigung rechtzeitig ankommt. "
+           f"{n_mail} von {len(ids)} Kassen nehmen sie laut eigener Website auch per Mail an, die Tabelle unten zeigt welche. "
+           "Per Post ist das Einschreiben der sicherste Beweis, per Mail die Eingangsbestätigung der Kasse.",
+           "Non. La loi n’impose aucune forme, l’essentiel est que la résiliation arrive à temps. "
+           f"Selon leur site, {n_mail} caisses sur {len(ids)} l’acceptent aussi par e-mail, le tableau ci-dessous indique lesquelles. "
+           "Par la poste, le recommandé est la preuve la plus sûre ; par e-mail, c’est la confirmation de réception de la caisse.",
+           "No. The law prescribes no form; what matters is that the cancellation arrives on time. "
+           f"According to their own websites, {n_mail} of {len(ids)} insurers also accept it by email; the table below shows which. "
+           "By post, registered mail is the safest proof; by email, the insurer’s confirmation of receipt.")),
+        (L("Kann die neue Krankenkasse mich ablehnen?", "La nouvelle caisse-maladie peut-elle me refuser ?", "Can the new health insurer refuse me?"),
+         L("Nein. In der Grundversicherung muss jede Kasse in ihrem Tätigkeitsgebiet alle Personen aufnehmen, ohne Gesundheitsfragen. "
+           "Bei Zusatzversicherungen ist das anders.",
+           "Non. Dans l’assurance de base, chaque caisse doit accepter toute personne dans sa zone d’activité, sans questions de santé. "
+           "Pour les assurances complémentaires, c’est différent.",
+           "No. In basic insurance, every insurer must accept everyone in its area of operation, without health questions. "
+           "Supplementary insurance is different.")),
+        (L("Was passiert mit meiner Zusatzversicherung?", "Qu’advient-il de mon assurance complémentaire ?", "What happens to my supplementary insurance?"),
+         L("Nichts, wenn du sie nicht selbst kündigst. Die Zusatzversicherung kann bei der bisherigen Kasse bleiben, auch wenn du "
+           "die Grundversicherung wechselst. Für sie gelten eigene Fristen im Vertrag. Ein Wechsel lohnt sich selten: Die neue Kasse "
+           "darf Gesundheitsfragen stellen und Vorbehalte machen. Berater empfehlen ihn trotzdem oft, weil sie dafür Provision erhalten.",
+           "Rien, si vous ne la résiliez pas vous-même. L’assurance complémentaire peut rester auprès de votre caisse actuelle, même si vous "
+           "changez d’assurance de base. Elle a ses propres délais, fixés dans le contrat. Changer en vaut rarement la peine : la nouvelle caisse "
+           "peut poser des questions de santé et émettre des réserves. Les conseillers le recommandent pourtant souvent, car ils touchent une commission.",
+           "Nothing, unless you cancel it yourself. Supplementary insurance can stay with your current insurer even if you "
+           "switch basic insurance. It has its own notice periods in the contract. Switching it rarely pays off: the new insurer "
+           "may ask health questions and impose exclusions. Advisers still often recommend it, because they earn a commission.")),
+        (L("Kann ich auch auf Ende Juni wechseln?", "Puis-je aussi changer pour fin juin ?", "Can I also switch at the end of June?"),
+         L("Nur im Standardmodell mit Franchise 300. Dann muss die Kündigung bis 31. März eintreffen, der Wechsel gilt ab 1. Juli.",
+           "Seulement en modèle standard avec franchise 300. La résiliation doit alors parvenir au plus tard le 31 mars, le changement prend effet le 1er juillet.",
+           "Only in the standard model with a 300 deductible. The cancellation must then arrive by 31 March, and the switch takes effect on 1 July.")),
     ]
-    body = f"""{crumbs_html([("Krankenkassen-Vergleich", "/"), ("Krankenkasse kündigen", path)])}
-<div class="article-badge">Frist {DEADLINE}</div>
-<h1>Krankenkasse kündigen: bis {DEADLINE.replace(' ' + str(PREV), '')}, mit Vorlage</h1>
-<div class="article-meta">Grundversicherung auf den 1. Januar {YEAR} wechseln · Brief in 2 Minuten</div>
-<p class="kk-lead">Die Kündigung der Grundversicherung muss bis am <strong>{DEADLINE}</strong> bei deiner Kasse <strong>eingetroffen</strong> sein. Der Poststempel zählt nicht. <span id="kd-left"></span></p>
+    crumb_name = L("Krankenkasse kündigen", "Résilier sa caisse-maladie", "Cancel health insurance")
+    crumbs = [home_crumb(), (crumb_name, path)]
+    calc = f'{i18n.url("home")}#kk-rechner'
+    prov = i18n.url("blog/provisionen-zusatzversicherung")
+    T = L
+    zus_tip = T("Eine Zusatzversicherung zu wechseln lohnt sich selten. Die neue Kasse darf Gesundheitsfragen stellen, Vorbehalte machen oder dich ablehnen, und mit dem Alter wird der Einstieg teurer. Berater drängen trotzdem oft dazu, weil sie dafür bis zu 16 Monatsprämien Provision erhalten.",
+                "Changer d’assurance complémentaire en vaut rarement la peine. La nouvelle caisse peut poser des questions de santé, émettre des réserves ou vous refuser, et l’entrée coûte plus cher avec l’âge. Les conseillers poussent pourtant souvent au changement, car ils touchent jusqu’à 16 primes mensuelles de commission.",
+                "Switching supplementary insurance rarely pays off. The new insurer may ask health questions, impose exclusions or refuse you, and joining gets more expensive with age. Advisers still often push for it, because they earn up to 16 monthly premiums in commission.")
+    body = f"""{crumbs_html(crumbs)}
+<div class="article-badge">{T("Frist", "Délai", "Deadline")} {dl}</div>
+<h1>{T(f"Krankenkasse kündigen: bis {dls}, mit Vorlage", f"Résilier sa caisse-maladie : d’ici au {dls}, avec modèle", f"Cancel your health insurance: by {dls}, with template")}</h1>
+<div class="article-meta">{T(f"Grundversicherung auf den 1. Januar {YEAR} wechseln · Brief in 2 Minuten", f"Changer d’assurance de base au 1er janvier {YEAR} · lettre en 2 minutes", f"Switch basic insurance on 1 January {YEAR} · letter in 2 minutes")}</div>
+<p class="kk-lead">{T(f"Die Kündigung der Grundversicherung muss bis am <strong>{dl}</strong> bei deiner Kasse <strong>eingetroffen</strong> sein. Der Poststempel zählt nicht.",
+  f"La résiliation de l’assurance de base doit être <strong>parvenue</strong> à votre caisse au plus tard le <strong>{dl}</strong>. Le cachet de la poste ne compte pas.",
+  f"Your cancellation of basic insurance must have <strong>reached</strong> your insurer by <strong>{dl}</strong>. The postmark does not count.")} <span id="kd-left"></span></p>
 <div id="wechsel" class="kd-wechsel" hidden></div>
-<div class="kd-ctas"><a class="kk-cta" href="#vorlage">Kündigung jetzt erstellen &darr;</a><a class="kd-cta-sec" id="kd-compare" href="/#kk-rechner">Zuerst vergleichen: lohnt sich der Wechsel? &rarr;</a></div>
+<div class="kd-ctas"><a class="kk-cta" href="#vorlage">{T("Kündigung jetzt erstellen", "Créer la résiliation maintenant", "Create your cancellation now")} &darr;</a><a class="kd-cta-sec" id="kd-compare" href="{calc}">{T("Zuerst vergleichen: lohnt sich der Wechsel?", "Comparer d’abord : le changement vaut-il la peine ?", "Compare first: is switching worth it?")} &rarr;</a></div>
 
-<h2>So wechselst du in vier Schritten</h2>
+<h2>{T("So wechselst du in vier Schritten", "Changer en quatre étapes", "How to switch in four steps")}</h2>
 <ol>
-<li><strong>Neue Kasse wählen</strong> und dort für den 1. Januar {YEAR} anmelden. Sie muss dich ohne Gesundheitsfragen aufnehmen.</li>
-<li><strong>Bisherige Kasse kündigen, direkt hier:</strong> Im <a href="#vorlage">Kündigungs-Editor</a> wählst du deine Kasse, gibst Name und Adresse ein und unterschreibst mit Maus oder Finger. Den fertigen Brief mit der richtigen Adresse schicken wir dir als PDF per Mail.</li>
-<li><strong>Abschicken:</strong> per Mail, wenn deine Kasse das annimmt (steht beim Brief), sonst per Post, spätestens eine Woche vor dem {DEADLINE}. Ein Einschreiben ist nicht Pflicht, beweist aber den Eingang.</li>
-<li><strong>Bestätigung abwarten.</strong> Die neue Kasse bestätigt dir und der alten Kasse schriftlich, dass du bei ihr versichert bist. Bis dahin bleibt die alte Versicherung bestehen, du bist also nie ohne Schutz.</li>
+<li>{T(f"<strong>Neue Kasse wählen</strong> und dort für den 1. Januar {YEAR} anmelden. Sie muss dich ohne Gesundheitsfragen aufnehmen.",
+  f"<strong>Choisir la nouvelle caisse</strong> et s’y inscrire pour le 1er janvier {YEAR}. Elle doit vous accepter sans questions de santé.",
+  f"<strong>Choose your new insurer</strong> and sign up there for 1 January {YEAR}. It must accept you without health questions.")}</li>
+<li>{T('<strong>Bisherige Kasse kündigen, direkt hier:</strong> Im <a href="#vorlage">Kündigungs-Editor</a> wählst du deine Kasse, gibst Name und Adresse ein und unterschreibst mit Maus oder Finger. Den fertigen Brief mit der richtigen Adresse schicken wir dir als PDF per Mail.',
+  '<strong>Résilier votre caisse actuelle, directement ici :</strong> dans le <a href="#vorlage">générateur de lettre</a>, choisissez votre caisse, saisissez nom et adresse et signez avec la souris ou le doigt. Nous vous envoyons la lettre prête, avec la bonne adresse, en PDF par e-mail.',
+  '<strong>Cancel your current insurer, right here:</strong> in the <a href="#vorlage">cancellation letter tool</a>, pick your insurer, enter your name and address and sign with your mouse or finger. We email you the finished letter with the right address as a PDF.')}</li>
+<li>{T(f"<strong>Abschicken:</strong> per Mail, wenn deine Kasse das annimmt (steht beim Brief), sonst per Post, spätestens eine Woche vor dem {dl}. Ein Einschreiben ist nicht Pflicht, beweist aber den Eingang.",
+  f"<strong>Envoyer :</strong> par e-mail si votre caisse l’accepte (indiqué avec la lettre), sinon par la poste, au plus tard une semaine avant le {dl}. Le recommandé n’est pas obligatoire, mais prouve la réception.",
+  f"<strong>Send it:</strong> by email if your insurer accepts that (shown with the letter), otherwise by post, at least one week before {dl}. Registered mail is not required, but proves receipt.")}</li>
+<li>{T("<strong>Bestätigung abwarten.</strong> Die neue Kasse bestätigt dir und der alten Kasse schriftlich, dass du bei ihr versichert bist. Bis dahin bleibt die alte Versicherung bestehen, du bist also nie ohne Schutz.",
+  "<strong>Attendre la confirmation.</strong> La nouvelle caisse confirme par écrit, à vous et à l’ancienne caisse, que vous êtes assuré chez elle. D’ici là, l’ancienne assurance reste en vigueur : vous n’êtes donc jamais sans couverture.",
+  "<strong>Wait for confirmation.</strong> The new insurer confirms in writing, to you and to your old insurer, that you are insured with it. Until then your old insurance remains in force, so you are never without cover.")}</li>
 </ol>
-<a class="kk-cta" href="#vorlage">Zum Kündigungs-Editor &darr;</a>
-<p>Wichtig: Wer bis 31. Dezember noch offene Prämien oder Kostenbeteiligungen bei der bisherigen Kasse hat, kann nicht wechseln. Offene Rechnungen vorher bezahlen.</p>
+<a class="kk-cta" href="#vorlage">{T("Zum Kündigungs-Editor", "Vers le générateur de lettre", "Go to the letter tool")} &darr;</a>
+<p>{T("Wichtig: Wer bis 31. Dezember noch offene Prämien oder Kostenbeteiligungen bei der bisherigen Kasse hat, kann nicht wechseln. Offene Rechnungen vorher bezahlen.",
+  "Important : si vous avez encore des primes ou des participations aux coûts impayées auprès de votre caisse actuelle au 31 décembre, vous ne pouvez pas changer. Réglez d’abord les factures ouvertes.",
+  "Important: if you still have unpaid premiums or cost-sharing with your current insurer on 31 December, you cannot switch. Pay any open bills first.")}</p>
 
-<h2 id="vorlage">Kündigungsbrief erstellen</h2>
-<p>Kasse wählen, Angaben eintragen, unterschreiben. Du bekommst das PDF sofort und als Kopie per Mail. Abschicken an die Kasse tust du selbst.</p>
+<h2 id="vorlage">{T("Kündigungsbrief erstellen", "Créer la lettre de résiliation", "Create your cancellation letter")}</h2>
+<p>{T("Kasse wählen, Angaben eintragen, unterschreiben. Du bekommst das PDF sofort und als Kopie per Mail. Abschicken an die Kasse tust du selbst.",
+  "Choisissez la caisse, saisissez vos données, signez. Vous recevez le PDF par e-mail. C’est vous qui l’envoyez à la caisse.",
+  "Pick your insurer, enter your details, sign. You receive the PDF by email. You send it to the insurer yourself.")}</p>
 <div class="kd-form">
-  <div class="full"><label for="kd-kasse">Deine bisherige Kasse</label><select id="kd-kasse"></select></div>
-  <div><label for="kd-name">Vorname und Name</label><input id="kd-name" autocomplete="name"></div>
-  <div><label for="kd-birth">Geburtsdatum</label><input id="kd-birth" autocomplete="bday" inputmode="numeric" placeholder="12.03.1985"></div>
-  <div><label for="kd-street">Strasse und Nr.</label><input id="kd-street" autocomplete="address-line1"></div>
-  <div class="kd-plzort"><div><label for="kd-plz">PLZ</label><input id="kd-plz" autocomplete="postal-code" inputmode="numeric" maxlength="4" placeholder="8004"></div><div><label for="kd-ort">Ort</label><input id="kd-ort" autocomplete="address-level2" placeholder="Zürich"></div></div>
-  <div><label for="kd-email">E-Mail</label><input id="kd-email" type="email" autocomplete="email" placeholder="du@beispiel.ch"><div class="kd-hint">Dorthin schicken wir dir das PDF als Kopie.</div></div>
-  <div><label for="kd-nr">Versicherten-Nr. <span style="text-transform:none;font-weight:400;">(optional)</span></label><input id="kd-nr"><div class="kd-hint">Steht auf der Versichertenkarte.</div></div>
-  <div class="full"><label for="kd-more">Kinder im selben Brief <span style="text-transform:none;font-weight:400;">(optional, eine Person pro Zeile, mit Geburtsdatum)</span></label><textarea id="kd-more" rows="2" placeholder="Anna Muster, 12.03.2015"></textarea><div class="kd-hint">Erwachsene kündigen je selbst, mit eigenem Brief und eigener Unterschrift. Das verlangen mehrere Kassen.</div></div>
-  <fieldset class="kd-zusatz full"><legend>Zusatzversicherung bei dieser Kasse <span class="tip" tabindex="0" aria-label="Info">i<span>Eine Zusatzversicherung zu wechseln lohnt sich selten. Die neue Kasse darf Gesundheitsfragen stellen, Vorbehalte machen oder dich ablehnen, und mit dem Alter wird der Einstieg teurer. Berater drängen trotzdem oft dazu, weil sie dafür bis zu 16 Monatsprämien Provision erhalten. <a href="/blog/provisionen-zusatzversicherung/">Mehr dazu</a></span></span></legend>
-    <label class="kd-check"><input type="radio" name="kd-zusatz" value="keine"> Habe ich nicht</label>
-    <label class="kd-check"><input type="radio" name="kd-zusatz" value="behalten" checked> Behalten, nur die Grundversicherung kündigen <span class="kd-reco">empfohlen</span></label>
-    <label class="kd-check"><input type="radio" name="kd-zusatz" value="kuendigen"> Auch kündigen</label>
-    <div class="kd-warn" id="kd-zusatz-warn" hidden><strong>Gut überlegen.</strong> Eine Zusatzversicherung zu wechseln lohnt sich selten. Die neue Kasse darf Gesundheitsfragen stellen, Vorbehalte machen oder dich ablehnen, und mit dem Alter wird der Einstieg teurer. Berater drängen trotzdem oft dazu, weil sie dafür bis zu 16 Monatsprämien Provision erhalten. Zudem gelten eigene Fristen, oft drei Monate auf Ende Jahr. Dann ist es für {YEAR} schon zu spät und die Kündigung gilt erst auf den nächstmöglichen Termin. Kündige die Zusatzversicherung erst, wenn die neue schriftlich zugesagt hat. <a href="/blog/provisionen-zusatzversicherung/">Warum Berater zum Wechsel drängen</a></div>
+  <div class="full"><label for="kd-kasse">{T("Deine bisherige Kasse", "Votre caisse actuelle", "Your current insurer")}</label><select id="kd-kasse"></select></div>
+  <div><label for="kd-name">{T("Vorname und Name", "Prénom et nom", "First and last name")}</label><input id="kd-name" autocomplete="name"></div>
+  <div><label for="kd-birth">{T("Geburtsdatum", "Date de naissance", "Date of birth")}</label><input id="kd-birth" autocomplete="bday" inputmode="numeric" placeholder="12.03.1985"></div>
+  <div><label for="kd-street">{T("Strasse und Nr.", "Rue et n°", "Street and no.")}</label><input id="kd-street" autocomplete="address-line1"></div>
+  <div class="kd-plzort"><div><label for="kd-plz">{T("PLZ", "NPA", "Postcode")}</label><input id="kd-plz" autocomplete="postal-code" inputmode="numeric" maxlength="4" placeholder="{T("8004", "1003", "8004")}"></div><div><label for="kd-ort">{T("Ort", "Localité", "Town")}</label><input id="kd-ort" autocomplete="address-level2" placeholder="{T("Zürich", "Lausanne", "Zurich")}"></div></div>
+  <div><label for="kd-email">{T("E-Mail", "E-mail", "Email")}</label><input id="kd-email" type="email" autocomplete="email" placeholder="{T("du@beispiel.ch", "vous@exemple.ch", "you@example.ch")}"><div class="kd-hint">{T("Dorthin schicken wir dir das PDF als Kopie.", "Nous vous y envoyons le PDF.", "We send the PDF there.")}</div></div>
+  <div><label for="kd-nr">{T("Versicherten-Nr.", "N° d’assuré", "Policy no.")} <span style="text-transform:none;font-weight:400;">({T("optional", "facultatif", "optional")})</span></label><input id="kd-nr"><div class="kd-hint">{T("Steht auf der Versichertenkarte.", "Figure sur la carte d’assuré.", "On your health insurance card.")}</div></div>
+  <div class="full"><label for="kd-more">{T("Kinder im selben Brief", "Enfants dans la même lettre", "Children in the same letter")} <span style="text-transform:none;font-weight:400;">({T("optional, eine Person pro Zeile, mit Geburtsdatum", "facultatif, une personne par ligne, avec date de naissance", "optional, one person per line, with date of birth")})</span></label><textarea id="kd-more" rows="2" placeholder="{T("Anna Muster, 12.03.2015", "Anne Exemple, 12.03.2015", "Anna Muster, 12.03.2015")}"></textarea><div class="kd-hint">{T("Erwachsene kündigen je selbst, mit eigenem Brief und eigener Unterschrift. Das verlangen mehrere Kassen.", "Les adultes résilient chacun pour soi, avec leur propre lettre et leur propre signature. Plusieurs caisses l’exigent.", "Adults each cancel for themselves, with their own letter and signature. Several insurers require this.")}</div></div>
+  <div><label for="kd-lang">{T("Sprache des Briefs", "Langue de la lettre", "Letter language")}</label><select id="kd-lang"><option value="de">{T("Deutsch", "Allemand", "German")}</option><option value="fr">{T("Französisch", "Français", "French")}</option></select></div>
+  <fieldset class="kd-zusatz full"><legend>{T("Zusatzversicherung bei dieser Kasse", "Assurance complémentaire auprès de cette caisse", "Supplementary insurance with this insurer")} {tip(zus_tip + f' <a href="{prov}">' + T("Mehr dazu", "En savoir plus", "More") + '</a>')}</legend>
+    <label class="kd-check"><input type="radio" name="kd-zusatz" value="keine"> {T("Habe ich nicht", "Je n’en ai pas", "I don’t have any")}</label>
+    <label class="kd-check"><input type="radio" name="kd-zusatz" value="behalten" checked> {T("Behalten, nur die Grundversicherung kündigen", "La garder, ne résilier que l’assurance de base", "Keep it, cancel basic insurance only")} <span class="kd-reco">{T("empfohlen", "recommandé", "recommended")}</span></label>
+    <label class="kd-check"><input type="radio" name="kd-zusatz" value="kuendigen"> {T("Auch kündigen", "La résilier aussi", "Cancel it too")}</label>
+    <div class="kd-warn" id="kd-zusatz-warn" hidden>{T(f'<strong>Gut überlegen.</strong> {zus_tip} Zudem gelten eigene Fristen, oft drei Monate auf Ende Jahr. Dann ist es für {YEAR} schon zu spät und die Kündigung gilt erst auf den nächstmöglichen Termin. Kündige die Zusatzversicherung erst, wenn die neue schriftlich zugesagt hat. <a href="{prov}">Warum Berater zum Wechsel drängen</a>',
+      f'<strong>Réfléchissez bien.</strong> {zus_tip} De plus, des délais propres s’appliquent, souvent trois mois pour la fin de l’année. Il est alors déjà trop tard pour {YEAR} et la résiliation ne vaut que pour la prochaine échéance possible. Ne résiliez l’assurance complémentaire que lorsque la nouvelle vous a accepté par écrit. <a href="{prov}">Pourquoi les conseillers poussent au changement</a>',
+      f'<strong>Think twice.</strong> {zus_tip} It also has its own notice periods, often three months to the end of the year. Then it is already too late for {YEAR} and the cancellation only applies at the next possible date. Only cancel supplementary insurance once the new insurer has accepted you in writing. <a href="{prov}">Why advisers push you to switch</a>')}</div>
   </fieldset>
 </div>
 <div class="kd-sign">
-  <label for="kd-pad">Unterschrift</label>
-  <canvas id="kd-pad" aria-label="Hier unterschreiben"></canvas>
-  <div class="kd-sign-row"><span id="kd-pad-hint"></span><button type="button" id="kd-pad-clear" class="kd-link">Neu zeichnen</button></div>
+  <label for="kd-pad">{T("Unterschrift", "Signature", "Signature")}</label>
+  <canvas id="kd-pad" aria-label="{T("Hier unterschreiben", "Signez ici", "Sign here")}"></canvas>
+  <div class="kd-sign-row"><span id="kd-pad-hint"></span><button type="button" id="kd-pad-clear" class="kd-link">{T("Neu zeichnen", "Recommencer", "Redraw")}</button></div>
 </div>
 <div id="kd-kanal" class="kd-kanal"></div>
-<label class="kd-consent"><input type="checkbox" id="kd-wecker" checked> <span>Nächstes Jahr die besten Kassen für mich ins Postfach (1 Mail im Jahr)</span></label>
-<div class="kd-actions"><button id="kd-send">PDF per Mail zuschicken</button><button id="kd-mail" class="sec" hidden>Mail an die Kasse vorbereiten</button><button id="kd-copy" class="sec">Text kopieren</button></div>
-<div class="kd-terms">Mit dem Versand akzeptierst du unseren <a href="/datenschutz/#kuendigung" target="_blank">Datenschutz</a>: Wir speichern deine E-Mail-Adresse und die Angaben zum Wechsel, den Brief nur 60 Tage zum Abholen.</div>
+<label class="kd-consent"><input type="checkbox" id="kd-wecker" checked> <span>{T("Nächstes Jahr die besten Kassen für mich ins Postfach (1 Mail im Jahr)", "L’an prochain, recevoir les meilleures caisses pour moi par e-mail (1 e-mail par an)", "Next year, send me the best insurers for me by email (1 email a year)")}</span></label>
+<div class="kd-actions"><button id="kd-send">{T("PDF per Mail zuschicken", "Recevoir le PDF par e-mail", "Send me the PDF")}</button><button id="kd-mail" class="sec" hidden>{T("Mail an die Kasse vorbereiten", "Préparer l’e-mail à la caisse", "Prepare the email to the insurer")}</button><button id="kd-copy" class="sec">{T("Text kopieren", "Copier le texte", "Copy text")}</button></div>
+<div class="kd-terms">{T(f'Mit dem Versand akzeptierst du unseren <a href="{i18n.url("datenschutz")}#kuendigung" target="_blank">Datenschutz</a>: Wir speichern deine E-Mail-Adresse und die Angaben zum Wechsel, den Brief nur 60 Tage zum Abholen.',
+  f'En envoyant, vous acceptez notre <a href="{i18n.url("datenschutz")}#kuendigung" target="_blank">politique de confidentialité</a> : nous enregistrons votre adresse e-mail et les données du changement, la lettre seulement 60 jours pour le téléchargement.',
+  f'By sending, you accept our <a href="{i18n.url("datenschutz")}#kuendigung" target="_blank">privacy policy</a>: we store your email address and the details of the switch, and the letter for 60 days only so you can download it.')}</div>
 <div id="kd-msg" class="kd-msg" role="status"></div>
 <div id="kd-done" class="kd-done" hidden></div>
-<div class="kd-preview-label">Vorschau</div>
+<div class="kd-preview-label">{T("Vorschau", "Aperçu", "Preview")}</div>
 <div id="kd-brief"></div>
 
-<h2>Sonderfälle</h2>
+<h2>{T("Sonderfälle", "Cas particuliers", "Special cases")}</h2>
 <ul>
-<li><strong>Nur das Modell oder die Franchise ändern, bei derselben Kasse:</strong> geht ebenfalls auf den 1. Januar. Die Frist steht in den Bedingungen deiner Kasse; sicher bist du, wenn du bis {DEADLINE} meldest.</li>
-<li><strong>Kündigung auf Ende Juni:</strong> nur im Standardmodell mit Franchise 300, Eingang bis 31. März.</li>
-<li><strong>Umzug ins Ausland oder Tod:</strong> die Versicherung endet ohne Frist mit dem Wegzug beziehungsweise dem Todestag.</li>
+<li>{T(f"<strong>Nur das Modell oder die Franchise ändern, bei derselben Kasse:</strong> geht ebenfalls auf den 1. Januar. Die Frist steht in den Bedingungen deiner Kasse; sicher bist du, wenn du bis {dl} meldest.",
+  f"<strong>Changer seulement de modèle ou de franchise, dans la même caisse :</strong> c’est aussi possible au 1er janvier. Le délai figure dans les conditions de votre caisse ; vous êtes sûr de respecter le délai en l’annonçant d’ici au {dl}.",
+  f"<strong>Only changing model or deductible with the same insurer:</strong> also possible from 1 January. The deadline is in your insurer’s terms; you are safe if you notify them by {dl}.")}</li>
+<li>{T("<strong>Kündigung auf Ende Juni:</strong> nur im Standardmodell mit Franchise 300, Eingang bis 31. März.",
+  "<strong>Résiliation pour fin juin :</strong> seulement en modèle standard avec franchise 300, réception au plus tard le 31 mars.",
+  "<strong>Cancelling for the end of June:</strong> only in the standard model with a 300 deductible, received by 31 March.")}</li>
+<li>{T("<strong>Umzug ins Ausland oder Tod:</strong> die Versicherung endet ohne Frist mit dem Wegzug beziehungsweise dem Todestag.",
+  "<strong>Départ à l’étranger ou décès :</strong> l’assurance prend fin sans délai au départ ou au jour du décès.",
+  "<strong>Moving abroad or death:</strong> the insurance ends without notice on the day you leave or the day of death.")}</li>
 </ul>
 
-<h2>Adressen aller Krankenkassen</h2>
-<p>Adressen laut BAG-Verzeichnis der zugelassenen Krankenversicherer. Manche Kassen nennen auf ihrer Website zusätzlich eine eigene Adresse für Kündigungen, beide sind gültig. Die Spalte «Kündigung» zeigt, ob die Kasse auf ihrer Website ausdrücklich eine Kündigung der Grundversicherung per Mail annimmt (Stand {stand}). «Post» heisst: sie sagt nichts dazu oder verlangt einen Brief.</p>
-<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Kasse</th><th>Adresse</th><th>Kündigung</th></tr></thead><tbody>{addr_rows}</tbody></table></div>
-<p class="kk-note">* Nur von der Mail-Adresse, die die Kasse von dir kennt.</p>
+<h2>{T("Adressen aller Krankenkassen", "Adresses de toutes les caisses-maladie", "Addresses of all health insurers")}</h2>
+<p>{T(f"Adressen laut BAG-Verzeichnis der zugelassenen Krankenversicherer. Manche Kassen nennen auf ihrer Website zusätzlich eine eigene Adresse für Kündigungen, beide sind gültig. Die Spalte «Kündigung» zeigt, ob die Kasse auf ihrer Website ausdrücklich eine Kündigung der Grundversicherung per Mail annimmt (Stand {stand}). «Post» heisst: sie sagt nichts dazu oder verlangt einen Brief.",
+  f"Adresses selon la liste de l’OFSP des assureurs-maladie autorisés. Certaines caisses indiquent en plus sur leur site une adresse propre pour les résiliations ; les deux sont valables. La colonne « Résiliation » indique si la caisse accepte expressément sur son site une résiliation de l’assurance de base par e-mail (état au {stand}). « Poste » signifie : elle ne dit rien à ce sujet ou exige une lettre.",
+  f"Addresses according to the FOPH list of licensed health insurers. Some insurers also give their own address for cancellations on their website; both are valid. The “Cancellation” column shows whether the insurer explicitly accepts cancellation of basic insurance by email on its website (as of {stand}). “Post” means it says nothing about it or requires a letter.")}</p>
+<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>{T("Kasse", "Caisse", "Insurer")}</th><th>{T("Adresse", "Adresse", "Address")}</th><th>{T("Kündigung", "Résiliation", "Cancellation")}</th></tr></thead><tbody>{addr_rows}</tbody></table></div>
+<p class="kk-note">{T("* Nur von der Mail-Adresse, die die Kasse von dir kennt.", "* Uniquement depuis l’adresse e-mail que la caisse connaît.", "* Only from the email address the insurer has on file for you.")}</p>
 
-<div class="kk-faq"><h2>Häufige Fragen</h2>{"".join(f"<h3>{e(q)}</h3><p>{e(a)}</p>" for q, a in qa)}</div>
-<p class="kk-note">Quellen: Bundesamt für Gesundheit (<a href="https://www.bag.admin.ch/de/praemien-und-kosten-antworten-auf-haeufige-fragen">Fragen zu Prämien und Wechsel</a>), <a href="https://www.bag.admin.ch/de/verzeichnisse-der-zugelassenen-kranken-und-rueckversicherer">Verzeichnis der zugelassenen Krankenversicherer</a>. Angaben ohne Gewähr.</p>
+<div class="kk-faq"><h2>{T("Häufige Fragen", "Questions fréquentes", "Frequently asked questions")}</h2>{"".join(f"<h3>{e(q)}</h3><p>{e(a)}</p>" for q, a in qa)}</div>
+<p class="kk-note">{T('Quellen: Bundesamt für Gesundheit (<a href="https://www.bag.admin.ch/de/praemien-und-kosten-antworten-auf-haeufige-fragen">Fragen zu Prämien und Wechsel</a>), <a href="https://www.bag.admin.ch/de/verzeichnisse-der-zugelassenen-kranken-und-rueckversicherer">Verzeichnis der zugelassenen Krankenversicherer</a>. Angaben ohne Gewähr.',
+  'Sources : Office fédéral de la santé publique (<a href="https://www.bag.admin.ch/fr/praemien-und-kosten-antworten-auf-haeufige-fragen">questions sur les primes et le changement</a>), <a href="https://www.bag.admin.ch/fr/verzeichnisse-der-zugelassenen-kranken-und-rueckversicherer">liste des assureurs-maladie autorisés</a>. Sans garantie.',
+  'Sources: Federal Office of Public Health (<a href="https://www.bag.admin.ch/en/praemien-und-kosten-antworten-auf-haeufige-fragen">questions on premiums and switching</a>), <a href="https://www.bag.admin.ch/en/verzeichnisse-der-zugelassenen-kranken-und-rueckversicherer">list of licensed health insurers</a>. No liability for accuracy.')}</p>
 
 <script id="kd-data" type="application/json">{kd_data}</script>
 <script src="/js/combobox.js"></script>
 <script src="/js/kuendigung.js"></script>"""
-    html_out = page(path, f"Krankenkasse kündigen {PREV}: Frist {DEADLINE.replace(' ' + str(PREV), '')}, Vorlage und Adressen",
-                    f"Grundversicherung kündigen: bis {DEADLINE} muss die Kündigung bei der Kasse sein. Kostenlose Vorlage, Adressen aller Kassen, Schritt für Schritt.",
-                    body, [breadcrumb([("Krankenkassen-Vergleich", "/"), ("Krankenkasse kündigen", path)]), faq(qa)])
+    html_out = page(path, T(f"Krankenkasse kündigen {PREV}: Frist {dls}, Vorlage und Adressen",
+                            f"Résilier sa caisse-maladie {PREV} : délai {dls}, modèle et adresses",
+                            f"Cancel health insurance {PREV}: deadline {dls}, template and addresses"),
+                    T(f"Grundversicherung kündigen: bis {dl} muss die Kündigung bei der Kasse sein. Kostenlose Vorlage, Adressen aller Kassen, Schritt für Schritt.",
+                      f"Résilier l’assurance de base : la résiliation doit parvenir à la caisse d’ici au {dl}. Modèle gratuit, adresses de toutes les caisses.",
+                      f"Cancel basic health insurance: your cancellation must reach the insurer by {dl}. Free template, addresses of all insurers, step by step."),
+                    body, [breadcrumb(crumbs), faq(qa)], dict(i18n.ROUTES["kuendigen"]))
     return path, html_out.replace("</style>", KUENDIGEN_CSS + "</style>", 1)
 
 
@@ -1723,74 +2397,131 @@ def kuendigen_page(kv):
 def pickup_page():
     """Abholseite für das Kündigungs-PDF aus der Mail. Erst der Klick auf den
     Knopf bestätigt die E-Mail-Adresse (Mailfilter öffnen Links, klicken aber
-    keine Knöpfe). Nicht in der Sitemap, noindex."""
-    path = "/krankenkasse-kuendigen/pdf/"
-    body = f"""{crumbs_html([("Krankenkassen-Vergleich", "/"), ("Krankenkasse kündigen", "/krankenkasse-kuendigen/"), ("Dein PDF", path)])}
-<h1>Deine Kündigung</h1>
+    keine Knöpfe). Nicht in der Sitemap, noindex. Die Texte im Skript kommen
+    als JSON in der Sprache der Seite."""
+    path = f'{i18n.url("kuendigen")}pdf/'
+    calc = f'{i18n.url("home")}#kk-rechner'
+    T = L
+    S = {
+        "incomplete": T("Dieser Link ist unvollständig. Öffne ihn direkt aus der Mail.", "Ce lien est incomplet. Ouvrez-le directement depuis l’e-mail.", "This link is incomplete. Open it directly from the email."),
+        "wait": T("Einen Moment…", "Un instant…", "One moment…"),
+        "fail": T("Das hat nicht geklappt.", "Cela n’a pas fonctionné.", "That didn’t work."),
+        "btn": T("PDF herunterladen", "Télécharger le PDF", "Download PDF"),
+        "w_mail": T("Schick das PDF als Anhang an {z}, von der Mail-Adresse, die {k} von dir kennt.", "Envoyez le PDF en pièce jointe à {z}, depuis l’adresse e-mail que {k} connaît.", "Send the PDF as an attachment to {z}, from the email address {k} has on file for you."),
+        "w_nosig_mail": T(" Im PDF fehlt die Unterschrift: ausdrucken, unterschreiben, einscannen, oder neu erstellen mit Unterschrift.", " La signature manque dans le PDF : imprimez-le, signez-le et scannez-le, ou recréez-le avec signature.", " The PDF has no signature: print, sign and scan it, or create it again with a signature."),
+        "w_portal": T("Lade das PDF in {z} hoch oder schick es per Post.", "Téléversez le PDF dans {z} ou envoyez-le par la poste.", "Upload the PDF to {z} or send it by post."),
+        "w_post": T("Druck das PDF aus und schick es per Post an {k}.", "Imprimez le PDF et envoyez-le par la poste à {k}.", "Print the PDF and send it by post to {k}."),
+        "w_nosig_post": T(" Vorher von Hand unterschreiben, im PDF fehlt die Unterschrift.", " Signez-le d’abord à la main, la signature manque dans le PDF.", " Sign it by hand first; the PDF has no signature."),
+        "neu_named": T("<strong>Bei {n} anmelden</strong>, online in etwa 10 Minuten.", "<strong>S’inscrire chez {n}</strong>, en ligne en 10 minutes environ.", "<strong>Sign up with {n}</strong>, online in about 10 minutes."),
+        "go": T("Zu {n}", "Vers {n}", "Go to {n}"),
+        "neu_any": T("<strong>Bei der neuen Kasse anmelden</strong>, online in etwa 10 Minuten.", "<strong>S’inscrire auprès de la nouvelle caisse</strong>, en ligne en 10 minutes environ.", "<strong>Sign up with the new insurer</strong>, online in about 10 minutes."),
+        "find": T("Günstigste Kasse finden", "Trouver la caisse la moins chère", "Find the cheapest insurer"),
+        "list": T("<li>Beginn: 1. Januar</li><li>AHV-Nummer (756…, steht auf deiner Versichertenkarte)</li><li>Franchise und Modell, das du gewählt hast</li><li>beim Hausarzt- oder HMO-Modell: deine Praxis</li>",
+                  "<li>Début : 1er janvier</li><li>numéro AVS (756…, sur votre carte d’assuré)</li><li>franchise et modèle choisis</li><li>pour le modèle médecin de famille ou HMO : votre cabinet</li>",
+                  "<li>Start: 1 January</li><li>AHV number (756…, on your insurance card)</li><li>the deductible and model you chose</li><li>for the family doctor or HMO model: your practice</li>"),
+        "list_short": T("<li>Beginn: 1. Januar</li><li>AHV-Nummer (756…, steht auf deiner Versichertenkarte)</li><li>Franchise und Modell</li><li>beim Hausarzt- oder HMO-Modell: deine Praxis</li>",
+                        "<li>Début : 1er janvier</li><li>numéro AVS (756…, sur votre carte d’assuré)</li><li>franchise et modèle</li><li>pour le modèle médecin de famille ou HMO : votre cabinet</li>",
+                        "<li>Start: 1 January</li><li>AHV number (756…, on your insurance card)</li><li>deductible and model</li><li>for the family doctor or HMO model: your practice</li>"),
+        "health": T("Gesundheitsfragen gibt es in der Grundversicherung keine. Fragt das Formular danach, geht es um eine Zusatzversicherung, die du nicht abschliessen musst.",
+                    "Il n’y a pas de questions de santé dans l’assurance de base. Si le formulaire en pose, il s’agit d’une assurance complémentaire que vous n’êtes pas obligé de conclure.",
+                    "There are no health questions in basic insurance. If the form asks any, they are about supplementary insurance, which you don’t have to take out."),
+        "ok": T("<strong>E-Mail-Adresse bestätigt.</strong> Dein PDF wird heruntergeladen.", "<strong>Adresse e-mail confirmée.</strong> Votre PDF est en cours de téléchargement.", "<strong>Email address confirmed.</strong> Your PDF is downloading."),
+        "notstarted": T("Nicht gestartet?", "Le téléchargement n’a pas démarré ?", "Didn’t start?"),
+        "next": T("So geht es weiter", "La suite", "What happens next"),
+        "send": T("<strong>Abschicken:</strong> ", "<strong>Envoyer :</strong> ", "<strong>Send it:</strong> "),
+        "arrive": T(" Eintreffen muss die Kündigung bis {d}.", " La résiliation doit parvenir d’ici au {d}.", " The cancellation must arrive by {d}."),
+        "soon": T(" Spätestens bis Ende Dezember, am besten gleich jetzt.", " Au plus tard fin décembre, idéalement tout de suite.", " By the end of December at the latest, ideally right now."),
+        "confirm": T("<strong>Bestätigung abwarten.</strong> Die neue Kasse meldet der alten, dass du bei ihr versichert bist. Bis dahin bleibst du bei der alten versichert.",
+                     "<strong>Attendre la confirmation.</strong> La nouvelle caisse informe l’ancienne que vous êtes assuré chez elle. D’ici là, vous restez assuré auprès de l’ancienne.",
+                     "<strong>Wait for confirmation.</strong> The new insurer tells the old one that you are insured with it. Until then you stay insured with the old one."),
+        "nonet": T("Keine Verbindung. Bitte nochmals versuchen.", "Pas de connexion. Veuillez réessayer.", "No connection. Please try again."),
+        "thanks": T("Danke für deine Antwort", "Merci pour votre réponse", "Thanks for your answer"),
+        "the_new": T("der neuen Kasse", "la nouvelle caisse", "the new insurer"),
+        "a_yes": T("<strong>Super.</strong> Jetzt fehlt nur noch die Bestätigung: Die neue Kasse meldet sich bei {k}. Wir fragen Mitte Dezember nach, ob alles geklappt hat.",
+                   "<strong>Parfait.</strong> Il ne manque plus que la confirmation : la nouvelle caisse informera {k}. Nous vous demanderons mi-décembre si tout a fonctionné.",
+                   "<strong>Great.</strong> Now only the confirmation is missing: the new insurer will contact {k}. We’ll check in mid-December whether everything worked."),
+        "a_no": T("Kein Problem, das geht online in etwa 10 Minuten.", "Pas de problème, cela se fait en ligne en 10 minutes environ.", "No problem, it takes about 10 minutes online."),
+        "b_yes": T("<strong>Perfekt, dein Wechsel ist durch.</strong> Ab 1. Januar bist du bei {n} versichert.", "<strong>Parfait, votre changement est fait.</strong> Dès le 1er janvier, vous êtes assuré chez {n}.", "<strong>Perfect, your switch is done.</strong> From 1 January you are insured with {n}."),
+        "b_no": T("Ruf {k} an und frag nach, ob die Kündigung angekommen ist. Hast du sie per Mail geschickt, ist deine gesendete Mail der Beweis, per Einschreiben der Beleg der Post. Und frag bei {n} nach, ob die Anmeldung durch ist: Erst wenn die neue Kasse sich bei der alten meldet, endet die alte Versicherung.",
+                  "Appelez {k} et demandez si la résiliation est arrivée. Si vous l’avez envoyée par e-mail, votre e-mail envoyé fait office de preuve ; par recommandé, le récépissé de la poste. Demandez aussi à {n} si l’inscription est faite : l’ancienne assurance ne prend fin que lorsque la nouvelle caisse informe l’ancienne.",
+                  "Call {k} and ask whether the cancellation arrived. If you sent it by email, your sent email is the proof; by registered mail, the post office receipt. Also ask {n} whether your sign-up went through: the old insurance only ends once the new insurer informs the old one."),
+        "stop": T("Erledigt, du bekommst zu diesem Brief keine Erinnerungen mehr.", "C’est fait, vous ne recevrez plus de rappels pour cette lettre.", "Done, you won’t get any more reminders about this letter."),
+        "saved": T("Gespeichert.", "Enregistré.", "Saved."),
+        "reopen": T("Keine Verbindung. Bitte Link nochmals öffnen.", "Pas de connexion. Veuillez rouvrir le lien.", "No connection. Please open the link again."),
+        "calc": calc,
+        "lang": i18n.LANG,
+    }
+    s_json = json.dumps(S, ensure_ascii=False).replace("</", "<\\/")
+    crumbs = [home_crumb(), (T("Krankenkasse kündigen", "Résilier sa caisse-maladie", "Cancel health insurance"), i18n.url("kuendigen")),
+              (T("Dein PDF", "Votre PDF", "Your PDF"), path)]
+    body = f"""{crumbs_html(crumbs)}
+<h1>{T("Deine Kündigung", "Votre résiliation", "Your cancellation")}</h1>
 <div id="kp">
-  <p class="kk-lead">Ein Klick, und du hast dein PDF. Damit bestätigst du auch deine E-Mail-Adresse.</p>
-  <button class="kk-cta kp-btn" id="kp-go">PDF herunterladen</button>
+  <p class="kk-lead">{T("Ein Klick, und du hast dein PDF. Damit bestätigst du auch deine E-Mail-Adresse.", "Un clic et vous avez votre PDF. Cela confirme aussi votre adresse e-mail.", "One click and you have your PDF. This also confirms your email address.")}</p>
+  <button class="kk-cta kp-btn" id="kp-go">{S["btn"]}</button>
 </div>
 <div id="kp-msg" class="kk-note" role="status"></div>
 <script>
 (function () {{
+  var S = {s_json};
+  var f = function (s, v) {{ return s.replace(/\{{(\w)\}}/g, function (_, x) {{ return v[x] != null ? v[x] : ''; }}); }};
   var API = 'https://zexpmaegqsayleaohiip.supabase.co/functions/v1/kuendigung-pdf';
   var t = new URLSearchParams(location.search).get('t') || '';
   var box = document.getElementById('kp'), msg = document.getElementById('kp-msg');
   var esc = function (s) {{ return String(s || '').replace(/[&<>"]/g, function (c) {{ return {{ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }}[c]; }}); }};
-  if (!t) {{ box.innerHTML = '<p class="kk-lead">Dieser Link ist unvollständig. Öffne ihn direkt aus der Mail.</p>'; return; }}
+  if (!t) {{ box.innerHTML = '<p class="kk-lead">' + S.incomplete + '</p>'; return; }}
   function go(btn) {{
-    btn.disabled = true; btn.textContent = 'Einen Moment…'; msg.textContent = '';
-    fetch(API, {{ method: 'POST', headers: {{ 'Content-Type': 'application/json' }}, body: JSON.stringify({{ action: 'abholen', t: t }}) }})
+    btn.disabled = true; btn.textContent = S.wait; msg.textContent = '';
+    fetch(API, {{ method: 'POST', headers: {{ 'Content-Type': 'application/json' }}, body: JSON.stringify({{ action: 'abholen', t: t, lang: S.lang }}) }})
       .then(function (r) {{ return r.json(); }})
       .then(function (d) {{
-        if (!d.ok) {{ msg.textContent = d.error || 'Das hat nicht geklappt.'; btn.disabled = false; btn.textContent = 'PDF herunterladen'; return; }}
+        if (!d.ok) {{ msg.textContent = d.error || S.fail; btn.disabled = false; btn.textContent = S.btn; return; }}
         var weg = d.kanal === 'mail'
-          ? 'Schick das PDF als Anhang an <a href="mailto:' + esc(d.ziel) + '">' + esc(d.ziel) + '</a>, von der Mail-Adresse, die ' + esc(d.kasse) + ' von dir kennt.' + (d.signiert ? '' : ' Im PDF fehlt die Unterschrift: ausdrucken, unterschreiben, einscannen, oder neu erstellen mit Unterschrift.')
-          : d.kanal === 'portal' ? 'Lade das PDF in ' + esc(d.ziel) + ' hoch oder schick es per Post.'
-          : 'Druck das PDF aus und schick es per Post an ' + esc(d.kasse) + '.' + (d.signiert ? '' : ' Vorher von Hand unterschreiben, im PDF fehlt die Unterschrift.');
+          ? f(S.w_mail, {{ z: '<a href="mailto:' + esc(d.ziel) + '">' + esc(d.ziel) + '</a>', k: esc(d.kasse) }}) + (d.signiert ? '' : S.w_nosig_mail)
+          : d.kanal === 'portal' ? f(S.w_portal, {{ z: esc(d.ziel) }})
+          : f(S.w_post, {{ k: esc(d.kasse) }}) + (d.signiert ? '' : S.w_nosig_post);
         var neu = (d.neu
-          ? '<strong>Bei ' + esc(d.neu) + ' anmelden</strong>, online in etwa 10 Minuten.' + (d.neu_url ? ' <a href="' + esc(d.neu_url) + '?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=kk-wechsel" target="_blank" rel="noopener sponsored">Zu ' + esc(d.neu) + ' &rarr;</a>' : '')
-          : '<strong>Bei der neuen Kasse anmelden</strong>, online in etwa 10 Minuten. <a href="/#kk-rechner">Günstigste Kasse finden &rarr;</a>') +
-          '<ul class="kp-list"><li>Beginn: 1. Januar</li><li>AHV-Nummer (756…, steht auf deiner Versichertenkarte)</li>' +
-          '<li>Franchise und Modell, das du gewählt hast</li><li>beim Hausarzt- oder HMO-Modell: deine Praxis</li></ul>' +
-          'Gesundheitsfragen gibt es in der Grundversicherung keine. Fragt das Formular danach, geht es um eine Zusatzversicherung, die du nicht abschliessen musst.';
-        box.innerHTML = '<p class="kk-lead"><strong>E-Mail-Adresse bestätigt.</strong> Dein PDF wird heruntergeladen. <a href="' + esc(d.url) + '">Nicht gestartet?</a></p>' +
-          '<h2>So geht es weiter</h2><ol>' +
-          '<li><strong>Abschicken:</strong> ' + weg + ' Eintreffen muss die Kündigung bis ' + esc(d.deadline) + '.</li>' +
-          '<li>' + neu + ' Spätestens bis Ende Dezember, am besten gleich jetzt.</li>' +
-          '<li><strong>Bestätigung abwarten.</strong> Die neue Kasse meldet der alten, dass du bei ihr versichert bist. Bis dahin bleibst du bei der alten versichert.</li></ol>';
+          ? f(S.neu_named, {{ n: esc(d.neu) }}) + (d.neu_url ? ' <a href="' + esc(d.neu_url) + '?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=kk-wechsel" target="_blank" rel="noopener sponsored">' + f(S.go, {{ n: esc(d.neu) }}) + ' &rarr;</a>' : '')
+          : S.neu_any + ' <a href="' + S.calc + '">' + S.find + ' &rarr;</a>') +
+          '<ul class="kp-list">' + S.list + '</ul>' + S.health;
+        box.innerHTML = '<p class="kk-lead">' + S.ok + ' <a href="' + esc(d.url) + '">' + S.notstarted + '</a></p>' +
+          '<h2>' + S.next + '</h2><ol>' +
+          '<li>' + S.send + weg + f(S.arrive, {{ d: esc(d.deadline) }}) + '</li>' +
+          '<li>' + neu + S.soon + '</li>' +
+          '<li>' + S.confirm + '</li></ol>';
         location.href = d.url;
       }})
-      .catch(function () {{ msg.textContent = 'Keine Verbindung. Bitte nochmals versuchen.'; btn.disabled = false; btn.textContent = 'PDF herunterladen'; }});
+      .catch(function () {{ msg.textContent = S.nonet; btn.disabled = false; btn.textContent = S.btn; }});
   }}
   document.getElementById('kp-go').onclick = function () {{ go(this); }};
 
   // Antworten aus den Erinnerungsmails: ?frage=anmeldung|bestaetigung|stopp&a=ja|nein
   var frage = new URLSearchParams(location.search).get('frage'), a = new URLSearchParams(location.search).get('a') || '';
   if (frage) {{
-    document.querySelector('h1').textContent = 'Danke für deine Antwort';
-    box.innerHTML = '<p class="kk-lead">Einen Moment…</p>';
-    fetch(API, {{ method: 'POST', headers: {{ 'Content-Type': 'application/json' }}, body: JSON.stringify({{ action: 'antwort', t: t, frage: frage, a: a }}) }})
+    document.querySelector('h1').textContent = S.thanks;
+    box.innerHTML = '<p class="kk-lead">' + S.wait + '</p>';
+    fetch(API, {{ method: 'POST', headers: {{ 'Content-Type': 'application/json' }}, body: JSON.stringify({{ action: 'antwort', t: t, frage: frage, a: a, lang: S.lang }}) }})
       .then(function (r) {{ return r.json(); }})
       .then(function (d) {{
-        if (!d.ok) {{ box.innerHTML = '<p class="kk-lead">' + esc(d.error || 'Das hat nicht geklappt.') + '</p>'; return; }}
-        var neu = d.neu ? esc(d.neu) : 'der neuen Kasse';
+        if (!d.ok) {{ box.innerHTML = '<p class="kk-lead">' + esc(d.error || S.fail) + '</p>'; return; }}
+        var neu = d.neu ? esc(d.neu) : S.the_new;
         var html = {{
-          'anmeldung|ja': '<p class="kk-lead"><strong>Super.</strong> Jetzt fehlt nur noch die Bestätigung: Die neue Kasse meldet sich bei ' + esc(d.kasse) + '. Wir fragen Mitte Dezember nach, ob alles geklappt hat.</p>',
-          'anmeldung|nein': '<p class="kk-lead">Kein Problem, das geht online in etwa 10 Minuten.</p><ul class="kp-list"><li>Beginn: 1. Januar</li><li>AHV-Nummer (756…, steht auf deiner Versichertenkarte)</li><li>Franchise und Modell</li><li>beim Hausarzt- oder HMO-Modell: deine Praxis</li></ul>' +
-            (d.neu_url ? '<a class="kk-cta" href="' + esc(d.neu_url) + '?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=kk-wechsel" target="_blank" rel="noopener sponsored">Zu ' + neu + ' &rarr;</a>' : '<a class="kk-cta" href="/#kk-rechner">Günstigste Kasse finden &rarr;</a>'),
-          'bestaetigung|ja': '<p class="kk-lead"><strong>Perfekt, dein Wechsel ist durch.</strong> Ab 1. Januar bist du bei ' + neu + ' versichert.</p>',
-          'bestaetigung|nein': '<p class="kk-lead">Ruf ' + esc(d.kasse) + ' an und frag nach, ob die Kündigung angekommen ist. Hast du sie per Mail geschickt, ist deine gesendete Mail der Beweis, per Einschreiben der Beleg der Post. Und frag bei ' + neu + ' nach, ob die Anmeldung durch ist: Erst wenn die neue Kasse sich bei der alten meldet, endet die alte Versicherung.</p>',
-          'stopp|': '<p class="kk-lead">Erledigt, du bekommst zu diesem Brief keine Erinnerungen mehr.</p>'
-        }}[frage + '|' + (frage === 'stopp' ? '' : a)] || '<p class="kk-lead">Gespeichert.</p>';
+          'anmeldung|ja': '<p class="kk-lead">' + f(S.a_yes, {{ k: esc(d.kasse) }}) + '</p>',
+          'anmeldung|nein': '<p class="kk-lead">' + S.a_no + '</p><ul class="kp-list">' + S.list_short + '</ul>' +
+            (d.neu_url ? '<a class="kk-cta" href="' + esc(d.neu_url) + '?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=kk-wechsel" target="_blank" rel="noopener sponsored">' + f(S.go, {{ n: neu }}) + ' &rarr;</a>' : '<a class="kk-cta" href="' + S.calc + '">' + S.find + ' &rarr;</a>'),
+          'bestaetigung|ja': '<p class="kk-lead">' + f(S.b_yes, {{ n: neu }}) + '</p>',
+          'bestaetigung|nein': '<p class="kk-lead">' + f(S.b_no, {{ k: esc(d.kasse), n: neu }}) + '</p>',
+          'stopp|': '<p class="kk-lead">' + S.stop + '</p>'
+        }}[frage + '|' + (frage === 'stopp' ? '' : a)] || '<p class="kk-lead">' + S.saved + '</p>';
         box.innerHTML = html;
       }})
-      .catch(function () {{ box.innerHTML = '<p class="kk-lead">Keine Verbindung. Bitte Link nochmals öffnen.</p>'; }});
+      .catch(function () {{ box.innerHTML = '<p class="kk-lead">' + S.reopen + '</p>'; }});
   }}
 }})();
 </script>"""
-    html_out = page(path, "Deine Kündigung herunterladen", "Kündigungsbrief für die Grundversicherung herunterladen.", body, [])
+    html_out = page(path, T("Deine Kündigung herunterladen", "Télécharger votre résiliation", "Download your cancellation"),
+                    T("Kündigungsbrief für die Grundversicherung herunterladen.", "Télécharger la lettre de résiliation de l’assurance de base.", "Download the cancellation letter for basic insurance."),
+                    body, [], alts_of(lambda: f'{i18n.url("kuendigen")}pdf/'))
     html_out = html_out.replace('<meta name="robots" content="index, follow">', '<meta name="robots" content="noindex, nofollow">', 1)
     return path, html_out.replace("</style>", "  .kp-btn { border:none; cursor:pointer; font-family:inherit; font-size:16px; }\n  .kp-btn:disabled { opacity:.6; }\n  .kp-list { margin:8px 0 8px 18px; }\n  .kp-list li { margin:2px 0; }\n</style>", 1)
 
@@ -1802,12 +2533,13 @@ def pickup_page():
 MARKT_WERBUNG = {2020: 60.3, 2021: 62.4, 2022: 72.6, 2023: 80.0, 2024: 73.3, 2025: 74.1}
 MARKT_PROVISIONEN = {2020: 60.4, 2021: 48.1, 2022: 48.4, 2023: 59.0, 2024: 49.9, 2025: 32.6}
 BLOG_VERWALTUNG = "/blog/verwaltungskosten-krankenkassen/"
+BLOG_VERWALTUNG_KEY = "blog/verwaltungskosten-krankenkassen"
 
 
 def blog_verwaltung_page():
     """Blog: Verwaltungskosten, Werbung und Provisionen je Kasse. Jede Zahl
     kommt aus den BAG-Dateien, nichts ist von Hand übertragen."""
-    path = BLOG_VERWALTUNG
+    path = i18n.url(BLOG_VERWALTUNG_KEY)
     nat = RATING["national"]
     adm = RATING["verwaltung"]["kassen"]
     mk = RATING["verwaltung"]["markt_verwaltung"]
@@ -1839,6 +2571,8 @@ def blog_verwaltung_page():
     flag = lambda i: (vdet(i)[1] or {}).get("ohne_personal")
     ch = lambda a, b: f"{(b / a - 1) * 100:+.0f}".replace("-", "−") + "&#8239;%"
     nm = lambda i: e(nat[i]["name"])
+    T = L
+    AND = T(" und ", " et ", " and ")
 
     trs = "".join(
         f'<tr><td>{kasse_link(i)}{"&nbsp;¹" if flag(i) else ""}{"&nbsp;²" if i in fus else ""}</td><td class="num"><strong>CHF {v(i, last):.0f}</strong></td>'
@@ -1847,55 +2581,118 @@ def blog_verwaltung_page():
         f'<td class="num">{("CHF " + format((vdet(i)[1] or {}).get("provisionen", 0), ".0f")) if vdet(i)[1] else "–"}</td>'
         f'<td class="num">{(format(sol(i), ".0f") + "&#8239;%") if sol(i) else "–"}</td>'
         f'<td class="num">{note_fmt(nat[i]["note"])}</td></tr>' for i in rows)
-    mrows = "".join(f'<tr><td>{y}</td><td class="num">{MARKT_WERBUNG[y]:.1f}</td><td class="num">{MARKT_PROVISIONEN[y]:.1f}</td></tr>'.replace(".", ",")
+    mrows = "".join(f'<tr><td>{y}</td><td class="num">{MARKT_WERBUNG[y]:.1f}</td><td class="num">{MARKT_PROVISIONEN[y]:.1f}</td></tr>'
                     for y in sorted(MARKT_WERBUNG))
-    title = "Verwaltungskosten der Krankenkassen: was jede Kasse ausgibt"
-    desc = (f"Verwaltung, Werbung und Vermittler-Provisionen je Krankenkasse in der Grundversicherung, "
-            f"mit Reserven und Preistreue-Note. Alle Zahlen vom BAG.")
-    body = f"""{crumbs_html([("Krankenkassen-Vergleich", "/"), ("Ratgeber", "/blog/"), ("Verwaltungskosten", path)])}
-<div class="article-badge">Hintergrund</div>
-<h1>Was die Krankenkassen für Verwaltung, Werbung und Vermittler ausgeben</h1>
-<div class="article-meta">Grundversicherung · Zahlen des BAG · Lesezeit: 4 Min.</div>
-<p class="kk-lead">Im Schnitt kostet die Verwaltung der Grundversicherung <strong>CHF {mk[last]:.0f} pro versicherte Person und Jahr</strong> ({last}), rund {share:.0f}&#8239;% der Prämie. Dahinter stecken grosse Unterschiede: von CHF {v(lo, last):.0f} bei {nm(lo)} bis CHF {v(hi, last):.0f} bei {nm(hi)}. Für Werbung gaben alle Kassen zusammen {vj} CHF {MARKT_WERBUNG[int(vj)]:.0f} Mio. aus, für Provisionen an Vermittler CHF {MARKT_PROVISIONEN[int(vj)]:.0f} Mio.</p>
+    if i18n.LANG != "en":
+        mrows = mrows.replace(".", ",")
+    title = T("Verwaltungskosten der Krankenkassen: was jede Kasse ausgibt", "Frais administratifs des caisses-maladie : ce que dépense chaque caisse",
+              "Health insurers’ administrative costs: what each insurer spends")
+    desc = T("Verwaltung, Werbung und Vermittler-Provisionen je Krankenkasse in der Grundversicherung, "
+             "mit Reserven und Preistreue-Note. Alle Zahlen vom BAG.",
+             "Administration, publicité et commissions aux intermédiaires par caisse-maladie dans l’assurance de base, "
+             "avec réserves et note de constance. Tous les chiffres de l’OFSP.",
+             "Administration, advertising and broker commissions per health insurer in basic insurance, "
+             "with reserves and price consistency score. All figures from the FOPH.")
+    short = T("Verwaltungskosten", "Frais administratifs", "Administrative costs")
+    crumbs = [home_crumb(), (T("Ratgeber", "Guide", "Guide"), i18n.url("blog")), (short, path)]
+    rl = f'<a href="{i18n.url("rating")}">{rating_name(cap=i18n.LANG != "fr")}</a>'
+    wbv, pvv = vdet(wb)[1]["werbung"], vdet(pv)[1]["provisionen"]
+    if pv0:
+        names = AND.join([", ".join(nm(i) for i in pv0[:-1]), nm(pv0[-1])] if len(pv0) > 1 else [nm(pv0[0])])
+        pv0_txt = T(f"Praktisch keine Provisionen, zwei Jahre in Folge unter CHF 2 pro Kopf, zahlen {names}.",
+                    f"Pratiquement aucune commission, moins de CHF 2 par assuré deux années de suite : {names}.",
+                    f"Practically no commissions, under CHF 2 per head two years running: {names}.")
+    else:
+        pv0_txt = ""
+    up = ", ".join(f"{nm(i)} ({ch(v(i, first), v(i, last))})" for i in grow[::-1][:3])
+    down = ", ".join(f"{nm(i)} ({ch(v(i, first), v(i, last))})" for i in grow[:3] if v(i, last) < v(i, first)) or T("nur wenige", "peu de caisses", "only a few")
+    if thin:
+        thin_txt = T("Überdurchschnittliche Verwaltungskosten bei einer Solvenzquote unter 130&#8239;% haben " + ", ".join(nm(i) for i in thin) + ". Das heisst nicht, dass etwas falsch läuft, aber hier bleibt am wenigsten Spielraum.",
+                     "Des frais administratifs supérieurs à la moyenne avec un taux de solvabilité inférieur à 130&#8239;% : " + ", ".join(nm(i) for i in thin) + ". Cela ne signifie pas que quelque chose ne va pas, mais c’est là que la marge est la plus faible.",
+                     "Above-average administrative costs with a solvency ratio below 130&#8239;%: " + ", ".join(nm(i) for i in thin) + ". That does not mean anything is wrong, but this is where there is least room for manoeuvre.")
+    else:
+        thin_txt = T("Keine grosse Kasse kombiniert hohe Verwaltungskosten mit knappen Reserven.", "Aucune grande caisse ne cumule des frais administratifs élevés et des réserves serrées.",
+                     "No large insurer combines high administrative costs with thin reserves.")
+    fus_txt = T(" ² Die Zahlen stammen aus einer Zeit, als die Kasse noch unter 50'000 Versicherte hatte. Seither ist sie gewachsen oder hat mit einer anderen Kasse fusioniert.",
+                " ² Les chiffres datent d’une époque où la caisse comptait moins de 50'000 assurés. Depuis, elle a grandi ou fusionné avec une autre caisse.",
+                " ² The figures date from a time when the insurer had fewer than 50'000 insured persons. It has since grown or merged with another insurer.") if fus else ""
+    P = "&#8239;%"
+    body = f"""{crumbs_html(crumbs)}
+<div class="article-badge">{T("Hintergrund", "Contexte", "Background")}</div>
+<h1>{T("Was die Krankenkassen für Verwaltung, Werbung und Vermittler ausgeben", "Ce que les caisses-maladie dépensent pour l’administration, la publicité et les intermédiaires", "What health insurers spend on administration, advertising and brokers")}</h1>
+<div class="article-meta">{T("Grundversicherung · Zahlen des BAG · Lesezeit: 4 Min.", "Assurance de base · chiffres de l’OFSP · lecture : 4 min", "Basic insurance · FOPH figures · reading time: 4 min")}</div>
+<p class="kk-lead">{T(f"Im Schnitt kostet die Verwaltung der Grundversicherung <strong>CHF {mk[last]:.0f} pro versicherte Person und Jahr</strong> ({last}), rund {share:.0f}{P} der Prämie. Dahinter stecken grosse Unterschiede: von CHF {v(lo, last):.0f} bei {nm(lo)} bis CHF {v(hi, last):.0f} bei {nm(hi)}. Für Werbung gaben alle Kassen zusammen {vj} CHF {MARKT_WERBUNG[int(vj)]:.0f} Mio. aus, für Provisionen an Vermittler CHF {MARKT_PROVISIONEN[int(vj)]:.0f} Mio.",
+  f"En moyenne, l’administration de l’assurance de base coûte <strong>CHF {mk[last]:.0f} par assuré et par an</strong> ({last}), soit environ {share:.0f}{P} de la prime. Les écarts sont importants : de CHF {v(lo, last):.0f} chez {nm(lo)} à CHF {v(hi, last):.0f} chez {nm(hi)}. En {vj}, l’ensemble des caisses a dépensé CHF {MARKT_WERBUNG[int(vj)]:.0f} mio en publicité et CHF {MARKT_PROVISIONEN[int(vj)]:.0f} mio en commissions aux intermédiaires.",
+  f"On average, administering basic insurance costs <strong>CHF {mk[last]:.0f} per insured person per year</strong> ({last}), around {share:.0f}{P} of the premium. Behind that are big differences: from CHF {v(lo, last):.0f} at {nm(lo)} to CHF {v(hi, last):.0f} at {nm(hi)}. In {vj}, all insurers together spent CHF {MARKT_WERBUNG[int(vj)]:.0f}m on advertising and CHF {MARKT_PROVISIONEN[int(vj)]:.0f}m on broker commissions.")}</p>
 
-<h2>Verwaltungskosten je Kasse</h2>
-<p>Kassen mit mindestens 50'000 Versicherten, pro versicherte Person und Jahr. Verwaltung {last} mit Veränderung seit {first}, Werbung und Provisionen {vj}, dazu die Solvenzquote (Reserven im Verhältnis zum gesetzlichen Minimum) und die Note im <a href="{RATING_PATH}">Preistreue-Rating</a>.</p>
-<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Kasse</th><th class="num">Verwaltung {last}</th><th class="num">seit {first}</th><th class="num">Werbung {vj}</th><th class="num">Provisionen {vj}</th><th class="num">Solvenz</th><th class="num">Preistreue</th></tr></thead><tbody>{trs}</tbody></table></div>
-<p class="kk-note">¹ Ohne eigenes Personal: Die Kasse kauft ihre Verwaltung als Gebühr bei einer Konzern- oder Partnerfirma ein. Der Gesamtbetrag ist vergleichbar, wie er sich auf die Kassen eines Konzerns verteilt, bestimmt aber der Konzern.{(" ² Die Zahlen stammen aus einer Zeit, als die Kasse noch unter 50'000 Versicherte hatte. Seither ist sie gewachsen oder hat mit einer anderen Kasse fusioniert.") if fus else ""}</p>
+<h2>{T("Verwaltungskosten je Kasse", "Frais administratifs par caisse", "Administrative costs per insurer")}</h2>
+<p>{T(f"Kassen mit mindestens 50'000 Versicherten, pro versicherte Person und Jahr. Verwaltung {last} mit Veränderung seit {first}, Werbung und Provisionen {vj}, dazu die Solvenzquote (Reserven im Verhältnis zum gesetzlichen Minimum) und die Note im {rl}.",
+  f"Caisses d’au moins 50'000 assurés, par assuré et par an. Administration {last} avec évolution depuis {first}, publicité et commissions {vj}, ainsi que le taux de solvabilité (réserves par rapport au minimum légal) et la note de la {rl}.",
+  f"Insurers with at least 50'000 insured persons, per insured person per year. Administration {last} with change since {first}, advertising and commissions {vj}, plus the solvency ratio (reserves relative to the legal minimum) and the score in the {rl}.")}</p>
+<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>{T("Kasse", "Caisse", "Insurer")}</th><th class="num">{T("Verwaltung", "Administration", "Administration")} {last}</th><th class="num">{T("seit", "depuis", "since")} {first}</th><th class="num">{T("Werbung", "Publicité", "Advertising")} {vj}</th><th class="num">{T("Provisionen", "Commissions", "Commissions")} {vj}</th><th class="num">{T("Solvenz", "Solvabilité", "Solvency")}</th><th class="num">{T("Preistreue", "Constance", "Consistency")}</th></tr></thead><tbody>{trs}</tbody></table></div>
+<p class="kk-note">{T("¹ Ohne eigenes Personal: Die Kasse kauft ihre Verwaltung als Gebühr bei einer Konzern- oder Partnerfirma ein. Der Gesamtbetrag ist vergleichbar, wie er sich auf die Kassen eines Konzerns verteilt, bestimmt aber der Konzern.",
+  "¹ Sans personnel propre : la caisse achète son administration sous forme de frais à une société du groupe ou partenaire. Le montant total est comparable, mais c’est le groupe qui décide de sa répartition entre ses caisses.",
+  "¹ No staff of its own: the insurer buys in its administration as a fee from a group or partner company. The total is comparable, but the group decides how it is split among its insurers.")}{fus_txt}</p>
 
-<h2>Werbung und Vermittler</h2>
-<p>Am meisten pro Kopf für Werbung gibt {nm(wb)} aus: CHF {vdet(wb)[1]["werbung"]:.0f} pro versicherte Person ({vj}). Bei den Provisionen an Vermittler liegt {nm(pv)} vorne, mit CHF {vdet(pv)[1]["provisionen"]:.0f} pro Kopf. {"Praktisch keine Provisionen, zwei Jahre in Folge unter CHF 2 pro Kopf, zahlen " + " und ".join([", ".join(nm(i) for i in pv0[:-1]), nm(pv0[-1])] if len(pv0) > 1 else [nm(pv0[0])]) + "." if pv0 else ""}</p>
-<p>In der Grundversicherung ist die Provision gedeckelt: höchstens CHF 70 pro Abschluss, seit 1. September 2024 verbindlich für alle Kassen. Das zeigt sich in den Zahlen:</p>
-<div class="kk-table-wrap"><table class="kk-table" style="min-width:0;"><thead><tr><th>Jahr</th><th class="num">Werbung, Mio. CHF</th><th class="num">Provisionen, Mio. CHF</th></tr></thead><tbody>{mrows}</tbody></table></div>
-<p>Bei der Zusatzversicherung ist das anders, dort sind bis zu 16 Monatsprämien Provision erlaubt. Mehr dazu: <a href="/blog/provisionen-zusatzversicherung/">Warum dein Berater dir die Zusatzversicherung verkaufen will</a>.</p>
+<h2>{T("Werbung und Vermittler", "Publicité et intermédiaires", "Advertising and brokers")}</h2>
+<p>{T(f"Am meisten pro Kopf für Werbung gibt {nm(wb)} aus: CHF {wbv:.0f} pro versicherte Person ({vj}). Bei den Provisionen an Vermittler liegt {nm(pv)} vorne, mit CHF {pvv:.0f} pro Kopf. {pv0_txt}",
+  f"C’est {nm(wb)} qui dépense le plus en publicité par assuré : CHF {wbv:.0f} par assuré ({vj}). Pour les commissions aux intermédiaires, {nm(pv)} est en tête avec CHF {pvv:.0f} par assuré. {pv0_txt}",
+  f"{nm(wb)} spends the most on advertising per head: CHF {wbv:.0f} per insured person ({vj}). For broker commissions {nm(pv)} leads, with CHF {pvv:.0f} per head. {pv0_txt}")}</p>
+<p>{T("In der Grundversicherung ist die Provision gedeckelt: höchstens CHF 70 pro Abschluss, seit 1. September 2024 verbindlich für alle Kassen. Das zeigt sich in den Zahlen:",
+  "Dans l’assurance de base, la commission est plafonnée : CHF 70 au maximum par contrat, obligatoire pour toutes les caisses depuis le 1er septembre 2024. Cela se voit dans les chiffres :",
+  "In basic insurance, commission is capped: at most CHF 70 per policy, binding on all insurers since 1 September 2024. This shows in the figures:")}</p>
+<div class="kk-table-wrap"><table class="kk-table" style="min-width:0;"><thead><tr><th>{T("Jahr", "Année", "Year")}</th><th class="num">{T("Werbung, Mio. CHF", "Publicité, mio CHF", "Advertising, CHF m")}</th><th class="num">{T("Provisionen, Mio. CHF", "Commissions, mio CHF", "Commissions, CHF m")}</th></tr></thead><tbody>{mrows}</tbody></table></div>
+<p>{T(f'Bei der Zusatzversicherung ist das anders, dort sind bis zu 16 Monatsprämien Provision erlaubt. Mehr dazu: <a href="{i18n.url("blog/provisionen-zusatzversicherung")}">Warum dein Berater dir die Zusatzversicherung verkaufen will</a>.',
+  f'Pour l’assurance complémentaire, c’est différent : jusqu’à 16 primes mensuelles de commission sont autorisées. En savoir plus : <a href="{i18n.url("blog/provisionen-zusatzversicherung")}">pourquoi votre conseiller veut vous vendre une assurance complémentaire</a>.',
+  f'Supplementary insurance is different: commissions of up to 16 monthly premiums are allowed there. More: <a href="{i18n.url("blog/provisionen-zusatzversicherung")}">why your adviser wants to sell you supplementary insurance</a>.')}</p>
 
-<h2>Wer seit {first} zulegt und wer spart</h2>
-<p>Den stärksten Anstieg der Verwaltungskosten pro Kopf haben {", ".join(f"{nm(i)} ({ch(v(i, first), v(i, last))})" for i in grow[::-1][:3])}. Gesenkt haben sie {", ".join(f"{nm(i)} ({ch(v(i, first), v(i, last))})" for i in grow[:3] if v(i, last) < v(i, first)) or "nur wenige"}. Der Schnitt aller Kassen stieg von CHF {mk[first]:.0f} auf CHF {mk[last]:.0f}.</p>
+<h2>{T(f"Wer seit {first} zulegt und wer spart", f"Qui augmente depuis {first} et qui économise", f"Who has grown since {first} and who saves")}</h2>
+<p>{T(f"Den stärksten Anstieg der Verwaltungskosten pro Kopf haben {up}. Gesenkt haben sie {down}. Der Schnitt aller Kassen stieg von CHF {mk[first]:.0f} auf CHF {mk[last]:.0f}.",
+  f"Les plus fortes hausses des frais administratifs par assuré : {up}. Les ont réduits : {down}. La moyenne de toutes les caisses est passée de CHF {mk[first]:.0f} à CHF {mk[last]:.0f}.",
+  f"The largest increases in administrative costs per head: {up}. Reduced them: {down}. The average of all insurers rose from CHF {mk[first]:.0f} to CHF {mk[last]:.0f}.")}</p>
 
-<h2>Verwaltung und Reserven zusammen</h2>
-<p>Die Reserven sind das Polster, mit dem eine Kasse teure Jahre abfedert, ohne gleich die Prämien zu erhöhen. {("Überdurchschnittliche Verwaltungskosten bei einer Solvenzquote unter 130&#8239;% haben " + ", ".join(nm(i) for i in thin) + ". Das heisst nicht, dass etwas falsch läuft, aber hier bleibt am wenigsten Spielraum.") if thin else "Keine grosse Kasse kombiniert hohe Verwaltungskosten mit knappen Reserven."} Die Reserven fliessen mit 10&#8239;% in die Preistreue-Note ein, die Verwaltungskosten nicht, weil sie schon im Preis stecken.</p>
+<h2>{T("Verwaltung und Reserven zusammen", "Administration et réserves ensemble", "Administration and reserves together")}</h2>
+<p>{T(f"Die Reserven sind das Polster, mit dem eine Kasse teure Jahre abfedert, ohne gleich die Prämien zu erhöhen. {thin_txt} Die Reserven fliessen mit 10{P} in die Preistreue-Note ein, die Verwaltungskosten nicht, weil sie schon im Preis stecken.",
+  f"Les réserves sont le coussin qui permet à une caisse d’amortir les années coûteuses sans augmenter aussitôt les primes. {thin_txt} Les réserves comptent pour 10{P} dans la note de constance, les frais administratifs non, car ils sont déjà compris dans le prix.",
+  f"Reserves are the cushion an insurer uses to absorb expensive years without raising premiums straight away. {thin_txt} Reserves count for 10{P} of the price consistency score; administrative costs do not, because they are already in the price.")}</p>
 
-<h2>Was heisst das für dich?</h2>
-<p>Die Verwaltung macht nur einen kleinen Teil der Prämie aus, rund {share:.0f}&#8239;%. Zwischen der schlanksten und der teuersten grossen Kasse liegen CHF {v(hi, last) - v(lo, last):.0f} im Jahr. Beim Prämienvergleich sind die Unterschiede meist viel grösser. Entscheidend bleibt, was du bezahlst und ob die Kasse über die Jahre günstig bleibt.</p>
-<a class="kk-cta" href="/#kk-rechner">Prämien vergleichen &rarr;</a>
+<h2>{T("Was heisst das für dich?", "Qu’est-ce que cela signifie pour vous ?", "What does this mean for you?")}</h2>
+<p>{T(f"Die Verwaltung macht nur einen kleinen Teil der Prämie aus, rund {share:.0f}{P}. Zwischen der schlanksten und der teuersten grossen Kasse liegen CHF {v(hi, last) - v(lo, last):.0f} im Jahr. Beim Prämienvergleich sind die Unterschiede meist viel grösser. Entscheidend bleibt, was du bezahlst und ob die Kasse über die Jahre günstig bleibt.",
+  f"L’administration ne représente qu’une petite part de la prime, environ {share:.0f}{P}. Entre la grande caisse la plus légère et la plus chère, l’écart est de CHF {v(hi, last) - v(lo, last):.0f} par an. En comparant les primes, les différences sont généralement bien plus grandes. Ce qui compte, c’est ce que vous payez et si la caisse reste avantageuse au fil des ans.",
+  f"Administration is only a small part of the premium, around {share:.0f}{P}. Between the leanest and the most expensive large insurer the gap is CHF {v(hi, last) - v(lo, last):.0f} a year. Premium differences are usually much bigger. What matters is what you pay and whether the insurer stays cheap over the years.")}</p>
+<a class="kk-cta" href="{i18n.url("home")}#kk-rechner">{T("Prämien vergleichen", "Comparer les primes", "Compare premiums")} &rarr;</a>
 
-<p class="kk-note">Quellen: BAG, Aufsichtsdaten der obligatorischen Krankenpflegeversicherung (Verwaltungsaufwand je versicherte Person, {first} bis {last}); BAG, Auswertungen Verwaltungskosten (Werbeaufwand und Provisionen, Jahresrechnung definitiv {vj}); BAG über priminfo.admin.ch, Solvenzquoten per 1.1.2026. Werbung und Provisionen umfassen nur die Grundversicherung.</p>"""
-    return path, page(path, title, desc, body, [breadcrumb([("Krankenkassen-Vergleich", "/"), ("Ratgeber", "/blog/"), ("Verwaltungskosten", path)])])
+<p class="kk-note">{T(f"Quellen: BAG, Aufsichtsdaten der obligatorischen Krankenpflegeversicherung (Verwaltungsaufwand je versicherte Person, {first} bis {last}); BAG, Auswertungen Verwaltungskosten (Werbeaufwand und Provisionen, Jahresrechnung definitiv {vj}); BAG über priminfo.admin.ch, Solvenzquoten per 1.1.2026. Werbung und Provisionen umfassen nur die Grundversicherung.",
+  f"Sources : OFSP, données de surveillance de l’assurance obligatoire des soins (frais administratifs par assuré, {first} à {last}) ; OFSP, analyses des frais administratifs (publicité et commissions, comptes annuels définitifs {vj}) ; OFSP via priminfo.admin.ch, taux de solvabilité au 1.1.2026. La publicité et les commissions ne concernent que l’assurance de base.",
+  f"Sources: FOPH, supervisory data on compulsory health insurance (administrative costs per insured person, {first} to {last}); FOPH, analyses of administrative costs (advertising and commissions, final annual accounts {vj}); FOPH via priminfo.admin.ch, solvency ratios as of 1 January 2026. Advertising and commissions cover basic insurance only.")}</p>"""
+    return path, page(path, title, desc, body, [breadcrumb(crumbs)], dict(i18n.ROUTES[BLOG_VERWALTUNG_KEY]))
 
 
-def write_sitemap(paths):
+def write_sitemap(groups):
+    """groups: Liste von ({Sprache: Pfad}, Priorität). Jede URL nennt ihre
+    Gegenstücke in den anderen Sprachen (xhtml:link), wie Google es für
+    mehrsprachige Seiten empfiehlt."""
     today = date.today().isoformat()
-    static = [("/", "1.0"), ("/hausratversicherung/", "0.9"), ("/methode/", "0.6"),
-              ("/blog/beste-franchise-schweiz/", "0.7"), ("/blog/hmo-telmed-hausarzt-erklaert/", "0.7"),
-              ("/blog/unfallversicherung-schweiz-ausland/", "0.7"), ("/blog/provisionen-zusatzversicherung/", "0.7"),
-              ("/blog/krankenkasse-mit-26/", "0.7"),
-              ("/blog/", "0.6")]
-    items = [(p, pr) for p, pr in static] + [(p, "0.8") for p in paths]
-    body = "\n".join(f"  <url>\n    <loc>{SITE}{p}</loc>\n    <lastmod>{today}</lastmod>\n    <priority>{pr}</priority>\n  </url>"
-                     for p, pr in items)
+    static_pr = {"home": "1.0", "hausrat": "0.9", "methode": "0.6", "blog": "0.6"}
+    items = []
+    for key in i18n.STATIC:
+        if key in ("impressum", "datenschutz", "kontakt"):
+            continue   # bewusst nicht in der Sitemap
+        alts = {l: i18n.url(key, l) for l in i18n.LANGS if (ROOT / i18n.file_for(key, l)).exists()}
+        items.append((alts, static_pr.get(key, "0.7")))
+    items += groups
+    out = []
+    for alts, pr in items:
+        links = "".join(f'\n    <xhtml:link rel="alternate" hreflang="{i18n.HREFLANG[l]}" href="{SITE}{p}"/>' for l, p in alts.items())
+        if len(alts) > 1 and "de" in alts:
+            links += f'\n    <xhtml:link rel="alternate" hreflang="x-default" href="{SITE}{alts["de"]}"/>'
+        for l, p in alts.items():
+            out.append(f"  <url>\n    <loc>{SITE}{p}</loc>\n    <lastmod>{today}</lastmod>\n    <priority>{pr}</priority>"
+                       f"{links if len(alts) > 1 else ''}\n  </url>")
     (ROOT / "sitemap.xml").write_text(
         f'<?xml version="1.0" encoding="UTF-8"?>\n<!-- generiert von scripts/build_kk_pages.py -->\n'
-        f'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{body}\n</urlset>\n', encoding="utf-8")
+        f'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n'
+        + "\n".join(out) + '\n</urlset>\n', encoding="utf-8")
 
 
 def write_llms(n_insurers, nat):
@@ -1924,7 +2721,7 @@ abovergleich.com hilft beim Sparen auf der Grundversicherung. Die Leistungen sin
 - [Preistreue-Rating {YEAR}]({SITE}/krankenkassen-rating/): Note 0 bis 10 je Kasse aus BAG-Prämien seit 2020: Preis, Konstanz unter den günstigsten, Aufschläge, Rabatt-Treue neuer Sparmodelle, Tarif-Bestand, Reserven.
 - [Preistreue-Award {YEAR}]({SITE}/krankenkassen-rating/award/): Gesamtsieger, Kategoriensieger und Sieger je Kanton, mit Regeln.
 - [Verwaltungskosten der Krankenkassen]({SITE}{BLOG_VERWALTUNG}): Verwaltung, Werbung und Vermittler-Provisionen je Kasse (BAG), mit Reserven und Preistreue-Note.
-- [Krankenkasse kündigen]({SITE}/krankenkasse-kuendigen/): Frist {DEADLINE}, Kündigungs-Editor mit Unterschrift und PDF, Kündigungsweg (Mail oder Post) und Adresse jeder Kasse laut BAG.
+- [Krankenkasse kündigen]({SITE}/krankenkasse-kuendigen/): Frist {deadline()}, Kündigungs-Editor mit Unterschrift und PDF, Kündigungsweg (Mail oder Post) und Adresse jeder Kasse laut BAG.
 - [Hausrat & Haftpflicht]({SITE}/hausratversicherung/): Bedarfsrechner und Anbieter-Vergleich.
 - [Unsere Methode]({SITE}/methode/): Wie wir vergleichen und warum wir keine Telefonnummern verlangen.
 
@@ -1941,6 +2738,20 @@ abovergleich.com hilft beim Sparen auf der Grundversicherung. Die Leistungen sin
 - [Krankenkasse mit 26: Warum die Prämie so stark steigt]({SITE}/blog/krankenkasse-mit-26/)
 - [Krankenkassen-Rating: Welche Kasse ist dauerhaft günstig?]({SITE}/krankenkassen-rating/)
 
+## En français
+
+- [Comparatif des caisses-maladie {YEAR}]({SITE}/fr/): calculateur de primes par NPA, année de naissance, franchise et couverture accidents.
+- [Primes {YEAR} par canton]({SITE}/fr/caisse-maladie/) · [Toutes les caisses]({SITE}/fr/caisses/) · [Analyse des primes {YEAR}]({SITE}/fr/primes-caisse-maladie-{YEAR}/)
+- [Notation Constance des primes {YEAR}]({SITE}/fr/constance-des-primes/) et [Prix Constance des primes {YEAR}]({SITE}/fr/constance-des-primes/prix/)
+- [Résilier sa caisse-maladie]({SITE}/fr/resilier-caisse-maladie/): délai, lettre de résiliation en français avec signature, adresses de toutes les caisses.
+
+## In English
+
+- [Swiss health insurance comparison {YEAR}]({SITE}/en/): premium calculator by postcode, year of birth, deductible and accident cover.
+- [Premiums {YEAR} by canton]({SITE}/en/health-insurance/) · [All insurers]({SITE}/en/insurers/) · [Premium analysis {YEAR}]({SITE}/en/health-insurance-premiums-{YEAR}/)
+- [Price Consistency Rating {YEAR}]({SITE}/en/health-insurance-rating/) and [Price Consistency Award {YEAR}]({SITE}/en/health-insurance-rating/award/)
+- [Cancel Swiss health insurance]({SITE}/en/cancel-health-insurance/): deadline, cancellation letter in German or French, addresses of all insurers.
+
 ## Schwesterseite
 
 - [Handy-Abo Vergleich](https://handyabo.com/)
@@ -1951,7 +2762,7 @@ abovergleich.com hilft beim Sparen auf der Grundversicherung. Die Leistungen sin
 - Prämien: Bundesamt für Gesundheit (BAG), opendata.swiss, Prämienjahre {PREV} und {YEAR}
 - Kassennamen: BAG-Verzeichnis der zugelassenen Krankenversicherer
 - Aktualisierung: jährlich Ende September nach Veröffentlichung der neuen Prämien
-- Kündigung Grundversicherung: bis {DEADLINE} bei der Kasse eingetroffen
+- Kündigung Grundversicherung: bis {deadline()} bei der Kasse eingetroffen
 
 ## Kontakt
 
@@ -1964,7 +2775,7 @@ def bust_assets():
     Ändert sich die Datei, ändert sich die URL, und Browser laden sie neu."""
     import hashlib
     assets = {}
-    for rel in ("styles/shared.css", "js/combobox.js", "js/kuendigung.js", "rating-daten.json"):
+    for rel in ("styles/shared.css", "js/combobox.js", "js/kuendigung.js", "js/rechner.js", "rating-daten.json"):
         f = ROOT / rel
         if f.exists():
             assets["/" + rel] = hashlib.md5(f.read_bytes()).hexdigest()[:8]
@@ -2035,64 +2846,66 @@ def main():
     jojo = jojo_analysis()
     JOJO_ROWS[:] = (jojo.get(f"{PREV}-{YEAR}") or {}).get("rows") or []
 
-    paths, cheapest = [], {}
+    # Daten, die nicht von der Sprache abhängen
+    cheapest, ins_by_c = {}, {}
     for c in CANTONS:
-        ins_c = [{"name": INSURER_NAMES[str(i)], "premium": sum(p for p, _ in v) / len(v),
-                  "change": sum(x for _, x in v) / len(v) * 100}
-                 for (cc, i), v in ic.items() if cc == c]
-        path, content = canton_page(c, by_canton_cur[c], prev_idx, cantons, ins_c, regions)
-        write(path, content)
-        paths.append(path)
+        ins_by_c[c] = [{"name": INSURER_NAMES[str(i)], "premium": sum(p for p, _ in v) / len(v),
+                        "change": sum(x for _, x in v) / len(v) * 100}
+                       for (cc, i), v in ic.items() if cc == c]
         cheapest[c] = ranking(by_canton_cur[c], c, MAIN_REGION[c], 2500, prev_idx, n=1)[0]
-
     model_counts = defaultdict(int)
     for c in CANTONS:
         reg = main_region(by_canton_cur[c], c)
         best = min((r for r in by_canton_cur[c] if r["region"] == reg and r["franchise"] == 300), key=lambda r: r["premium"])
         model_counts[best["model_type"]] += 1
-
     top3_cur = top3_counts(cur, by_canton_cur)
-    for i in KASSE_SLUG:
-        path, content = kasse_page(i, cur, by_canton_cur, prev_idx, insurers, ic, top3_cur, kv, nu)
-        write(path, content)
-        paths.append(path)
-
-    for fn in (lambda: hub_page(cantons, cheapest), lambda: report_page(cantons, insurers, nat, model_counts, jojo),
-               lambda: kasse_hub(insurers, top3_cur), lambda: kuendigen_page(kv), lambda: rating_page(RATING), award_page):
-        path, content = fn()
-        write(path, content)
-        paths.insert(0, path)
-
-    path, content = blog_verwaltung_page()
-    write(path, content)
-    paths.append(path)
-
-    path, content = pickup_page()   # nicht in die Sitemap
-    write(path, content)
-
-    # Startseite: Insights-Block ersetzen
-    idx = ROOT / "index.html"
-    s = idx.read_text(encoding="utf-8")
     prev2 = load_year(YEAR - 2)
     by_canton_prev2 = defaultdict(list)
     for r in prev2:
         by_canton_prev2[r["canton"]].append(r)
     _, ins_prev, nat_prev = analyse(prev, prev2, bestand)
-    block = insights_block(cantons, insurers, nat,
-                           top3_counts(prev, by_canton_prev), top3_counts(cur, by_canton_cur),
-                           ins_prev, nat_prev, top3_counts(prev2, by_canton_prev2), jojo)
-    new, n = re.subn(r"<!-- INSIGHTS:START.*?<!-- INSIGHTS:END -->", lambda _: block, s, flags=re.S)
-    if n != 1:
-        sys.exit("Insights-Marker in index.html nicht gefunden")
+    top3_prev, top3_prev2 = top3_counts(prev, by_canton_prev), top3_counts(prev2, by_canton_prev2)
     n_insurers = len({r["insurer_id"] for r in cur})
-    new = re.sub(r'(class="[^"]*insurer-count[^"]*">)\d+(<)', rf"\g<1>{n_insurers}\g<2>", new)
-    new = re.sub(r'href="/krankenkassenpraemien-\d{4}/" class="nav-link">Prämien \d{4}',
-                 f'href="/krankenkassenpraemien-{YEAR}/" class="nav-link">Prämien {YEAR}', new)
-    idx.write_text(new, encoding="utf-8")
 
-    meth = ROOT / "methode" / "index.html"
-    ms = meth.read_text(encoding="utf-8")
-    meth.write_text(re.sub(r'(class="[^"]*insurer-count[^"]*">)\d+(<)', rf"\g<1>{n_insurers}\g<2>", ms), encoding="utf-8")
+    groups = {}   # Schlüssel -> {Sprache: Pfad}, für die Sitemap
+    def add(key, lang, path, pr="0.8"):
+        groups.setdefault(key, ({}, pr))[0][lang] = path
+
+    for lang in i18n.LANGS:
+        i18n.set_lang(lang)
+        for c in CANTONS:
+            path, content = canton_page(c, by_canton_cur[c], prev_idx, cantons, ins_by_c[c], regions)
+            write(path, content)
+            add(("canton", c), lang, path)
+        for i in KASSE_SLUG:
+            path, content = kasse_page(i, cur, by_canton_cur, prev_idx, insurers, ic, top3_cur, kv, nu)
+            write(path, content)
+            add(("kasse", i), lang, path)
+        for key, fn in (("cantons", lambda: hub_page(cantons, cheapest)),
+                        ("report", lambda: report_page(cantons, insurers, nat, model_counts, jojo)),
+                        ("kassen", lambda: kasse_hub(insurers, top3_cur)), ("kuendigen", lambda: kuendigen_page(kv)),
+                        ("rating", lambda: rating_page(RATING)), ("award", award_page), ("blogv", blog_verwaltung_page)):
+            path, content = fn()
+            write(path, content)
+            add(key, lang, path)
+        path, content = pickup_page()   # nicht in die Sitemap
+        write(path, content)
+
+        # Startseite der Sprache: Insights-Block ersetzen
+        idx = ROOT / i18n.file_for("home", lang)
+        if idx.exists():
+            s_idx = idx.read_text(encoding="utf-8")
+            block = insights_block(cantons, insurers, nat, top3_prev, top3_cur, ins_prev, nat_prev, top3_prev2, jojo)
+            new, n = re.subn(r"<!-- INSIGHTS:START.*?<!-- INSIGHTS:END -->", lambda _: block, s_idx, flags=re.S)
+            if n != 1:
+                sys.exit(f"Insights-Marker in {idx} nicht gefunden")
+            new = re.sub(r'(class="[^"]*insurer-count[^"]*">)\d+(<)', rf"\g<1>{n_insurers}\g<2>", new)
+            idx.write_text(new, encoding="utf-8")
+        meth = ROOT / i18n.file_for("methode", lang)
+        if meth.exists():
+            ms = meth.read_text(encoding="utf-8")
+            meth.write_text(re.sub(r'(class="[^"]*insurer-count[^"]*">)\d+(<)', rf"\g<1>{n_insurers}\g<2>", ms), encoding="utf-8")
+    i18n.set_lang("de")
     write_llms(n_insurers, nat)
 
     (ROOT / "premium-insights.json").write_text(json.dumps({
@@ -2106,7 +2919,8 @@ def main():
                      for i, d in insurers.items()},
     }, ensure_ascii=False, indent=1), encoding="utf-8")
 
-    write_sitemap(paths)
+    paths = [p for alts, _ in groups.values() for p in alts.values()]
+    write_sitemap(list(groups.values()))
     site_nav.apply_static()
     try:
         import sync_handyabo

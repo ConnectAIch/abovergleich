@@ -50,15 +50,19 @@ def figures(live=False):
 
 def apply(live=False):
     vals = figures(live)
-    idx = ROOT / "index.html"
-    s = idx.read_text(encoding="utf-8")
-    new = s
-    for cls, v in vals.items():
-        new, n = re.subn(rf'(<span class="{cls}">)[^<]*(</span>)', rf"\g<1>{v}\g<2>", new)
-        if not n:
-            sys.exit(f"Platzhalter {cls} fehlt in index.html")
-    if new != s:
-        idx.write_text(new, encoding="utf-8")
+    # Startseite in allen Sprachen (DE, /fr/, /en/), soweit es sie gibt
+    for rel in ("index.html", "fr/index.html", "en/index.html"):
+        idx = ROOT / rel
+        if not idx.exists():
+            continue
+        s = idx.read_text(encoding="utf-8")
+        new = s
+        for cls, v in vals.items():
+            new, n = re.subn(rf'(<span class="{cls}">)[^<]*(</span>)', rf"\g<1>{v}\g<2>", new)
+            if not n:
+                sys.exit(f"Platzhalter {cls} fehlt in {rel}")
+        if new != s:
+            idx.write_text(new, encoding="utf-8")
     print("✓ handyabo:", ", ".join(f"{k.removeprefix('hb-')} {v}" for k, v in vals.items()))
 
 
