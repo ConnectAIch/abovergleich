@@ -583,6 +583,7 @@ def canton_page(c, cur, prev_idx, cantons, insurers_c, regions):
                              f'<p>{e(", ".join(gem))}</p></details>')
 
     parts.append(rating_canton_block(c, main))
+    parts.append(vorjahr_block(c))
 
     ranked = sorted(insurers_c, key=lambda x: x["change"])
     if len(ranked) >= 4:
@@ -922,6 +923,34 @@ def set_home(bestand):
 
 def canton_award(c):
     return next((a for a in AWARDS if a["group"] == "Kantone" and a["id"].startswith(f"kanton-{CANTONS[c][1]}-")), None)
+
+
+JOJO_ROWS = []   # Vorjahressieger je Region, in main() vor den Kantonsseiten gefüllt
+
+
+def vorjahr_block(c):
+    """Der günstigste Tarif des Vorjahres in jeder Region des Kantons und was
+    er heute kostet. Gleiche Rechnung wie in der Auswertung und im Pressetext:
+    Erwachsene, Franchise 2'500, ohne Unfall."""
+    rows = sorted((x for x in JOJO_ROWS if x["canton"] == c), key=lambda x: x["region"])
+    if not rows:
+        return ""
+    n = len({x["region"] for x in JOJO_ROWS if x["canton"] == c})
+    def lab(x):
+        return "ganzer Kanton" if x["region"].endswith("0") else f"Region {x['region'][-1]}"
+    trs = "".join(
+        f'<tr><td>{lab(x)}</td><td>{e(x["insurer"])}<span class="sub">{e(MODEL_LABEL.get(x["model"], x["model"]))} · {e(x["tariff"])}</span></td>'
+        f'<td class="num">CHF {chf(x["before"])}</td><td class="num">CHF {chf(x["after"])}</td>'
+        f'<td class="num {"kk-up" if x["change"] > x["market"] else "kk-down"}">{pct(x["change"])}<span class="sub">Markt {pct(x["market"])}</span></td>'
+        f'<td class="num">{x["rank_after"]}. von {x["n_after"]}</td></tr>' for x in rows)
+    still = sum(1 for x in rows if x["rank_after"] == 1)
+    lead = ("Der günstigste Tarif vom letzten Jahr ist auch {y} noch der günstigste." if still == len(rows) else
+            "Wer letztes Jahr zur günstigsten Kasse gewechselt hat, sollte dieses Jahr wieder vergleichen.").format(y=YEAR)
+    return (f"<h2>Letztes Jahr die Günstigste, und heute?</h2>"
+            f"<p>Der günstigste Tarif {PREV} in {'jeder Prämienregion' if len(rows) > 1 else 'der Prämienregion'} des Kantons und was derselbe Tarif {YEAR} kostet. "
+            f"Erwachsene, Franchise 2'500, ohne Unfall, pro Monat. {lead}</p>"
+            f'<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Region</th><th>Sieger {PREV}</th><th class="num">{PREV}</th>'
+            f'<th class="num">{YEAR}</th><th class="num">Veränderung</th><th class="num">Rang {YEAR}</th></tr></thead><tbody>{trs}</tbody></table></div>')
 
 
 def rating_canton_block(c, main):
@@ -2003,6 +2032,8 @@ def main():
     AWARDS = build_awards.compute(RATING, YEAR, CANTONS, MAIN_REGION, adm_cost)
     write_award_badges()
     set_home(bestand)
+    jojo = jojo_analysis()
+    JOJO_ROWS[:] = (jojo.get(f"{PREV}-{YEAR}") or {}).get("rows") or []
 
     paths, cheapest = [], {}
     for c in CANTONS:
@@ -2014,7 +2045,6 @@ def main():
         paths.append(path)
         cheapest[c] = ranking(by_canton_cur[c], c, MAIN_REGION[c], 2500, prev_idx, n=1)[0]
 
-    jojo = jojo_analysis()
     model_counts = defaultdict(int)
     for c in CANTONS:
         reg = main_region(by_canton_cur[c], c)
