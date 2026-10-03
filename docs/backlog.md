@@ -13,6 +13,8 @@ Grundversicherung, Beratungsprotokoll, kein Telefonverkauf) und von der
 Kasse einen Partner-Parameter oder eine eigene Landingpage. Erster Schritt:
 Sanitas Vertrieb anschreiben, danach Concordia, KPT, Assura (die häufigsten
 «neu»-Kassen im Rechner, siehe kk_events). Entscheid bei Matthias.
+Entwürfe für Sanitas, CSS und Helsana: `docs/partner-anfragen-2026-10.md`
+(03.10.2026, noch nicht verschickt). Trichter je Woche: Sicht `kk_trichter`.
 
 ## Anmelde-Links: alle 32 Kassen geprüft (03.10.2026)
 
