@@ -2266,6 +2266,10 @@ KUENDIGEN_CSS = """
   .kd-nx-sub { font-size:14px; color:var(--text2); line-height:1.5; margin-top:6px; }
   .kd-done .kd-go { display:inline-block; background:var(--accent); color:var(--text); padding:11px 18px; border-radius:10px; text-decoration:none; font-weight:700; }
   .kd-done .kd-go.sec { background:var(--surface); border:2px solid var(--accent); padding:9px 16px; }
+  .kd-nx strong { display:inline; font-family:inherit; font-size:15px; margin:0; }
+  .kd-addr { display:inline-block; font-size:16px; word-break:break-all; margin:4px 4px 4px 0; }
+  .kd-done .kd-copy-addr { border:none; cursor:pointer; font:inherit; font-weight:700; padding:7px 14px; font-size:14px; }
+  .kd-done .kd-nx-sub a { color:var(--accent-dark); }
   @media (max-width:640px) { .kd-form, .kd-more-grid { grid-template-columns:1fr; } #kd-brief { padding:20px; } }
   @media print {
     body * { visibility:hidden; }
@@ -2491,12 +2495,12 @@ def pickup_page():
         "wait": T("Einen Moment…", "Un instant…", "One moment…"),
         "fail": T("Das hat nicht geklappt.", "Cela n’a pas fonctionné.", "That didn’t work."),
         "btn": T("PDF herunterladen", "Télécharger le PDF", "Download PDF"),
-        "w_mail": T("<strong>Abschicken</strong> an {z}, von der Mail-Adresse, die {k} von dir kennt. PDF anhängen.", "<strong>Envoyer</strong> à {z}, depuis l’adresse e-mail que {k} connaît. Joindre le PDF.", "<strong>Send it</strong> to {z}, from the email address {k} has on file for you. Attach the PDF."),
+        "w_mail": T("<strong>Weiterleiten:</strong> unsere Mail «Kündigung Grundversicherung» an {z}. Text und PDF sind schon drin. Von der Adresse, die {k} von dir kennt.", "<strong>Transférer :</strong> notre e-mail « Résiliation assurance de base » à {z}. Le texte et le PDF y sont déjà. Depuis l’adresse que {k} connaît.", "<strong>Forward</strong> our email “Kündigung Grundversicherung” to {z}. Text and PDF are already in it. From the address {k} has on file for you."),
         "w_nosig_mail": T(" Im PDF fehlt die Unterschrift: ausdrucken, unterschreiben, einscannen.", " La signature manque dans le PDF : imprimez, signez, scannez.", " The PDF has no signature: print, sign and scan it."),
         "w_portal": T("<strong>Abschicken:</strong> das PDF in {z} hochladen oder per Post an {k}.", "<strong>Envoyer :</strong> téléverser le PDF dans {z} ou l’envoyer par la poste à {k}.", "<strong>Send it:</strong> upload the PDF to {z} or post it to {k}."),
         "w_post": T("<strong>Abschicken:</strong> ausdrucken und per Post an {k}.", "<strong>Envoyer :</strong> imprimer et envoyer par la poste à {k}.", "<strong>Send it:</strong> print it and post it to {k}."),
         "w_nosig_post": T(" Vorher von Hand unterschreiben.", " Signez-le d’abord à la main.", " Sign it by hand first."),
-        "m_open": T("Mail an {k} öffnen", "Ouvrir l’e-mail à {k}", "Open email to {k}"),
+        "m_open": T("Oder neue Mail an {k} öffnen", "Ou ouvrir un nouvel e-mail à {k}", "Or open a new email to {k}"),
         "m_subject": T("Kündigung Grundversicherung", "Résiliation assurance de base", "Kündigung Grundversicherung"),
         "m_body_de": "Sehr geehrte Damen und Herren\n\nIm Anhang sende ich Ihnen meine unterschriebene Kündigung der Grundversicherung auf den {e}.\n\nBitte bestätigen Sie mir den Eingang.\n\nFreundliche Grüsse",
         "m_body_fr": "Madame, Monsieur,\n\nVous trouverez en pièce jointe ma résiliation signée de l’assurance de base pour le {e}.\n\nJe vous prie de bien vouloir m’en confirmer la réception.\n\nMeilleures salutations",
@@ -2504,6 +2508,7 @@ def pickup_page():
         "neu_named": T("<strong>Bei {n} anmelden</strong>, online in etwa 10 Minuten, ohne Gesundheitsfragen. AHV-Nummer bereithalten.", "<strong>S’inscrire chez {n}</strong>, en ligne en 10 minutes environ, sans questions de santé. Numéro AVS sous la main.", "<strong>Sign up with {n}</strong>, online in about 10 minutes, no health questions. Have your AHV number ready."),
         "go": T("Zu {n}", "Vers {n}", "Go to {n}"),
         "neu_form": T("<strong>Bei {n} anmelden.</strong> {n} hat keine Online-Anmeldung: Offerte anfordern oder Beitrittsformular ausfüllen.", "<strong>S’inscrire chez {n}.</strong> {n} n’a pas d’inscription en ligne : demandez une offre ou remplissez le formulaire d’adhésion.", "<strong>Sign up with {n}.</strong> {n} has no online sign-up: request an offer or fill in the membership form."),
+        "ids": {INSURER_NAMES[str(i)]: i for i in KASSE_SLUG},
         "offline": [INSURER_NAMES[str(x["id"])] for x in json.loads((DATA / "kuendigung_kanaele.json").read_text(encoding="utf-8"))["kassen"] if x.get("signup_online") is False],
         "neu_any": T("<strong>Bei der neuen Kasse anmelden</strong>, online in etwa 10 Minuten, ohne Gesundheitsfragen.", "<strong>S’inscrire auprès de la nouvelle caisse</strong>, en ligne en 10 minutes environ, sans questions de santé.", "<strong>Sign up with the new insurer</strong>, online in about 10 minutes, no health questions."),
         "find": T("Günstigste Kasse finden", "Trouver la caisse la moins chère", "Find the cheapest insurer"),
@@ -2579,6 +2584,16 @@ def pickup_page():
           '<li>' + weg + '</li>' +
           '<li>' + neu + '</li>' +
           '<li>' + f(S.confirm, {{ n: d.neu ? esc(d.neu) : S.the_new, k: esc(d.kasse) }}) + '</li></ol>';
+        // Statistik ohne Personendaten: welcher Knopf, welche Kassen
+        Array.prototype.forEach.call(box.querySelectorAll('a.kp-cta'), function (a) {{
+          a.addEventListener('click', function () {{
+            var ev = /^mailto:/.test(a.href) ? 'kuendigung_mail' : a.href.indexOf(S.calc) >= 0 ? null : 'anmeldung_klick';
+            if (!ev) return;
+            try {{ fetch('https://zexpmaegqsayleaohiip.supabase.co/functions/v1/kk-ereignis', {{ method: 'POST', keepalive: true,
+              headers: {{ 'Content-Type': 'application/json' }}, body: JSON.stringify({{ event: ev, quelle: 'abholseite',
+              kasse_alt: S.ids[d.kasse] || null, kasse_neu: S.ids[d.neu] || null, kanal: d.kanal }}) }}).catch(function () {{}}); }} catch (e) {{}}
+          }});
+        }});
         location.href = d.url;
       }})
       .catch(function () {{ msg.textContent = S.nonet; btn.disabled = false; btn.textContent = S.btn; }});

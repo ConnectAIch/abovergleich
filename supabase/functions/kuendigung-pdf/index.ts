@@ -5,8 +5,10 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 //
 // 1. POST { email, pdf, ... }  (Editor): legt das PDF im privaten Speicher ab
 //    (Bucket kuendigungen, 60 Tage), speichert die E-Mail-Adresse mit den
-//    Wechselangaben in kk_wecker (noch unbestätigt) und schickt eine Mail mit
-//    dem PDF als Anhang, dem Weg zur Kasse und dem Knopf «Nächste Schritte».
+//    Wechselangaben in kk_wecker (noch unbestätigt). Nimmt die Kasse Mails an,
+//    gehen zwei Mails raus: eine zum Weiterleiten an die Kasse (Text und PDF,
+//    ohne Links) und eine mit dem Knopf «Nächste Schritte». Sonst eine Mail
+//    mit PDF, Weg zur Kasse und Knopf.
 // 2. POST { action: 'abholen', t } (Seite /krankenkasse-kuendigen/pdf/): erst
 //    der Klick auf der Seite bestätigt die Adresse (confirmed_at) und liefert
 //    einen kurz gültigen Download-Link. Ein Mailfilter, der den Link in der
@@ -59,11 +61,17 @@ const TX: Record<string, Record<Lang, string>> = {
   w_post: { de: '<strong>Abschicken:</strong> PDF ausdrucken und per Post an {k}, spätestens eine Woche vor dem {d}. Einschreiben empfohlen.', fr: '<strong>Envoyer :</strong> imprimer le PDF et l’envoyer par la poste à {k}, au plus tard une semaine avant le {d}. Recommandé conseillé.', en: '<strong>Send it:</strong> print the PDF and post it to {k}, at least one week before {d}. Registered mail recommended.' },
   w_neu: { de: '<strong>Dann bei {n} anmelden</strong>, online in etwa 10 Minuten, ohne Gesundheitsfragen.', fr: '<strong>Puis s’inscrire chez {n}</strong>, en ligne en 10 minutes environ, sans questions de santé.', en: '<strong>Then sign up with {n}</strong>, online in about 10 minutes, no health questions.' },
   w_neu_form: { de: '<strong>Dann bei {n} anmelden.</strong> {n} hat keine Online-Anmeldung: Offerte anfordern oder Beitrittsformular ausfüllen.', fr: '<strong>Puis s’inscrire chez {n}.</strong> {n} n’a pas d’inscription en ligne : demandez une offre ou remplissez le formulaire d’adhésion.', en: '<strong>Then sign up with {n}.</strong> {n} has no online sign-up: request an offer or fill in the membership form.' },
+  s_next_n: { de: 'Nächster Schritt: bei {n} anmelden', fr: 'Prochaine étape : s’inscrire chez {n}', en: 'Next step: sign up with {n}' },
+  s_next: { de: 'Deine Kündigung an {k}: so geht es weiter', fr: 'Votre résiliation pour {k} : la suite', en: 'Your cancellation to {k}: what happens next' },
+  p_fwd: { de: 'Frist: bis <strong>{d}</strong> bei der Kasse.', fr: 'Délai : elle doit parvenir à la caisse au plus tard le <strong>{d}</strong>.', en: 'Deadline: it must reach the insurer by <strong>{d}</strong>.' },
+  w_fwd: { de: '<strong>1. Weiterleiten:</strong> die Mail «{s}» an <strong>{z}</strong>. Text und PDF sind schon drin.', fr: '<strong>1. Transférer :</strong> l’e-mail « {s} » à <strong>{z}</strong>. Le texte et le PDF y sont déjà.', en: '<strong>1. Forward</strong> the email “{s}” to <strong>{z}</strong>. Text and PDF are already in it.' },
+  w_fwd_own: { de: ' Von der Adresse, die {k} von dir kennt.', fr: ' Depuis l’adresse que {k} connaît.', en: ' From the address {k} has on file for you.' },
+  fwd_hint: { de: 'Zum Weiterleiten an {z}. Text und PDF sind fertig.', fr: 'À transférer à {z}. Le texte et le PDF sont prêts.', en: 'Forward this to {z}. Text and PDF are ready.' },
   b_download: { de: 'Nächste Schritte anzeigen', fr: 'Voir les prochaines étapes', en: 'Show next steps' },
   f_ready: { de: 'Der Knopf bestätigt deine E-Mail-Adresse und lädt das PDF nochmals, 60 Tage lang.', fr: 'Le bouton confirme votre adresse e-mail et retélécharge le PDF, pendant 60 jours.', en: 'The button confirms your email address and downloads the PDF again, for 60 days.' },
   stop: { de: 'Keine Erinnerungen mehr', fr: 'Ne plus recevoir de rappels', en: 'No more reminders' },
-  s_wait: { de: 'Deine Kündigung an {k} wartet noch', fr: 'Votre résiliation pour {k} vous attend', en: 'Your cancellation to {k} is still waiting' },
-  p_wait: { de: 'Sie muss bis <strong>{d}</strong> bei der Kasse sein.', fr: 'Elle doit parvenir à la caisse au plus tard le <strong>{d}</strong>.', en: 'It must reach the insurer by <strong>{d}</strong>.' },
+  s_wait: { de: 'Schon an {k} geschickt?', fr: 'Déjà envoyée à {k} ?', en: 'Sent to {k} yet?' },
+  p_wait: { de: 'Die Kündigung muss bis <strong>{d}</strong> bei der Kasse sein. Falls noch nicht geschehen: unsere Mail mit dem PDF weiterleiten oder das PDF per Post schicken.', fr: 'La résiliation doit parvenir à la caisse au plus tard le <strong>{d}</strong>. Si ce n’est pas encore fait : transférez notre e-mail avec le PDF ou envoyez le PDF par la poste.', en: 'The cancellation must reach the insurer by <strong>{d}</strong>. If you haven’t yet: forward our email with the PDF or send the PDF by post.' },
   s_reg_n: { de: 'Schon bei {n} angemeldet?', fr: 'Déjà inscrit chez {n} ?', en: 'Signed up with {n} yet?' },
   s_reg: { de: 'Schon bei der neuen Kasse angemeldet?', fr: 'Déjà inscrit auprès de la nouvelle caisse ?', en: 'Signed up with your new insurer yet?' },
   p_reg: { de: 'Ohne Anmeldung bleibst du bei {k}. Online dauert sie etwa 10 Minuten.', fr: 'Sans inscription, vous restez chez {k}. En ligne, cela prend environ 10 minutes.', en: 'Without signing up you stay with {k}. It takes about 10 minutes online.' },
@@ -98,7 +106,7 @@ function limited(ip: string, max: number) {
 
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
 
-function mail(p: { kasse: string; deadline: string; link: string; lang: Lang; kanal: string; ziel: string; neu: string; neuOnline: boolean }) {
+function mail(p: { kasse: string; deadline: string; link: string; lang: Lang; kanal: string; ziel: string; neu: string; neuOnline: boolean; fwdSubject?: string; own?: boolean }) {
   const l = p.lang;
   // Der Weg zur Kasse steht gleich in der Mail: mit Anhang weiterleiten,
   // hochladen oder ausdrucken. Die Person muss nichts mehr nachlesen.
@@ -108,7 +116,8 @@ function mail(p: { kasse: string; deadline: string; link: string; lang: Lang; ka
   const mailto = `mailto:${p.ziel}?subject=${encodeURIComponent(fr ? 'Résiliation assurance de base' : 'Kündigung Grundversicherung')}&body=${encodeURIComponent(fr
     ? 'Madame, Monsieur,\n\nVous trouverez en pièce jointe ma résiliation signée de l’assurance de base.\n\nJe vous prie de bien vouloir m’en confirmer la réception.\n\nMeilleures salutations'
     : 'Sehr geehrte Damen und Herren\n\nIm Anhang sende ich Ihnen meine unterschriebene Kündigung der Grundversicherung.\n\nBitte bestätigen Sie mir den Eingang.\n\nFreundliche Grüsse')}`;
-  const weg = p.kanal === 'mail' && p.ziel ? tx('w_mail', l, { k: esc(p.kasse), z: esc(p.ziel), m: esc(mailto) })
+  const weg = p.fwdSubject ? tx('w_fwd', l, { s: esc(p.fwdSubject), z: esc(p.ziel) }) + (p.own ? tx('w_fwd_own', l, { k: esc(p.kasse) }) : '')
+    : p.kanal === 'mail' && p.ziel ? tx('w_mail', l, { k: esc(p.kasse), z: esc(p.ziel), m: esc(mailto) })
     : p.kanal === 'portal' && p.ziel ? tx('w_portal', l, { k: esc(p.kasse), z: esc(p.ziel) })
     : tx('w_post', l, { k: esc(p.kasse), d: esc(p.deadline) });
   const neu = p.neu ? `<p style="margin:0 0 20px;">${tx(p.neuOnline ? 'w_neu' : 'w_neu_form', l, { n: esc(p.neu) })}</p>` : '';
@@ -116,12 +125,34 @@ function mail(p: { kasse: string; deadline: string; link: string; lang: Lang; ka
 <div style="max-width:520px;margin:0 auto;padding:28px 20px;font-size:15px;line-height:1.6;">
   <div style="font-size:20px;font-weight:800;margin-bottom:18px;">abo<span style="color:#a68600;">vergleich</span>.com</div>
   <h1 style="font-size:21px;margin:0 0 14px;">${tx('h_ready', l, { k: esc(p.kasse) })}</h1>
-  <p style="margin:0 0 14px;">${tx('p_ready', l, { d: esc(p.deadline) })}</p>
+  <p style="margin:0 0 14px;">${tx(p.fwdSubject ? 'p_fwd' : 'p_ready', l, { d: esc(p.deadline) })}</p>
   <p style="margin:0 0 14px;">${weg}</p>
   ${neu}
   <a href="${p.link}" style="display:inline-block;background:#fed001;color:#1c1917;font-weight:700;text-decoration:none;padding:13px 22px;border-radius:10px;">${tx('b_download', l)}</a>
   <p style="font-size:12px;color:#6b6560;margin-top:24px;">${tx('f_ready', l)}<br><a href="${SITE}${HOME[l]}" style="color:#a68600;">abovergleich.com</a></p>
 </div></body></html>`;
+}
+
+// Die Mail zum Weiterleiten an die Kasse: Text in der Sprache des Briefs,
+// PDF als Anhang, oben eine graue Zeile für die Person selbst. Keine Links,
+// damit beim Weiterleiten nichts Persönliches an die Kasse geht.
+function fwdMail(p: { lang: Lang; ll: 'de' | 'fr'; name: string; nr: string; end: string; ziel: string }) {
+  const fr = p.ll === 'fr';
+  const subject = (fr ? 'Résiliation assurance de base, ' : 'Kündigung Grundversicherung, ') + p.name +
+    (p.nr ? (fr ? ', n° d’assuré ' : ', Vers.-Nr. ') + p.nr : '');
+  const lines = fr
+    ? ['Madame, Monsieur,', '', `Vous trouverez en pièce jointe ma résiliation signée de l’assurance obligatoire des soins pour le ${p.end}.`, '',
+       `Nom : ${p.name}`, ...(p.nr ? [`N° d’assuré : ${p.nr}`] : []), '', 'Je vous prie de bien vouloir m’en confirmer la réception.', '', 'Meilleures salutations', p.name]
+    : ['Sehr geehrte Damen und Herren', '', `Im Anhang sende ich Ihnen meine unterschriebene Kündigung der obligatorischen Krankenpflegeversicherung auf den ${p.end}.`, '',
+       `Name: ${p.name}`, ...(p.nr ? [`Versicherten-Nr.: ${p.nr}`] : []), '', 'Bitte bestätigen Sie mir den Eingang.', '', 'Freundliche Grüsse', p.name];
+  const hint = tx('fwd_hint', p.lang, { z: p.ziel });
+  const html = `<!doctype html><html lang="${p.ll}"><body style="margin:0;font-family:Arial,Helvetica,sans-serif;color:#1c1917;">
+<div style="max-width:560px;padding:16px;font-size:15px;line-height:1.5;">
+  <p style="font-size:12px;color:#6b6560;margin:0 0 6px;">${esc(hint)}</p>
+  <hr style="border:0;border-top:1px solid #e7e5e4;margin:0 0 18px;">
+  ${lines.map((x) => (x ? esc(x) : '')).join('<br>')}
+</div></body></html>`;
+  return { subject, html, text: `${hint}\n\n---\n\n${lines.join('\n')}` };
 }
 
 const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
@@ -309,24 +340,39 @@ Deno.serve(async (req) => {
     }).select('token').single();
     if (docErr || !doc) { console.error('doc', docErr); return json({ error: tx('store', l) }, 500); }
 
-    const res = await fetch('https://api.resend.com/emails', {
+    const from = Deno.env.get('WECKER_FROM') || 'abovergleich.com <wecker@abovergleich.com>';
+    const resend = (body: Record<string, unknown>) => fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        from: Deno.env.get('WECKER_FROM') || 'abovergleich.com <wecker@abovergleich.com>',
-        reply_to: 'hello@handyabo.com',
-        to: [email],
-        subject: tx('s_ready', l, { k: kasse }),
-        html: mail({ kasse, deadline, link: page(doc.token, '', l), lang: l,
-          kanal: String(b.kanal || 'post'), ziel: String(b.ziel || '').slice(0, 120), neu: String(b.neu || '').slice(0, 80),
-          neuOnline: b.neu_online !== false }),
-        // Das PDF gleich mitschicken, dann ist es auf dem Handy schon da,
-        // wenn die Mail an die Kasse aufgeht. Der Abhol-Link bleibt für die
-        // Bestätigung der Adresse. Nicht zum Weiterleiten gedacht: sonst
-        // ginge der persönliche Link an die Kasse.
-        attachments: [{ filename, content: pdf }],
-      }),
+      body: JSON.stringify({ from, reply_to: 'hello@handyabo.com', to: [email], ...body }),
     });
+    const kanal = String(b.kanal || 'post'), ziel = String(b.ziel || '').slice(0, 120);
+    const neuName = String(b.neu || '').slice(0, 80), neuOnline = b.neu_online !== false;
+    const link = page(doc.token, '', l);
+    let res: Response;
+    if (kanal === 'mail' && /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(ziel)) {
+      // Mailweg: zwei Mails. Zuerst «so geht es weiter» mit dem Bestätigungs-
+      // Link, dann die Mail zum Weiterleiten. So liegt diese im Postfach oben.
+      // Name und Versichertennummer stehen nur in der Mail, gespeichert wird
+      // davon nichts (sie sind ohnehin im PDF).
+      const fw = fwdMail({ lang: l, ll: b.letter_lang === 'fr' ? 'fr' : 'de',
+        name: String(b.name || '').replace(/[\r\n]/g, ' ').slice(0, 80) || kasse,
+        nr: String(b.nr || '').replace(/[\r\n]/g, ' ').slice(0, 40),
+        end: String(b.end_text || '').slice(0, 40) || '31. Dezember', ziel });
+      const next = await resend({
+        subject: neuName ? tx('s_next_n', l, { n: neuName }) : tx('s_next', l, { k: kasse }),
+        html: mail({ kasse, deadline, link, lang: l, kanal, ziel, neu: neuName, neuOnline, fwdSubject: fw.subject, own: b.own === true }),
+      });
+      if (!next.ok) console.error('resend next', next.status, await next.text());
+      res = await resend({ subject: fw.subject, html: fw.html, text: fw.text, attachments: [{ filename, content: pdf }] });
+    } else {
+      // Post oder Portal: eine Mail mit PDF, Weg und Link
+      res = await resend({
+        subject: tx('s_ready', l, { k: kasse }),
+        html: mail({ kasse, deadline, link, lang: l, kanal, ziel, neu: neuName, neuOnline }),
+        attachments: [{ filename, content: pdf }],
+      });
+    }
     if (!res.ok) {
       console.error('resend', res.status, await res.text());
       return json({ error: tx('mail_fail', l) }, 502);

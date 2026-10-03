@@ -33,10 +33,11 @@
     pad_go: { de: 'Mit Maus, Finger oder Stift unterschreiben.', fr: 'Signez avec la souris, le doigt ou un stylet.', en: 'Sign with your mouse, finger or stylus.' },
     sig_alt: { de: 'Unterschrift', fr: 'Signature', en: 'Signature' },
     src: { de: 'Laut <a href="{u}" target="_blank" rel="noopener">Website der Kasse</a>, Stand {d}.', fr: 'Selon le <a href="{u}" target="_blank" rel="noopener">site de la caisse</a>, état au {d}.', en: 'According to the <a href="{u}" target="_blank" rel="noopener">insurer’s website</a>, as of {d}.' },
-    k_mail: { de: '<strong>{n} nimmt die Kündigung per Mail an:</strong> {m}', fr: '<strong>{n} accepte la résiliation par e-mail :</strong> {m}', en: '<strong>{n} accepts cancellation by email:</strong> {m}' },
+    k_mail: { de: '<strong>{n} nimmt die Kündigung per Mail an.</strong> Du bekommst sie fertig per Mail und leitest sie an {m} weiter',
+              fr: '<strong>{n} accepte la résiliation par e-mail.</strong> Vous la recevez prête par e-mail et la transférez à {m}',
+              en: '<strong>{n} accepts cancellation by email.</strong> You get it ready-made by email and forward it to {m}' },
     k_own: { de: ', <strong>nur von der Mail-Adresse, die {n} von dir kennt</strong>.', fr: ', <strong>uniquement depuis l’adresse e-mail que {n} connaît</strong>.', en: ', <strong>only from the email address {n} has on file for you</strong>.' },
-    k_any: { de: ', am besten von der Adresse, die die Kasse von dir kennt.', fr: ', de préférence depuis l’adresse que la caisse connaît.', en: ', ideally from the address the insurer has on file.' },
-    k_proof: { de: ' Die Eingangsbestätigung aufheben.', fr: ' Conservez la confirmation de réception.', en: ' Keep the confirmation of receipt.' },
+    k_any: { de: '.', fr: '.', en: '.' },
     k_portal: { de: '<strong>{n} nimmt die Kündigung im Kundenportal {p} an</strong> (PDF hochladen) oder per Post.',
                 fr: '<strong>{n} accepte la résiliation dans l’espace client {p}</strong> (téléverser le PDF) ou par la poste.',
                 en: '<strong>{n} accepts cancellation in the customer portal {p}</strong> (upload the PDF) or by post.' },
@@ -58,14 +59,21 @@
                 fr: 'L’e-mail est en route vers {m}. Cliquez sur « Télécharger la résiliation » : cela confirme aussi votre adresse. Rien reçu ? Regardez dans les spams.',
                 en: 'The email is on its way to {m}. Click “Download your cancellation” in it; that also confirms your address. Nothing there? Check your spam folder.' },
     done_t: { de: 'Brief fertig', fr: 'Lettre prête', en: 'Letter ready' },
+    done_1_mail: { de: 'Zwei Mails sind unterwegs an <b>{m}</b>: die Kündigung zum Weiterleiten und die nächsten Schritte.', fr: 'Deux e-mails sont en route vers <b>{m}</b> : la résiliation à transférer et les prochaines étapes.', en: 'Two emails are on their way to <b>{m}</b>: the cancellation to forward and the next steps.' },
     done_1: { de: 'Das PDF ist unterwegs an <b>{m}</b>, als Anhang.', fr: 'Le PDF est en route vers <b>{m}</b>, en pièce jointe.', en: 'The PDF is on its way to <b>{m}</b>, as an attachment.' },
     done_2: { de: 'Nichts da? Spam-Ordner prüfen oder die Adresse oben.', fr: 'Rien reçu ? Vérifiez les spams ou l’adresse ci-dessus.', en: 'Nothing there? Check spam or the address above.' },
     nx_h: { de: 'Jetzt noch zwei Schritte', fr: 'Encore deux étapes', en: 'Two more steps' },
+    nx_fwd: { de: 'Unsere Mail «{s}» weiterleiten an', fr: 'Transférer notre e-mail « {s} » à', en: 'Forward our email “{s}” to' },
+    nx_fwd_sub: { de: 'Text und PDF sind schon drin. Weiterleiten, Adresse einsetzen, senden.', fr: 'Le texte et le PDF y sont déjà. Transférer, coller l’adresse, envoyer.', en: 'Text and PDF are already in it. Forward, paste the address, send.' },
+    nx_copy: { de: 'Adresse kopieren', fr: 'Copier l’adresse', en: 'Copy address' },
+    nx_alt: { de: 'Oder neue Mail mit Text öffnen und PDF selbst anhängen', fr: 'Ou ouvrir un nouvel e-mail avec le texte et joindre le PDF vous-même', en: 'Or open a new email with the text and attach the PDF yourself' },
+    nx_dl: { de: 'PDF herunterladen', fr: 'Télécharger le PDF', en: 'Download PDF' },
     nx_mail: { de: 'Mail an {n} öffnen', fr: 'Ouvrir l’e-mail à {n}', en: 'Open email to {n}' },
     nx_mail_sub: { de: 'An {m}, Betreff und Text sind schon drin. Du hängst nur das PDF aus unserer Mail an.',
                    fr: 'À {m}, objet et texte sont déjà remplis. Il ne reste qu’à joindre le PDF de notre e-mail.',
                    en: 'To {m}, subject and text are already filled in. Just attach the PDF from our email.' },
     nx_own: { de: ' Wichtig: von der Adresse, die {n} von dir kennt.', fr: ' Important : depuis l’adresse que {n} connaît.', en: ' Important: from the address {n} has on file for you.' },
+    nx_proof: { de: ' Die Eingangsbestätigung der Kasse aufheben.', fr: ' Conservez la confirmation de réception de la caisse.', en: ' Keep the insurer’s confirmation of receipt.' },
     nx_portal: { de: 'PDF in {p} hochladen oder per Post schicken, bis {d}.', fr: 'Téléverser le PDF dans {p} ou l’envoyer par la poste, d’ici au {d}.', en: 'Upload the PDF to {p} or send it by post, by {d}.' },
     nx_post: { de: 'PDF ausdrucken und per Post an {n}, spätestens eine Woche vor dem {d}.', fr: 'Imprimer le PDF et l’envoyer par la poste à {n}, au plus tard une semaine avant le {d}.', en: 'Print the PDF and post it to {n}, at least one week before {d}.' },
     nx_neu: { de: 'Bei {n} anmelden', fr: 'S’inscrire chez {n}', en: 'Sign up with {n}' },
@@ -335,6 +343,9 @@
     lines.push('', b('m_confirm'), '', LL() === 'fr' ? 'Meilleures salutations' : 'Freundliche Grüsse', L.name);
     return lines.join('\n');
   }
+  function fwdSubject() {
+    return (LL() === 'fr' ? 'Résiliation assurance de base' : 'Kündigung Grundversicherung');
+  }
   function mailSubject(L) {
     return b('m_subject') + L.name + (val('kd-nr') ? b('m_vnr') + val('kd-nr') : '');
   }
@@ -349,7 +360,7 @@
     if (k.mail) {
       // Der Mail-Link ist schon ausgefüllt: Empfänger, Betreff, Text
       el.innerHTML = t('k_mail', { n: nm, m: '<a href="' + esc(mailtoHref(L)) + '">' + esc(k.mail) + '</a>' }) +
-        (k.own ? t('k_own', { n: nm }) : t('k_any')) + t('k_proof') + src;
+        (k.own ? t('k_own', { n: nm }) : t('k_any')) + src;
     } else if (k.portal) {
       el.innerHTML = t('k_portal', { n: nm, p: esc(k.portal) }) + src;
     } else {
@@ -460,6 +471,33 @@
   }
   REQUIRED.forEach(function (f) { $(f[0]).addEventListener('input', function () { $(f[0]).classList.remove('kd-invalid'); }); });
 
+  // Geburtsdatum: Das iPhone zeigt bei Zifferntastatur keinen Punkt. Also
+  // setzen wir die Punkte selbst (26021989 -> 26.02.1989) und nehmen auch
+  // / - , oder Leerzeichen als Trenner an.
+  function fmtBirth(v, typing) {
+    // Zeichen für Zeichen in Tag, Monat, Jahr einordnen. Nach zwei Ziffern
+    // springt es von selbst weiter, ein getippter Trenner schliesst den Teil.
+    var g = [''], i = 0;
+    for (var k = 0; k < v.length; k++) {
+      var c = v.charAt(k);
+      if (/\d/.test(c)) {
+        if (i < 2 && g[i].length === 2) { i++; g[i] = ''; }
+        if (i === 2 && g[2].length === 4) break;
+        g[i] += c;
+      } else if (/[.\/\-, ]/.test(c) && g[i] !== '' && i < 2) { i++; g[i] = ''; }
+    }
+    var out = g.map(function (x, n) { return n < 2 && x.length === 1 && (n < g.length - 1 || !typing) ? '0' + x : x; });
+    if (out[out.length - 1] === '') { out.pop(); return out.join('.') + (typing ? '.' : ''); }
+    return out.join('.');
+  }
+  $('kd-birth').addEventListener('input', function (e) {
+    var el = this, before = el.value;
+    if (e.inputType && e.inputType.indexOf('delete') === 0) return;   // Löschen nicht stören
+    var after = fmtBirth(before, true);
+    if (after !== before) el.value = after;
+  });
+  $('kd-birth').addEventListener('blur', function () { this.value = fmtBirth(this.value, false); render(); });
+
   // Statistik ohne Namen, Adresse oder E-Mail (Datenschutz 3.3)
   function track(event) {
     var L = letter();
@@ -481,7 +519,9 @@
   // Kopie per Mail an die Person selbst, bei jeder Aktion genau einmal pro
   // Fassung des Briefs. Mit Häkchen schaltet sie den Wechsel-Wecker ein.
   var sent = {};
+  var lastDoc = null;
   function sendCopy(doc, L, force) {
+    lastDoc = doc;
     var email = val('kd-email'), pr = profile(), k = L.kasse;
     var b64 = doc.output('datauristring').split(',')[1];
     var key = email + '|' + $('kd-wecker').checked + '|' + b64.length + '|' + plain(L).length;
@@ -491,6 +531,7 @@
       body: JSON.stringify({
         email: email, wecker: $('kd-wecker').checked, pdf: b64, filename: fileName(L), signiert: !!sig,
         kasse: k.name, kanal: k.mail ? 'mail' : k.portal ? 'portal' : 'post', ziel: k.mail || k.portal || '',
+        name: L.name, nr: val('kd-nr'), letter_lang: LL(), end_text: endText(), own: !!k.own,
         deadline: D.deadline_text, neu: neu ? neu.name : '', neu_url: neu && neu.url ? neu.url : '', neu_online: !neu || neu.online !== false, lang: UI,
         plz: plzOf() || pr.plz, jahrgang: jahrgangOf() || pr.year, franchise: pr.franchise,
         accident_included: pr.accident === true, current_insurer_id: k.id, new_insurer_id: neu ? neu.id : null,
@@ -511,26 +552,41 @@
   function done() {
     var box = $('kd-done'), L = letter(), k = L.kasse, nm = esc(k.name), d = esc(D.deadline_text);
     var step1;
+    var dl = ' <button type="button" class="kd-link" id="kd-dl">' + t('nx_dl') + '</button>';
     if (k.mail) {
-      step1 = '<a class="kd-go" id="kd-mailto" href="' + esc(mailtoHref(L)) + '">' + t('nx_mail', { n: nm }) + ' &rarr;</a>' +
-        '<div class="kd-nx-sub">' + t('nx_mail_sub', { m: '<b>' + esc(k.mail) + '</b>' }) + (k.own ? t('nx_own', { n: nm }) : '') + '</div>';
+      // Schritt 1: unsere Mail weiterleiten (Text und PDF drin). mailto bleibt
+      // als Ausweg, kann aber keinen Anhang mitgeben.
+      step1 = '<strong>' + t('nx_fwd', { s: esc(fwdSubject()) }) + '</strong> <b class="kd-addr">' + esc(k.mail) + '</b> ' +
+        '<button type="button" class="kd-go kd-copy-addr" id="kd-copy-addr">' + t('nx_copy') + '</button>' +
+        '<div class="kd-nx-sub">' + t('nx_fwd_sub') + (k.own ? t('nx_own', { n: nm }) : '') + t('nx_proof') + '</div>' +
+        '<div class="kd-nx-sub"><a id="kd-mailto" href="' + esc(mailtoHref(L)) + '">' + t('nx_alt') + '</a></div>';
     } else if (k.portal) {
-      step1 = '<div class="kd-nx-sub">' + t('nx_portal', { p: esc(k.portal), d: d }) + '</div>';
+      step1 = '<div class="kd-nx-sub">' + t('nx_portal', { p: esc(k.portal), d: d }) + dl + '</div>';
     } else {
-      step1 = '<div class="kd-nx-sub">' + t('nx_post', { n: nm, d: d }) + '</div>';
+      step1 = '<div class="kd-nx-sub">' + t('nx_post', { n: nm, d: d }) + dl + '</div>';
     }
     var step2 = neu
-      ? (neuGo ? '<a class="kd-go sec" href="' + esc(neuLink()) + '" target="_blank" rel="noopener sponsored">' + t('nx_neu', { n: esc(neu.name) }) + ' &rarr;</a>' : '<strong>' + t('nx_neu', { n: esc(neu.name) }) + '</strong>') +
+      ? (neuGo ? '<a class="kd-go sec" id="kd-neu-go" href="' + esc(neuLink()) + '" target="_blank" rel="noopener sponsored">' + t('nx_neu', { n: esc(neu.name) }) + ' &rarr;</a>' : '<strong>' + t('nx_neu', { n: esc(neu.name) }) + '</strong>') +
         '<div class="kd-nx-sub">' + (neu.online === false ? t('nx_neu_form', { n: esc(neu.name), d: esc(D.start) }) : t('nx_neu_sub', { d: esc(D.start) })) + '</div>'
       : '<a class="kd-go sec" href="' + esc(D.calc) + '">' + t('nx_find') + ' &rarr;</a><div class="kd-nx-sub">' + t('nx_find_sub') + '</div>';
     box.innerHTML = '<div class="kd-done-head"><div class="kd-done-icon">✓</div><div><strong>' + t('done_t') + '</strong>' +
-      '<p>' + t('done_1', { m: esc(val('kd-email')) }) + ' <span class="kd-done-small">' + t('done_2') + '</span></p></div></div>' +
+      '<p>' + t(k.mail ? 'done_1_mail' : 'done_1', { m: esc(val('kd-email')) }) + ' <span class="kd-done-small">' + t('done_2') + '</span></p></div></div>' +
       '<div class="kd-nx-h">' + t('nx_h') + '</div>' +
       '<ol class="kd-nx"><li>' + step1 + '</li><li>' + step2 + '</li></ol>' +
       '<div class="kd-nx-sub">' + t('nx_conf', { k: nm }) + '</div>';
     box.hidden = false;
     var m = $('kd-mailto');
     if (m) m.addEventListener('click', function () { track('kuendigung_mail'); });
+    var ca = $('kd-copy-addr');
+    if (ca) ca.addEventListener('click', function () {
+      track('kuendigung_mail');
+      (navigator.clipboard ? navigator.clipboard.writeText(k.mail) : Promise.reject()).then(
+        function () { ca.textContent = t('copied'); }, function () { ca.textContent = k.mail; });
+    });
+    var dlb = $('kd-dl');
+    if (dlb) dlb.addEventListener('click', function () { if (lastDoc) lastDoc.save(fileName(L)); });
+    var g = $('kd-neu-go');
+    if (g) g.addEventListener('click', function () { track('anmeldung_klick'); });
     $('kd-msg').textContent = '';
     $('kd-send').textContent = t('again');
     $('kd-send').classList.add('sec');

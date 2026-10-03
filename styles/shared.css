@@ -442,3 +442,9 @@ a.kasse-link:hover { color: var(--accent-dark); }
 /* Rechner: kleiner Link zur Kassen-Analyse neben dem Namen */
 .kk-analysis { font-size: 12px; font-weight: 500; color: var(--muted); margin-left: 8px; text-decoration: none; white-space: nowrap; }
 .kk-analysis:hover { color: var(--accent-dark); text-decoration: underline; }
+
+/* iPhone zoomt in jedes Eingabefeld unter 16px hinein und bleibt dann
+   vergrössert stehen. Auf Touch-Geräten deshalb alle Felder mindestens 16px. */
+@media (pointer: coarse) {
+  input, select, textarea { font-size: 16px !important; }
+}

@@ -13,7 +13,7 @@ const corsHeaders = {
 };
 const ok = () => new Response(null, { status: 204, headers: corsHeaders });
 
-const EVENTS = new Set(['vergleich', 'wechsel_klick', 'kuendigung_pdf', 'kuendigung_mail', 'kuendigung_text']);
+const EVENTS = new Set(['vergleich', 'wechsel_klick', 'kuendigung_pdf', 'kuendigung_mail', 'kuendigung_text', 'anmeldung_klick']);
 const FRANCHISEN = new Set([0, 100, 200, 300, 400, 500, 600, 1000, 1500, 2000, 2500]);
 const ZUSATZ = new Set(['keine', 'behalten', 'kuendigen']);
 
