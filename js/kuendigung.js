@@ -6,8 +6,9 @@
 // Abschicken muss der Kunde selbst. Groupe Mutuel und Sympany nehmen eine
 // Kündigung per Mail nur vom Absender an, den sie vom Kunden kennen, und bei
 // den anderen ist eine fremde Absenderadresse mindestens ein Grund für
-// Rückfragen. Deshalb liefert die Seite das PDF und einen fertigen Mailentwurf,
-// aber keinen Versand.
+// Rückfragen. Deshalb liefert die Seite das PDF (als Anhang an die Person
+// selbst) und einen fertigen Mailentwurf (mailto mit Empfänger, Betreff und
+// Text), aber keinen Versand an die Kasse.
 //
 // Die Daten kommen vom Generator (scripts/build_kk_pages.py) im Block
 // #kd-data: Adressen aus dem BAG-Verzeichnis, Kündigungswege aus
@@ -23,37 +24,28 @@
   var T = {
     choose: { de: 'Bitte wählen', fr: 'Veuillez choisir', en: 'Please choose' },
     search: { de: 'Kasse suchen…', fr: 'Chercher une caisse…', en: 'Search insurer…' },
-    sw_h: { de: 'Wechsel zu {n} in zwei Schritten', fr: 'Passer à {n} en deux étapes', en: 'Switching to {n} in two steps' },
-    sw_1: { de: '<strong>Bei {n} anmelden</strong>, für den {d}. Online in etwa 10 Minuten, ohne Gesundheitsfragen. Halte deine AHV-Nummer bereit (steht auf der Versichertenkarte).',
-            fr: '<strong>S’inscrire chez {n}</strong>, pour le {d}. En ligne en 10 minutes environ, sans questions de santé. Ayez votre numéro AVS sous la main (il figure sur la carte d’assuré).',
-            en: '<strong>Sign up with {n}</strong>, starting {d}. Online in about 10 minutes, no health questions. Have your AHV number ready (it is on your insurance card).' },
-    sw_go: { de: 'Zu {n}', fr: 'Vers {n}', en: 'Go to {n}' },
-    sw_2: { de: '<strong>Deine bisherige Kasse kündigen</strong>, bis {d}. Der Brief ist unten schon vorbereitet. <a href="#vorlage">Zum Brief &darr;</a>',
-            fr: '<strong>Résilier votre caisse actuelle</strong>, d’ici au {d}. La lettre est déjà préparée ci-dessous. <a href="#vorlage">Vers la lettre &darr;</a>',
-            en: '<strong>Cancel your current insurer</strong>, by {d}. The letter is already prepared below. <a href="#vorlage">Go to the letter &darr;</a>' },
+    st_1: { de: '{k} kündigen', fr: 'Résilier {k}', en: 'Cancel {k}' },
+    st_1_any: { de: 'Bisherige Kasse kündigen', fr: 'Résilier la caisse actuelle', en: 'Cancel current insurer' },
+    st_2: { de: 'Bei {n} anmelden', fr: 'S’inscrire chez {n}', en: 'Sign up with {n}' },
     last: { de: 'Heute ist der letzte Tag.', fr: 'C’est le dernier jour.', en: 'Today is the last day.' },
     left: { de: 'Noch {n} Tage.', fr: 'Encore {n} jours.', en: '{n} days left.' },
     pad_ok: { de: 'Sieht gut aus?', fr: 'Ça vous convient ?', en: 'Looks good?' },
     pad_go: { de: 'Mit Maus, Finger oder Stift unterschreiben.', fr: 'Signez avec la souris, le doigt ou un stylet.', en: 'Sign with your mouse, finger or stylus.' },
     sig_alt: { de: 'Unterschrift', fr: 'Signature', en: 'Signature' },
     src: { de: 'Laut <a href="{u}" target="_blank" rel="noopener">Website der Kasse</a>, Stand {d}.', fr: 'Selon le <a href="{u}" target="_blank" rel="noopener">site de la caisse</a>, état au {d}.', en: 'According to the <a href="{u}" target="_blank" rel="noopener">insurer’s website</a>, as of {d}.' },
-    k_mail: { de: '<strong>{n} nimmt die Kündigung per Mail an.</strong> Unterschreib oben, lass dir das PDF zuschicken und leite es an {m}',
-              fr: '<strong>{n} accepte la résiliation par e-mail.</strong> Signez ci-dessus, faites-vous envoyer le PDF et transférez-le à {m}',
-              en: '<strong>{n} accepts cancellation by email.</strong> Sign above, have the PDF sent to you and forward it to {m}' },
-    k_own: { de: ', <strong>von der Mail-Adresse, die {n} von dir kennt</strong>. Von einer anderen Adresse gilt die Kündigung nicht.',
-             fr: ', <strong>depuis l’adresse e-mail que {n} connaît</strong>. Depuis une autre adresse, la résiliation n’est pas valable.',
-             en: ', <strong>from the email address {n} has on file for you</strong>. From any other address the cancellation is not valid.' },
-    k_any: { de: ', am besten von der Mail-Adresse, die deine Kasse von dir kennt.', fr: ', de préférence depuis l’adresse e-mail que votre caisse connaît.', en: ', ideally from the email address your insurer has on file.' },
-    k_proof: { de: ' Die Eingangsbestätigung der Kasse ist dein Beweis, heb sie auf.', fr: ' La confirmation de réception de la caisse est votre preuve : conservez-la.', en: ' The insurer’s confirmation of receipt is your proof, so keep it.' },
-    k_portal: { de: '<strong>{n} nimmt die Kündigung per Mail oder im Kundenportal {p} an,</strong> nennt aber keine Mail-Adresse. Lass dir das PDF zuschicken und lade es in {p} hoch, oder schick es per Post.',
-                fr: '<strong>{n} accepte la résiliation par e-mail ou dans l’espace client {p},</strong> mais n’indique pas d’adresse e-mail. Faites-vous envoyer le PDF et téléversez-le dans {p}, ou envoyez-le par la poste.',
-                en: '<strong>{n} accepts cancellation by email or in the customer portal {p},</strong> but gives no email address. Have the PDF sent to you and upload it to {p}, or send it by post.' },
-    k_reg: { de: '<strong>Per eingeschriebenem Brief.</strong> {n} verlangt das ausdrücklich. Lass dir das PDF zuschicken, druck es aus und bring es spätestens eine Woche vor dem {d} zur Post.',
-             fr: '<strong>Par lettre recommandée.</strong> {n} l’exige expressément. Faites-vous envoyer le PDF, imprimez-le et déposez-le à la poste au plus tard une semaine avant le {d}.',
-             en: '<strong>By registered letter.</strong> {n} explicitly requires this. Have the PDF sent to you, print it and take it to the post office at least one week before {d}.' },
-    k_post: { de: '<strong>Per Post an die Adresse im Brief.</strong> {n} nennt auf der eigenen Website keinen Mail-Weg für die Grundversicherung. Lass dir das PDF zuschicken, druck es aus und schick es spätestens eine Woche vor dem {d} ab. Ein Einschreiben ist nicht vorgeschrieben, aber dein Beweis, dass der Brief rechtzeitig ankam.',
-              fr: '<strong>Par la poste, à l’adresse de la lettre.</strong> {n} n’indique sur son site aucune voie par e-mail pour l’assurance de base. Faites-vous envoyer le PDF, imprimez-le et envoyez-le au plus tard une semaine avant le {d}. Le recommandé n’est pas obligatoire, mais prouve que la lettre est arrivée à temps.',
-              en: '<strong>By post to the address in the letter.</strong> {n} gives no email route for basic insurance on its website. Have the PDF sent to you, print it and post it at least one week before {d}. Registered mail is not required, but proves the letter arrived on time.' },
+    k_mail: { de: '<strong>{n} nimmt die Kündigung per Mail an:</strong> {m}', fr: '<strong>{n} accepte la résiliation par e-mail :</strong> {m}', en: '<strong>{n} accepts cancellation by email:</strong> {m}' },
+    k_own: { de: ', <strong>nur von der Mail-Adresse, die {n} von dir kennt</strong>.', fr: ', <strong>uniquement depuis l’adresse e-mail que {n} connaît</strong>.', en: ', <strong>only from the email address {n} has on file for you</strong>.' },
+    k_any: { de: ', am besten von der Adresse, die die Kasse von dir kennt.', fr: ', de préférence depuis l’adresse que la caisse connaît.', en: ', ideally from the address the insurer has on file.' },
+    k_proof: { de: ' Die Eingangsbestätigung aufheben.', fr: ' Conservez la confirmation de réception.', en: ' Keep the confirmation of receipt.' },
+    k_portal: { de: '<strong>{n} nimmt die Kündigung im Kundenportal {p} an</strong> (PDF hochladen) oder per Post.',
+                fr: '<strong>{n} accepte la résiliation dans l’espace client {p}</strong> (téléverser le PDF) ou par la poste.',
+                en: '<strong>{n} accepts cancellation in the customer portal {p}</strong> (upload the PDF) or by post.' },
+    k_reg: { de: '<strong>{n} verlangt einen eingeschriebenen Brief.</strong> Ausdrucken und spätestens eine Woche vor dem {d} zur Post.',
+             fr: '<strong>{n} exige une lettre recommandée.</strong> Imprimez-la et postez-la au plus tard une semaine avant le {d}.',
+             en: '<strong>{n} requires a registered letter.</strong> Print it and post it at least one week before {d}.' },
+    k_post: { de: '<strong>{n} nennt keinen Mail-Weg, also per Post</strong> an die Adresse im Brief, spätestens eine Woche vor dem {d}. Einschreiben empfohlen.',
+              fr: '<strong>{n} n’indique pas de voie par e-mail, donc par la poste</strong> à l’adresse de la lettre, au plus tard une semaine avant le {d}. Recommandé conseillé.',
+              en: '<strong>{n} gives no email route, so by post</strong> to the address in the letter, at least one week before {d}. Registered mail recommended.' },
     wait: { de: 'Einen Moment…', fr: 'Un instant…', en: 'One moment…' },
     fail: { de: 'Das hat nicht geklappt. Versuch es nochmals oder nimm «Text kopieren».', fr: 'Cela n’a pas fonctionné. Réessayez ou utilisez « Copier le texte ».', en: 'That didn’t work. Try again or use “Copy text”.' },
     again: { de: 'Nochmals senden', fr: 'Renvoyer', en: 'Send again' },
@@ -65,9 +57,22 @@
     sent_txt: { de: 'Mail ist unterwegs an {m}. Klick dort auf «Kündigung herunterladen», damit bestätigst du auch deine Adresse. Nichts da? Schau im Spam-Ordner.',
                 fr: 'L’e-mail est en route vers {m}. Cliquez sur « Télécharger la résiliation » : cela confirme aussi votre adresse. Rien reçu ? Regardez dans les spams.',
                 en: 'The email is on its way to {m}. Click “Download your cancellation” in it; that also confirms your address. Nothing there? Check your spam folder.' },
-    done_t: { de: 'Verschickt!', fr: 'C’est envoyé !', en: 'Sent!' },
-    done_1: { de: 'Die Mail ist unterwegs an <b>{m}</b>. Öffne sie und klick auf «Kündigung herunterladen».', fr: 'L’e-mail est en route vers <b>{m}</b>. Ouvrez-le et cliquez sur « Télécharger la résiliation ».', en: 'The email is on its way to <b>{m}</b>. Open it and click “Download your cancellation”.' },
-    done_2: { de: 'Nach 5 Minuten nichts da? Schau im Spam-Ordner nach oder prüf die Adresse oben.', fr: 'Rien après 5 minutes ? Regardez dans les spams ou vérifiez l’adresse ci-dessus.', en: 'Nothing after 5 minutes? Check your spam folder or the address above.' },
+    done_t: { de: 'Brief fertig', fr: 'Lettre prête', en: 'Letter ready' },
+    done_1: { de: 'Das PDF ist unterwegs an <b>{m}</b>, als Anhang.', fr: 'Le PDF est en route vers <b>{m}</b>, en pièce jointe.', en: 'The PDF is on its way to <b>{m}</b>, as an attachment.' },
+    done_2: { de: 'Nichts da? Spam-Ordner prüfen oder die Adresse oben.', fr: 'Rien reçu ? Vérifiez les spams ou l’adresse ci-dessus.', en: 'Nothing there? Check spam or the address above.' },
+    nx_h: { de: 'Jetzt noch zwei Schritte', fr: 'Encore deux étapes', en: 'Two more steps' },
+    nx_mail: { de: 'Mail an {n} öffnen', fr: 'Ouvrir l’e-mail à {n}', en: 'Open email to {n}' },
+    nx_mail_sub: { de: 'Empfänger und Text sind drin, du hängst nur das PDF aus unserer Mail an. Oder du leitest unsere Mail an {m} weiter.',
+                   fr: 'Destinataire et texte sont prêts, il ne reste qu’à joindre le PDF de notre e-mail. Ou transférez simplement notre e-mail à {m}.',
+                   en: 'Recipient and text are filled in; just attach the PDF from our email. Or simply forward our email to {m}.' },
+    nx_own: { de: ' Wichtig: von der Adresse, die {n} von dir kennt.', fr: ' Important : depuis l’adresse que {n} connaît.', en: ' Important: from the address {n} has on file for you.' },
+    nx_portal: { de: 'PDF in {p} hochladen oder per Post schicken, bis {d}.', fr: 'Téléverser le PDF dans {p} ou l’envoyer par la poste, d’ici au {d}.', en: 'Upload the PDF to {p} or send it by post, by {d}.' },
+    nx_post: { de: 'PDF ausdrucken und per Post an {n}, spätestens eine Woche vor dem {d}.', fr: 'Imprimer le PDF et l’envoyer par la poste à {n}, au plus tard une semaine avant le {d}.', en: 'Print the PDF and post it to {n}, at least one week before {d}.' },
+    nx_neu: { de: 'Bei {n} anmelden', fr: 'S’inscrire chez {n}', en: 'Sign up with {n}' },
+    nx_neu_sub: { de: 'Online, etwa 10 Minuten, ohne Gesundheitsfragen. AHV-Nummer bereithalten, Beginn {d}.', fr: 'En ligne, environ 10 minutes, sans questions de santé. Numéro AVS sous la main, début le {d}.', en: 'Online, about 10 minutes, no health questions. Have your AHV number ready, start {d}.' },
+    nx_find: { de: 'Günstigste Kasse finden', fr: 'Trouver la caisse la moins chère', en: 'Find the cheapest insurer' },
+    nx_find_sub: { de: 'Dann dort anmelden, online in etwa 10 Minuten.', fr: 'Puis s’y inscrire, en ligne en 10 minutes environ.', en: 'Then sign up there, online in about 10 minutes.' },
+    nx_conf: { de: 'Danach bestätigt die neue Kasse den Wechsel. Bis dahin bleibst du bei {k} versichert.', fr: 'Ensuite, la nouvelle caisse confirme le changement. D’ici là, vous restez assuré chez {k}.', en: 'The new insurer then confirms the switch. Until then you stay insured with {k}.' },
     send_fail: { de: 'Der Versand hat nicht geklappt. Bitte nochmals versuchen.', fr: 'L’envoi n’a pas fonctionné. Veuillez réessayer.', en: 'Sending didn’t work. Please try again.' },
     attach: { de: ' Das PDF hängst du dann an die Mail an die Kasse an.', fr: ' Joignez ensuite le PDF à l’e-mail destiné à la caisse.', en: ' Then attach the PDF to the email to your insurer.' },
     copied: { de: 'Kopiert', fr: 'Copié', en: 'Copied' },
@@ -136,19 +141,27 @@
       if (pc && !$('kd-plz').value) { $('kd-plz').value = pc[1]; $('kd-ort').value = pc[2]; }
     }
   } catch (e) {}
+  try {
+    var pr0 = JSON.parse(localStorage.getItem('kk-profile') || 'null') || {};
+    if (/^\d{4}$/.test(String(pr0.plz || '')) && !$('kd-plz').value) $('kd-plz').value = String(pr0.plz);
+  } catch (e) {}
   if (window.Combobox) Combobox.enhance(sel, { search: true, placeholder: t('search') });
 
   // Aus dem Rechner mit «Wechseln»: zuerst bei der neuen Kasse anmelden, dann
   // die bisherige kündigen. Die Reihenfolge ist egal (die alte Versicherung
   // endet erst, wenn die neue sie bestätigt), aber so vergisst man keinen Teil.
   var neu = KASSEN.find(function (k) { return String(k.id) === new URLSearchParams(location.search).get('neu'); });
-  if (neu && String(neu.id) !== sel.value) {
+  if (neu && String(neu.id) === sel.value) neu = null;
+  var neuGo = neu && neu.url ? neu.url + '?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=kk-wechsel' : null;
+  // Aus dem Rechner mit «Wechseln»: zwei Schritte als Leiste. Schritt 2 wird
+  // aktiv, sobald der Brief verschickt ist (siehe done()).
+  function stepper(step) {
+    if (!neu) return;
+    var k = kasse();
     var w = $('wechsel');
-    var go = neu.url ? neu.url + '?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=kk-wechsel' : null;
-    w.innerHTML = '<h2>' + t('sw_h', { n: esc(neu.name) }) + '</h2><ol>' +
-      '<li>' + t('sw_1', { n: esc(neu.name), d: esc(D.start) }) +
-      (go ? '<br><a class="kd-go" href="' + esc(go) + '" target="_blank" rel="noopener sponsored">' + t('sw_go', { n: esc(neu.name) }) + ' &rarr;</a>' : '') + '</li>' +
-      '<li>' + t('sw_2', { d: esc(D.deadline_text) }) + '</li></ol>';
+    w.innerHTML = '<li class="' + (step === 1 ? 'on' : 'ok') + '"><b>' + (step === 1 ? '1' : '✓') + '</b>' +
+      (k ? t('st_1', { k: esc(k.name) }) : t('st_1_any')) + '</li>' +
+      '<li class="' + (step === 2 ? 'on' : '') + '"><b>2</b>' + t('st_2', { n: esc(neu.name) }) + '</li>';
     w.hidden = false;
     $('kd-compare').hidden = true;
   }
@@ -157,6 +170,8 @@
   if (days >= 0) $('kd-left').textContent = days === 0 ? t('last') : t('left', { n: days });
 
   function kasse() { return KASSEN.find(function (x) { return String(x.id) === sel.value; }) || null; }
+  stepper(1);
+  sel.addEventListener('change', function () { if ($('kd-done').hidden) stepper(1); });
   function val(id) { return $(id).value.trim(); }
 
   // ── Unterschrift (nach der Zeichenfläche in TreuFlow) ──────────────────
@@ -306,14 +321,17 @@
   function mailSubject(L) {
     return b('m_subject') + L.name + (val('kd-nr') ? b('m_vnr') + val('kd-nr') : '');
   }
+  function mailtoHref(L) {
+    return 'mailto:' + encodeURIComponent(L.kasse.mail) + '?subject=' + encodeURIComponent(mailSubject(L)) + '&body=' + encodeURIComponent(mailBody(L));
+  }
   function channel(L) {
     var k = L.kasse, el = $('kd-kanal');
-    $('kd-mail').hidden = !(k && k.mail);
     if (!k) { el.innerHTML = ''; return; }
     var src = k.src ? '<div class="kd-src">' + t('src', { u: esc(k.src), d: esc(D.stand) }) + '</div>' : '';
     var nm = esc(k.name);
     if (k.mail) {
-      el.innerHTML = t('k_mail', { n: nm, m: '<a href="mailto:' + esc(k.mail) + '">' + esc(k.mail) + '</a>' }) +
+      // Der Mail-Link ist schon ausgefüllt: Empfänger, Betreff, Text
+      el.innerHTML = t('k_mail', { n: nm, m: '<a href="' + esc(mailtoHref(L)) + '">' + esc(k.mail) + '</a>' }) +
         (k.own ? t('k_own', { n: nm }) : t('k_any')) + t('k_proof') + src;
     } else if (k.portal) {
       el.innerHTML = t('k_portal', { n: nm, p: esc(k.portal) }) + src;
@@ -474,32 +492,38 @@
 
   // Gut sichtbare Bestätigung statt einer Textzeile
   function done() {
-    var box = $('kd-done');
-    box.innerHTML = '<div class="kd-done-icon">✓</div><div><strong>' + t('done_t') + '</strong>' +
-      '<p>' + t('done_1', { m: esc(val('kd-email')) }) + '</p>' +
-      '<p style="font-size:13px;color:var(--muted);margin-top:6px;">' + t('done_2') + '</p></div>';
+    var box = $('kd-done'), L = letter(), k = L.kasse, nm = esc(k.name), d = esc(D.deadline_text);
+    var step1;
+    if (k.mail) {
+      step1 = '<a class="kd-go" id="kd-mailto" href="' + esc(mailtoHref(L)) + '">' + t('nx_mail', { n: nm }) + ' &rarr;</a>' +
+        '<div class="kd-nx-sub">' + t('nx_mail_sub', { m: '<b>' + esc(k.mail) + '</b>' }) + (k.own ? t('nx_own', { n: nm }) : '') + '</div>';
+    } else if (k.portal) {
+      step1 = '<div class="kd-nx-sub">' + t('nx_portal', { p: esc(k.portal), d: d }) + '</div>';
+    } else {
+      step1 = '<div class="kd-nx-sub">' + t('nx_post', { n: nm, d: d }) + '</div>';
+    }
+    var step2 = neu
+      ? (neuGo ? '<a class="kd-go sec" href="' + esc(neuGo) + '" target="_blank" rel="noopener sponsored">' + t('nx_neu', { n: esc(neu.name) }) + ' &rarr;</a>' : '<strong>' + t('nx_neu', { n: esc(neu.name) }) + '</strong>') +
+        '<div class="kd-nx-sub">' + t('nx_neu_sub', { d: esc(D.start) }) + '</div>'
+      : '<a class="kd-go sec" href="' + esc(D.calc) + '">' + t('nx_find') + ' &rarr;</a><div class="kd-nx-sub">' + t('nx_find_sub') + '</div>';
+    box.innerHTML = '<div class="kd-done-head"><div class="kd-done-icon">✓</div><div><strong>' + t('done_t') + '</strong>' +
+      '<p>' + t('done_1', { m: esc(val('kd-email')) }) + ' <span class="kd-done-small">' + t('done_2') + '</span></p></div></div>' +
+      '<div class="kd-nx-h">' + t('nx_h') + '</div>' +
+      '<ol class="kd-nx"><li>' + step1 + '</li><li>' + step2 + '</li></ol>' +
+      '<div class="kd-nx-sub">' + t('nx_conf', { k: nm }) + '</div>';
     box.hidden = false;
+    var m = $('kd-mailto');
+    if (m) m.addEventListener('click', function () { track('kuendigung_mail'); });
     $('kd-msg').textContent = '';
     $('kd-send').textContent = t('again');
     $('kd-send').classList.add('sec');
-    box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    stepper(2);
+    box.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
   $('kd-send').onclick = function () {
     withPdf(this, function (doc, L) {
       return sendCopy(doc, L, !$('kd-done').hidden).then(function () { done(); },
         function (err) { $('kd-msg').textContent = (err && err.message !== 'Versand' && err.message) || t('send_fail'); });
-    });
-  };
-  // Mail an die Kasse: zuerst die Kopie mit PDF an dich, dann das Mailprogramm
-  // mit Empfänger, Betreff und Text. Den Anhang kann ein mailto-Link nicht
-  // mitgeben, also leitest du am einfachsten unsere Mail weiter.
-  $('kd-mail').onclick = function () {
-    withPdf(this, function (doc, L) {
-      return sendCopy(doc, L).then(function (res) {
-        track('kuendigung_mail');
-        $('kd-msg').textContent = sentText(res) + t('attach');
-        location.href = 'mailto:' + encodeURIComponent(L.kasse.mail) + '?subject=' + encodeURIComponent(mailSubject(L)) + '&body=' + encodeURIComponent(mailBody(L));
-      }, function () { $('kd-msg').textContent = t('send_fail'); });
     });
   };
   $('kd-copy').onclick = function () {

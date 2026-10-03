@@ -51,7 +51,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles/shared.css?v=2c0760ee">
+<link rel="stylesheet" href="/styles/shared.css?v=7a81b62a">
 <style>
   .kk-rating { background:var(--surface); border:1px solid var(--border2); border-radius:14px; padding:20px 22px; margin:20px 0; }
   .kk-rating-head { display:flex; justify-content:space-between; gap:16px; align-items:flex-start; margin-bottom:12px; }
@@ -106,6 +106,10 @@
   .award-page .rules { list-style:none; padding:0; display:grid; gap:10px; margin:16px 0 0; }
   .award-page .rules li { position:relative; padding-left:26px; color:var(--text2); }
   .award-page .rules li::before { content:"✓"; position:absolute; left:0; color:var(--green); font-weight:700; }
+  .award-fold { border:1px solid var(--border2); border-radius:12px; padding:12px 16px; margin:14px 0; }
+  .award-fold summary { cursor:pointer; font-weight:700; font-family:'Plus Jakarta Sans',sans-serif; font-size:17px; }
+  .award-fold[open] summary { margin-bottom: 8px; }
+  .award-cantons td.num, .award-cantons th.num { text-align:right; }
   .grouphead { font-family:'Plus Jakarta Sans',sans-serif; font-size:14px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin:38px 0 14px; padding-bottom:9px; border-bottom:1px solid var(--border); }
   .win { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:22px; margin-bottom:18px; display:grid; grid-template-columns:240px 1fr; gap:24px; align-items:start; }
   .win > * { min-width:0; }
@@ -153,10 +157,18 @@
 <h1>abovergleich Preistreue-Award 2027</h1>
 <p class="kk-lead">34 Auszeichnungen für Krankenkassen, die dauerhaft günstig bleiben. Vergeben allein aus den Prämiendaten des Bundes seit 2020. Keine Jury, keine Einreichung, keine Gebühr.</p>
 
-<h2>Wofür ausgezeichnet wird</h2>
-<p>Grundlage ist das <a href="/krankenkassen-rating/">Preistreue-Rating</a>: Preis heute, wie oft eine Kasse seit 2020 in ihrer Region unter den fünf günstigsten war, wie stark sie aufschlägt, ob neue Sparmodelle ihren Rabatt halten, wie oft sie Tarife streicht und wie gut ihre Reserven sind. Die <strong>Gesamtwertung</strong> zeichnet die drei besten Noten aus, die <strong>Kategorien</strong> den Besten in je einem Teilaspekt, und in jedem <strong>Kanton</strong> die Kasse mit der besten Note in der Hauptregion, Regionalkassen eingeschlossen.</p>
+<h2>Die Gewinner 2027</h2>
+<p><strong><a class="kasse-link" href="/kasse/concordia/">Concordia</a></strong> ist die preistreueste Krankenkasse 2027, Note 9,1 von 10. Dahinter <a class="kasse-link" href="/kasse/agrisano/">Agrisano</a> (8,6) und <a class="kasse-link" href="/kasse/kpt/">KPT</a> (8,4). Grundlage ist das <a href="/krankenkassen-rating/">Preistreue-Rating</a>: Preis heute, wie oft eine Kasse seit 2020 in ihrer Region unter den fünf günstigsten war, wie stark sie aufschlägt, ob neue Sparmodelle ihren Rabatt halten, wie oft sie Tarife streicht und wie gut ihre Reserven sind.</p>
 
-<h2>Die Regeln</h2>
+<h3>Kategorien</h3>
+<p>Je Teilaspekt die beste Kasse mit mindestens 50'000 Versicherten. Bei Gleichstand gewinnen alle.</p>
+<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Kategorie</th><th>Kasse</th><th>Wert</th></tr></thead><tbody><tr><td>Dauerhaft günstig</td><td><a class="kasse-link" href="/kasse/assura/">Assura</a></td><td>Top 5 in 47 % der Jahre</td></tr><tr><td>Stabilste Prämien</td><td><a class="kasse-link" href="/kasse/oekk/">ÖKK</a></td><td>0,5 Pkt. pro Jahr unter dem Markt</td></tr><tr><td>Fairste Sparmodelle</td><td><a class="kasse-link" href="/kasse/kpt/">KPT</a></td><td>Rabatt gehalten</td></tr><tr><td>Solideste Reserven</td><td><a class="kasse-link" href="/kasse/galenos/">Galenos</a></td><td>Solvenzquote 234 %</td></tr><tr><td>Schlankste Verwaltung</td><td><a class="kasse-link" href="/kasse/sodalis/">sodalis</a></td><td>CHF 129 pro Kopf</td></tr></tbody></table></div>
+
+<h3>Kantone</h3>
+<p>Die Kasse mit der besten Note in der Hauptregion jedes Kantons, Regionalkassen eingeschlossen. Klick auf den Kanton für alle Prämien dort.</p>
+<div class="kk-table-wrap"><table class="kk-table award-cantons"><thead><tr><th>Kanton</th><th>Kasse</th><th class="num">Note</th></tr></thead><tbody><tr><td><a href="/krankenkasse/aargau/">Aargau</a></td><td><a class="kasse-link" href="/kasse/agrisano/">Agrisano</a></td><td class="num">8,9</td></tr><tr><td><a href="/krankenkasse/appenzell-ausserrhoden/">Appenzell Ausserrhoden</a></td><td><a class="kasse-link" href="/kasse/egk/">EGK</a></td><td class="num">9,1</td></tr><tr><td><a href="/krankenkasse/appenzell-innerrhoden/">Appenzell Innerrhoden</a></td><td><a class="kasse-link" href="/kasse/oekk/">ÖKK</a></td><td class="num">8,9</td></tr><tr><td><a href="/krankenkasse/basel-landschaft/">Basel-Landschaft</a></td><td><a class="kasse-link" href="/kasse/oekk/">ÖKK</a></td><td class="num">9,0</td></tr><tr><td><a href="/krankenkasse/basel-stadt/">Basel-Stadt</a></td><td><a class="kasse-link" href="/kasse/concordia/">Concordia</a></td><td class="num">9,4</td></tr><tr><td><a href="/krankenkasse/bern/">Bern</a></td><td><a class="kasse-link" href="/kasse/visana/">Visana</a></td><td class="num">9,3</td></tr><tr><td><a href="/krankenkasse/freiburg/">Freiburg</a></td><td><a class="kasse-link" href="/kasse/concordia/">Concordia</a></td><td class="num">9,6</td></tr><tr><td><a href="/krankenkasse/genf/">Genf</a></td><td><a class="kasse-link" href="/kasse/sanitas/">Sanitas</a></td><td class="num">8,2</td></tr><tr><td><a href="/krankenkasse/glarus/">Glarus</a></td><td><a class="kasse-link" href="/kasse/slkk/">SLKK</a></td><td class="num">9,0</td></tr><tr><td><a href="/krankenkasse/graubuenden/">Graubünden</a></td><td><a class="kasse-link" href="/kasse/concordia/">Concordia</a></td><td class="num">9,6</td></tr><tr><td><a href="/krankenkasse/jura/">Jura</a></td><td><a class="kasse-link" href="/kasse/sanitas/">Sanitas</a></td><td class="num">8,1</td></tr><tr><td><a href="/krankenkasse/luzern/">Luzern</a></td><td><a class="kasse-link" href="/kasse/concordia/">Concordia</a></td><td class="num">9,4</td></tr><tr><td><a href="/krankenkasse/neuenburg/">Neuenburg</a></td><td><a class="kasse-link" href="/kasse/visana/">Visana</a></td><td class="num">8,6</td></tr><tr><td><a href="/krankenkasse/nidwalden/">Nidwalden</a></td><td><a class="kasse-link" href="/kasse/agrisano/">Agrisano</a></td><td class="num">8,9</td></tr><tr><td><a href="/krankenkasse/obwalden/">Obwalden</a></td><td><a class="kasse-link" href="/kasse/concordia/">Concordia</a></td><td class="num">9,6</td></tr><tr><td><a href="/krankenkasse/schaffhausen/">Schaffhausen</a></td><td><a class="kasse-link" href="/kasse/oekk/">ÖKK</a></td><td class="num">9,0</td></tr><tr><td><a href="/krankenkasse/schwyz/">Schwyz</a></td><td><a class="kasse-link" href="/kasse/einsiedler-krankenkasse/">Einsiedler Krankenkasse</a></td><td class="num">10,0</td></tr><tr><td><a href="/krankenkasse/solothurn/">Solothurn</a></td><td><a class="kasse-link" href="/kasse/concordia/">Concordia</a></td><td class="num">9,3</td></tr><tr><td><a href="/krankenkasse/st-gallen/">St. Gallen</a></td><td><a class="kasse-link" href="/kasse/concordia/">Concordia</a></td><td class="num">9,3</td></tr><tr><td><a href="/krankenkasse/tessin/">Tessin</a></td><td><a class="kasse-link" href="/kasse/concordia/">Concordia</a></td><td class="num">9,5</td></tr><tr><td><a href="/krankenkasse/thurgau/">Thurgau</a></td><td><a class="kasse-link" href="/kasse/concordia/">Concordia</a></td><td class="num">9,6</td></tr><tr><td><a href="/krankenkasse/uri/">Uri</a></td><td><a class="kasse-link" href="/kasse/oekk/">ÖKK</a></td><td class="num">9,0</td></tr><tr><td><a href="/krankenkasse/waadt/">Waadt</a></td><td><a class="kasse-link" href="/kasse/sanitas/">Sanitas</a></td><td class="num">8,2</td></tr><tr><td><a href="/krankenkasse/wallis/">Wallis</a></td><td><a class="kasse-link" href="/kasse/concordia/">Concordia</a></td><td class="num">9,4</td></tr><tr><td><a href="/krankenkasse/zug/">Zug</a></td><td><a class="kasse-link" href="/kasse/concordia/">Concordia</a></td><td class="num">9,6</td></tr><tr><td><a href="/krankenkasse/zuerich/">Zürich</a></td><td><a class="kasse-link" href="/kasse/kpt/">KPT</a></td><td class="num">8,6</td></tr></tbody></table></div>
+
+<details class="award-fold" id="regeln"><summary>Die Regeln</summary>
 <ul class="rules">
   <li>Die Auswahl folgt allein der Zahl. Es gibt keine Jury, keine Einreichung und keinen Weg, einen Award zu beeinflussen.</li>
   <li>Der Award kostet nichts und ist an nichts gekoppelt. Ob eine Kasse das Badge einbindet oder verlinkt, ändert weder Note noch Reihenfolge auf abovergleich.com.</li>
@@ -165,7 +177,10 @@
   <li>Gesamtwertung und Kategorien: Kassen mit mindestens 50'000 Versicherten. Bei Gleichstand gewinnen alle. Die Note rechnen wir für vier Situationen (mit oder ohne Unfall, Franchise 300 oder 2'500) und gewichten sie nach dem Bestand laut BAG.</li>
   <li>«Schlankste Verwaltung»: die gesamten Verwaltungskosten pro versicherte Person laut BAG, letztes verfügbares Jahr, auch was eine Kasse bei einer Konzernfirma einkauft.</li>
 </ul>
+</details>
 
+<details class="award-fold" id="badges"><summary>Badges, Einbindungscode und Textbausteine für Kassen</summary>
+<p class="kk-note">Jede Auszeichnung als Badge in vier Varianten (SVG oder PNG), dazu der Einbindungscode und ein Satz zum Übernehmen. Kostenlos, ohne Bedingungen.</p>
 <div class="grouphead">Gesamtwertung</div><div class="win" id="gesamt-concordia">
   <img src="/krankenkassen-rating/award/badge/gesamt-concordia.svg" alt="abovergleich Preistreue-Award 2027: Preistreueste Krankenkasse 2027, Concordia" width="240" height="384" loading="lazy">
   <div>
@@ -881,6 +896,7 @@
     <blockquote class="baustein">KPT ist im Preistreue-Award 2027 von abovergleich.com die preistreueste Krankenkasse im Kanton Zürich in der Grundversicherung. Das unabhängige Rating zeigt, welche Krankenkassen über die Jahre günstig bleiben, allein aus den Prämiendaten des Bundesamts für Gesundheit seit 2020.</blockquote>
   </div>
 </div>
+</details>
 
 <div class="cta-box"><h3>Zahl falsch? Sag es uns.</h3><p>Wenn ein Wert nicht stimmt, korrigieren wir ihn und rechnen die Edition neu. Schreib an hello@handyabo.com.</p><a href="mailto:hello@handyabo.com">Mail schreiben &rarr;</a></div>
 </div>
@@ -906,6 +922,18 @@ document.querySelectorAll('.pngrow button').forEach(function (btn) {
     }).catch(function () { btn.disabled = false; btn.textContent = label; });
   });
 });
+</script>
+<script>
+(function () {
+  function openFor() {
+    var id = location.hash.slice(1), el = id && document.getElementById(id);
+    if (!el) return;
+    var d = el.closest('details');
+    if (d && !d.open) { d.open = true; el.scrollIntoView(); }
+  }
+  openFor();
+  window.addEventListener('hashchange', openFor);
+})();
 </script>
 </article>
 

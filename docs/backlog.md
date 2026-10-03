@@ -3,6 +3,31 @@
 Zurückgestellt, nicht vergessen. Neueste Einträge oben. Wer etwas davon
 anfängt, streicht es hier und verweist auf den Commit.
 
+## Sanitas und Co.: Attribution der Anmeldungen (offen seit 03.10.2026)
+
+Heute hängt an jedem Link zur neuen Kasse nur `utm_source=abovergleich.com`.
+Das sieht die Kasse in ihrer Analytics, mehr nicht. Damit eine Kasse weiss,
+dass ein Abschluss von uns kommt, braucht es einen Vermittlervertrag (seit
+1.9.2024 Branchenvereinbarung, höchstens CHF 70 pro Abschluss in der
+Grundversicherung, Beratungsprotokoll, kein Telefonverkauf) und von der
+Kasse einen Partner-Parameter oder eine eigene Landingpage. Erster Schritt:
+Sanitas Vertrieb anschreiben, danach Concordia, KPT, Assura (die häufigsten
+«neu»-Kassen im Rechner, siehe kk_events). Entscheid bei Matthias.
+
+## Deep-Links zur Anmeldung mit Franchise und Modell (offen seit 03.10.2026)
+
+Ob sanitas.com Franchise, Modell und Unfall per URL vorbelegen kann, war am
+3.10.2026 nicht prüfbar (Website in Wartung). Nachschauen: Prämienrechner
+der Kasse ausfüllen und beobachten, ob die Werte in der URL landen. Wenn ja,
+in `neu_url` aus dem Rechner-Profil (kk-profile) anhängen.
+
+## BCC an uns beim Mailversand an die Kasse: nein (entschieden 03.10.2026)
+
+Der mailto-Link setzt kein BCC. Der Brief enthält Name, Adresse,
+Geburtsdatum und Versichertennummer; der Datenschutz verspricht nur die
+60-Tage-Ablage. Ob die Kündigung durch ist, fragt die Erinnerung
+«Hat die Kasse bestätigt?» ab, das reicht als Messung.
+
 ## Rechnungsfoto auslesen (zurückgestellt 30.09.2026)
 
 Der Kunde lädt Foto oder PDF seiner Prämienrechnung hoch, der Rechner füllt

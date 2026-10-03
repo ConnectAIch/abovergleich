@@ -365,6 +365,15 @@ footer > div { max-width: 1000px; }
   border: 1px solid var(--border2); border-radius: 12px; padding: 6px;
   box-shadow: 0 8px 28px rgba(20,30,40,.16); text-align: left;
 }
+/* Touch: Liste als Blatt am unteren Rand, Hintergrund schliesst */
+.cbx-backdrop { position: fixed; inset: 0; z-index: 999; background: rgba(28,25,23,.38); }
+.cbx-panel.cbx-sheet {
+  left: 0 !important; right: 0; bottom: 0; top: auto !important; width: auto !important;
+  border-radius: 18px 18px 0 0; border-bottom: 0; padding: 6px 10px calc(10px + env(safe-area-inset-bottom));
+  box-shadow: 0 -8px 28px rgba(20,30,40,.18);
+}
+.cbx-grip { width: 40px; height: 4px; border-radius: 2px; background: var(--border2); margin: 4px auto 10px; }
+.cbx-sheet .cbx-row { padding-top: 12px; padding-bottom: 12px; }
 .cbx-search {
   display: flex; align-items: center; gap: 8px; margin-bottom: 4px;
   background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 0 10px;
@@ -429,3 +438,7 @@ a.kasse-link:hover { color: var(--accent-dark); }
 .tip > span a { color:var(--accent); }
 .tip:hover > span, .tip:focus > span, .tip:focus-within > span { display:block; }
 @media (max-width:600px) { .tip > span { left:auto; right:-10px; transform:none; } }
+
+/* Rechner: kleiner Link zur Kassen-Analyse neben dem Namen */
+.kk-analysis { font-size: 12px; font-weight: 500; color: var(--muted); margin-left: 8px; text-decoration: none; white-space: nowrap; }
+.kk-analysis:hover { color: var(--accent-dark); text-decoration: underline; }

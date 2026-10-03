@@ -1127,9 +1127,9 @@ def insights_block(cantons, insurers, nat, top3_prev, top3_cur, ins_prev, nat_pr
     <div {card}>
       <h3 style="font-size:18px;font-weight:700;margin-bottom:6px;">{L(f"Preistreue-Rating {YEAR} und Anstieg pro Kasse", f"Constance des primes {YEAR} et hausse par caisse", f"Price Consistency Rating {YEAR} and increase per insurer")}</h3>
       <div style="font-size:14px;color:var(--muted);margin-bottom:16px;">{L(
-        f'Note von 0 bis 10 aus Preis, Konstanz, Treue, Rabatt-Treue, Tarif-Bestand und Reserven. Daneben der Anstieg der Standardprämie, Schnitt aller Kassen {pct(nat_prev)} im {PREV} und {pct(nat)} im {YEAR}. Rot heisst über dem Schnitt. <strong style="color:var(--text);">Klick auf eine Kasse für die ganze Analyse:</strong> Note mit allen Teilnoten, Prämien in jedem Kanton, Modelle und Kündigungsweg.',
-        f'Note de 0 à 10 basée sur le prix, la constance, la fidélité, le rabais durable, la pérennité des tarifs et les réserves. À côté, la hausse de la prime standard, moyenne de toutes les caisses {pct(nat_prev)} en {PREV} et {pct(nat)} en {YEAR}. En rouge : au-dessus de la moyenne. <strong style="color:var(--text);">Cliquez sur une caisse pour l’analyse complète :</strong> note détaillée, primes dans chaque canton, modèles et voie de résiliation.',
-        f'Score from 0 to 10 based on price, consistency, loyalty, discount retention, tariff continuity and reserves. Next to it, the rise in the standard premium; average of all insurers {pct(nat_prev)} in {PREV} and {pct(nat)} in {YEAR}. Red means above average. <strong style="color:var(--text);">Click an insurer for the full analysis:</strong> score with all components, premiums in every canton, models and how to cancel.')}</div>
+        f'Note 0 bis 10: je höher, desto länger bleibt die Kasse günstig. Daneben der Prämienanstieg, <span style="color:var(--red);">rot</span> heisst über dem Schnitt ({pct(nat)} im {YEAR}). <strong style="color:var(--text);">Klick auf eine Kasse für die ganze Analyse.</strong>',
+        f'Note de 0 à 10 : plus elle est élevée, plus la caisse reste longtemps avantageuse. À côté, la hausse des primes, en <span style="color:var(--red);">rouge</span> au-dessus de la moyenne ({pct(nat)} en {YEAR}). <strong style="color:var(--text);">Cliquez sur une caisse pour l’analyse complète.</strong>',
+        f'Score 0 to 10: the higher, the longer the insurer stays cheap. Next to it the premium increase, <span style="color:var(--red);">red</span> means above average ({pct(nat)} in {YEAR}). <strong style="color:var(--text);">Click an insurer for the full analysis.</strong>')}</div>
       <div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:14px;">
         <thead><tr style="border-bottom:1px solid var(--border2);"><th style="text-align:left;padding:8px 12px;">{L("Kasse", "Caisse", "Insurer")}</th><th style="text-align:right;padding:8px 12px;">{L("Note", "Note", "Score")}</th><th style="text-align:right;padding:8px 12px;">{PREV}</th><th style="text-align:right;padding:8px 12px;">{YEAR}</th><th style="text-align:right;padding:8px 12px;">{L("Seit", "Depuis", "Since")} {Y0}</th><th></th></tr></thead>
         <tbody>{kas}</tbody>
@@ -1651,6 +1651,10 @@ AWARD_CSS = """
   .award-page .rules { list-style:none; padding:0; display:grid; gap:10px; margin:16px 0 0; }
   .award-page .rules li { position:relative; padding-left:26px; color:var(--text2); }
   .award-page .rules li::before { content:"✓"; position:absolute; left:0; color:var(--green); font-weight:700; }
+  .award-fold { border:1px solid var(--border2); border-radius:12px; padding:12px 16px; margin:14px 0; }
+  .award-fold summary { cursor:pointer; font-weight:700; font-family:'Plus Jakarta Sans',sans-serif; font-size:17px; }
+  .award-fold[open] summary { margin-bottom: 8px; }
+  .award-cantons td.num, .award-cantons th.num { text-align:right; }
   .grouphead { font-family:'Plus Jakarta Sans',sans-serif; font-size:14px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin:38px 0 14px; padding-bottom:9px; border-bottom:1px solid var(--border); }
   .win { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:22px; margin-bottom:18px; display:grid; grid-template-columns:240px 1fr; gap:24px; align-items:start; }
   .win > * { min-width:0; }
@@ -1785,6 +1789,23 @@ def award_page():
     rl = f'<a href="{i18n.url("rating")}">{rating_name(cap=i18n.LANG != "fr")}</a>'
     crumbs = [home_crumb(), ("Rating" if i18n.LANG != "fr" else "Constance des primes", i18n.url("rating")),
               (L("Award", "Prix", "Award"), path)]
+
+    # Der Artikel: wer gewonnen hat, in Sätzen und zwei kurzen Tabellen. Die
+    # Badges und Textbausteine für die Kassen stehen eingeklappt darunter.
+    ges = sorted((x for x in AWARDS if x["group"] == "Gesamtwertung"), key=lambda x: x["rank"])
+    kat = [x for x in AWARDS if x["group"] == "Kategorien"]
+    kan = sorted((x for x in AWARDS if x["group"] == "Kantone"), key=lambda x: cname(x["_canton"]))
+    def nl(x):
+        return kasse_link(x["insurer"], x["name"])
+    def nt(x):
+        return i18n.dec(x["_note"], 1)
+    ges_txt = ""
+    if len(ges) >= 3:
+        ges_txt = T(f"<strong>{nl(ges[0])}</strong> ist die preistreueste Krankenkasse {YEAR}, Note {nt(ges[0])} von 10. Dahinter {nl(ges[1])} ({nt(ges[1])}) und {nl(ges[2])} ({nt(ges[2])}).",
+                    f"<strong>{nl(ges[0])}</strong> est la caisse-maladie la plus constante {YEAR}, note {nt(ges[0])} sur 10. Suivent {nl(ges[1])} ({nt(ges[1])}) et {nl(ges[2])} ({nt(ges[2])}).",
+                    f"<strong>{nl(ges[0])}</strong> is the most price-consistent health insurer of {YEAR}, score {nt(ges[0])} out of 10. Next come {nl(ges[1])} ({nt(ges[1])}) and {nl(ges[2])} ({nt(ges[2])}).")
+    kat_rows = "".join(f'<tr><td>{e(award_loc(x)["category"])}</td><td>{nl(x)}</td><td>{e(award_loc(x)["fact"])}</td></tr>' for x in kat)
+    kan_rows = "".join(f'<tr><td><a href="{canton_url(x["_canton"])}">{e(cname(x["_canton"]))}</a></td><td>{nl(x)}</td><td class="num">{nt(x)}</td></tr>' for x in kan)
     body = f"""<div class="award-page">
 {crumbs_html(crumbs)}
 <div class="article-badge">{T("Edition", "Édition", "Edition")} {YEAR}</div>
@@ -1793,12 +1814,20 @@ def award_page():
   f"{n_awards} distinctions pour des caisses-maladie qui restent durablement avantageuses. Décernées uniquement à partir des données de primes de la Confédération depuis {y0}. Pas de jury, pas de candidature, pas de frais.",
   f"{n_awards} awards for health insurers that stay cheap over time. Given solely on the basis of federal premium data since {y0}. No jury, no entry, no fee.")}</p>
 
-<h2>{T("Wofür ausgezeichnet wird", "Ce qui est récompensé", "What is rewarded")}</h2>
-<p>{T(f"Grundlage ist das {rl}: Preis heute, wie oft eine Kasse seit {y0} in ihrer Region unter den fünf günstigsten war, wie stark sie aufschlägt, ob neue Sparmodelle ihren Rabatt halten, wie oft sie Tarife streicht und wie gut ihre Reserven sind. Die <strong>Gesamtwertung</strong> zeichnet die drei besten Noten aus, die <strong>Kategorien</strong> den Besten in je einem Teilaspekt, und in jedem <strong>Kanton</strong> die Kasse mit der besten Note in der Hauptregion, Regionalkassen eingeschlossen.",
-  f"La base est la {rl} : prix actuel, fréquence à laquelle une caisse a figuré depuis {y0} parmi les cinq moins chères de sa région, ampleur de ses hausses, maintien du rabais des nouveaux modèles alternatifs, fréquence des suppressions de tarifs et solidité des réserves. Le <strong>classement général</strong> distingue les trois meilleures notes, les <strong>catégories</strong> la meilleure caisse sur un aspect précis, et dans chaque <strong>canton</strong> la caisse la mieux notée dans la région principale, caisses régionales comprises.",
-  f"It is based on the {rl}: price today, how often an insurer has been among the five cheapest in its region since {y0}, how much it raises prices, whether new savings models keep their discount, how often it drops tariffs and how strong its reserves are. The <strong>overall ranking</strong> rewards the three best scores, the <strong>categories</strong> the best in one aspect each, and in every <strong>canton</strong> the insurer with the best score in the main region, regional insurers included.")}</p>
+<h2>{T(f"Die Gewinner {YEAR}", f"Les lauréates {YEAR}", f"The {YEAR} winners")}</h2>
+<p>{ges_txt} {T(f"Grundlage ist das {rl}: Preis heute, wie oft eine Kasse seit {y0} in ihrer Region unter den fünf günstigsten war, wie stark sie aufschlägt, ob neue Sparmodelle ihren Rabatt halten, wie oft sie Tarife streicht und wie gut ihre Reserven sind.",
+  f"La base est la {rl} : prix actuel, fréquence à laquelle une caisse a figuré depuis {y0} parmi les cinq moins chères de sa région, ampleur de ses hausses, maintien du rabais des nouveaux modèles alternatifs, fréquence des suppressions de tarifs et solidité des réserves.",
+  f"It is based on the {rl}: price today, how often an insurer has been among the five cheapest in its region since {y0}, how much it raises prices, whether new savings models keep their discount, how often it drops tariffs and how strong its reserves are.")}</p>
 
-<h2>{T("Die Regeln", "Les règles", "The rules")}</h2>
+<h3>{T("Kategorien", "Catégories", "Categories")}</h3>
+<p>{T("Je Teilaspekt die beste Kasse mit mindestens 50'000 Versicherten. Bei Gleichstand gewinnen alle.", "La meilleure caisse d’au moins 50'000 assurés pour chaque aspect. En cas d’égalité, toutes gagnent.", "The best insurer with at least 50'000 insured persons in each aspect. In a tie, all win.")}</p>
+<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>{T("Kategorie", "Catégorie", "Category")}</th><th>{T("Kasse", "Caisse", "Insurer")}</th><th>{T("Wert", "Valeur", "Value")}</th></tr></thead><tbody>{kat_rows}</tbody></table></div>
+
+<h3>{T("Kantone", "Cantons", "Cantons")}</h3>
+<p>{T("Die Kasse mit der besten Note in der Hauptregion jedes Kantons, Regionalkassen eingeschlossen. Klick auf den Kanton für alle Prämien dort.", "La caisse la mieux notée dans la région principale de chaque canton, caisses régionales comprises. Cliquez sur le canton pour toutes les primes.", "The insurer with the best score in each canton’s main region, regional insurers included. Click the canton for all premiums there.")}</p>
+<div class="kk-table-wrap"><table class="kk-table award-cantons"><thead><tr><th>{T("Kanton", "Canton", "Canton")}</th><th>{T("Kasse", "Caisse", "Insurer")}</th><th class="num">{T("Note", "Note", "Score")}</th></tr></thead><tbody>{kan_rows}</tbody></table></div>
+
+<details class="award-fold" id="regeln"><summary>{T("Die Regeln", "Les règles", "The rules")}</summary>
 <ul class="rules">
   <li>{T("Die Auswahl folgt allein der Zahl. Es gibt keine Jury, keine Einreichung und keinen Weg, einen Award zu beeinflussen.", "La sélection suit uniquement les chiffres. Il n’y a ni jury, ni candidature, ni moyen d’influencer une distinction.", "Selection follows the numbers alone. There is no jury, no entry and no way to influence an award.")}</li>
   <li>{T("Der Award kostet nichts und ist an nichts gekoppelt. Ob eine Kasse das Badge einbindet oder verlinkt, ändert weder Note noch Reihenfolge auf abovergleich.com.", "La distinction est gratuite et sans condition. Qu’une caisse intègre le badge ou crée un lien ne change ni la note ni le classement sur abovergleich.com.", "The award costs nothing and comes with no strings. Whether an insurer uses or links the badge changes neither its score nor its ranking on abovergleich.com.")}</li>
@@ -1807,12 +1836,28 @@ def award_page():
   <li>{T("Gesamtwertung und Kategorien: Kassen mit mindestens 50'000 Versicherten. Bei Gleichstand gewinnen alle. Die Note rechnen wir für vier Situationen (mit oder ohne Unfall, Franchise 300 oder 2'500) und gewichten sie nach dem Bestand laut BAG.", "Classement général et catégories : caisses d’au moins 50'000 assurés. En cas d’égalité, toutes gagnent. La note est calculée pour quatre situations (avec ou sans accidents, franchise 300 ou 2'500) et pondérée selon l’effectif d’après l’OFSP.", "Overall ranking and categories: insurers with at least 50'000 insured persons. In a tie, all win. The score is calculated for four situations (with or without accident cover, deductible 300 or 2'500) and weighted by FOPH enrolment figures.")}</li>
   <li>{T("«Schlankste Verwaltung»: die gesamten Verwaltungskosten pro versicherte Person laut BAG, letztes verfügbares Jahr, auch was eine Kasse bei einer Konzernfirma einkauft.", "« Administration la plus légère » : l’ensemble des frais administratifs par assuré selon l’OFSP, dernière année disponible, y compris ce qu’une caisse achète à une société de son groupe.", "“Leanest administration”: total administrative costs per insured person according to the FOPH, latest available year, including what an insurer buys in from a group company.")}</li>
 </ul>
+</details>
 
+<details class="award-fold" id="badges"><summary>{T("Badges, Einbindungscode und Textbausteine für Kassen", "Badges, code d’intégration et textes pour les caisses", "Badges, embed code and text for insurers")}</summary>
+<p class="kk-note">{T("Jede Auszeichnung als Badge in vier Varianten (SVG oder PNG), dazu der Einbindungscode und ein Satz zum Übernehmen. Kostenlos, ohne Bedingungen.", "Chaque distinction sous forme de badge en quatre variantes (SVG ou PNG), avec le code d’intégration et une phrase à reprendre. Gratuit, sans conditions.", "Every award as a badge in four variants (SVG or PNG), plus the embed code and a sentence you can use. Free, no conditions.")}</p>
 {"".join(groups)}
+</details>
 
 <div class="cta-box"><h3>{T("Zahl falsch? Sag es uns.", "Un chiffre est faux ? Dites-le-nous.", "Wrong number? Tell us.")}</h3><p>{T("Wenn ein Wert nicht stimmt, korrigieren wir ihn und rechnen die Edition neu. Schreib an hello@handyabo.com.", "Si une valeur est inexacte, nous la corrigeons et recalculons l’édition. Écrivez à hello@handyabo.com.", "If a value is wrong, we correct it and recalculate the edition. Write to hello@handyabo.com.")}</p><a href="mailto:hello@handyabo.com">{T("Mail schreiben", "Écrire un e-mail", "Send an email")} &rarr;</a></div>
 </div>
-{AWARD_PNG_JS}"""
+{AWARD_PNG_JS}
+<script>
+(function () {{
+  function openFor() {{
+    var id = location.hash.slice(1), el = id && document.getElementById(id);
+    if (!el) return;
+    var d = el.closest('details');
+    if (d && !d.open) {{ d.open = true; el.scrollIntoView(); }}
+  }}
+  openFor();
+  window.addEventListener('hashchange', openFor);
+}})();
+</script>"""
     jsonld = [breadcrumb(crumbs)]
     winner = AWARDS[0]["name"] if AWARDS else ""
     html_out = page(path, T(f"Preistreue-Award {YEAR}: die preistreuesten Krankenkassen", f"Prix Constance des primes {YEAR} : les caisses-maladie lauréates",
@@ -2191,7 +2236,37 @@ KUENDIGEN_CSS = """
   .kd-wechsel a { color:var(--accent-dark); font-weight:700; }
   .kd-wechsel .kd-go { display:inline-block; margin-top:6px; background:var(--accent); color:var(--text); padding:9px 16px; border-radius:10px; text-decoration:none; }
   .kd-preview-label { font-size:12px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; margin-top:18px; }
-  @media (max-width:640px) { .kd-form { grid-template-columns:1fr; } #kd-brief { padding:20px; } }
+  .kd-intro { font-size:15px; color:var(--text2); margin:0 0 6px; }
+  .kd-compare { display:inline-block; margin-left:6px; color:var(--accent-dark) !important; font-weight:600; font-size:14px; }
+  .kd-compare[hidden] { display:none; }
+  .kd-lbl-note { text-transform:none; letter-spacing:0; font-weight:400; color:var(--muted); }
+  .kd-stepper { list-style:none; display:flex; gap:8px; flex-wrap:wrap; margin:6px 0 18px; padding:0; }
+  .kd-stepper[hidden] { display:none; }
+  .kd-stepper li { display:flex; align-items:center; gap:8px; font-size:14px; font-weight:600; color:var(--muted); background:var(--surface2); border-radius:999px; padding:7px 14px 7px 8px; }
+  .kd-stepper li b { width:22px; height:22px; border-radius:50%; background:var(--border2); color:var(--text); font-size:12px; display:inline-flex; align-items:center; justify-content:center; }
+  .kd-stepper li.on { color:var(--text); background:var(--surface); border:2px solid var(--accent); padding:5px 12px 5px 6px; }
+  .kd-stepper li.on b { background:var(--accent); }
+  .kd-stepper li.ok b { background:var(--green); color:#fff; }
+  .kd-more { border:1px dashed var(--border2); border-radius:10px; padding:10px 14px; }
+  .kd-more summary { cursor:pointer; font-size:13px; font-weight:600; color:var(--text2); }
+  .kd-more summary .kd-lbl-note { font-weight:400; }
+  .kd-more-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px; }
+  .kd-more-grid .full { grid-column:1 / -1; }
+  .kd-preview { margin:18px 0 8px; }
+  .kd-preview summary { cursor:pointer; font-size:13px; font-weight:600; color:var(--accent-dark); }
+  .kd-actions { align-items:center; }
+  .kd-actions button.kd-link { background:none; padding:12px 6px; font-weight:600; color:var(--accent-dark); }
+  .kd-done { display:block; }
+  .kd-done-head { display:flex; gap:14px; align-items:flex-start; }
+  .kd-done-small { display:block; font-size:13px; color:var(--muted); margin-top:4px; }
+  .kd-nx-h { font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; font-size:16px; margin:16px 0 8px; }
+  .kd-nx { margin:0; padding-left:22px; }
+  .kd-nx li { margin:0 0 14px; font-size:15px; }
+  .kd-nx li::marker { font-weight:700; }
+  .kd-nx-sub { font-size:14px; color:var(--text2); line-height:1.5; margin-top:6px; }
+  .kd-done .kd-go { display:inline-block; background:var(--accent); color:var(--text); padding:11px 18px; border-radius:10px; text-decoration:none; font-weight:700; }
+  .kd-done .kd-go.sec { background:var(--surface); border:2px solid var(--accent); padding:9px 16px; }
+  @media (max-width:640px) { .kd-form, .kd-more-grid { grid-template-columns:1fr; } #kd-brief { padding:20px; } }
   @media print {
     body * { visibility:hidden; }
     #kd-brief, #kd-brief * { visibility:visible; }
@@ -2288,58 +2363,43 @@ def kuendigen_page(kv):
     zus_tip = T("Eine Zusatzversicherung zu wechseln lohnt sich selten. Die neue Kasse darf Gesundheitsfragen stellen, Vorbehalte machen oder dich ablehnen, und mit dem Alter wird der Einstieg teurer. Berater drängen trotzdem oft dazu, weil sie dafür bis zu 16 Monatsprämien Provision erhalten.",
                 "Changer d’assurance complémentaire en vaut rarement la peine. La nouvelle caisse peut poser des questions de santé, émettre des réserves ou vous refuser, et l’entrée coûte plus cher avec l’âge. Les conseillers poussent pourtant souvent au changement, car ils touchent jusqu’à 16 primes mensuelles de commission.",
                 "Switching supplementary insurance rarely pays off. The new insurer may ask health questions, impose exclusions or refuse you, and joining gets more expensive with age. Advisers still often push for it, because they earn up to 16 monthly premiums in commission.")
+    more_lbl = T("Weitere Angaben", "Autres indications", "More details")
     body = f"""{crumbs_html(crumbs)}
 <div class="article-badge">{T("Frist", "Délai", "Deadline")} {dl}</div>
 <h1>{T(f"Krankenkasse kündigen: bis {dls}, mit Vorlage", f"Résilier sa caisse-maladie : d’ici au {dls}, avec modèle", f"Cancel your health insurance: by {dls}, with template")}</h1>
 <div class="article-meta">{T(f"Grundversicherung auf den 1. Januar {YEAR} wechseln · Brief in 2 Minuten", f"Changer d’assurance de base au 1er janvier {YEAR} · lettre en 2 minutes", f"Switch basic insurance on 1 January {YEAR} · letter in 2 minutes")}</div>
-<p class="kk-lead">{T(f"Die Kündigung der Grundversicherung muss bis am <strong>{dl}</strong> bei deiner Kasse <strong>eingetroffen</strong> sein. Der Poststempel zählt nicht.",
-  f"La résiliation de l’assurance de base doit être <strong>parvenue</strong> à votre caisse au plus tard le <strong>{dl}</strong>. Le cachet de la poste ne compte pas.",
-  f"Your cancellation of basic insurance must have <strong>reached</strong> your insurer by <strong>{dl}</strong>. The postmark does not count.")} <span id="kd-left"></span></p>
-<div id="wechsel" class="kd-wechsel" hidden></div>
-<div class="kd-ctas"><a class="kk-cta" href="#vorlage">{T("Kündigung jetzt erstellen", "Créer la résiliation maintenant", "Create your cancellation now")} &darr;</a><a class="kd-cta-sec" id="kd-compare" href="{calc}">{T("Zuerst vergleichen: lohnt sich der Wechsel?", "Comparer d’abord : le changement vaut-il la peine ?", "Compare first: is switching worth it?")} &rarr;</a></div>
-
-<h2>{T("So wechselst du in vier Schritten", "Changer en quatre étapes", "How to switch in four steps")}</h2>
-<ol>
-<li>{T(f"<strong>Neue Kasse wählen</strong> und dort für den 1. Januar {YEAR} anmelden. Sie muss dich ohne Gesundheitsfragen aufnehmen.",
-  f"<strong>Choisir la nouvelle caisse</strong> et s’y inscrire pour le 1er janvier {YEAR}. Elle doit vous accepter sans questions de santé.",
-  f"<strong>Choose your new insurer</strong> and sign up there for 1 January {YEAR}. It must accept you without health questions.")}</li>
-<li>{T('<strong>Bisherige Kasse kündigen, direkt hier:</strong> Im <a href="#vorlage">Kündigungs-Editor</a> wählst du deine Kasse, gibst Name und Adresse ein und unterschreibst mit Maus oder Finger. Den fertigen Brief mit der richtigen Adresse schicken wir dir als PDF per Mail.',
-  '<strong>Résilier votre caisse actuelle, directement ici :</strong> dans le <a href="#vorlage">générateur de lettre</a>, choisissez votre caisse, saisissez nom et adresse et signez avec la souris ou le doigt. Nous vous envoyons la lettre prête, avec la bonne adresse, en PDF par e-mail.',
-  '<strong>Cancel your current insurer, right here:</strong> in the <a href="#vorlage">cancellation letter tool</a>, pick your insurer, enter your name and address and sign with your mouse or finger. We email you the finished letter with the right address as a PDF.')}</li>
-<li>{T(f"<strong>Abschicken:</strong> per Mail, wenn deine Kasse das annimmt (steht beim Brief), sonst per Post, spätestens eine Woche vor dem {dl}. Ein Einschreiben ist nicht Pflicht, beweist aber den Eingang.",
-  f"<strong>Envoyer :</strong> par e-mail si votre caisse l’accepte (indiqué avec la lettre), sinon par la poste, au plus tard une semaine avant le {dl}. Le recommandé n’est pas obligatoire, mais prouve la réception.",
-  f"<strong>Send it:</strong> by email if your insurer accepts that (shown with the letter), otherwise by post, at least one week before {dl}. Registered mail is not required, but proves receipt.")}</li>
-<li>{T("<strong>Bestätigung abwarten.</strong> Die neue Kasse bestätigt dir und der alten Kasse schriftlich, dass du bei ihr versichert bist. Bis dahin bleibt die alte Versicherung bestehen, du bist also nie ohne Schutz.",
-  "<strong>Attendre la confirmation.</strong> La nouvelle caisse confirme par écrit, à vous et à l’ancienne caisse, que vous êtes assuré chez elle. D’ici là, l’ancienne assurance reste en vigueur : vous n’êtes donc jamais sans couverture.",
-  "<strong>Wait for confirmation.</strong> The new insurer confirms in writing, to you and to your old insurer, that you are insured with it. Until then your old insurance remains in force, so you are never without cover.")}</li>
-</ol>
-<a class="kk-cta" href="#vorlage">{T("Zum Kündigungs-Editor", "Vers le générateur de lettre", "Go to the letter tool")} &darr;</a>
-<p>{T("Wichtig: Wer bis 31. Dezember noch offene Prämien oder Kostenbeteiligungen bei der bisherigen Kasse hat, kann nicht wechseln. Offene Rechnungen vorher bezahlen.",
-  "Important : si vous avez encore des primes ou des participations aux coûts impayées auprès de votre caisse actuelle au 31 décembre, vous ne pouvez pas changer. Réglez d’abord les factures ouvertes.",
-  "Important: if you still have unpaid premiums or cost-sharing with your current insurer on 31 December, you cannot switch. Pay any open bills first.")}</p>
+<p class="kk-lead">{T(f"Bis <strong>{dl}</strong> muss die Kündigung bei deiner Kasse <strong>eingetroffen</strong> sein.",
+  f"La résiliation doit être <strong>parvenue</strong> à votre caisse au plus tard le <strong>{dl}</strong>.",
+  f"Your cancellation must have <strong>reached</strong> your insurer by <strong>{dl}</strong>.")} <span id="kd-left"></span></p>
+<ol id="wechsel" class="kd-stepper" hidden></ol>
 
 <h2 id="vorlage">{T("Kündigungsbrief erstellen", "Créer la lettre de résiliation", "Create your cancellation letter")}</h2>
-<p>{T("Kasse wählen, Angaben eintragen, unterschreiben. Du bekommst das PDF sofort und als Kopie per Mail. Abschicken an die Kasse tust du selbst.",
-  "Choisissez la caisse, saisissez vos données, signez. Vous recevez le PDF par e-mail. C’est vous qui l’envoyez à la caisse.",
-  "Pick your insurer, enter your details, sign. You receive the PDF by email. You send it to the insurer yourself.")}</p>
+<p class="kd-intro">{T("Ausfüllen, unterschreiben, fertig. Das PDF kommt per Mail, abschicken an die Kasse tust du selbst.",
+  "Remplir, signer, terminé. Le PDF arrive par e-mail, c’est vous qui l’envoyez à la caisse.",
+  "Fill in, sign, done. The PDF arrives by email; you send it to the insurer yourself.")}
+  {tip(T("Wir schicken nie selbst an die Kasse: Mehrere Kassen nehmen eine Kündigung per Mail nur vom Absender an, den sie von dir kennen.", "Nous n’envoyons jamais nous-mêmes à la caisse : plusieurs caisses n’acceptent une résiliation par e-mail que depuis l’adresse qu’elles connaissent.", "We never send to the insurer ourselves: several insurers only accept an emailed cancellation from the address they have on file for you."))}
+  <a id="kd-compare" class="kd-compare" href="{calc}">{T("Noch keine neue Kasse? Zuerst vergleichen", "Pas encore de nouvelle caisse ? Comparez d’abord", "No new insurer yet? Compare first")} &rarr;</a></p>
 <div class="kd-form">
   <div class="full"><label for="kd-kasse">{T("Deine bisherige Kasse", "Votre caisse actuelle", "Your current insurer")}</label><select id="kd-kasse"></select></div>
   <div><label for="kd-name">{T("Vorname und Name", "Prénom et nom", "First and last name")}</label><input id="kd-name" autocomplete="name"></div>
   <div><label for="kd-birth">{T("Geburtsdatum", "Date de naissance", "Date of birth")}</label><input id="kd-birth" autocomplete="bday" inputmode="numeric" placeholder="12.03.1985"></div>
   <div><label for="kd-street">{T("Strasse und Nr.", "Rue et n°", "Street and no.")}</label><input id="kd-street" autocomplete="address-line1"></div>
   <div class="kd-plzort"><div><label for="kd-plz">{T("PLZ", "NPA", "Postcode")}</label><input id="kd-plz" autocomplete="postal-code" inputmode="numeric" maxlength="4" placeholder="{T("8004", "1003", "8004")}"></div><div><label for="kd-ort">{T("Ort", "Localité", "Town")}</label><input id="kd-ort" autocomplete="address-level2" placeholder="{T("Zürich", "Lausanne", "Zurich")}"></div></div>
-  <div><label for="kd-email">{T("E-Mail", "E-mail", "Email")}</label><input id="kd-email" type="email" autocomplete="email" placeholder="{T("du@beispiel.ch", "vous@exemple.ch", "you@example.ch")}"><div class="kd-hint">{T("Dorthin schicken wir dir das PDF als Kopie.", "Nous vous y envoyons le PDF.", "We send the PDF there.")}</div></div>
-  <div><label for="kd-nr">{T("Versicherten-Nr.", "N° d’assuré", "Policy no.")} <span style="text-transform:none;font-weight:400;">({T("optional", "facultatif", "optional")})</span></label><input id="kd-nr"><div class="kd-hint">{T("Steht auf der Versichertenkarte.", "Figure sur la carte d’assuré.", "On your health insurance card.")}</div></div>
-  <div class="full"><label for="kd-more">{T("Kinder im selben Brief", "Enfants dans la même lettre", "Children in the same letter")} <span style="text-transform:none;font-weight:400;">({T("optional, eine Person pro Zeile, mit Geburtsdatum", "facultatif, une personne par ligne, avec date de naissance", "optional, one person per line, with date of birth")})</span></label><textarea id="kd-more" rows="2" placeholder="{T("Anna Muster, 12.03.2015", "Anne Exemple, 12.03.2015", "Anna Muster, 12.03.2015")}"></textarea><div class="kd-hint">{T("Erwachsene kündigen je selbst, mit eigenem Brief und eigener Unterschrift. Das verlangen mehrere Kassen.", "Les adultes résilient chacun pour soi, avec leur propre lettre et leur propre signature. Plusieurs caisses l’exigent.", "Adults each cancel for themselves, with their own letter and signature. Several insurers require this.")}</div></div>
-  <div><label for="kd-lang">{T("Sprache des Briefs", "Langue de la lettre", "Letter language")}</label><select id="kd-lang"><option value="de">{T("Deutsch", "Allemand", "German")}</option><option value="fr">{T("Französisch", "Français", "French")}</option></select></div>
+  <div class="full"><label for="kd-email">{T("E-Mail", "E-mail", "Email")} <span class="kd-lbl-note">{T("dorthin kommt das PDF", "le PDF y est envoyé", "the PDF goes here")}</span></label><input id="kd-email" type="email" autocomplete="email" placeholder="{T("du@beispiel.ch", "vous@exemple.ch", "you@example.ch")}"></div>
   <fieldset class="kd-zusatz full"><legend>{T("Zusatzversicherung bei dieser Kasse", "Assurance complémentaire auprès de cette caisse", "Supplementary insurance with this insurer")} {tip(zus_tip + f' <a href="{prov}">' + T("Mehr dazu", "En savoir plus", "More") + '</a>')}</legend>
-    <label class="kd-check"><input type="radio" name="kd-zusatz" value="keine"> {T("Habe ich nicht", "Je n’en ai pas", "I don’t have any")}</label>
     <label class="kd-check"><input type="radio" name="kd-zusatz" value="behalten" checked> {T("Behalten, nur die Grundversicherung kündigen", "La garder, ne résilier que l’assurance de base", "Keep it, cancel basic insurance only")} <span class="kd-reco">{T("empfohlen", "recommandé", "recommended")}</span></label>
     <label class="kd-check"><input type="radio" name="kd-zusatz" value="kuendigen"> {T("Auch kündigen", "La résilier aussi", "Cancel it too")}</label>
-    <div class="kd-warn" id="kd-zusatz-warn" hidden>{T(f'<strong>Gut überlegen.</strong> {zus_tip} Zudem gelten eigene Fristen, oft drei Monate auf Ende Jahr. Dann ist es für {YEAR} schon zu spät und die Kündigung gilt erst auf den nächstmöglichen Termin. Kündige die Zusatzversicherung erst, wenn die neue schriftlich zugesagt hat. <a href="{prov}">Warum Berater zum Wechsel drängen</a>',
-      f'<strong>Réfléchissez bien.</strong> {zus_tip} De plus, des délais propres s’appliquent, souvent trois mois pour la fin de l’année. Il est alors déjà trop tard pour {YEAR} et la résiliation ne vaut que pour la prochaine échéance possible. Ne résiliez l’assurance complémentaire que lorsque la nouvelle vous a accepté par écrit. <a href="{prov}">Pourquoi les conseillers poussent au changement</a>',
-      f'<strong>Think twice.</strong> {zus_tip} It also has its own notice periods, often three months to the end of the year. Then it is already too late for {YEAR} and the cancellation only applies at the next possible date. Only cancel supplementary insurance once the new insurer has accepted you in writing. <a href="{prov}">Why advisers push you to switch</a>')}</div>
+    <div class="kd-warn" id="kd-zusatz-warn" hidden>{T(f'<strong>Gut überlegen.</strong> Die neue Kasse darf Gesundheitsfragen stellen und dich ablehnen, und die Zusatzversicherung hat eigene Fristen, oft drei Monate. Kündige sie erst, wenn die neue schriftlich zugesagt hat. <a href="{prov}">Warum Berater zum Wechsel drängen</a>',
+      f'<strong>Réfléchissez bien.</strong> La nouvelle caisse peut poser des questions de santé et vous refuser, et l’assurance complémentaire a ses propres délais, souvent trois mois. Ne la résiliez que lorsque la nouvelle vous a accepté par écrit. <a href="{prov}">Pourquoi les conseillers poussent au changement</a>',
+      f'<strong>Think twice.</strong> The new insurer may ask health questions and refuse you, and supplementary insurance has its own notice periods, often three months. Only cancel it once the new insurer has accepted you in writing. <a href="{prov}">Why advisers push you to switch</a>')}</div>
   </fieldset>
+  <details class="kd-more full"><summary>{more_lbl} <span class="kd-lbl-note">{T("Versicherten-Nr., Kinder, Sprache des Briefs", "n° d’assuré, enfants, langue de la lettre", "policy no., children, letter language")}</span></summary>
+    <div class="kd-more-grid">
+      <div><label for="kd-nr">{T("Versicherten-Nr.", "N° d’assuré", "Policy no.")} <span class="kd-lbl-note">{T("steht auf der Karte", "sur la carte d’assuré", "on your insurance card")}</span></label><input id="kd-nr"></div>
+      <div><label for="kd-lang">{T("Sprache des Briefs", "Langue de la lettre", "Letter language")}</label><select id="kd-lang"><option value="de">{T("Deutsch", "Allemand", "German")}</option><option value="fr">{T("Französisch", "Français", "French")}</option></select></div>
+      <div class="full"><label for="kd-more">{T("Kinder im selben Brief", "Enfants dans la même lettre", "Children in the same letter")} <span class="kd-lbl-note">{T("eine Person pro Zeile, mit Geburtsdatum", "une personne par ligne, avec date de naissance", "one person per line, with date of birth")}</span></label><textarea id="kd-more" rows="2" placeholder="{T("Anna Muster, 12.03.2015", "Anne Exemple, 12.03.2015", "Anna Muster, 12.03.2015")}"></textarea><div class="kd-hint">{T("Erwachsene kündigen je selbst, mit eigenem Brief und eigener Unterschrift.", "Les adultes résilient chacun pour soi, avec leur propre lettre et leur propre signature.", "Adults each cancel for themselves, with their own letter and signature.")}</div></div>
+    </div>
+  </details>
 </div>
 <div class="kd-sign">
   <label for="kd-pad">{T("Unterschrift", "Signature", "Signature")}</label>
@@ -2348,14 +2408,29 @@ def kuendigen_page(kv):
 </div>
 <div id="kd-kanal" class="kd-kanal"></div>
 <label class="kd-consent"><input type="checkbox" id="kd-wecker" checked> <span>{T("Nächstes Jahr die besten Kassen für mich ins Postfach (1 Mail im Jahr)", "L’an prochain, recevoir les meilleures caisses pour moi par e-mail (1 e-mail par an)", "Next year, send me the best insurers for me by email (1 email a year)")}</span></label>
-<div class="kd-actions"><button id="kd-send">{T("PDF per Mail zuschicken", "Recevoir le PDF par e-mail", "Send me the PDF")}</button><button id="kd-mail" class="sec" hidden>{T("Mail an die Kasse vorbereiten", "Préparer l’e-mail à la caisse", "Prepare the email to the insurer")}</button><button id="kd-copy" class="sec">{T("Text kopieren", "Copier le texte", "Copy text")}</button></div>
+<div class="kd-actions"><button id="kd-send">{T("Kündigung erstellen", "Créer la résiliation", "Create cancellation")}</button><button id="kd-copy" class="kd-link">{T("Nur Text kopieren", "Copier le texte seulement", "Copy text only")}</button></div>
 <div class="kd-terms">{T(f'Mit dem Versand akzeptierst du unseren <a href="{i18n.url("datenschutz")}#kuendigung" target="_blank">Datenschutz</a>: Wir speichern deine E-Mail-Adresse und die Angaben zum Wechsel, den Brief nur 60 Tage zum Abholen.',
   f'En envoyant, vous acceptez notre <a href="{i18n.url("datenschutz")}#kuendigung" target="_blank">politique de confidentialité</a> : nous enregistrons votre adresse e-mail et les données du changement, la lettre seulement 60 jours pour le téléchargement.',
   f'By sending, you accept our <a href="{i18n.url("datenschutz")}#kuendigung" target="_blank">privacy policy</a>: we store your email address and the details of the switch, and the letter for 60 days only so you can download it.')}</div>
 <div id="kd-msg" class="kd-msg" role="status"></div>
 <div id="kd-done" class="kd-done" hidden></div>
-<div class="kd-preview-label">{T("Vorschau", "Aperçu", "Preview")}</div>
-<div id="kd-brief"></div>
+<details class="kd-preview"><summary>{T("Brief ansehen", "Voir la lettre", "View the letter")}</summary><div id="kd-brief"></div></details>
+
+<h2>{T("So läuft der Wechsel", "Comment se passe le changement", "How the switch works")}</h2>
+<ol>
+<li>{T(f"<strong>Kündigung abschicken:</strong> per Mail, wenn deine Kasse das annimmt (steht beim Brief), sonst per Post. Eingetroffen bis {dl}, der Poststempel zählt nicht.",
+  f"<strong>Envoyer la résiliation :</strong> par e-mail si votre caisse l’accepte (indiqué avec la lettre), sinon par la poste. Reçue au plus tard le {dl}, le cachet de la poste ne compte pas.",
+  f"<strong>Send the cancellation:</strong> by email if your insurer accepts that (shown with the letter), otherwise by post. Received by {dl}; the postmark does not count.")}</li>
+<li>{T(f"<strong>Bei der neuen Kasse anmelden</strong>, für den 1. Januar {YEAR}. Online in etwa 10 Minuten, ohne Gesundheitsfragen. Sie muss dich nehmen.",
+  f"<strong>S’inscrire auprès de la nouvelle caisse</strong>, pour le 1er janvier {YEAR}. En ligne en 10 minutes environ, sans questions de santé. Elle doit vous accepter.",
+  f"<strong>Sign up with your new insurer</strong> for 1 January {YEAR}. Online in about 10 minutes, no health questions. It must accept you.")}</li>
+<li>{T("<strong>Bestätigung abwarten.</strong> Die neue Kasse meldet der alten, dass du bei ihr versichert bist. Bis dahin bleibst du bei der alten versichert, du bist nie ohne Schutz.",
+  "<strong>Attendre la confirmation.</strong> La nouvelle caisse informe l’ancienne que vous êtes assuré chez elle. D’ici là, vous restez assuré auprès de l’ancienne, jamais sans couverture.",
+  "<strong>Wait for confirmation.</strong> The new insurer tells the old one that you are insured with it. Until then you stay insured with the old one, never without cover.")}</li>
+</ol>
+<p>{T("Wichtig: Wer bis 31. Dezember noch offene Prämien oder Kostenbeteiligungen bei der bisherigen Kasse hat, kann nicht wechseln. Offene Rechnungen vorher bezahlen.",
+  "Important : si vous avez encore des primes ou des participations aux coûts impayées auprès de votre caisse actuelle au 31 décembre, vous ne pouvez pas changer. Réglez d’abord les factures ouvertes.",
+  "Important: if you still have unpaid premiums or cost-sharing with your current insurer on 31 December, you cannot switch. Pay any open bills first.")}</p>
 
 <h2>{T("Sonderfälle", "Cas particuliers", "Special cases")}</h2>
 <ul>
@@ -2409,33 +2484,30 @@ def pickup_page():
         "wait": T("Einen Moment…", "Un instant…", "One moment…"),
         "fail": T("Das hat nicht geklappt.", "Cela n’a pas fonctionné.", "That didn’t work."),
         "btn": T("PDF herunterladen", "Télécharger le PDF", "Download PDF"),
-        "w_mail": T("Schick das PDF als Anhang an {z}, von der Mail-Adresse, die {k} von dir kennt.", "Envoyez le PDF en pièce jointe à {z}, depuis l’adresse e-mail que {k} connaît.", "Send the PDF as an attachment to {z}, from the email address {k} has on file for you."),
-        "w_nosig_mail": T(" Im PDF fehlt die Unterschrift: ausdrucken, unterschreiben, einscannen, oder neu erstellen mit Unterschrift.", " La signature manque dans le PDF : imprimez-le, signez-le et scannez-le, ou recréez-le avec signature.", " The PDF has no signature: print, sign and scan it, or create it again with a signature."),
-        "w_portal": T("Lade das PDF in {z} hoch oder schick es per Post.", "Téléversez le PDF dans {z} ou envoyez-le par la poste.", "Upload the PDF to {z} or send it by post."),
-        "w_post": T("Druck das PDF aus und schick es per Post an {k}.", "Imprimez le PDF et envoyez-le par la poste à {k}.", "Print the PDF and send it by post to {k}."),
-        "w_nosig_post": T(" Vorher von Hand unterschreiben, im PDF fehlt die Unterschrift.", " Signez-le d’abord à la main, la signature manque dans le PDF.", " Sign it by hand first; the PDF has no signature."),
-        "neu_named": T("<strong>Bei {n} anmelden</strong>, online in etwa 10 Minuten.", "<strong>S’inscrire chez {n}</strong>, en ligne en 10 minutes environ.", "<strong>Sign up with {n}</strong>, online in about 10 minutes."),
+        "w_mail": T("<strong>Abschicken</strong> an {z}, von der Mail-Adresse, die {k} von dir kennt. PDF anhängen.", "<strong>Envoyer</strong> à {z}, depuis l’adresse e-mail que {k} connaît. Joindre le PDF.", "<strong>Send it</strong> to {z}, from the email address {k} has on file for you. Attach the PDF."),
+        "w_nosig_mail": T(" Im PDF fehlt die Unterschrift: ausdrucken, unterschreiben, einscannen.", " La signature manque dans le PDF : imprimez, signez, scannez.", " The PDF has no signature: print, sign and scan it."),
+        "w_portal": T("<strong>Abschicken:</strong> das PDF in {z} hochladen oder per Post an {k}.", "<strong>Envoyer :</strong> téléverser le PDF dans {z} ou l’envoyer par la poste à {k}.", "<strong>Send it:</strong> upload the PDF to {z} or post it to {k}."),
+        "w_post": T("<strong>Abschicken:</strong> ausdrucken und per Post an {k}.", "<strong>Envoyer :</strong> imprimer et envoyer par la poste à {k}.", "<strong>Send it:</strong> print it and post it to {k}."),
+        "w_nosig_post": T(" Vorher von Hand unterschreiben.", " Signez-le d’abord à la main.", " Sign it by hand first."),
+        "m_open": T("Mail an {k} öffnen", "Ouvrir l’e-mail à {k}", "Open email to {k}"),
+        "m_subject": T("Kündigung Grundversicherung", "Résiliation assurance de base", "Kündigung Grundversicherung"),
+        "m_body_de": "Sehr geehrte Damen und Herren\n\nIm Anhang sende ich Ihnen meine unterschriebene Kündigung der Grundversicherung auf den {e}.\n\nBitte bestätigen Sie mir den Eingang.\n\nFreundliche Grüsse",
+        "m_body_fr": "Madame, Monsieur,\n\nVous trouverez en pièce jointe ma résiliation signée de l’assurance de base pour le {e}.\n\nJe vous prie de bien vouloir m’en confirmer la réception.\n\nMeilleures salutations",
+        "end_de": i18n.date_long(f"{PREV}-12-31", "de"), "end_fr": i18n.date_long(f"{PREV}-12-31", "fr"),
+        "neu_named": T("<strong>Bei {n} anmelden</strong>, online in etwa 10 Minuten, ohne Gesundheitsfragen. AHV-Nummer bereithalten.", "<strong>S’inscrire chez {n}</strong>, en ligne en 10 minutes environ, sans questions de santé. Numéro AVS sous la main.", "<strong>Sign up with {n}</strong>, online in about 10 minutes, no health questions. Have your AHV number ready."),
         "go": T("Zu {n}", "Vers {n}", "Go to {n}"),
-        "neu_any": T("<strong>Bei der neuen Kasse anmelden</strong>, online in etwa 10 Minuten.", "<strong>S’inscrire auprès de la nouvelle caisse</strong>, en ligne en 10 minutes environ.", "<strong>Sign up with the new insurer</strong>, online in about 10 minutes."),
+        "neu_any": T("<strong>Bei der neuen Kasse anmelden</strong>, online in etwa 10 Minuten, ohne Gesundheitsfragen.", "<strong>S’inscrire auprès de la nouvelle caisse</strong>, en ligne en 10 minutes environ, sans questions de santé.", "<strong>Sign up with the new insurer</strong>, online in about 10 minutes, no health questions."),
         "find": T("Günstigste Kasse finden", "Trouver la caisse la moins chère", "Find the cheapest insurer"),
-        "list": T("<li>Beginn: 1. Januar</li><li>AHV-Nummer (756…, steht auf deiner Versichertenkarte)</li><li>Franchise und Modell, das du gewählt hast</li><li>beim Hausarzt- oder HMO-Modell: deine Praxis</li>",
-                  "<li>Début : 1er janvier</li><li>numéro AVS (756…, sur votre carte d’assuré)</li><li>franchise et modèle choisis</li><li>pour le modèle médecin de famille ou HMO : votre cabinet</li>",
-                  "<li>Start: 1 January</li><li>AHV number (756…, on your insurance card)</li><li>the deductible and model you chose</li><li>for the family doctor or HMO model: your practice</li>"),
         "list_short": T("<li>Beginn: 1. Januar</li><li>AHV-Nummer (756…, steht auf deiner Versichertenkarte)</li><li>Franchise und Modell</li><li>beim Hausarzt- oder HMO-Modell: deine Praxis</li>",
                         "<li>Début : 1er janvier</li><li>numéro AVS (756…, sur votre carte d’assuré)</li><li>franchise et modèle</li><li>pour le modèle médecin de famille ou HMO : votre cabinet</li>",
                         "<li>Start: 1 January</li><li>AHV number (756…, on your insurance card)</li><li>deductible and model</li><li>for the family doctor or HMO model: your practice</li>"),
-        "health": T("Gesundheitsfragen gibt es in der Grundversicherung keine. Fragt das Formular danach, geht es um eine Zusatzversicherung, die du nicht abschliessen musst.",
-                    "Il n’y a pas de questions de santé dans l’assurance de base. Si le formulaire en pose, il s’agit d’une assurance complémentaire que vous n’êtes pas obligé de conclure.",
-                    "There are no health questions in basic insurance. If the form asks any, they are about supplementary insurance, which you don’t have to take out."),
         "ok": T("<strong>E-Mail-Adresse bestätigt.</strong> Dein PDF wird heruntergeladen.", "<strong>Adresse e-mail confirmée.</strong> Votre PDF est en cours de téléchargement.", "<strong>Email address confirmed.</strong> Your PDF is downloading."),
         "notstarted": T("Nicht gestartet?", "Le téléchargement n’a pas démarré ?", "Didn’t start?"),
         "next": T("So geht es weiter", "La suite", "What happens next"),
-        "send": T("<strong>Abschicken:</strong> ", "<strong>Envoyer :</strong> ", "<strong>Send it:</strong> "),
-        "arrive": T(" Eintreffen muss die Kündigung bis {d}.", " La résiliation doit parvenir d’ici au {d}.", " The cancellation must arrive by {d}."),
-        "soon": T(" Spätestens bis Ende Dezember, am besten gleich jetzt.", " Au plus tard fin décembre, idéalement tout de suite.", " By the end of December at the latest, ideally right now."),
-        "confirm": T("<strong>Bestätigung abwarten.</strong> Die neue Kasse meldet der alten, dass du bei ihr versichert bist. Bis dahin bleibst du bei der alten versichert.",
-                     "<strong>Attendre la confirmation.</strong> La nouvelle caisse informe l’ancienne que vous êtes assuré chez elle. D’ici là, vous restez assuré auprès de l’ancienne.",
-                     "<strong>Wait for confirmation.</strong> The new insurer tells the old one that you are insured with it. Until then you stay insured with the old one."),
+        "arrive": T(" Eintreffen bis {d}.", " Doit parvenir d’ici au {d}.", " Must arrive by {d}."),
+        "confirm": T("<strong>Bestätigung abwarten.</strong> {n} meldet {k}, dass du dort versichert bist. Bis dahin bleibst du bei {k}.",
+                     "<strong>Attendre la confirmation.</strong> {n} informe {k} que vous êtes assuré chez elle. D’ici là, vous restez chez {k}.",
+                     "<strong>Wait for confirmation.</strong> {n} tells {k} that you are insured there. Until then you stay with {k}."),
         "nonet": T("Keine Verbindung. Bitte nochmals versuchen.", "Pas de connexion. Veuillez réessayer.", "No connection. Please try again."),
         "thanks": T("Danke für deine Antwort", "Merci pour votre réponse", "Thanks for your answer"),
         "the_new": T("der neuen Kasse", "la nouvelle caisse", "the new insurer"),
@@ -2478,19 +2550,23 @@ def pickup_page():
       .then(function (r) {{ return r.json(); }})
       .then(function (d) {{
         if (!d.ok) {{ msg.textContent = d.error || S.fail; btn.disabled = false; btn.textContent = S.btn; return; }}
+        var LB = S.lang === 'fr' ? 'fr' : 'de';
+        var mailto = 'mailto:' + encodeURIComponent(d.ziel || '') + '?subject=' + encodeURIComponent(S.m_subject) +
+          '&body=' + encodeURIComponent(f(S['m_body_' + LB], {{ e: S['end_' + LB] }}));
         var weg = d.kanal === 'mail'
-          ? f(S.w_mail, {{ z: '<a href="mailto:' + esc(d.ziel) + '">' + esc(d.ziel) + '</a>', k: esc(d.kasse) }}) + (d.signiert ? '' : S.w_nosig_mail)
-          : d.kanal === 'portal' ? f(S.w_portal, {{ z: esc(d.ziel) }})
-          : f(S.w_post, {{ k: esc(d.kasse) }}) + (d.signiert ? '' : S.w_nosig_post);
+          ? f(S.w_mail, {{ z: '<a href="mailto:' + esc(d.ziel) + '">' + esc(d.ziel) + '</a>', k: esc(d.kasse) }}) + (d.signiert ? '' : S.w_nosig_mail) + f(S.arrive, {{ d: esc(d.deadline) }}) +
+            '<br><a class="kk-cta kp-cta" href="' + mailto + '">' + f(S.m_open, {{ k: esc(d.kasse) }}) + ' &rarr;</a>'
+          : d.kanal === 'portal' ? f(S.w_portal, {{ z: esc(d.ziel), k: esc(d.kasse) }}) + f(S.arrive, {{ d: esc(d.deadline) }})
+          : f(S.w_post, {{ k: esc(d.kasse) }}) + (d.signiert ? '' : S.w_nosig_post) + f(S.arrive, {{ d: esc(d.deadline) }});
+        var neuUrl = d.neu_url ? esc(d.neu_url) + '?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=kk-wechsel' : null;
         var neu = (d.neu
-          ? f(S.neu_named, {{ n: esc(d.neu) }}) + (d.neu_url ? ' <a href="' + esc(d.neu_url) + '?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=kk-wechsel" target="_blank" rel="noopener sponsored">' + f(S.go, {{ n: esc(d.neu) }}) + ' &rarr;</a>' : '')
-          : S.neu_any + ' <a href="' + S.calc + '">' + S.find + ' &rarr;</a>') +
-          '<ul class="kp-list">' + S.list + '</ul>' + S.health;
+          ? f(S.neu_named, {{ n: esc(d.neu) }}) + (neuUrl ? '<br><a class="kk-cta kp-cta" href="' + neuUrl + '" target="_blank" rel="noopener sponsored">' + f(S.go, {{ n: esc(d.neu) }}) + ' &rarr;</a>' : '')
+          : S.neu_any + '<br><a class="kk-cta kp-cta" href="' + S.calc + '">' + S.find + ' &rarr;</a>');
         box.innerHTML = '<p class="kk-lead">' + S.ok + ' <a href="' + esc(d.url) + '">' + S.notstarted + '</a></p>' +
-          '<h2>' + S.next + '</h2><ol>' +
-          '<li>' + S.send + weg + f(S.arrive, {{ d: esc(d.deadline) }}) + '</li>' +
-          '<li>' + neu + S.soon + '</li>' +
-          '<li>' + S.confirm + '</li></ol>';
+          '<h2>' + S.next + '</h2><ol class="kp-steps">' +
+          '<li>' + weg + '</li>' +
+          '<li>' + neu + '</li>' +
+          '<li>' + f(S.confirm, {{ n: d.neu ? esc(d.neu) : S.the_new, k: esc(d.kasse) }}) + '</li></ol>';
         location.href = d.url;
       }})
       .catch(function () {{ msg.textContent = S.nonet; btn.disabled = false; btn.textContent = S.btn; }});
@@ -2525,7 +2601,7 @@ def pickup_page():
                     T("Kündigungsbrief für die Grundversicherung herunterladen.", "Télécharger la lettre de résiliation de l’assurance de base.", "Download the cancellation letter for basic insurance."),
                     body, [], alts_of(lambda: f'{i18n.url("kuendigen")}pdf/'))
     html_out = html_out.replace('<meta name="robots" content="index, follow">', '<meta name="robots" content="noindex, nofollow">', 1)
-    return path, html_out.replace("</style>", "  .kp-btn { border:none; cursor:pointer; font-family:inherit; font-size:16px; }\n  .kp-btn:disabled { opacity:.6; }\n  .kp-list { margin:8px 0 8px 18px; }\n  .kp-list li { margin:2px 0; }\n</style>", 1)
+    return path, html_out.replace("</style>", "  .kp-btn { border:none; cursor:pointer; font-family:inherit; font-size:16px; }\n  .kp-btn:disabled { opacity:.6; }\n  .kp-list { margin:8px 0 8px 18px; }\n  .kp-list li { margin:2px 0; }\n  .kp-steps li { margin:0 0 14px; }\n  .kp-cta { margin:8px 0 0; font-size:15px; }\n</style>", 1)
 
 
 # Werbung und Provisionen aller Kassen in der Grundversicherung, Mio. CHF.

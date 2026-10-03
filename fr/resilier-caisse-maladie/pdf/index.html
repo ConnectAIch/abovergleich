@@ -26,7 +26,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles/shared.css?v=2c0760ee">
+<link rel="stylesheet" href="/styles/shared.css?v=7a81b62a">
 <style>
   .kk-rating { background:var(--surface); border:1px solid var(--border2); border-radius:14px; padding:20px 22px; margin:20px 0; }
   .kk-rating-head { display:flex; justify-content:space-between; gap:16px; align-items:flex-start; margin-bottom:12px; }
@@ -80,6 +80,8 @@
   .kp-btn:disabled { opacity:.6; }
   .kp-list { margin:8px 0 8px 18px; }
   .kp-list li { margin:2px 0; }
+  .kp-steps li { margin:0 0 14px; }
+  .kp-cta { margin:8px 0 0; font-size:15px; }
 </style>
 </head>
 <body>
@@ -112,7 +114,7 @@
 <div id="kp-msg" class="kk-note" role="status"></div>
 <script>
 (function () {
-  var S = {"incomplete": "Ce lien est incomplet. Ouvrez-le directement depuis l’e-mail.", "wait": "Un instant…", "fail": "Cela n’a pas fonctionné.", "btn": "Télécharger le PDF", "w_mail": "Envoyez le PDF en pièce jointe à {z}, depuis l’adresse e-mail que {k} connaît.", "w_nosig_mail": " La signature manque dans le PDF : imprimez-le, signez-le et scannez-le, ou recréez-le avec signature.", "w_portal": "Téléversez le PDF dans {z} ou envoyez-le par la poste.", "w_post": "Imprimez le PDF et envoyez-le par la poste à {k}.", "w_nosig_post": " Signez-le d’abord à la main, la signature manque dans le PDF.", "neu_named": "<strong>S’inscrire chez {n}<\/strong>, en ligne en 10 minutes environ.", "go": "Vers {n}", "neu_any": "<strong>S’inscrire auprès de la nouvelle caisse<\/strong>, en ligne en 10 minutes environ.", "find": "Trouver la caisse la moins chère", "list": "<li>Début : 1er janvier<\/li><li>numéro AVS (756…, sur votre carte d’assuré)<\/li><li>franchise et modèle choisis<\/li><li>pour le modèle médecin de famille ou HMO : votre cabinet<\/li>", "list_short": "<li>Début : 1er janvier<\/li><li>numéro AVS (756…, sur votre carte d’assuré)<\/li><li>franchise et modèle<\/li><li>pour le modèle médecin de famille ou HMO : votre cabinet<\/li>", "health": "Il n’y a pas de questions de santé dans l’assurance de base. Si le formulaire en pose, il s’agit d’une assurance complémentaire que vous n’êtes pas obligé de conclure.", "ok": "<strong>Adresse e-mail confirmée.<\/strong> Votre PDF est en cours de téléchargement.", "notstarted": "Le téléchargement n’a pas démarré ?", "next": "La suite", "send": "<strong>Envoyer :<\/strong> ", "arrive": " La résiliation doit parvenir d’ici au {d}.", "soon": " Au plus tard fin décembre, idéalement tout de suite.", "confirm": "<strong>Attendre la confirmation.<\/strong> La nouvelle caisse informe l’ancienne que vous êtes assuré chez elle. D’ici là, vous restez assuré auprès de l’ancienne.", "nonet": "Pas de connexion. Veuillez réessayer.", "thanks": "Merci pour votre réponse", "the_new": "la nouvelle caisse", "a_yes": "<strong>Parfait.<\/strong> Il ne manque plus que la confirmation : la nouvelle caisse informera {k}. Nous vous demanderons mi-décembre si tout a fonctionné.", "a_no": "Pas de problème, cela se fait en ligne en 10 minutes environ.", "b_yes": "<strong>Parfait, votre changement est fait.<\/strong> Dès le 1er janvier, vous êtes assuré chez {n}.", "b_no": "Appelez {k} et demandez si la résiliation est arrivée. Si vous l’avez envoyée par e-mail, votre e-mail envoyé fait office de preuve ; par recommandé, le récépissé de la poste. Demandez aussi à {n} si l’inscription est faite : l’ancienne assurance ne prend fin que lorsque la nouvelle caisse informe l’ancienne.", "stop": "C’est fait, vous ne recevrez plus de rappels pour cette lettre.", "saved": "Enregistré.", "reopen": "Pas de connexion. Veuillez rouvrir le lien.", "calc": "/fr/#kk-rechner", "lang": "fr"};
+  var S = {"incomplete": "Ce lien est incomplet. Ouvrez-le directement depuis l’e-mail.", "wait": "Un instant…", "fail": "Cela n’a pas fonctionné.", "btn": "Télécharger le PDF", "w_mail": "<strong>Envoyer<\/strong> à {z}, depuis l’adresse e-mail que {k} connaît. Joindre le PDF.", "w_nosig_mail": " La signature manque dans le PDF : imprimez, signez, scannez.", "w_portal": "<strong>Envoyer :<\/strong> téléverser le PDF dans {z} ou l’envoyer par la poste à {k}.", "w_post": "<strong>Envoyer :<\/strong> imprimer et envoyer par la poste à {k}.", "w_nosig_post": " Signez-le d’abord à la main.", "m_open": "Ouvrir l’e-mail à {k}", "m_subject": "Résiliation assurance de base", "m_body_de": "Sehr geehrte Damen und Herren\n\nIm Anhang sende ich Ihnen meine unterschriebene Kündigung der Grundversicherung auf den {e}.\n\nBitte bestätigen Sie mir den Eingang.\n\nFreundliche Grüsse", "m_body_fr": "Madame, Monsieur,\n\nVous trouverez en pièce jointe ma résiliation signée de l’assurance de base pour le {e}.\n\nJe vous prie de bien vouloir m’en confirmer la réception.\n\nMeilleures salutations", "end_de": "31. Dezember 2026", "end_fr": "31 décembre 2026", "neu_named": "<strong>S’inscrire chez {n}<\/strong>, en ligne en 10 minutes environ, sans questions de santé. Numéro AVS sous la main.", "go": "Vers {n}", "neu_any": "<strong>S’inscrire auprès de la nouvelle caisse<\/strong>, en ligne en 10 minutes environ, sans questions de santé.", "find": "Trouver la caisse la moins chère", "list_short": "<li>Début : 1er janvier<\/li><li>numéro AVS (756…, sur votre carte d’assuré)<\/li><li>franchise et modèle<\/li><li>pour le modèle médecin de famille ou HMO : votre cabinet<\/li>", "ok": "<strong>Adresse e-mail confirmée.<\/strong> Votre PDF est en cours de téléchargement.", "notstarted": "Le téléchargement n’a pas démarré ?", "next": "La suite", "arrive": " Doit parvenir d’ici au {d}.", "confirm": "<strong>Attendre la confirmation.<\/strong> {n} informe {k} que vous êtes assuré chez elle. D’ici là, vous restez chez {k}.", "nonet": "Pas de connexion. Veuillez réessayer.", "thanks": "Merci pour votre réponse", "the_new": "la nouvelle caisse", "a_yes": "<strong>Parfait.<\/strong> Il ne manque plus que la confirmation : la nouvelle caisse informera {k}. Nous vous demanderons mi-décembre si tout a fonctionné.", "a_no": "Pas de problème, cela se fait en ligne en 10 minutes environ.", "b_yes": "<strong>Parfait, votre changement est fait.<\/strong> Dès le 1er janvier, vous êtes assuré chez {n}.", "b_no": "Appelez {k} et demandez si la résiliation est arrivée. Si vous l’avez envoyée par e-mail, votre e-mail envoyé fait office de preuve ; par recommandé, le récépissé de la poste. Demandez aussi à {n} si l’inscription est faite : l’ancienne assurance ne prend fin que lorsque la nouvelle caisse informe l’ancienne.", "stop": "C’est fait, vous ne recevrez plus de rappels pour cette lettre.", "saved": "Enregistré.", "reopen": "Pas de connexion. Veuillez rouvrir le lien.", "calc": "/fr/#kk-rechner", "lang": "fr"};
   var f = function (s, v) { return s.replace(/\{(\w)\}/g, function (_, x) { return v[x] != null ? v[x] : ''; }); };
   var API = 'https://zexpmaegqsayleaohiip.supabase.co/functions/v1/kuendigung-pdf';
   var t = new URLSearchParams(location.search).get('t') || '';
@@ -125,19 +127,23 @@
       .then(function (r) { return r.json(); })
       .then(function (d) {
         if (!d.ok) { msg.textContent = d.error || S.fail; btn.disabled = false; btn.textContent = S.btn; return; }
+        var LB = S.lang === 'fr' ? 'fr' : 'de';
+        var mailto = 'mailto:' + encodeURIComponent(d.ziel || '') + '?subject=' + encodeURIComponent(S.m_subject) +
+          '&body=' + encodeURIComponent(f(S['m_body_' + LB], { e: S['end_' + LB] }));
         var weg = d.kanal === 'mail'
-          ? f(S.w_mail, { z: '<a href="mailto:' + esc(d.ziel) + '">' + esc(d.ziel) + '</a>', k: esc(d.kasse) }) + (d.signiert ? '' : S.w_nosig_mail)
-          : d.kanal === 'portal' ? f(S.w_portal, { z: esc(d.ziel) })
-          : f(S.w_post, { k: esc(d.kasse) }) + (d.signiert ? '' : S.w_nosig_post);
+          ? f(S.w_mail, { z: '<a href="mailto:' + esc(d.ziel) + '">' + esc(d.ziel) + '</a>', k: esc(d.kasse) }) + (d.signiert ? '' : S.w_nosig_mail) + f(S.arrive, { d: esc(d.deadline) }) +
+            '<br><a class="kk-cta kp-cta" href="' + mailto + '">' + f(S.m_open, { k: esc(d.kasse) }) + ' &rarr;</a>'
+          : d.kanal === 'portal' ? f(S.w_portal, { z: esc(d.ziel), k: esc(d.kasse) }) + f(S.arrive, { d: esc(d.deadline) })
+          : f(S.w_post, { k: esc(d.kasse) }) + (d.signiert ? '' : S.w_nosig_post) + f(S.arrive, { d: esc(d.deadline) });
+        var neuUrl = d.neu_url ? esc(d.neu_url) + '?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=kk-wechsel' : null;
         var neu = (d.neu
-          ? f(S.neu_named, { n: esc(d.neu) }) + (d.neu_url ? ' <a href="' + esc(d.neu_url) + '?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=kk-wechsel" target="_blank" rel="noopener sponsored">' + f(S.go, { n: esc(d.neu) }) + ' &rarr;</a>' : '')
-          : S.neu_any + ' <a href="' + S.calc + '">' + S.find + ' &rarr;</a>') +
-          '<ul class="kp-list">' + S.list + '</ul>' + S.health;
+          ? f(S.neu_named, { n: esc(d.neu) }) + (neuUrl ? '<br><a class="kk-cta kp-cta" href="' + neuUrl + '" target="_blank" rel="noopener sponsored">' + f(S.go, { n: esc(d.neu) }) + ' &rarr;</a>' : '')
+          : S.neu_any + '<br><a class="kk-cta kp-cta" href="' + S.calc + '">' + S.find + ' &rarr;</a>');
         box.innerHTML = '<p class="kk-lead">' + S.ok + ' <a href="' + esc(d.url) + '">' + S.notstarted + '</a></p>' +
-          '<h2>' + S.next + '</h2><ol>' +
-          '<li>' + S.send + weg + f(S.arrive, { d: esc(d.deadline) }) + '</li>' +
-          '<li>' + neu + S.soon + '</li>' +
-          '<li>' + S.confirm + '</li></ol>';
+          '<h2>' + S.next + '</h2><ol class="kp-steps">' +
+          '<li>' + weg + '</li>' +
+          '<li>' + neu + '</li>' +
+          '<li>' + f(S.confirm, { n: d.neu ? esc(d.neu) : S.the_new, k: esc(d.kasse) }) + '</li></ol>';
         location.href = d.url;
       })
       .catch(function () { msg.textContent = S.nonet; btn.disabled = false; btn.textContent = S.btn; });

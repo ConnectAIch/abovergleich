@@ -51,7 +51,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles/shared.css?v=2c0760ee">
+<link rel="stylesheet" href="/styles/shared.css?v=7a81b62a">
 <style>
   .kk-rating { background:var(--surface); border:1px solid var(--border2); border-radius:14px; padding:20px 22px; margin:20px 0; }
   .kk-rating-head { display:flex; justify-content:space-between; gap:16px; align-items:flex-start; margin-bottom:12px; }
@@ -106,6 +106,10 @@
   .award-page .rules { list-style:none; padding:0; display:grid; gap:10px; margin:16px 0 0; }
   .award-page .rules li { position:relative; padding-left:26px; color:var(--text2); }
   .award-page .rules li::before { content:"✓"; position:absolute; left:0; color:var(--green); font-weight:700; }
+  .award-fold { border:1px solid var(--border2); border-radius:12px; padding:12px 16px; margin:14px 0; }
+  .award-fold summary { cursor:pointer; font-weight:700; font-family:'Plus Jakarta Sans',sans-serif; font-size:17px; }
+  .award-fold[open] summary { margin-bottom: 8px; }
+  .award-cantons td.num, .award-cantons th.num { text-align:right; }
   .grouphead { font-family:'Plus Jakarta Sans',sans-serif; font-size:14px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin:38px 0 14px; padding-bottom:9px; border-bottom:1px solid var(--border); }
   .win { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:22px; margin-bottom:18px; display:grid; grid-template-columns:240px 1fr; gap:24px; align-items:start; }
   .win > * { min-width:0; }
@@ -153,10 +157,18 @@
 <h1>abovergleich Prix Constance des primes 2027</h1>
 <p class="kk-lead">34 distinctions pour des caisses-maladie qui restent durablement avantageuses. Décernées uniquement à partir des données de primes de la Confédération depuis 2020. Pas de jury, pas de candidature, pas de frais.</p>
 
-<h2>Ce qui est récompensé</h2>
-<p>La base est la <a href="/fr/constance-des-primes/">notation Constance des primes</a> : prix actuel, fréquence à laquelle une caisse a figuré depuis 2020 parmi les cinq moins chères de sa région, ampleur de ses hausses, maintien du rabais des nouveaux modèles alternatifs, fréquence des suppressions de tarifs et solidité des réserves. Le <strong>classement général</strong> distingue les trois meilleures notes, les <strong>catégories</strong> la meilleure caisse sur un aspect précis, et dans chaque <strong>canton</strong> la caisse la mieux notée dans la région principale, caisses régionales comprises.</p>
+<h2>Les lauréates 2027</h2>
+<p><strong><a class="kasse-link" href="/fr/caisses/concordia/">Concordia</a></strong> est la caisse-maladie la plus constante 2027, note 9,1 sur 10. Suivent <a class="kasse-link" href="/fr/caisses/agrisano/">Agrisano</a> (8,6) et <a class="kasse-link" href="/fr/caisses/kpt/">KPT</a> (8,4). La base est la <a href="/fr/constance-des-primes/">notation Constance des primes</a> : prix actuel, fréquence à laquelle une caisse a figuré depuis 2020 parmi les cinq moins chères de sa région, ampleur de ses hausses, maintien du rabais des nouveaux modèles alternatifs, fréquence des suppressions de tarifs et solidité des réserves.</p>
 
-<h2>Les règles</h2>
+<h3>Catégories</h3>
+<p>La meilleure caisse d’au moins 50'000 assurés pour chaque aspect. En cas d’égalité, toutes gagnent.</p>
+<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Catégorie</th><th>Caisse</th><th>Valeur</th></tr></thead><tbody><tr><td>Durablement avantageuse</td><td><a class="kasse-link" href="/fr/caisses/assura/">Assura</a></td><td>Top 5 dans 47 % des années</td></tr><tr><td>Primes les plus stables</td><td><a class="kasse-link" href="/fr/caisses/oekk/">ÖKK</a></td><td>0,5 pt par an sous le marché</td></tr><tr><td>Modèles alternatifs les plus fiables</td><td><a class="kasse-link" href="/fr/caisses/kpt/">KPT</a></td><td>Rabais maintenu</td></tr><tr><td>Réserves les plus solides</td><td><a class="kasse-link" href="/fr/caisses/galenos/">Galenos</a></td><td>Taux de solvabilité 234 %</td></tr><tr><td>Administration la plus légère</td><td><a class="kasse-link" href="/fr/caisses/sodalis/">sodalis</a></td><td>CHF 129 par assuré</td></tr></tbody></table></div>
+
+<h3>Cantons</h3>
+<p>La caisse la mieux notée dans la région principale de chaque canton, caisses régionales comprises. Cliquez sur le canton pour toutes les primes.</p>
+<div class="kk-table-wrap"><table class="kk-table award-cantons"><thead><tr><th>Canton</th><th>Caisse</th><th class="num">Note</th></tr></thead><tbody><tr><td><a href="/fr/caisse-maladie/appenzell-rhodes-exterieures/">Appenzell Rhodes-Extérieures</a></td><td><a class="kasse-link" href="/fr/caisses/egk/">EGK</a></td><td class="num">9,1</td></tr><tr><td><a href="/fr/caisse-maladie/appenzell-rhodes-interieures/">Appenzell Rhodes-Intérieures</a></td><td><a class="kasse-link" href="/fr/caisses/oekk/">ÖKK</a></td><td class="num">8,9</td></tr><tr><td><a href="/fr/caisse-maladie/argovie/">Argovie</a></td><td><a class="kasse-link" href="/fr/caisses/agrisano/">Agrisano</a></td><td class="num">8,9</td></tr><tr><td><a href="/fr/caisse-maladie/berne/">Berne</a></td><td><a class="kasse-link" href="/fr/caisses/visana/">Visana</a></td><td class="num">9,3</td></tr><tr><td><a href="/fr/caisse-maladie/bale-campagne/">Bâle-Campagne</a></td><td><a class="kasse-link" href="/fr/caisses/oekk/">ÖKK</a></td><td class="num">9,0</td></tr><tr><td><a href="/fr/caisse-maladie/bale-ville/">Bâle-Ville</a></td><td><a class="kasse-link" href="/fr/caisses/concordia/">Concordia</a></td><td class="num">9,4</td></tr><tr><td><a href="/fr/caisse-maladie/fribourg/">Fribourg</a></td><td><a class="kasse-link" href="/fr/caisses/concordia/">Concordia</a></td><td class="num">9,6</td></tr><tr><td><a href="/fr/caisse-maladie/geneve/">Genève</a></td><td><a class="kasse-link" href="/fr/caisses/sanitas/">Sanitas</a></td><td class="num">8,2</td></tr><tr><td><a href="/fr/caisse-maladie/glaris/">Glaris</a></td><td><a class="kasse-link" href="/fr/caisses/slkk/">SLKK</a></td><td class="num">9,0</td></tr><tr><td><a href="/fr/caisse-maladie/grisons/">Grisons</a></td><td><a class="kasse-link" href="/fr/caisses/concordia/">Concordia</a></td><td class="num">9,6</td></tr><tr><td><a href="/fr/caisse-maladie/jura/">Jura</a></td><td><a class="kasse-link" href="/fr/caisses/sanitas/">Sanitas</a></td><td class="num">8,1</td></tr><tr><td><a href="/fr/caisse-maladie/lucerne/">Lucerne</a></td><td><a class="kasse-link" href="/fr/caisses/concordia/">Concordia</a></td><td class="num">9,4</td></tr><tr><td><a href="/fr/caisse-maladie/neuchatel/">Neuchâtel</a></td><td><a class="kasse-link" href="/fr/caisses/visana/">Visana</a></td><td class="num">8,6</td></tr><tr><td><a href="/fr/caisse-maladie/nidwald/">Nidwald</a></td><td><a class="kasse-link" href="/fr/caisses/agrisano/">Agrisano</a></td><td class="num">8,9</td></tr><tr><td><a href="/fr/caisse-maladie/obwald/">Obwald</a></td><td><a class="kasse-link" href="/fr/caisses/concordia/">Concordia</a></td><td class="num">9,6</td></tr><tr><td><a href="/fr/caisse-maladie/saint-gall/">Saint-Gall</a></td><td><a class="kasse-link" href="/fr/caisses/concordia/">Concordia</a></td><td class="num">9,3</td></tr><tr><td><a href="/fr/caisse-maladie/schaffhouse/">Schaffhouse</a></td><td><a class="kasse-link" href="/fr/caisses/oekk/">ÖKK</a></td><td class="num">9,0</td></tr><tr><td><a href="/fr/caisse-maladie/schwyz/">Schwyz</a></td><td><a class="kasse-link" href="/fr/caisses/einsiedler-krankenkasse/">Einsiedler Krankenkasse</a></td><td class="num">10,0</td></tr><tr><td><a href="/fr/caisse-maladie/soleure/">Soleure</a></td><td><a class="kasse-link" href="/fr/caisses/concordia/">Concordia</a></td><td class="num">9,3</td></tr><tr><td><a href="/fr/caisse-maladie/tessin/">Tessin</a></td><td><a class="kasse-link" href="/fr/caisses/concordia/">Concordia</a></td><td class="num">9,5</td></tr><tr><td><a href="/fr/caisse-maladie/thurgovie/">Thurgovie</a></td><td><a class="kasse-link" href="/fr/caisses/concordia/">Concordia</a></td><td class="num">9,6</td></tr><tr><td><a href="/fr/caisse-maladie/uri/">Uri</a></td><td><a class="kasse-link" href="/fr/caisses/oekk/">ÖKK</a></td><td class="num">9,0</td></tr><tr><td><a href="/fr/caisse-maladie/valais/">Valais</a></td><td><a class="kasse-link" href="/fr/caisses/concordia/">Concordia</a></td><td class="num">9,4</td></tr><tr><td><a href="/fr/caisse-maladie/vaud/">Vaud</a></td><td><a class="kasse-link" href="/fr/caisses/sanitas/">Sanitas</a></td><td class="num">8,2</td></tr><tr><td><a href="/fr/caisse-maladie/zoug/">Zoug</a></td><td><a class="kasse-link" href="/fr/caisses/concordia/">Concordia</a></td><td class="num">9,6</td></tr><tr><td><a href="/fr/caisse-maladie/zurich/">Zurich</a></td><td><a class="kasse-link" href="/fr/caisses/kpt/">KPT</a></td><td class="num">8,6</td></tr></tbody></table></div>
+
+<details class="award-fold" id="regeln"><summary>Les règles</summary>
 <ul class="rules">
   <li>La sélection suit uniquement les chiffres. Il n’y a ni jury, ni candidature, ni moyen d’influencer une distinction.</li>
   <li>La distinction est gratuite et sans condition. Qu’une caisse intègre le badge ou crée un lien ne change ni la note ni le classement sur abovergleich.com.</li>
@@ -165,7 +177,10 @@
   <li>Classement général et catégories : caisses d’au moins 50'000 assurés. En cas d’égalité, toutes gagnent. La note est calculée pour quatre situations (avec ou sans accidents, franchise 300 ou 2'500) et pondérée selon l’effectif d’après l’OFSP.</li>
   <li>« Administration la plus légère » : l’ensemble des frais administratifs par assuré selon l’OFSP, dernière année disponible, y compris ce qu’une caisse achète à une société de son groupe.</li>
 </ul>
+</details>
 
+<details class="award-fold" id="badges"><summary>Badges, code d’intégration et textes pour les caisses</summary>
+<p class="kk-note">Chaque distinction sous forme de badge en quatre variantes (SVG ou PNG), avec le code d’intégration et une phrase à reprendre. Gratuit, sans conditions.</p>
 <div class="grouphead">Classement général</div><div class="win" id="gesamt-concordia">
   <img src="/fr/constance-des-primes/prix/badge/gesamt-concordia.svg" alt="abovergleich Prix Constance des primes 2027 : Caisse-maladie la plus constante 2027, Concordia" width="240" height="384" loading="lazy">
   <div>
@@ -881,6 +896,7 @@
     <blockquote class="baustein">KPT est, dans le Prix Constance des primes 2027 d’abovergleich.com, la caisse-maladie aux primes les plus constantes dans le canton de Zurich dans l’assurance de base. Cette notation indépendante montre quelles caisses-maladie restent avantageuses au fil des ans, uniquement sur la base des primes publiées par l’Office fédéral de la santé publique depuis 2020.</blockquote>
   </div>
 </div>
+</details>
 
 <div class="cta-box"><h3>Un chiffre est faux ? Dites-le-nous.</h3><p>Si une valeur est inexacte, nous la corrigeons et recalculons l’édition. Écrivez à hello@handyabo.com.</p><a href="mailto:hello@handyabo.com">Écrire un e-mail &rarr;</a></div>
 </div>
@@ -906,6 +922,18 @@ document.querySelectorAll('.pngrow button').forEach(function (btn) {
     }).catch(function () { btn.disabled = false; btn.textContent = label; });
   });
 });
+</script>
+<script>
+(function () {
+  function openFor() {
+    var id = location.hash.slice(1), el = id && document.getElementById(id);
+    if (!el) return;
+    var d = el.closest('details');
+    if (d && !d.open) { d.open = true; el.scrollIntoView(); }
+  }
+  openFor();
+  window.addEventListener('hashchange', openFor);
+})();
 </script>
 </article>
 

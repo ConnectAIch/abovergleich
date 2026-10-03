@@ -6,7 +6,14 @@
 //
 //   Combobox.enhance(select, { search: true, placeholder: 'Kasse suchen…',
 //                              keywords: value => 'zusätzliche Suchbegriffe' })
+//
+// Auf Touch-Geräten (pointer: coarse) öffnet die Liste als Blatt am unteren
+// Rand mit abgedunkeltem Hintergrund. Das schwebende Panel brauchte dort
+// die Position des Knopfs und einen Klick-ausserhalb-Fänger, und beides war
+// auf dem Handy unzuverlässig (Oktober 2026: Liste ging auf Android nicht
+// auf). Ein Blatt hängt an nichts, der Hintergrund schliesst es.
 (function () {
+  const coarse = () => window.matchMedia('(pointer: coarse)').matches;
   const norm = s => (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
   const CHEV = '<svg class="cbx-chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   const SEARCH = '<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
@@ -33,7 +40,7 @@
     const lbl = select.id && document.querySelector('label[for="' + select.id + '"]');
     if (lbl) lbl.htmlFor = btn.id;
 
-    let panel = null, list = null, input = null, rows = [], active = -1;
+    let panel = null, list = null, input = null, backdrop = null, sheet = false, rows = [], active = -1;
 
     function sync() {
       const o = select.selectedOptions[0];
@@ -87,6 +94,11 @@
     }
 
     function place() {
+      if (sheet) {
+        // Platz für Suchfeld und Griff abziehen, höchstens gut die halbe Höhe
+        list.style.maxHeight = Math.max(160, Math.round(window.innerHeight * 0.55)) + 'px';
+        return;
+      }
       const r = btn.getBoundingClientRect();
       const w = Math.min(Math.max(r.width, 230), window.innerWidth - 16);
       let left = Math.min(r.left, window.innerWidth - w - 8);
@@ -104,11 +116,22 @@
 
     function open() {
       if (openCombo && openCombo !== api) openCombo.close();
+      sheet = coarse();
+      if (sheet) {
+        backdrop = document.createElement('div');
+        backdrop.className = 'cbx-backdrop';
+        backdrop.addEventListener('click', close);
+        document.body.appendChild(backdrop);
+      }
       panel = document.createElement('div');
-      panel.className = 'cbx-panel';
+      panel.className = 'cbx-panel' + (sheet ? ' cbx-sheet' : '');
       panel.setAttribute('role', 'listbox');
+      let head = sheet ? '<div class="cbx-grip" aria-hidden="true"></div>' : '';
       if (opts.search) {
-        panel.innerHTML = '<label class="cbx-search">' + SEARCH + '<input type="text" autocomplete="off"></label>';
+        head += '<label class="cbx-search">' + SEARCH + '<input type="text" autocomplete="off"></label>';
+      }
+      panel.innerHTML = head;
+      if (opts.search) {
         input = panel.querySelector('input');
         input.placeholder = opts.placeholder || 'Suchen…';
         input.addEventListener('input', () => render(input.value));
@@ -122,20 +145,21 @@
       place();
       btn.setAttribute('aria-expanded', 'true');
       openCombo = api;
-      // Auf dem Handy nicht ins Suchfeld springen: die Tastatur würde die
-      // halbe Liste verdecken. Wer suchen will, tippt ins Feld.
-      if (input && !window.matchMedia('(pointer: coarse)').matches) input.focus(); else btn.focus();
-      setTimeout(() => document.addEventListener('mousedown', outside), 0);
+      // Auf dem Handy nichts fokussieren: die Tastatur würde die halbe Liste
+      // verdecken. Wer suchen will, tippt ins Feld.
+      if (input && !sheet) input.focus(); else if (!sheet) btn.focus();
+      if (!sheet) setTimeout(() => document.addEventListener('mousedown', outside), 0);
       // Nicht schliessen: auf Android löst schon das Aufgehen der Tastatur ein
       // resize aus, die Liste ging dann sofort wieder zu. Nur neu platzieren.
       window.addEventListener('resize', place);
-      window.addEventListener('scroll', onScroll, true);
+      if (!sheet) window.addEventListener('scroll', onScroll, true);
     }
 
     function close() {
       if (!panel) return;
       panel.remove();
-      panel = list = input = null;
+      if (backdrop) backdrop.remove();
+      panel = list = input = backdrop = null;
       btn.setAttribute('aria-expanded', 'false');
       document.removeEventListener('mousedown', outside);
       window.removeEventListener('resize', place);
@@ -151,7 +175,7 @@
       select.value = v;
       sync();
       close();
-      btn.focus();
+      if (!sheet) btn.focus();
       if (changed) select.dispatchEvent(new Event('change', { bubbles: true }));
     }
 

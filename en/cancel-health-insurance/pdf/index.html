@@ -26,7 +26,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles/shared.css?v=2c0760ee">
+<link rel="stylesheet" href="/styles/shared.css?v=7a81b62a">
 <style>
   .kk-rating { background:var(--surface); border:1px solid var(--border2); border-radius:14px; padding:20px 22px; margin:20px 0; }
   .kk-rating-head { display:flex; justify-content:space-between; gap:16px; align-items:flex-start; margin-bottom:12px; }
@@ -80,6 +80,8 @@
   .kp-btn:disabled { opacity:.6; }
   .kp-list { margin:8px 0 8px 18px; }
   .kp-list li { margin:2px 0; }
+  .kp-steps li { margin:0 0 14px; }
+  .kp-cta { margin:8px 0 0; font-size:15px; }
 </style>
 </head>
 <body>
@@ -112,7 +114,7 @@
 <div id="kp-msg" class="kk-note" role="status"></div>
 <script>
 (function () {
-  var S = {"incomplete": "This link is incomplete. Open it directly from the email.", "wait": "One moment…", "fail": "That didn’t work.", "btn": "Download PDF", "w_mail": "Send the PDF as an attachment to {z}, from the email address {k} has on file for you.", "w_nosig_mail": " The PDF has no signature: print, sign and scan it, or create it again with a signature.", "w_portal": "Upload the PDF to {z} or send it by post.", "w_post": "Print the PDF and send it by post to {k}.", "w_nosig_post": " Sign it by hand first; the PDF has no signature.", "neu_named": "<strong>Sign up with {n}<\/strong>, online in about 10 minutes.", "go": "Go to {n}", "neu_any": "<strong>Sign up with the new insurer<\/strong>, online in about 10 minutes.", "find": "Find the cheapest insurer", "list": "<li>Start: 1 January<\/li><li>AHV number (756…, on your insurance card)<\/li><li>the deductible and model you chose<\/li><li>for the family doctor or HMO model: your practice<\/li>", "list_short": "<li>Start: 1 January<\/li><li>AHV number (756…, on your insurance card)<\/li><li>deductible and model<\/li><li>for the family doctor or HMO model: your practice<\/li>", "health": "There are no health questions in basic insurance. If the form asks any, they are about supplementary insurance, which you don’t have to take out.", "ok": "<strong>Email address confirmed.<\/strong> Your PDF is downloading.", "notstarted": "Didn’t start?", "next": "What happens next", "send": "<strong>Send it:<\/strong> ", "arrive": " The cancellation must arrive by {d}.", "soon": " By the end of December at the latest, ideally right now.", "confirm": "<strong>Wait for confirmation.<\/strong> The new insurer tells the old one that you are insured with it. Until then you stay insured with the old one.", "nonet": "No connection. Please try again.", "thanks": "Thanks for your answer", "the_new": "the new insurer", "a_yes": "<strong>Great.<\/strong> Now only the confirmation is missing: the new insurer will contact {k}. We’ll check in mid-December whether everything worked.", "a_no": "No problem, it takes about 10 minutes online.", "b_yes": "<strong>Perfect, your switch is done.<\/strong> From 1 January you are insured with {n}.", "b_no": "Call {k} and ask whether the cancellation arrived. If you sent it by email, your sent email is the proof; by registered mail, the post office receipt. Also ask {n} whether your sign-up went through: the old insurance only ends once the new insurer informs the old one.", "stop": "Done, you won’t get any more reminders about this letter.", "saved": "Saved.", "reopen": "No connection. Please open the link again.", "calc": "/en/#kk-rechner", "lang": "en"};
+  var S = {"incomplete": "This link is incomplete. Open it directly from the email.", "wait": "One moment…", "fail": "That didn’t work.", "btn": "Download PDF", "w_mail": "<strong>Send it<\/strong> to {z}, from the email address {k} has on file for you. Attach the PDF.", "w_nosig_mail": " The PDF has no signature: print, sign and scan it.", "w_portal": "<strong>Send it:<\/strong> upload the PDF to {z} or post it to {k}.", "w_post": "<strong>Send it:<\/strong> print it and post it to {k}.", "w_nosig_post": " Sign it by hand first.", "m_open": "Open email to {k}", "m_subject": "Kündigung Grundversicherung", "m_body_de": "Sehr geehrte Damen und Herren\n\nIm Anhang sende ich Ihnen meine unterschriebene Kündigung der Grundversicherung auf den {e}.\n\nBitte bestätigen Sie mir den Eingang.\n\nFreundliche Grüsse", "m_body_fr": "Madame, Monsieur,\n\nVous trouverez en pièce jointe ma résiliation signée de l’assurance de base pour le {e}.\n\nJe vous prie de bien vouloir m’en confirmer la réception.\n\nMeilleures salutations", "end_de": "31. Dezember 2026", "end_fr": "31 décembre 2026", "neu_named": "<strong>Sign up with {n}<\/strong>, online in about 10 minutes, no health questions. Have your AHV number ready.", "go": "Go to {n}", "neu_any": "<strong>Sign up with the new insurer<\/strong>, online in about 10 minutes, no health questions.", "find": "Find the cheapest insurer", "list_short": "<li>Start: 1 January<\/li><li>AHV number (756…, on your insurance card)<\/li><li>deductible and model<\/li><li>for the family doctor or HMO model: your practice<\/li>", "ok": "<strong>Email address confirmed.<\/strong> Your PDF is downloading.", "notstarted": "Didn’t start?", "next": "What happens next", "arrive": " Must arrive by {d}.", "confirm": "<strong>Wait for confirmation.<\/strong> {n} tells {k} that you are insured there. Until then you stay with {k}.", "nonet": "No connection. Please try again.", "thanks": "Thanks for your answer", "the_new": "the new insurer", "a_yes": "<strong>Great.<\/strong> Now only the confirmation is missing: the new insurer will contact {k}. We’ll check in mid-December whether everything worked.", "a_no": "No problem, it takes about 10 minutes online.", "b_yes": "<strong>Perfect, your switch is done.<\/strong> From 1 January you are insured with {n}.", "b_no": "Call {k} and ask whether the cancellation arrived. If you sent it by email, your sent email is the proof; by registered mail, the post office receipt. Also ask {n} whether your sign-up went through: the old insurance only ends once the new insurer informs the old one.", "stop": "Done, you won’t get any more reminders about this letter.", "saved": "Saved.", "reopen": "No connection. Please open the link again.", "calc": "/en/#kk-rechner", "lang": "en"};
   var f = function (s, v) { return s.replace(/\{(\w)\}/g, function (_, x) { return v[x] != null ? v[x] : ''; }); };
   var API = 'https://zexpmaegqsayleaohiip.supabase.co/functions/v1/kuendigung-pdf';
   var t = new URLSearchParams(location.search).get('t') || '';
@@ -125,19 +127,23 @@
       .then(function (r) { return r.json(); })
       .then(function (d) {
         if (!d.ok) { msg.textContent = d.error || S.fail; btn.disabled = false; btn.textContent = S.btn; return; }
+        var LB = S.lang === 'fr' ? 'fr' : 'de';
+        var mailto = 'mailto:' + encodeURIComponent(d.ziel || '') + '?subject=' + encodeURIComponent(S.m_subject) +
+          '&body=' + encodeURIComponent(f(S['m_body_' + LB], { e: S['end_' + LB] }));
         var weg = d.kanal === 'mail'
-          ? f(S.w_mail, { z: '<a href="mailto:' + esc(d.ziel) + '">' + esc(d.ziel) + '</a>', k: esc(d.kasse) }) + (d.signiert ? '' : S.w_nosig_mail)
-          : d.kanal === 'portal' ? f(S.w_portal, { z: esc(d.ziel) })
-          : f(S.w_post, { k: esc(d.kasse) }) + (d.signiert ? '' : S.w_nosig_post);
+          ? f(S.w_mail, { z: '<a href="mailto:' + esc(d.ziel) + '">' + esc(d.ziel) + '</a>', k: esc(d.kasse) }) + (d.signiert ? '' : S.w_nosig_mail) + f(S.arrive, { d: esc(d.deadline) }) +
+            '<br><a class="kk-cta kp-cta" href="' + mailto + '">' + f(S.m_open, { k: esc(d.kasse) }) + ' &rarr;</a>'
+          : d.kanal === 'portal' ? f(S.w_portal, { z: esc(d.ziel), k: esc(d.kasse) }) + f(S.arrive, { d: esc(d.deadline) })
+          : f(S.w_post, { k: esc(d.kasse) }) + (d.signiert ? '' : S.w_nosig_post) + f(S.arrive, { d: esc(d.deadline) });
+        var neuUrl = d.neu_url ? esc(d.neu_url) + '?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=kk-wechsel' : null;
         var neu = (d.neu
-          ? f(S.neu_named, { n: esc(d.neu) }) + (d.neu_url ? ' <a href="' + esc(d.neu_url) + '?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=kk-wechsel" target="_blank" rel="noopener sponsored">' + f(S.go, { n: esc(d.neu) }) + ' &rarr;</a>' : '')
-          : S.neu_any + ' <a href="' + S.calc + '">' + S.find + ' &rarr;</a>') +
-          '<ul class="kp-list">' + S.list + '</ul>' + S.health;
+          ? f(S.neu_named, { n: esc(d.neu) }) + (neuUrl ? '<br><a class="kk-cta kp-cta" href="' + neuUrl + '" target="_blank" rel="noopener sponsored">' + f(S.go, { n: esc(d.neu) }) + ' &rarr;</a>' : '')
+          : S.neu_any + '<br><a class="kk-cta kp-cta" href="' + S.calc + '">' + S.find + ' &rarr;</a>');
         box.innerHTML = '<p class="kk-lead">' + S.ok + ' <a href="' + esc(d.url) + '">' + S.notstarted + '</a></p>' +
-          '<h2>' + S.next + '</h2><ol>' +
-          '<li>' + S.send + weg + f(S.arrive, { d: esc(d.deadline) }) + '</li>' +
-          '<li>' + neu + S.soon + '</li>' +
-          '<li>' + S.confirm + '</li></ol>';
+          '<h2>' + S.next + '</h2><ol class="kp-steps">' +
+          '<li>' + weg + '</li>' +
+          '<li>' + neu + '</li>' +
+          '<li>' + f(S.confirm, { n: d.neu ? esc(d.neu) : S.the_new, k: esc(d.kasse) }) + '</li></ol>';
         location.href = d.url;
       })
       .catch(function () { msg.textContent = S.nonet; btn.disabled = false; btn.textContent = S.btn; });

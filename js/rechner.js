@@ -171,6 +171,8 @@ const T = {
   // Ergebnisliste
   fullAnalysis: { de: 'Ganze Analyse von {insurer}', fr: 'Analyse complète de la caisse {insurer}', en: 'Full analysis of {insurer}' },
   switchTo: { de: 'Wechseln', fr: 'Changer', en: 'Switch' },
+  switchTitle: { de: 'Zu {insurer} wechseln: kündigen und anmelden', fr: 'Passer à {insurer} : résilier et s’inscrire', en: 'Switch to {insurer}: cancel and sign up' },
+  analysis: { de: 'Analyse', fr: 'Analyse', en: 'Analysis' },
   changeModel: { de: 'Modell ändern', fr: 'Changer de modèle', en: 'Change model' },
   cheaperYear: { de: 'CHF {amount}/Jahr günstiger', fr: 'CHF {amount}/an de moins', en: 'CHF {amount}/year cheaper' },
   dearerYear: { de: 'CHF {amount}/Jahr teurer', fr: 'CHF {amount}/an de plus', en: 'CHF {amount}/year more' },
@@ -810,10 +812,17 @@ async function checkKK() {
       return chips.length ? `<div class="kk-chips">${chips.join('')}</div>` : '';
     }
 
-    // Kassenname führt auf die Analyse der Kasse (Rating, Verlauf, Reserven)
-    function kasseName(p) {
+    // Kassenname: bei einer anderen Kasse führt er in den Wechsel-Ablauf
+    // (kündigen, dann anmelden), wie der Knopf «Wechseln». Wer die Analyse
+    // will (Rating, Verlauf, Reserven), nimmt den kleinen Link daneben.
+    function kasseName(p, flow) {
       const slug = RATING_DATA && RATING_DATA.slug && RATING_DATA.slug[p.insurer_id];
-      return slug ? `<a class="kk-insurer-link" href="${route('kassen')}${slug}/" title="${t('fullAnalysis', { insurer: p.insurer_name })}">${p.insurer_name} <span aria-hidden="true">›</span></a>` : p.insurer_name;
+      const analysis = slug ? `${route('kassen')}${slug}/` : null;
+      if (flow) {
+        return `<a class="kk-insurer-link" href="${flow}" title="${t('switchTitle', { insurer: p.insurer_name })}">${p.insurer_name} <span aria-hidden="true">›</span></a>`
+          + (analysis ? `<a class="kk-analysis" href="${analysis}" title="${t('fullAnalysis', { insurer: p.insurer_name })}">${t('analysis')}</a>` : '');
+      }
+      return analysis ? `<a class="kk-insurer-link" href="${analysis}" title="${t('fullAnalysis', { insurer: p.insurer_name })}">${p.insurer_name} <span aria-hidden="true">›</span></a>` : p.insurer_name;
     }
 
     function renderRow(p, rank, opts = {}) {
@@ -821,12 +830,13 @@ async function checkKK() {
       // Andere Kasse: «Wechseln» führt in den Ablauf auf der Kündigungsseite
       // (erst bei der neuen Kasse anmelden, dann die alte kündigen). Eigene
       // Kasse, anderes Modell: das ändert man bei der Kasse selbst, ohne Kündigung.
-      let cta = '';
+      let cta = '', flow = null;
       if (!isOwn) {
         const q = new URLSearchParams();
         if (currentId) q.set('kasse', currentId);
         q.set('neu', p.insurer_id);
-        cta = `<a href="${route('kuendigen')}?${q}#wechsel" class="kk-link">${t('switchTo')} ${arrowSvg}</a>`;
+        flow = `${route('kuendigen')}?${q}#wechsel`;
+        cta = `<a href="${flow}" class="kk-link">${t('switchTo')} ${arrowSvg}</a>`;
       } else if (p !== ownPick) {
         const link = affiliateLink(p.insurer_name);
         if (link) cta = `<a href="${link}" target="_blank" rel="noopener sponsored" class="kk-link">${t('changeModel')} ${arrowSvg}</a>`;
@@ -844,7 +854,7 @@ async function checkKK() {
         <div class="kk-row-left">
           <div class="kk-rank">${rank}</div>
           <div>
-            <div class="kk-insurer">${kasseName(p)}${isOwn ? `<span class="kk-tag">${t('yourInsurerTag')}</span>` : ''}</div>
+            <div class="kk-insurer">${kasseName(p, flow)}${isOwn ? `<span class="kk-tag">${t('yourInsurerTag')}</span>` : ''}</div>
             <div class="kk-model">${tariffLabel(p)}${modelTip(p.model_type)}</div>
             ${ratingChips(p)}
           </div>

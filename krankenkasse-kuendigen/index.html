@@ -93,7 +93,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles/shared.css?v=2c0760ee">
+<link rel="stylesheet" href="/styles/shared.css?v=7a81b62a">
 <style>
   .kk-rating { background:var(--surface); border:1px solid var(--border2); border-radius:14px; padding:20px 22px; margin:20px 0; }
   .kk-rating-head { display:flex; justify-content:space-between; gap:16px; align-items:flex-start; margin-bottom:12px; }
@@ -207,7 +207,37 @@
   .kd-wechsel a { color:var(--accent-dark); font-weight:700; }
   .kd-wechsel .kd-go { display:inline-block; margin-top:6px; background:var(--accent); color:var(--text); padding:9px 16px; border-radius:10px; text-decoration:none; }
   .kd-preview-label { font-size:12px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; margin-top:18px; }
-  @media (max-width:640px) { .kd-form { grid-template-columns:1fr; } #kd-brief { padding:20px; } }
+  .kd-intro { font-size:15px; color:var(--text2); margin:0 0 6px; }
+  .kd-compare { display:inline-block; margin-left:6px; color:var(--accent-dark) !important; font-weight:600; font-size:14px; }
+  .kd-compare[hidden] { display:none; }
+  .kd-lbl-note { text-transform:none; letter-spacing:0; font-weight:400; color:var(--muted); }
+  .kd-stepper { list-style:none; display:flex; gap:8px; flex-wrap:wrap; margin:6px 0 18px; padding:0; }
+  .kd-stepper[hidden] { display:none; }
+  .kd-stepper li { display:flex; align-items:center; gap:8px; font-size:14px; font-weight:600; color:var(--muted); background:var(--surface2); border-radius:999px; padding:7px 14px 7px 8px; }
+  .kd-stepper li b { width:22px; height:22px; border-radius:50%; background:var(--border2); color:var(--text); font-size:12px; display:inline-flex; align-items:center; justify-content:center; }
+  .kd-stepper li.on { color:var(--text); background:var(--surface); border:2px solid var(--accent); padding:5px 12px 5px 6px; }
+  .kd-stepper li.on b { background:var(--accent); }
+  .kd-stepper li.ok b { background:var(--green); color:#fff; }
+  .kd-more { border:1px dashed var(--border2); border-radius:10px; padding:10px 14px; }
+  .kd-more summary { cursor:pointer; font-size:13px; font-weight:600; color:var(--text2); }
+  .kd-more summary .kd-lbl-note { font-weight:400; }
+  .kd-more-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px; }
+  .kd-more-grid .full { grid-column:1 / -1; }
+  .kd-preview { margin:18px 0 8px; }
+  .kd-preview summary { cursor:pointer; font-size:13px; font-weight:600; color:var(--accent-dark); }
+  .kd-actions { align-items:center; }
+  .kd-actions button.kd-link { background:none; padding:12px 6px; font-weight:600; color:var(--accent-dark); }
+  .kd-done { display:block; }
+  .kd-done-head { display:flex; gap:14px; align-items:flex-start; }
+  .kd-done-small { display:block; font-size:13px; color:var(--muted); margin-top:4px; }
+  .kd-nx-h { font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; font-size:16px; margin:16px 0 8px; }
+  .kd-nx { margin:0; padding-left:22px; }
+  .kd-nx li { margin:0 0 14px; font-size:15px; }
+  .kd-nx li::marker { font-weight:700; }
+  .kd-nx-sub { font-size:14px; color:var(--text2); line-height:1.5; margin-top:6px; }
+  .kd-done .kd-go { display:inline-block; background:var(--accent); color:var(--text); padding:11px 18px; border-radius:10px; text-decoration:none; font-weight:700; }
+  .kd-done .kd-go.sec { background:var(--surface); border:2px solid var(--accent); padding:9px 16px; }
+  @media (max-width:640px) { .kd-form, .kd-more-grid { grid-template-columns:1fr; } #kd-brief { padding:20px; } }
   @media print {
     body * { visibility:hidden; }
     #kd-brief, #kd-brief * { visibility:visible; }
@@ -240,38 +270,32 @@
 <div class="article-badge">Frist 30. November 2026</div>
 <h1>Krankenkasse kündigen: bis 30. November, mit Vorlage</h1>
 <div class="article-meta">Grundversicherung auf den 1. Januar 2027 wechseln · Brief in 2 Minuten</div>
-<p class="kk-lead">Die Kündigung der Grundversicherung muss bis am <strong>30. November 2026</strong> bei deiner Kasse <strong>eingetroffen</strong> sein. Der Poststempel zählt nicht. <span id="kd-left"></span></p>
-<div id="wechsel" class="kd-wechsel" hidden></div>
-<div class="kd-ctas"><a class="kk-cta" href="#vorlage">Kündigung jetzt erstellen &darr;</a><a class="kd-cta-sec" id="kd-compare" href="/#kk-rechner">Zuerst vergleichen: lohnt sich der Wechsel? &rarr;</a></div>
-
-<h2>So wechselst du in vier Schritten</h2>
-<ol>
-<li><strong>Neue Kasse wählen</strong> und dort für den 1. Januar 2027 anmelden. Sie muss dich ohne Gesundheitsfragen aufnehmen.</li>
-<li><strong>Bisherige Kasse kündigen, direkt hier:</strong> Im <a href="#vorlage">Kündigungs-Editor</a> wählst du deine Kasse, gibst Name und Adresse ein und unterschreibst mit Maus oder Finger. Den fertigen Brief mit der richtigen Adresse schicken wir dir als PDF per Mail.</li>
-<li><strong>Abschicken:</strong> per Mail, wenn deine Kasse das annimmt (steht beim Brief), sonst per Post, spätestens eine Woche vor dem 30. November 2026. Ein Einschreiben ist nicht Pflicht, beweist aber den Eingang.</li>
-<li><strong>Bestätigung abwarten.</strong> Die neue Kasse bestätigt dir und der alten Kasse schriftlich, dass du bei ihr versichert bist. Bis dahin bleibt die alte Versicherung bestehen, du bist also nie ohne Schutz.</li>
-</ol>
-<a class="kk-cta" href="#vorlage">Zum Kündigungs-Editor &darr;</a>
-<p>Wichtig: Wer bis 31. Dezember noch offene Prämien oder Kostenbeteiligungen bei der bisherigen Kasse hat, kann nicht wechseln. Offene Rechnungen vorher bezahlen.</p>
+<p class="kk-lead">Bis <strong>30. November 2026</strong> muss die Kündigung bei deiner Kasse <strong>eingetroffen</strong> sein. <span id="kd-left"></span></p>
+<ol id="wechsel" class="kd-stepper" hidden></ol>
 
 <h2 id="vorlage">Kündigungsbrief erstellen</h2>
-<p>Kasse wählen, Angaben eintragen, unterschreiben. Du bekommst das PDF sofort und als Kopie per Mail. Abschicken an die Kasse tust du selbst.</p>
+<p class="kd-intro">Ausfüllen, unterschreiben, fertig. Das PDF kommt per Mail, abschicken an die Kasse tust du selbst.
+  <span class="tip" tabindex="0" aria-label="Info">i<span>Wir schicken nie selbst an die Kasse: Mehrere Kassen nehmen eine Kündigung per Mail nur vom Absender an, den sie von dir kennen.</span></span>
+  <a id="kd-compare" class="kd-compare" href="/#kk-rechner">Noch keine neue Kasse? Zuerst vergleichen &rarr;</a></p>
 <div class="kd-form">
   <div class="full"><label for="kd-kasse">Deine bisherige Kasse</label><select id="kd-kasse"></select></div>
   <div><label for="kd-name">Vorname und Name</label><input id="kd-name" autocomplete="name"></div>
   <div><label for="kd-birth">Geburtsdatum</label><input id="kd-birth" autocomplete="bday" inputmode="numeric" placeholder="12.03.1985"></div>
   <div><label for="kd-street">Strasse und Nr.</label><input id="kd-street" autocomplete="address-line1"></div>
   <div class="kd-plzort"><div><label for="kd-plz">PLZ</label><input id="kd-plz" autocomplete="postal-code" inputmode="numeric" maxlength="4" placeholder="8004"></div><div><label for="kd-ort">Ort</label><input id="kd-ort" autocomplete="address-level2" placeholder="Zürich"></div></div>
-  <div><label for="kd-email">E-Mail</label><input id="kd-email" type="email" autocomplete="email" placeholder="du@beispiel.ch"><div class="kd-hint">Dorthin schicken wir dir das PDF als Kopie.</div></div>
-  <div><label for="kd-nr">Versicherten-Nr. <span style="text-transform:none;font-weight:400;">(optional)</span></label><input id="kd-nr"><div class="kd-hint">Steht auf der Versichertenkarte.</div></div>
-  <div class="full"><label for="kd-more">Kinder im selben Brief <span style="text-transform:none;font-weight:400;">(optional, eine Person pro Zeile, mit Geburtsdatum)</span></label><textarea id="kd-more" rows="2" placeholder="Anna Muster, 12.03.2015"></textarea><div class="kd-hint">Erwachsene kündigen je selbst, mit eigenem Brief und eigener Unterschrift. Das verlangen mehrere Kassen.</div></div>
-  <div><label for="kd-lang">Sprache des Briefs</label><select id="kd-lang"><option value="de">Deutsch</option><option value="fr">Französisch</option></select></div>
+  <div class="full"><label for="kd-email">E-Mail <span class="kd-lbl-note">dorthin kommt das PDF</span></label><input id="kd-email" type="email" autocomplete="email" placeholder="du@beispiel.ch"></div>
   <fieldset class="kd-zusatz full"><legend>Zusatzversicherung bei dieser Kasse <span class="tip" tabindex="0" aria-label="Info">i<span>Eine Zusatzversicherung zu wechseln lohnt sich selten. Die neue Kasse darf Gesundheitsfragen stellen, Vorbehalte machen oder dich ablehnen, und mit dem Alter wird der Einstieg teurer. Berater drängen trotzdem oft dazu, weil sie dafür bis zu 16 Monatsprämien Provision erhalten. <a href="/blog/provisionen-zusatzversicherung/">Mehr dazu</a></span></span></legend>
-    <label class="kd-check"><input type="radio" name="kd-zusatz" value="keine"> Habe ich nicht</label>
     <label class="kd-check"><input type="radio" name="kd-zusatz" value="behalten" checked> Behalten, nur die Grundversicherung kündigen <span class="kd-reco">empfohlen</span></label>
     <label class="kd-check"><input type="radio" name="kd-zusatz" value="kuendigen"> Auch kündigen</label>
-    <div class="kd-warn" id="kd-zusatz-warn" hidden><strong>Gut überlegen.</strong> Eine Zusatzversicherung zu wechseln lohnt sich selten. Die neue Kasse darf Gesundheitsfragen stellen, Vorbehalte machen oder dich ablehnen, und mit dem Alter wird der Einstieg teurer. Berater drängen trotzdem oft dazu, weil sie dafür bis zu 16 Monatsprämien Provision erhalten. Zudem gelten eigene Fristen, oft drei Monate auf Ende Jahr. Dann ist es für 2027 schon zu spät und die Kündigung gilt erst auf den nächstmöglichen Termin. Kündige die Zusatzversicherung erst, wenn die neue schriftlich zugesagt hat. <a href="/blog/provisionen-zusatzversicherung/">Warum Berater zum Wechsel drängen</a></div>
+    <div class="kd-warn" id="kd-zusatz-warn" hidden><strong>Gut überlegen.</strong> Die neue Kasse darf Gesundheitsfragen stellen und dich ablehnen, und die Zusatzversicherung hat eigene Fristen, oft drei Monate. Kündige sie erst, wenn die neue schriftlich zugesagt hat. <a href="/blog/provisionen-zusatzversicherung/">Warum Berater zum Wechsel drängen</a></div>
   </fieldset>
+  <details class="kd-more full"><summary>Weitere Angaben <span class="kd-lbl-note">Versicherten-Nr., Kinder, Sprache des Briefs</span></summary>
+    <div class="kd-more-grid">
+      <div><label for="kd-nr">Versicherten-Nr. <span class="kd-lbl-note">steht auf der Karte</span></label><input id="kd-nr"></div>
+      <div><label for="kd-lang">Sprache des Briefs</label><select id="kd-lang"><option value="de">Deutsch</option><option value="fr">Französisch</option></select></div>
+      <div class="full"><label for="kd-more">Kinder im selben Brief <span class="kd-lbl-note">eine Person pro Zeile, mit Geburtsdatum</span></label><textarea id="kd-more" rows="2" placeholder="Anna Muster, 12.03.2015"></textarea><div class="kd-hint">Erwachsene kündigen je selbst, mit eigenem Brief und eigener Unterschrift.</div></div>
+    </div>
+  </details>
 </div>
 <div class="kd-sign">
   <label for="kd-pad">Unterschrift</label>
@@ -280,12 +304,19 @@
 </div>
 <div id="kd-kanal" class="kd-kanal"></div>
 <label class="kd-consent"><input type="checkbox" id="kd-wecker" checked> <span>Nächstes Jahr die besten Kassen für mich ins Postfach (1 Mail im Jahr)</span></label>
-<div class="kd-actions"><button id="kd-send">PDF per Mail zuschicken</button><button id="kd-mail" class="sec" hidden>Mail an die Kasse vorbereiten</button><button id="kd-copy" class="sec">Text kopieren</button></div>
+<div class="kd-actions"><button id="kd-send">Kündigung erstellen</button><button id="kd-copy" class="kd-link">Nur Text kopieren</button></div>
 <div class="kd-terms">Mit dem Versand akzeptierst du unseren <a href="/datenschutz/#kuendigung" target="_blank">Datenschutz</a>: Wir speichern deine E-Mail-Adresse und die Angaben zum Wechsel, den Brief nur 60 Tage zum Abholen.</div>
 <div id="kd-msg" class="kd-msg" role="status"></div>
 <div id="kd-done" class="kd-done" hidden></div>
-<div class="kd-preview-label">Vorschau</div>
-<div id="kd-brief"></div>
+<details class="kd-preview"><summary>Brief ansehen</summary><div id="kd-brief"></div></details>
+
+<h2>So läuft der Wechsel</h2>
+<ol>
+<li><strong>Kündigung abschicken:</strong> per Mail, wenn deine Kasse das annimmt (steht beim Brief), sonst per Post. Eingetroffen bis 30. November 2026, der Poststempel zählt nicht.</li>
+<li><strong>Bei der neuen Kasse anmelden</strong>, für den 1. Januar 2027. Online in etwa 10 Minuten, ohne Gesundheitsfragen. Sie muss dich nehmen.</li>
+<li><strong>Bestätigung abwarten.</strong> Die neue Kasse meldet der alten, dass du bei ihr versichert bist. Bis dahin bleibst du bei der alten versichert, du bist nie ohne Schutz.</li>
+</ol>
+<p>Wichtig: Wer bis 31. Dezember noch offene Prämien oder Kostenbeteiligungen bei der bisherigen Kasse hat, kann nicht wechseln. Offene Rechnungen vorher bezahlen.</p>
 
 <h2>Sonderfälle</h2>
 <ul>
@@ -303,8 +334,8 @@
 <p class="kk-note">Quellen: Bundesamt für Gesundheit (<a href="https://www.bag.admin.ch/de/praemien-und-kosten-antworten-auf-haeufige-fragen">Fragen zu Prämien und Wechsel</a>), <a href="https://www.bag.admin.ch/de/verzeichnisse-der-zugelassenen-kranken-und-rueckversicherer">Verzeichnis der zugelassenen Krankenversicherer</a>. Angaben ohne Gewähr.</p>
 
 <script id="kd-data" type="application/json">{"kassen": [{"id": 1560, "name": "Agrisano", "address": ["Agrisano Krankenkasse AG", "Laurstrasse 10", "5201 Brugg AG"], "mail": null, "own": false, "portal": null, "post_only": false, "src": "https://www.agrisano.ch/de/angebot/krankenkasse-grundversicherung/kuendigungsfristen", "url": "https://www.agrisano.ch"}, {"id": 32, "name": "Aquilana", "address": ["Aquilana Versicherungen", "Bruggerstrasse 46", "5401 Baden"], "mail": "kuendigungen@aquilana.ch", "own": false, "portal": null, "post_only": false, "src": "https://www.aquilana.ch/service/kundenbereich/kuendigung", "url": "https://www.aquilana.ch"}, {"id": 1542, "name": "Assura", "address": ["Assura-Basis SA", "Avenue C.-F. Ramuz 70", "1009 Pully"], "mail": null, "own": false, "portal": null, "post_only": false, "src": "https://www.assura.ch/de/haufig-fragen", "url": "https://www.assura.ch"}, {"id": 312, "name": "Atupri", "address": ["Atupri Gesundheitsversicherung AG", "Laupenstrasse 18", "3008 Bern"], "mail": "info@atupri.ch", "own": false, "portal": null, "post_only": false, "src": "https://atupri.ch/de/service-support/online-dienste/versicherung-kuendigen", "url": "https://www.atupri.ch"}, {"id": 343, "name": "Avenir", "address": ["Avenir Krankenversicherung AG", "Rue des Cèdres 5", "1919 Martigny"], "mail": "kunden@groupemutuel.ch", "own": true, "portal": null, "post_only": false, "src": "https://www.groupemutuel.ch/de/Privatkunden/Ihre-Bedurfnisse/Ihre-Bedurfnisse-im-Bereich-Gesundheit/versicherung-wechseln.html", "url": "https://www.groupemutuel.ch"}, {"id": 1322, "name": "Birchmeier", "address": ["Krankenkasse Birchmeier", "Hauptstrasse 22", "5444 Künten"], "mail": null, "own": false, "portal": null, "post_only": false, "src": "https://www.kkbirchmeier.ch/Downloads", "url": "https://www.kkbirchmeier.ch"}, {"id": 290, "name": "Concordia", "address": ["CONCORDIA Schweiz. Kranken- und Unfallversicherung AG", "Bundesplatz 15", "6002 Luzern"], "mail": "info@concordia.ch", "own": false, "portal": null, "post_only": false, "src": "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/grundversicherung/2.01_Reglement_OKP_de.pdf", "url": "https://www.concordia.ch"}, {"id": 8, "name": "CSS", "address": ["CSS Kranken-Versicherung AG", "Tribschenstrasse 21", "Postfach 2568", "6002 Luzern"], "mail": null, "own": false, "portal": null, "post_only": false, "src": "https://www.css.ch/de/privatkunden/richtig-versichert/gut-zu-wissen/versicherungstipps/krankenkasse-kuendigen.html", "url": "https://www.css.ch"}, {"id": 820, "name": "curaulta", "address": ["curaulta", "Postfach 22", "7144 Vella"], "mail": null, "own": false, "portal": null, "post_only": false, "src": "https://www.curaulta.ch/kontakt", "url": "https://www.curaulta.ch"}, {"id": 881, "name": "EGK", "address": ["EGK Grundversicherungen AG", "Birspark 1", "4242 Laufen"], "mail": null, "own": false, "portal": null, "post_only": false, "src": "https://egk.ch/de/versicherungen/grund-und-zusatzversicherung", "url": "https://www.egk.ch"}, {"id": 134, "name": "Einsiedler Krankenkasse", "address": ["Einsiedler Krankenkasse", "Kronenstrasse 19", "Postfach 57", "8840 Einsiedeln"], "mail": null, "own": false, "portal": null, "post_only": false, "src": "https://kkeinsiedeln.ch/faq/", "url": "https://www.kkeinsiedeln.ch"}, {"id": 1386, "name": "Galenos", "address": ["Galenos AG", "Binzmühlestrasse 95", "8050 Zürich"], "mail": null, "own": false, "portal": null, "post_only": false, "src": "https://www.galenos.ch/de/haeufige-fragen/", "url": "https://www.galenos.ch"}, {"id": 780, "name": "Glarner", "address": ["Genossenschaft Glarner Krankenversicherung", "Abläsch 8", "Postfach", "8762 Schwanden"], "mail": null, "own": false, "portal": null, "post_only": false, "src": "https://www.glkv.ch/ueber-glkv/kontakt/kontakt.html/83", "url": "https://www.glkv.ch"}, {"id": 1562, "name": "Helsana", "address": ["Helsana Versicherungen AG", "Postfach", "8081 Zürich"], "mail": "kuendigungen@helsana.ch", "own": false, "portal": null, "post_only": false, "src": "https://www.helsana.ch/de/private/services/versicherung/kuendigen.html", "url": "https://www.helsana.ch"}, {"id": 360, "name": "KK Luzerner Hinterland", "address": ["Krankenkasse Luzerner Hinterland", "Luzernstrasse 19", "6144 Zell LU"], "mail": null, "own": false, "portal": null, "post_only": false, "src": "https://www.kklh.ch/kundenservice/downloads/kuendigungsfristen/", "url": "https://www.kklh.ch"}, {"id": 246, "name": "KK Steffisburg", "address": ["Genossenschaft Krankenkasse Steffisburg", "Unterdorfstrasse 37", "Postfach", "3612 Steffisburg"], "mail": null, "own": false, "portal": null, "post_only": false, "src": "https://www.kkst.ch/ueber-uns/kontakt", "url": "https://www.kkst.ch"}, {"id": 1040, "name": "KK Visperterminen", "address": ["Verein Krankenkasse Visperterminen", "Dorfstrasse 66", "3932 Visperterminen"], "mail": null, "own": false, "portal": null, "post_only": false, "src": "https://www.kkv.ch/ueber-uns-2/kontakt/", "url": "https://www.kkv.ch"}, {"id": 1318, "name": "KK Wädenswil", "address": ["Stiftung Krankenkasse Wädenswil", "Industriestrasse 15", "8820 Wädenswil"], "mail": null, "own": false, "portal": null, "post_only": false, "src": "https://www.kkwaedenswil.ch/kontakt", "url": "https://www.kkwaedenswil.ch"}, {"id": 376, "name": "KPT", "address": ["KPT Krankenkasse AG", "Wankdorfallee 3", "Postfach", "3001 Bern"], "mail": null, "own": false, "portal": null, "post_only": false, "src": "https://www.kpt.ch/de/wissen/krankenkasse-wechseln", "url": "https://www.kpt.ch"}, {"id": 1479, "name": "Mutuel", "address": ["Mutuel Krankenversicherung AG", "Rue des Cèdres 5", "1919 Martigny"], "mail": "kunden@groupemutuel.ch", "own": true, "portal": null, "post_only": false, "src": "https://www.groupemutuel.ch/de/Privatkunden/Ihre-Bedurfnisse/Ihre-Bedurfnisse-im-Bereich-Gesundheit/versicherung-wechseln.html", "url": "https://www.groupemutuel.ch"}, {"id": 1535, "name": "Philos", "address": ["Philos Krankenversicherung AG", "Rue des Cèdres 5", "1919 Martigny"], "mail": "kunden@groupemutuel.ch", "own": true, "portal": null, "post_only": false, "src": "https://www.groupemutuel.ch/de/Privatkunden/Ihre-Bedurfnisse/Ihre-Bedurfnisse-im-Bereich-Gesundheit/versicherung-wechseln.html", "url": "https://www.groupemutuel.ch"}, {"id": 1401, "name": "rhenusana", "address": ["rhenusana", "Widnauerstrasse 6", "9435 Heerbrugg"], "mail": null, "own": false, "portal": null, "post_only": false, "src": "https://rhenusana.ch/grundversicherung/", "url": "https://www.rhenusana.ch"}, {"id": 1568, "name": "sana24", "address": ["sana24 AG", "Weltpoststrasse 19", "Postfach", "3000 Bern 16"], "mail": null, "own": false, "portal": null, "post_only": false, "src": "https://www.visana.ch/ueber-visana/rechtliches/informationspflicht-art-45", "url": "https://www.visana.ch"}, {"id": 1509, "name": "Sanitas", "address": ["Sanitas Grundversicherungen AG", "Jägergasse 3", "Postfach 2010", "8021 Zürich"], "mail": "info@sanitas.com", "own": false, "portal": null, "post_only": false, "src": "https://www.sanitas.com/de/privatkunden/services/schnell-erledigt/kuendigen.html", "url": "https://www.sanitas.com"}, {"id": 923, "name": "SLKK", "address": ["Genossenschaft KRANKENKASSE SLKK", "Hofwiesenstrasse 370", "Postfach 5652", "8050 Zürich"], "mail": null, "own": false, "portal": null, "post_only": false, "src": "https://slkk.ch/", "url": "https://www.slkk.ch"}, {"id": 941, "name": "sodalis", "address": ["sodalis gesundheitsgruppe", "Balfrinstrasse 15", "3930 Visp"], "mail": null, "own": false, "portal": null, "post_only": true, "src": "https://www.sodalis.ch/de/fuer-private/versicherungen/versicherung-verstehen/kann-ich-meine-versicherung-jederzeit-kuendigen--91", "url": "https://www.sodalis.ch"}, {"id": 194, "name": "Sumiswalder", "address": ["Sumiswalder Krankenkasse", "Spitalstrasse 47", "3454 Sumiswald"], "mail": null, "own": false, "portal": null, "post_only": false, "src": "https://sumiswalder.ch/ueber-uns/kontakt/", "url": "https://www.sumiswalder.ch"}, {"id": 1384, "name": "Swica", "address": ["SWICA Krankenversicherung AG", "Römerstrasse 37", "8401 Winterthur"], "mail": null, "own": false, "portal": "mySWICA", "post_only": false, "src": "https://www.swica.ch/de/private/services/faq", "url": "https://www.swica.ch"}, {"id": 1555, "name": "Visana", "address": ["Visana AG", "Weltpoststrasse 19", "Postfach", "3000 Bern 16"], "mail": null, "own": false, "portal": null, "post_only": false, "src": "https://www.visana.ch/privatpersonen/kampagnen/wichtige-versicherungsdaten", "url": "https://www.visana.ch"}, {"id": 966, "name": "vita surselva", "address": ["vita surselva", "Bahnhofstrasse 33", "Postfach 217", "7130 Ilanz"], "mail": null, "own": false, "portal": null, "post_only": false, "src": "https://www.vitasurselva.ch/home/praemienmitteilung/", "url": "https://www.vitasurselva.ch"}, {"id": 509, "name": "Vivao Sympany", "address": ["Vivao Sympany AG", "Peter Merian-Weg 4", "4002 Basel"], "mail": "kuendigungen@sympany.ch", "own": true, "portal": null, "post_only": false, "src": "https://www.sympany.ch/de/privatkunden/wissenswertes/einmaleins/krankenkasse-kuendigen.html", "url": "https://www.sympany.ch"}, {"id": 455, "name": "ÖKK", "address": ["ÖKK Kranken- und Unfallversicherungen AG", "Bahnhofstrasse 13", "7302 Landquart"], "mail": "info@oekk.ch", "own": false, "portal": null, "post_only": false, "src": "https://www.oekk.ch/de/themen-wissen/grundversicherung-wechseln", "url": "https://www.oekk.ch"}], "end": "31. Dezember 2026", "end_iso": "2026-12-31", "start": "1. Januar 2027", "deadline": "2026-11-30", "deadline_text": "30. November 2026", "stand": "30.9.2026", "lang": "de", "calc": "/#kk-rechner", "privacy": "/datenschutz/#kuendigung"}</script>
-<script src="/js/combobox.js?v=e94b1612"></script>
-<script src="/js/kuendigung.js?v=3b36a323"></script>
+<script src="/js/combobox.js?v=f97997fe"></script>
+<script src="/js/kuendigung.js?v=34cc47ce"></script>
 </article>
 
 <footer>

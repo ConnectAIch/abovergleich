@@ -51,7 +51,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles/shared.css?v=2c0760ee">
+<link rel="stylesheet" href="/styles/shared.css?v=7a81b62a">
 <style>
   .kk-rating { background:var(--surface); border:1px solid var(--border2); border-radius:14px; padding:20px 22px; margin:20px 0; }
   .kk-rating-head { display:flex; justify-content:space-between; gap:16px; align-items:flex-start; margin-bottom:12px; }
@@ -106,6 +106,10 @@
   .award-page .rules { list-style:none; padding:0; display:grid; gap:10px; margin:16px 0 0; }
   .award-page .rules li { position:relative; padding-left:26px; color:var(--text2); }
   .award-page .rules li::before { content:"✓"; position:absolute; left:0; color:var(--green); font-weight:700; }
+  .award-fold { border:1px solid var(--border2); border-radius:12px; padding:12px 16px; margin:14px 0; }
+  .award-fold summary { cursor:pointer; font-weight:700; font-family:'Plus Jakarta Sans',sans-serif; font-size:17px; }
+  .award-fold[open] summary { margin-bottom: 8px; }
+  .award-cantons td.num, .award-cantons th.num { text-align:right; }
   .grouphead { font-family:'Plus Jakarta Sans',sans-serif; font-size:14px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin:38px 0 14px; padding-bottom:9px; border-bottom:1px solid var(--border); }
   .win { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:22px; margin-bottom:18px; display:grid; grid-template-columns:240px 1fr; gap:24px; align-items:start; }
   .win > * { min-width:0; }
@@ -153,10 +157,18 @@
 <h1>abovergleich Price Consistency Award 2027</h1>
 <p class="kk-lead">34 awards for health insurers that stay cheap over time. Given solely on the basis of federal premium data since 2020. No jury, no entry, no fee.</p>
 
-<h2>What is rewarded</h2>
-<p>It is based on the <a href="/en/health-insurance-rating/">Price Consistency Rating</a>: price today, how often an insurer has been among the five cheapest in its region since 2020, how much it raises prices, whether new savings models keep their discount, how often it drops tariffs and how strong its reserves are. The <strong>overall ranking</strong> rewards the three best scores, the <strong>categories</strong> the best in one aspect each, and in every <strong>canton</strong> the insurer with the best score in the main region, regional insurers included.</p>
+<h2>The 2027 winners</h2>
+<p><strong><a class="kasse-link" href="/en/insurers/concordia/">Concordia</a></strong> is the most price-consistent health insurer of 2027, score 9.1 out of 10. Next come <a class="kasse-link" href="/en/insurers/agrisano/">Agrisano</a> (8.6) and <a class="kasse-link" href="/en/insurers/kpt/">KPT</a> (8.4). It is based on the <a href="/en/health-insurance-rating/">Price Consistency Rating</a>: price today, how often an insurer has been among the five cheapest in its region since 2020, how much it raises prices, whether new savings models keep their discount, how often it drops tariffs and how strong its reserves are.</p>
 
-<h2>The rules</h2>
+<h3>Categories</h3>
+<p>The best insurer with at least 50'000 insured persons in each aspect. In a tie, all win.</p>
+<div class="kk-table-wrap"><table class="kk-table"><thead><tr><th>Category</th><th>Insurer</th><th>Value</th></tr></thead><tbody><tr><td>Consistently cheap</td><td><a class="kasse-link" href="/en/insurers/assura/">Assura</a></td><td>Top 5 in 47% of years</td></tr><tr><td>Most stable premiums</td><td><a class="kasse-link" href="/en/insurers/oekk/">ÖKK</a></td><td>0.5 pts a year below market</td></tr><tr><td>Fairest savings models</td><td><a class="kasse-link" href="/en/insurers/kpt/">KPT</a></td><td>Discount retained</td></tr><tr><td>Strongest reserves</td><td><a class="kasse-link" href="/en/insurers/galenos/">Galenos</a></td><td>Solvency ratio 234%</td></tr><tr><td>Leanest administration</td><td><a class="kasse-link" href="/en/insurers/sodalis/">sodalis</a></td><td>CHF 129 per insured person</td></tr></tbody></table></div>
+
+<h3>Cantons</h3>
+<p>The insurer with the best score in each canton’s main region, regional insurers included. Click the canton for all premiums there.</p>
+<div class="kk-table-wrap"><table class="kk-table award-cantons"><thead><tr><th>Canton</th><th>Insurer</th><th class="num">Score</th></tr></thead><tbody><tr><td><a href="/en/health-insurance/aargau/">Aargau</a></td><td><a class="kasse-link" href="/en/insurers/agrisano/">Agrisano</a></td><td class="num">8.9</td></tr><tr><td><a href="/en/health-insurance/appenzell-ausserrhoden/">Appenzell Ausserrhoden</a></td><td><a class="kasse-link" href="/en/insurers/egk/">EGK</a></td><td class="num">9.1</td></tr><tr><td><a href="/en/health-insurance/appenzell-innerrhoden/">Appenzell Innerrhoden</a></td><td><a class="kasse-link" href="/en/insurers/oekk/">ÖKK</a></td><td class="num">8.9</td></tr><tr><td><a href="/en/health-insurance/basel-landschaft/">Basel-Landschaft</a></td><td><a class="kasse-link" href="/en/insurers/oekk/">ÖKK</a></td><td class="num">9.0</td></tr><tr><td><a href="/en/health-insurance/basel-stadt/">Basel-Stadt</a></td><td><a class="kasse-link" href="/en/insurers/concordia/">Concordia</a></td><td class="num">9.4</td></tr><tr><td><a href="/en/health-insurance/bern/">Bern</a></td><td><a class="kasse-link" href="/en/insurers/visana/">Visana</a></td><td class="num">9.3</td></tr><tr><td><a href="/en/health-insurance/fribourg/">Fribourg</a></td><td><a class="kasse-link" href="/en/insurers/concordia/">Concordia</a></td><td class="num">9.6</td></tr><tr><td><a href="/en/health-insurance/geneva/">Geneva</a></td><td><a class="kasse-link" href="/en/insurers/sanitas/">Sanitas</a></td><td class="num">8.2</td></tr><tr><td><a href="/en/health-insurance/glarus/">Glarus</a></td><td><a class="kasse-link" href="/en/insurers/slkk/">SLKK</a></td><td class="num">9.0</td></tr><tr><td><a href="/en/health-insurance/graubuenden/">Graubünden</a></td><td><a class="kasse-link" href="/en/insurers/concordia/">Concordia</a></td><td class="num">9.6</td></tr><tr><td><a href="/en/health-insurance/jura/">Jura</a></td><td><a class="kasse-link" href="/en/insurers/sanitas/">Sanitas</a></td><td class="num">8.1</td></tr><tr><td><a href="/en/health-insurance/lucerne/">Lucerne</a></td><td><a class="kasse-link" href="/en/insurers/concordia/">Concordia</a></td><td class="num">9.4</td></tr><tr><td><a href="/en/health-insurance/neuchatel/">Neuchâtel</a></td><td><a class="kasse-link" href="/en/insurers/visana/">Visana</a></td><td class="num">8.6</td></tr><tr><td><a href="/en/health-insurance/nidwalden/">Nidwalden</a></td><td><a class="kasse-link" href="/en/insurers/agrisano/">Agrisano</a></td><td class="num">8.9</td></tr><tr><td><a href="/en/health-insurance/obwalden/">Obwalden</a></td><td><a class="kasse-link" href="/en/insurers/concordia/">Concordia</a></td><td class="num">9.6</td></tr><tr><td><a href="/en/health-insurance/schaffhausen/">Schaffhausen</a></td><td><a class="kasse-link" href="/en/insurers/oekk/">ÖKK</a></td><td class="num">9.0</td></tr><tr><td><a href="/en/health-insurance/schwyz/">Schwyz</a></td><td><a class="kasse-link" href="/en/insurers/einsiedler-krankenkasse/">Einsiedler Krankenkasse</a></td><td class="num">10.0</td></tr><tr><td><a href="/en/health-insurance/solothurn/">Solothurn</a></td><td><a class="kasse-link" href="/en/insurers/concordia/">Concordia</a></td><td class="num">9.3</td></tr><tr><td><a href="/en/health-insurance/st-gallen/">St. Gallen</a></td><td><a class="kasse-link" href="/en/insurers/concordia/">Concordia</a></td><td class="num">9.3</td></tr><tr><td><a href="/en/health-insurance/thurgau/">Thurgau</a></td><td><a class="kasse-link" href="/en/insurers/concordia/">Concordia</a></td><td class="num">9.6</td></tr><tr><td><a href="/en/health-insurance/ticino/">Ticino</a></td><td><a class="kasse-link" href="/en/insurers/concordia/">Concordia</a></td><td class="num">9.5</td></tr><tr><td><a href="/en/health-insurance/uri/">Uri</a></td><td><a class="kasse-link" href="/en/insurers/oekk/">ÖKK</a></td><td class="num">9.0</td></tr><tr><td><a href="/en/health-insurance/valais/">Valais</a></td><td><a class="kasse-link" href="/en/insurers/concordia/">Concordia</a></td><td class="num">9.4</td></tr><tr><td><a href="/en/health-insurance/vaud/">Vaud</a></td><td><a class="kasse-link" href="/en/insurers/sanitas/">Sanitas</a></td><td class="num">8.2</td></tr><tr><td><a href="/en/health-insurance/zug/">Zug</a></td><td><a class="kasse-link" href="/en/insurers/concordia/">Concordia</a></td><td class="num">9.6</td></tr><tr><td><a href="/en/health-insurance/zurich/">Zurich</a></td><td><a class="kasse-link" href="/en/insurers/kpt/">KPT</a></td><td class="num">8.6</td></tr></tbody></table></div>
+
+<details class="award-fold" id="regeln"><summary>The rules</summary>
 <ul class="rules">
   <li>Selection follows the numbers alone. There is no jury, no entry and no way to influence an award.</li>
   <li>The award costs nothing and comes with no strings. Whether an insurer uses or links the badge changes neither its score nor its ranking on abovergleich.com.</li>
@@ -165,7 +177,10 @@
   <li>Overall ranking and categories: insurers with at least 50'000 insured persons. In a tie, all win. The score is calculated for four situations (with or without accident cover, deductible 300 or 2'500) and weighted by FOPH enrolment figures.</li>
   <li>“Leanest administration”: total administrative costs per insured person according to the FOPH, latest available year, including what an insurer buys in from a group company.</li>
 </ul>
+</details>
 
+<details class="award-fold" id="badges"><summary>Badges, embed code and text for insurers</summary>
+<p class="kk-note">Every award as a badge in four variants (SVG or PNG), plus the embed code and a sentence you can use. Free, no conditions.</p>
 <div class="grouphead">Overall ranking</div><div class="win" id="gesamt-concordia">
   <img src="/en/health-insurance-rating/award/badge/gesamt-concordia.svg" alt="abovergleich Price Consistency Award 2027: Most price-consistent health insurer 2027, Concordia" width="240" height="384" loading="lazy">
   <div>
@@ -881,6 +896,7 @@
     <blockquote class="baustein">In the abovergleich.com Price Consistency Award 2027, KPT is the most price-consistent health insurer in the canton of Zurich for basic insurance. The independent rating shows which health insurers stay cheap over the years, based solely on premium data from the Federal Office of Public Health since 2020.</blockquote>
   </div>
 </div>
+</details>
 
 <div class="cta-box"><h3>Wrong number? Tell us.</h3><p>If a value is wrong, we correct it and recalculate the edition. Write to hello@handyabo.com.</p><a href="mailto:hello@handyabo.com">Send an email &rarr;</a></div>
 </div>
@@ -906,6 +922,18 @@ document.querySelectorAll('.pngrow button').forEach(function (btn) {
     }).catch(function () { btn.disabled = false; btn.textContent = label; });
   });
 });
+</script>
+<script>
+(function () {
+  function openFor() {
+    var id = location.hash.slice(1), el = id && document.getElementById(id);
+    if (!el) return;
+    var d = el.closest('details');
+    if (d && !d.open) { d.open = true; el.scrollIntoView(); }
+  }
+  openFor();
+  window.addEventListener('hashchange', openFor);
+})();
 </script>
 </article>
 

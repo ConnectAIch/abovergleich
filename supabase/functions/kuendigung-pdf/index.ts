@@ -6,7 +6,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 // 1. POST { email, pdf, ... }  (Editor): legt das PDF im privaten Speicher ab
 //    (Bucket kuendigungen, 60 Tage), speichert die E-Mail-Adresse mit den
 //    Wechselangaben in kk_wecker (noch unbestätigt) und schickt eine Mail mit
-//    dem Knopf «Kündigung herunterladen».
+//    dem PDF als Anhang, dem Weg zur Kasse und dem Knopf «Nächste Schritte».
 // 2. POST { action: 'abholen', t } (Seite /krankenkasse-kuendigen/pdf/): erst
 //    der Klick auf der Seite bestätigt die Adresse (confirmed_at) und liefert
 //    einen kurz gültigen Download-Link. Ein Mailfilter, der den Link in der
@@ -49,11 +49,17 @@ const TX: Record<string, Record<Lang, string>> = {
   your_kasse: { de: 'deine Kasse', fr: 'votre caisse', en: 'your insurer' },
   s_ready: { de: 'Deine Kündigung an {k}', fr: 'Votre résiliation pour {k}', en: 'Your cancellation to {k}' },
   h_ready: { de: 'Deine Kündigung an {k} ist bereit', fr: 'Votre résiliation pour {k} est prête', en: 'Your cancellation to {k} is ready' },
-  p_ready: { de: 'Frist: bis <strong>{d}</strong> bei der Kasse. Nach dem Klick zeigen wir dir die nächsten Schritte.',
-             fr: 'Délai : elle doit parvenir à la caisse au plus tard le <strong>{d}</strong>. Après le clic, nous vous montrons les prochaines étapes.',
-             en: 'Deadline: it must reach the insurer by <strong>{d}</strong>. After the click we show you the next steps.' },
-  b_download: { de: 'Kündigung herunterladen', fr: 'Télécharger la résiliation', en: 'Download your cancellation' },
-  f_ready: { de: 'Damit bestätigst du auch deine E-Mail-Adresse. Der Link gilt 60 Tage.', fr: 'Cela confirme aussi votre adresse e-mail. Le lien est valable 60 jours.', en: 'This also confirms your email address. The link is valid for 60 days.' },
+  p_ready: { de: 'Das PDF hängt an dieser Mail. Frist: bis <strong>{d}</strong> bei der Kasse.',
+             fr: 'Le PDF est joint à cet e-mail. Délai : il doit parvenir à la caisse au plus tard le <strong>{d}</strong>.',
+             en: 'The PDF is attached to this email. Deadline: it must reach the insurer by <strong>{d}</strong>.' },
+  w_mail: { de: '<strong>{k} nimmt die Kündigung per Mail an.</strong> Leite diese Mail mit dem Anhang an <a href="mailto:{z}" style="color:#a68600;">{z}</a> weiter, am besten von der Adresse, die {k} von dir kennt. Die Eingangsbestätigung aufheben.',
+            fr: '<strong>{k} accepte la résiliation par e-mail.</strong> Transférez cet e-mail avec la pièce jointe à <a href="mailto:{z}" style="color:#a68600;">{z}</a>, de préférence depuis l’adresse que {k} connaît. Conservez la confirmation de réception.',
+            en: '<strong>{k} accepts cancellation by email.</strong> Forward this email with the attachment to <a href="mailto:{z}" style="color:#a68600;">{z}</a>, ideally from the address {k} has on file for you. Keep the confirmation of receipt.' },
+  w_portal: { de: '<strong>Abschicken:</strong> das PDF in {z} hochladen oder ausgedruckt per Post an {k}.', fr: '<strong>Envoyer :</strong> téléverser le PDF dans {z} ou l’imprimer et l’envoyer par la poste à {k}.', en: '<strong>Send it:</strong> upload the PDF to {z} or print and post it to {k}.' },
+  w_post: { de: '<strong>Abschicken:</strong> PDF ausdrucken und per Post an {k}, spätestens eine Woche vor dem {d}. Einschreiben empfohlen.', fr: '<strong>Envoyer :</strong> imprimer le PDF et l’envoyer par la poste à {k}, au plus tard une semaine avant le {d}. Recommandé conseillé.', en: '<strong>Send it:</strong> print the PDF and post it to {k}, at least one week before {d}. Registered mail recommended.' },
+  w_neu: { de: '<strong>Dann bei {n} anmelden</strong>, online in etwa 10 Minuten, ohne Gesundheitsfragen.', fr: '<strong>Puis s’inscrire chez {n}</strong>, en ligne en 10 minutes environ, sans questions de santé.', en: '<strong>Then sign up with {n}</strong>, online in about 10 minutes, no health questions.' },
+  b_download: { de: 'Nächste Schritte anzeigen', fr: 'Voir les prochaines étapes', en: 'Show next steps' },
+  f_ready: { de: 'Der Knopf bestätigt deine E-Mail-Adresse und lädt das PDF nochmals, 60 Tage lang.', fr: 'Le bouton confirme votre adresse e-mail et retélécharge le PDF, pendant 60 jours.', en: 'The button confirms your email address and downloads the PDF again, for 60 days.' },
   stop: { de: 'Keine Erinnerungen mehr', fr: 'Ne plus recevoir de rappels', en: 'No more reminders' },
   s_wait: { de: 'Deine Kündigung an {k} wartet noch', fr: 'Votre résiliation pour {k} vous attend', en: 'Your cancellation to {k} is still waiting' },
   p_wait: { de: 'Sie muss bis <strong>{d}</strong> bei der Kasse sein.', fr: 'Elle doit parvenir à la caisse au plus tard le <strong>{d}</strong>.', en: 'It must reach the insurer by <strong>{d}</strong>.' },
@@ -91,13 +97,21 @@ function limited(ip: string, max: number) {
 
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
 
-function mail(p: { kasse: string; deadline: string; link: string; lang: Lang }) {
+function mail(p: { kasse: string; deadline: string; link: string; lang: Lang; kanal: string; ziel: string; neu: string }) {
   const l = p.lang;
+  // Der Weg zur Kasse steht gleich in der Mail: mit Anhang weiterleiten,
+  // hochladen oder ausdrucken. Die Person muss nichts mehr nachlesen.
+  const weg = p.kanal === 'mail' && p.ziel ? tx('w_mail', l, { k: esc(p.kasse), z: esc(p.ziel) })
+    : p.kanal === 'portal' && p.ziel ? tx('w_portal', l, { k: esc(p.kasse), z: esc(p.ziel) })
+    : tx('w_post', l, { k: esc(p.kasse), d: esc(p.deadline) });
+  const neu = p.neu ? `<p style="margin:0 0 20px;">${tx('w_neu', l, { n: esc(p.neu) })}</p>` : '';
   return `<!doctype html><html lang="${l}"><body style="margin:0;background:#fafaf9;font-family:Inter,Arial,sans-serif;color:#1c1917;">
 <div style="max-width:520px;margin:0 auto;padding:28px 20px;font-size:15px;line-height:1.6;">
   <div style="font-size:20px;font-weight:800;margin-bottom:18px;">abo<span style="color:#a68600;">vergleich</span>.com</div>
   <h1 style="font-size:21px;margin:0 0 14px;">${tx('h_ready', l, { k: esc(p.kasse) })}</h1>
-  <p style="margin:0 0 20px;">${tx('p_ready', l, { d: esc(p.deadline) })}</p>
+  <p style="margin:0 0 14px;">${tx('p_ready', l, { d: esc(p.deadline) })}</p>
+  <p style="margin:0 0 14px;">${weg}</p>
+  ${neu}
   <a href="${p.link}" style="display:inline-block;background:#fed001;color:#1c1917;font-weight:700;text-decoration:none;padding:13px 22px;border-radius:10px;">${tx('b_download', l)}</a>
   <p style="font-size:12px;color:#6b6560;margin-top:24px;">${tx('f_ready', l)}<br><a href="${SITE}${HOME[l]}" style="color:#a68600;">abovergleich.com</a></p>
 </div></body></html>`;
@@ -296,7 +310,11 @@ Deno.serve(async (req) => {
         reply_to: 'hello@handyabo.com',
         to: [email],
         subject: tx('s_ready', l, { k: kasse }),
-        html: mail({ kasse, deadline, link: page(doc.token, '', l), lang: l }),
+        html: mail({ kasse, deadline, link: page(doc.token, '', l), lang: l,
+          kanal: String(b.kanal || 'post'), ziel: String(b.ziel || '').slice(0, 120), neu: String(b.neu || '').slice(0, 80) }),
+        // Das PDF gleich mitschicken: auf dem Handy ist «Weiterleiten» der
+        // kürzeste Weg zur Kasse. Der Abhol-Link bleibt für die Bestätigung.
+        attachments: [{ filename, content: pdf }],
       }),
     });
     if (!res.ok) {
