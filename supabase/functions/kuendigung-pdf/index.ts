@@ -52,9 +52,9 @@ const TX: Record<string, Record<Lang, string>> = {
   p_ready: { de: 'Das PDF hängt an dieser Mail. Frist: bis <strong>{d}</strong> bei der Kasse.',
              fr: 'Le PDF est joint à cet e-mail. Délai : il doit parvenir à la caisse au plus tard le <strong>{d}</strong>.',
              en: 'The PDF is attached to this email. Deadline: it must reach the insurer by <strong>{d}</strong>.' },
-  w_mail: { de: '<strong>{k} nimmt die Kündigung per Mail an.</strong> Leite diese Mail mit dem Anhang an <a href="mailto:{z}" style="color:#a68600;">{z}</a> weiter, am besten von der Adresse, die {k} von dir kennt. Die Eingangsbestätigung aufheben.',
-            fr: '<strong>{k} accepte la résiliation par e-mail.</strong> Transférez cet e-mail avec la pièce jointe à <a href="mailto:{z}" style="color:#a68600;">{z}</a>, de préférence depuis l’adresse que {k} connaît. Conservez la confirmation de réception.',
-            en: '<strong>{k} accepts cancellation by email.</strong> Forward this email with the attachment to <a href="mailto:{z}" style="color:#a68600;">{z}</a>, ideally from the address {k} has on file for you. Keep the confirmation of receipt.' },
+  w_mail: { de: '<strong>{k} nimmt die Kündigung per Mail an.</strong> Tipp auf die Adresse <a href="{m}" style="color:#a68600;">{z}</a>: Betreff und Text sind schon drin, du hängst nur das PDF an. Am besten von der Adresse, die {k} von dir kennt. Die Eingangsbestätigung aufheben.',
+            fr: '<strong>{k} accepte la résiliation par e-mail.</strong> Touchez l’adresse <a href="{m}" style="color:#a68600;">{z}</a> : objet et texte sont déjà remplis, il ne reste qu’à joindre le PDF. De préférence depuis l’adresse que {k} connaît. Conservez la confirmation de réception.',
+            en: '<strong>{k} accepts cancellation by email.</strong> Tap the address <a href="{m}" style="color:#a68600;">{z}</a>: subject and text are already filled in, just attach the PDF. Ideally from the address {k} has on file for you. Keep the confirmation of receipt.' },
   w_portal: { de: '<strong>Abschicken:</strong> das PDF in {z} hochladen oder ausgedruckt per Post an {k}.', fr: '<strong>Envoyer :</strong> téléverser le PDF dans {z} ou l’imprimer et l’envoyer par la poste à {k}.', en: '<strong>Send it:</strong> upload the PDF to {z} or print and post it to {k}.' },
   w_post: { de: '<strong>Abschicken:</strong> PDF ausdrucken und per Post an {k}, spätestens eine Woche vor dem {d}. Einschreiben empfohlen.', fr: '<strong>Envoyer :</strong> imprimer le PDF et l’envoyer par la poste à {k}, au plus tard une semaine avant le {d}. Recommandé conseillé.', en: '<strong>Send it:</strong> print the PDF and post it to {k}, at least one week before {d}. Registered mail recommended.' },
   w_neu: { de: '<strong>Dann bei {n} anmelden</strong>, online in etwa 10 Minuten, ohne Gesundheitsfragen.', fr: '<strong>Puis s’inscrire chez {n}</strong>, en ligne en 10 minutes environ, sans questions de santé.', en: '<strong>Then sign up with {n}</strong>, online in about 10 minutes, no health questions.' },
@@ -101,7 +101,13 @@ function mail(p: { kasse: string; deadline: string; link: string; lang: Lang; ka
   const l = p.lang;
   // Der Weg zur Kasse steht gleich in der Mail: mit Anhang weiterleiten,
   // hochladen oder ausdrucken. Die Person muss nichts mehr nachlesen.
-  const weg = p.kanal === 'mail' && p.ziel ? tx('w_mail', l, { k: esc(p.kasse), z: esc(p.ziel) })
+  // Mail an die Kasse: Empfänger, Betreff und Text vorbefüllt. Der Brief
+  // selbst ist deutsch oder französisch, englische Oberfläche schreibt deutsch.
+  const fr = l === 'fr';
+  const mailto = `mailto:${p.ziel}?subject=${encodeURIComponent(fr ? 'Résiliation assurance de base' : 'Kündigung Grundversicherung')}&body=${encodeURIComponent(fr
+    ? 'Madame, Monsieur,\n\nVous trouverez en pièce jointe ma résiliation signée de l’assurance de base.\n\nJe vous prie de bien vouloir m’en confirmer la réception.\n\nMeilleures salutations'
+    : 'Sehr geehrte Damen und Herren\n\nIm Anhang sende ich Ihnen meine unterschriebene Kündigung der Grundversicherung.\n\nBitte bestätigen Sie mir den Eingang.\n\nFreundliche Grüsse')}`;
+  const weg = p.kanal === 'mail' && p.ziel ? tx('w_mail', l, { k: esc(p.kasse), z: esc(p.ziel), m: esc(mailto) })
     : p.kanal === 'portal' && p.ziel ? tx('w_portal', l, { k: esc(p.kasse), z: esc(p.ziel) })
     : tx('w_post', l, { k: esc(p.kasse), d: esc(p.deadline) });
   const neu = p.neu ? `<p style="margin:0 0 20px;">${tx('w_neu', l, { n: esc(p.neu) })}</p>` : '';
@@ -312,8 +318,10 @@ Deno.serve(async (req) => {
         subject: tx('s_ready', l, { k: kasse }),
         html: mail({ kasse, deadline, link: page(doc.token, '', l), lang: l,
           kanal: String(b.kanal || 'post'), ziel: String(b.ziel || '').slice(0, 120), neu: String(b.neu || '').slice(0, 80) }),
-        // Das PDF gleich mitschicken: auf dem Handy ist «Weiterleiten» der
-        // kürzeste Weg zur Kasse. Der Abhol-Link bleibt für die Bestätigung.
+        // Das PDF gleich mitschicken, dann ist es auf dem Handy schon da,
+        // wenn die Mail an die Kasse aufgeht. Der Abhol-Link bleibt für die
+        // Bestätigung der Adresse. Nicht zum Weiterleiten gedacht: sonst
+        // ginge der persönliche Link an die Kasse.
         attachments: [{ filename, content: pdf }],
       }),
     });

@@ -62,9 +62,9 @@
     done_2: { de: 'Nichts da? Spam-Ordner prüfen oder die Adresse oben.', fr: 'Rien reçu ? Vérifiez les spams ou l’adresse ci-dessus.', en: 'Nothing there? Check spam or the address above.' },
     nx_h: { de: 'Jetzt noch zwei Schritte', fr: 'Encore deux étapes', en: 'Two more steps' },
     nx_mail: { de: 'Mail an {n} öffnen', fr: 'Ouvrir l’e-mail à {n}', en: 'Open email to {n}' },
-    nx_mail_sub: { de: 'Empfänger und Text sind drin, du hängst nur das PDF aus unserer Mail an. Oder du leitest unsere Mail an {m} weiter.',
-                   fr: 'Destinataire et texte sont prêts, il ne reste qu’à joindre le PDF de notre e-mail. Ou transférez simplement notre e-mail à {m}.',
-                   en: 'Recipient and text are filled in; just attach the PDF from our email. Or simply forward our email to {m}.' },
+    nx_mail_sub: { de: 'An {m}, Betreff und Text sind schon drin. Du hängst nur das PDF aus unserer Mail an.',
+                   fr: 'À {m}, objet et texte sont déjà remplis. Il ne reste qu’à joindre le PDF de notre e-mail.',
+                   en: 'To {m}, subject and text are already filled in. Just attach the PDF from our email.' },
     nx_own: { de: ' Wichtig: von der Adresse, die {n} von dir kennt.', fr: ' Important : depuis l’adresse que {n} connaît.', en: ' Important: from the address {n} has on file for you.' },
     nx_portal: { de: 'PDF in {p} hochladen oder per Post schicken, bis {d}.', fr: 'Téléverser le PDF dans {p} ou l’envoyer par la poste, d’ici au {d}.', en: 'Upload the PDF to {p} or send it by post, by {d}.' },
     nx_post: { de: 'PDF ausdrucken und per Post an {n}, spätestens eine Woche vor dem {d}.', fr: 'Imprimer le PDF et l’envoyer par la poste à {n}, au plus tard une semaine avant le {d}.', en: 'Print the PDF and post it to {n}, at least one week before {d}.' },
@@ -528,9 +528,9 @@
   };
   $('kd-copy').onclick = function () {
     if (!check()) return;
-    var btn = this, t = plain(letter());
+    var btn = this, txt = plain(letter());
     track('kuendigung_text');
-    (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(
+    (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(
       function () { btn.textContent = t('copied'); },
       function () { btn.textContent = t('copy_manual'); });
     // Kopie mit PDF trotzdem an die Mail-Adresse
