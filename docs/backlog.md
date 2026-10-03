@@ -30,22 +30,18 @@ September nachprüfen, die Rechner ziehen gern um.
 - **Nur deutsch:** die BBT-Portale (bbtp.ch) der kleinen Kassen, SLKK.
   Kein Englisch bei Agrisano, Assura, Atupri.
 
-### Offen: Vorbelegung per URL (Entscheid bei Matthias)
+### Vorbelegung per URL: eingebaut für CSS und ÖKK (03.10.2026)
 
-Franchise oder Modell lässt sich bei keiner Kasse belegt per URL vorwählen.
-PLZ und Geburtsdatum gehen bei einigen, laut Code ihrer Rechner (nicht im
-Browser getestet):
+Im Browser getestet: CSS übernimmt `plz` und `geburtsdatum` (dd.mm.jjjj),
+mit `gender=m|w` springt der Rechner gleich zu den Prämien. Gilt nur, wenn
+der Browser noch keine CSS-Sitzung hat. ÖKK übernimmt nur `Geburtsdatum`.
+Groupe Mutuel (npa/dateNaissance) und Aquilana (birthday/postcode) ignorieren
+die Parameter trotz Code, Swica/EGK/Sympany brauchen interne Orts-IDs.
+Franchise und Modell geht bei keiner Kasse.
 
-- **CSS:** `zip`, `birthdate`, `gender` auf `calculator.css.ch/start`
-- **Groupe Mutuel:** `npa`, `dateNaissance`, `sexe` auf `/poelGM/profile`
-- **Aquilana:** `birthday=JJJJ-MM-TT`, `postcode`
-- **ÖKK:** `PLZ`, `Jahrgang` oder `Geburtsdatum`, `Geschlecht`
-- Swica, EGK, Sympany nur mit kasseninternen Orts-IDs, nicht mit der PLZ.
-
-PLZ und Geburtsdatum hätten wir aus dem Kündigungsformular. Bedenken: das
-Geburtsdatum stünde in der URL und landet damit in den Trackern der Kasse
-(Google Ads, Adobe). Vor dem Einbau Datenschutz 3.x ergänzen oder nur die
-PLZ mitgeben.
+Umsetzung: Feld `signup_prefill` je Kasse, nur der Link im Fertig-Kasten des
+Editors. Mail und Abholseite bekommen den Link ohne Personendaten, sonst
+läge das Geburtsdatum in der Datenbank. Datenschutz 3.3 nennt es.
 
 ## BCC an uns beim Mailversand an die Kasse: nein (entschieden 03.10.2026)
 

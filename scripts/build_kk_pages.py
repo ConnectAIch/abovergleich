@@ -2298,6 +2298,8 @@ def kuendigen_page(kv):
                     or (f"https://www.{x['web']}" if x.get("web") else None)),
             # Ohne Online-Anmeldung (nur Formular oder PDF) kein «10 Minuten online»
             "online": x.get("signup_online", True),
+            # Parameter, mit denen der Rechner der Kasse PLZ/Geburtsdatum übernimmt
+            "prefill": x.get("signup_prefill"),
         }
 
     stand = i18n.date_short(kan_doc["stand"]) if i18n.LANG == "en" else ".".join(str(int(t)) for t in reversed(kan_doc["stand"].split("-")))

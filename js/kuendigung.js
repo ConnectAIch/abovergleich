@@ -159,6 +159,17 @@
     return a + (a.indexOf('?') < 0 ? '?' : '&') + 'utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=kk-wechsel' + z;
   }
   var neuGo = neu && neu.url ? utm(neu.url) : null;
+  // PLZ und Geburtsdatum aus dem Brief anhängen, wo der Rechner der Kasse sie
+  // übernimmt (CSS, ÖKK; siehe signup_prefill). Nur dieser Link im Browser,
+  // nicht an unsere Funktion und nicht in die Mail (Datenschutz 3.3).
+  function neuLink() {
+    if (!neuGo || !neu.prefill) return neuGo;
+    var m = val('kd-birth').match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/), q = [];
+    if (neu.prefill.plz && /^\d{4}$/.test(val('kd-plz'))) q.push(neu.prefill.plz + '=' + val('kd-plz'));
+    if (neu.prefill.birth && m) q.push(neu.prefill.birth + '=' + ('0' + m[1]).slice(-2) + '.' + ('0' + m[2]).slice(-2) + '.' + m[3]);
+    var h = neuGo.indexOf('#'), a = h < 0 ? neuGo : neuGo.slice(0, h), z = h < 0 ? '' : neuGo.slice(h);
+    return q.length ? a + '&' + q.join('&') + z : neuGo;
+  }
   // Aus dem Rechner mit «Wechseln»: zwei Schritte als Leiste. Schritt 2 wird
   // aktiv, sobald der Brief verschickt ist (siehe done()).
   function stepper(step) {
@@ -509,7 +520,7 @@
       step1 = '<div class="kd-nx-sub">' + t('nx_post', { n: nm, d: d }) + '</div>';
     }
     var step2 = neu
-      ? (neuGo ? '<a class="kd-go sec" href="' + esc(neuGo) + '" target="_blank" rel="noopener sponsored">' + t('nx_neu', { n: esc(neu.name) }) + ' &rarr;</a>' : '<strong>' + t('nx_neu', { n: esc(neu.name) }) + '</strong>') +
+      ? (neuGo ? '<a class="kd-go sec" href="' + esc(neuLink()) + '" target="_blank" rel="noopener sponsored">' + t('nx_neu', { n: esc(neu.name) }) + ' &rarr;</a>' : '<strong>' + t('nx_neu', { n: esc(neu.name) }) + '</strong>') +
         '<div class="kd-nx-sub">' + (neu.online === false ? t('nx_neu_form', { n: esc(neu.name), d: esc(D.start) }) : t('nx_neu_sub', { d: esc(D.start) })) + '</div>'
       : '<a class="kd-go sec" href="' + esc(D.calc) + '">' + t('nx_find') + ' &rarr;</a><div class="kd-nx-sub">' + t('nx_find_sub') + '</div>';
     box.innerHTML = '<div class="kd-done-head"><div class="kd-done-icon">✓</div><div><strong>' + t('done_t') + '</strong>' +

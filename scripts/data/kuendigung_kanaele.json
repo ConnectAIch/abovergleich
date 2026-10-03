@@ -197,7 +197,12 @@
     "de": "https://calculator.css.ch/start?lang=de",
     "fr": "https://calculator.css.ch/start?lang=fr",
     "en": "https://calculator.css.ch/start?lang=en"
-   }
+   },
+   "signup_prefill": {
+    "plz": "plz",
+    "birth": "geburtsdatum"
+   },
+   "signup_note": "PLZ und Geburtsdatum per URL getestet 03.10.2026 (Formular vorbelegt; mit gender=m|w springt der Rechner direkt zu den Prämien). Gilt nur ohne frühere CSS-Sitzung im Browser."
   },
   {
    "id": 820,
@@ -807,7 +812,11 @@
     "de": "https://oekk.ch/klickweb-oekk/personen?Lang=de",
     "fr": "https://oekk.ch/klickweb-oekk/personen?Lang=fr",
     "en": "https://oekk.ch/klickweb-oekk/personen?Lang=en"
-   }
+   },
+   "signup_prefill": {
+    "birth": "Geburtsdatum"
+   },
+   "signup_note": "Geburtsdatum per URL getestet 03.10.2026, PLZ wird nicht übernommen."
   }
  ],
  "signup_stand": "2026-10-03"
