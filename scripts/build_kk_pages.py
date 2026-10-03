@@ -2292,9 +2292,12 @@ def kuendigen_page(kv):
             "portal": x.get("online_channel") if ok and not x.get("cancel_email") else None,
             "post_only": x.get("email_accepted") == "nein",
             "src": (x.get("sources") or [None])[0],
-            # Anmeldung: direkt in den Prämienrechner, wo wir ihn kennen
-            "url": (x["signup_url"].replace("{lang}", i18n.LANG) if x.get("signup_url")
-                    else f"https://www.{x['web']}" if x.get("web") else None),
+            # Anmeldung: direkt in den Prämienrechner der Kasse, in der Sprache
+            # der Seite, sonst deutsch. Geprüft am signup_stand.
+            "url": ((x.get("signup") or {}).get(i18n.LANG) or (x.get("signup") or {}).get("de")
+                    or (f"https://www.{x['web']}" if x.get("web") else None)),
+            # Ohne Online-Anmeldung (nur Formular oder PDF) kein «10 Minuten online»
+            "online": x.get("signup_online", True),
         }
 
     stand = i18n.date_short(kan_doc["stand"]) if i18n.LANG == "en" else ".".join(str(int(t)) for t in reversed(kan_doc["stand"].split("-")))
@@ -2498,6 +2501,8 @@ def pickup_page():
         "end_de": i18n.date_long(f"{PREV}-12-31", "de"), "end_fr": i18n.date_long(f"{PREV}-12-31", "fr"),
         "neu_named": T("<strong>Bei {n} anmelden</strong>, online in etwa 10 Minuten, ohne Gesundheitsfragen. AHV-Nummer bereithalten.", "<strong>S’inscrire chez {n}</strong>, en ligne en 10 minutes environ, sans questions de santé. Numéro AVS sous la main.", "<strong>Sign up with {n}</strong>, online in about 10 minutes, no health questions. Have your AHV number ready."),
         "go": T("Zu {n}", "Vers {n}", "Go to {n}"),
+        "neu_form": T("<strong>Bei {n} anmelden.</strong> {n} hat keine Online-Anmeldung: Offerte anfordern oder Beitrittsformular ausfüllen.", "<strong>S’inscrire chez {n}.</strong> {n} n’a pas d’inscription en ligne : demandez une offre ou remplissez le formulaire d’adhésion.", "<strong>Sign up with {n}.</strong> {n} has no online sign-up: request an offer or fill in the membership form."),
+        "offline": [INSURER_NAMES[str(x["id"])] for x in json.loads((DATA / "kuendigung_kanaele.json").read_text(encoding="utf-8"))["kassen"] if x.get("signup_online") is False],
         "neu_any": T("<strong>Bei der neuen Kasse anmelden</strong>, online in etwa 10 Minuten, ohne Gesundheitsfragen.", "<strong>S’inscrire auprès de la nouvelle caisse</strong>, en ligne en 10 minutes environ, sans questions de santé.", "<strong>Sign up with the new insurer</strong>, online in about 10 minutes, no health questions."),
         "find": T("Günstigste Kasse finden", "Trouver la caisse la moins chère", "Find the cheapest insurer"),
         "list_short": T("<li>Beginn: 1. Januar</li><li>AHV-Nummer (756…, steht auf deiner Versichertenkarte)</li><li>Franchise und Modell</li><li>beim Hausarzt- oder HMO-Modell: deine Praxis</li>",
@@ -2544,6 +2549,9 @@ def pickup_page():
   var API = 'https://zexpmaegqsayleaohiip.supabase.co/functions/v1/kuendigung-pdf';
   var t = new URLSearchParams(location.search).get('t') || '';
   var box = document.getElementById('kp'), msg = document.getElementById('kp-msg');
+  // UTM anhängen, auch wenn der Link schon ? oder # enthält
+  var utm = function (u) {{ var h = u.indexOf('#'), a = h < 0 ? u : u.slice(0, h), z = h < 0 ? '' : u.slice(h);
+    return a + (a.indexOf('?') < 0 ? '?' : '&') + 'utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=kk-wechsel' + z; }};
   var esc = function (s) {{ return String(s || '').replace(/[&<>"]/g, function (c) {{ return {{ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }}[c]; }}); }};
   if (!t) {{ box.innerHTML = '<p class="kk-lead">' + S.incomplete + '</p>'; return; }}
   function go(btn) {{
@@ -2560,9 +2568,9 @@ def pickup_page():
             '<br><a class="kk-cta kp-cta" href="' + mailto + '">' + f(S.m_open, {{ k: esc(d.kasse) }}) + ' &rarr;</a>'
           : d.kanal === 'portal' ? f(S.w_portal, {{ z: esc(d.ziel), k: esc(d.kasse) }}) + f(S.arrive, {{ d: esc(d.deadline) }})
           : f(S.w_post, {{ k: esc(d.kasse) }}) + (d.signiert ? '' : S.w_nosig_post) + f(S.arrive, {{ d: esc(d.deadline) }});
-        var neuUrl = d.neu_url ? esc(d.neu_url) + '?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=kk-wechsel' : null;
+        var neuUrl = d.neu_url ? esc(utm(d.neu_url)) : null;
         var neu = (d.neu
-          ? f(S.neu_named, {{ n: esc(d.neu) }}) + (neuUrl ? '<br><a class="kk-cta kp-cta" href="' + neuUrl + '" target="_blank" rel="noopener sponsored">' + f(S.go, {{ n: esc(d.neu) }}) + ' &rarr;</a>' : '')
+          ? f(S.offline.indexOf(d.neu) >= 0 ? S.neu_form : S.neu_named, {{ n: esc(d.neu) }}) + (neuUrl ? '<br><a class="kk-cta kp-cta" href="' + neuUrl + '" target="_blank" rel="noopener sponsored">' + f(S.go, {{ n: esc(d.neu) }}) + ' &rarr;</a>' : '')
           : S.neu_any + '<br><a class="kk-cta kp-cta" href="' + S.calc + '">' + S.find + ' &rarr;</a>');
         box.innerHTML = '<p class="kk-lead">' + S.ok + ' <a href="' + esc(d.url) + '">' + S.notstarted + '</a></p>' +
           '<h2>' + S.next + '</h2><ol class="kp-steps">' +
@@ -2588,7 +2596,7 @@ def pickup_page():
         var html = {{
           'anmeldung|ja': '<p class="kk-lead">' + f(S.a_yes, {{ k: esc(d.kasse) }}) + '</p>',
           'anmeldung|nein': '<p class="kk-lead">' + S.a_no + '</p><ul class="kp-list">' + S.list_short + '</ul>' +
-            (d.neu_url ? '<a class="kk-cta" href="' + esc(d.neu_url) + '?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=kk-wechsel" target="_blank" rel="noopener sponsored">' + f(S.go, {{ n: neu }}) + ' &rarr;</a>' : '<a class="kk-cta" href="' + S.calc + '">' + S.find + ' &rarr;</a>'),
+            (d.neu_url ? '<a class="kk-cta" href="' + esc(utm(d.neu_url)) + '" target="_blank" rel="noopener sponsored">' + f(S.go, {{ n: neu }}) + ' &rarr;</a>' : '<a class="kk-cta" href="' + S.calc + '">' + S.find + ' &rarr;</a>'),
           'bestaetigung|ja': '<p class="kk-lead">' + f(S.b_yes, {{ n: neu }}) + '</p>',
           'bestaetigung|nein': '<p class="kk-lead">' + f(S.b_no, {{ k: esc(d.kasse), n: neu }}) + '</p>',
           'stopp|': '<p class="kk-lead">' + S.stop + '</p>'

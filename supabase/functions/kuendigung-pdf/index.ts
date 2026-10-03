@@ -58,6 +58,7 @@ const TX: Record<string, Record<Lang, string>> = {
   w_portal: { de: '<strong>Abschicken:</strong> das PDF in {z} hochladen oder ausgedruckt per Post an {k}.', fr: '<strong>Envoyer :</strong> téléverser le PDF dans {z} ou l’imprimer et l’envoyer par la poste à {k}.', en: '<strong>Send it:</strong> upload the PDF to {z} or print and post it to {k}.' },
   w_post: { de: '<strong>Abschicken:</strong> PDF ausdrucken und per Post an {k}, spätestens eine Woche vor dem {d}. Einschreiben empfohlen.', fr: '<strong>Envoyer :</strong> imprimer le PDF et l’envoyer par la poste à {k}, au plus tard une semaine avant le {d}. Recommandé conseillé.', en: '<strong>Send it:</strong> print the PDF and post it to {k}, at least one week before {d}. Registered mail recommended.' },
   w_neu: { de: '<strong>Dann bei {n} anmelden</strong>, online in etwa 10 Minuten, ohne Gesundheitsfragen.', fr: '<strong>Puis s’inscrire chez {n}</strong>, en ligne en 10 minutes environ, sans questions de santé.', en: '<strong>Then sign up with {n}</strong>, online in about 10 minutes, no health questions.' },
+  w_neu_form: { de: '<strong>Dann bei {n} anmelden.</strong> {n} hat keine Online-Anmeldung: Offerte anfordern oder Beitrittsformular ausfüllen.', fr: '<strong>Puis s’inscrire chez {n}.</strong> {n} n’a pas d’inscription en ligne : demandez une offre ou remplissez le formulaire d’adhésion.', en: '<strong>Then sign up with {n}.</strong> {n} has no online sign-up: request an offer or fill in the membership form.' },
   b_download: { de: 'Nächste Schritte anzeigen', fr: 'Voir les prochaines étapes', en: 'Show next steps' },
   f_ready: { de: 'Der Knopf bestätigt deine E-Mail-Adresse und lädt das PDF nochmals, 60 Tage lang.', fr: 'Le bouton confirme votre adresse e-mail et retélécharge le PDF, pendant 60 jours.', en: 'The button confirms your email address and downloads the PDF again, for 60 days.' },
   stop: { de: 'Keine Erinnerungen mehr', fr: 'Ne plus recevoir de rappels', en: 'No more reminders' },
@@ -97,7 +98,7 @@ function limited(ip: string, max: number) {
 
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
 
-function mail(p: { kasse: string; deadline: string; link: string; lang: Lang; kanal: string; ziel: string; neu: string }) {
+function mail(p: { kasse: string; deadline: string; link: string; lang: Lang; kanal: string; ziel: string; neu: string; neuOnline: boolean }) {
   const l = p.lang;
   // Der Weg zur Kasse steht gleich in der Mail: mit Anhang weiterleiten,
   // hochladen oder ausdrucken. Die Person muss nichts mehr nachlesen.
@@ -110,7 +111,7 @@ function mail(p: { kasse: string; deadline: string; link: string; lang: Lang; ka
   const weg = p.kanal === 'mail' && p.ziel ? tx('w_mail', l, { k: esc(p.kasse), z: esc(p.ziel), m: esc(mailto) })
     : p.kanal === 'portal' && p.ziel ? tx('w_portal', l, { k: esc(p.kasse), z: esc(p.ziel) })
     : tx('w_post', l, { k: esc(p.kasse), d: esc(p.deadline) });
-  const neu = p.neu ? `<p style="margin:0 0 20px;">${tx('w_neu', l, { n: esc(p.neu) })}</p>` : '';
+  const neu = p.neu ? `<p style="margin:0 0 20px;">${tx(p.neuOnline ? 'w_neu' : 'w_neu_form', l, { n: esc(p.neu) })}</p>` : '';
   return `<!doctype html><html lang="${l}"><body style="margin:0;background:#fafaf9;font-family:Inter,Arial,sans-serif;color:#1c1917;">
 <div style="max-width:520px;margin:0 auto;padding:28px 20px;font-size:15px;line-height:1.6;">
   <div style="font-size:20px;font-weight:800;margin-bottom:18px;">abo<span style="color:#a68600;">vergleich</span>.com</div>
@@ -317,7 +318,8 @@ Deno.serve(async (req) => {
         to: [email],
         subject: tx('s_ready', l, { k: kasse }),
         html: mail({ kasse, deadline, link: page(doc.token, '', l), lang: l,
-          kanal: String(b.kanal || 'post'), ziel: String(b.ziel || '').slice(0, 120), neu: String(b.neu || '').slice(0, 80) }),
+          kanal: String(b.kanal || 'post'), ziel: String(b.ziel || '').slice(0, 120), neu: String(b.neu || '').slice(0, 80),
+          neuOnline: b.neu_online !== false }),
         // Das PDF gleich mitschicken, dann ist es auf dem Handy schon da,
         // wenn die Mail an die Kasse aufgeht. Der Abhol-Link bleibt für die
         // Bestätigung der Adresse. Nicht zum Weiterleiten gedacht: sonst

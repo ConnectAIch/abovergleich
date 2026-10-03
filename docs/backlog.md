@@ -14,24 +14,38 @@ Kasse einen Partner-Parameter oder eine eigene Landingpage. Erster Schritt:
 Sanitas Vertrieb anschreiben, danach Concordia, KPT, Assura (die häufigsten
 «neu»-Kassen im Rechner, siehe kk_events). Entscheid bei Matthias.
 
-## Deep-Links zur Anmeldung: Sanitas geprüft (03.10.2026)
+## Anmelde-Links: alle 32 Kassen geprüft (03.10.2026)
 
-Im Code des Sanitas-Rechners (calculator.sanitas.com) nachgesehen:
+«Zu <Kasse>» führt bei jeder Kasse direkt in ihren Prämienrechner, in der
+Sprache der Seite, sonst deutsch. Daten: Feld `signup` je Kasse in
+`scripts/data/kuendigung_kanaele.json`, Stand `signup_stand`. Jedes Jahr im
+September nachprüfen, die Rechner ziehen gern um.
 
-- **Keine Vorbelegung per URL.** PLZ, Geburtsdatum, Franchise und Modell
-  lassen sich nicht mitgeben. Es gibt eine interne Vorbelegung (Vorname,
-  Geschlecht, Geburtsdatum, Region, PLZ), die nur die eigene Website nutzt.
-- **Direkt in den Rechner** geht `calculator.sanitas.com/de` (fr, en, it).
-  Seit 03.10.2026 zeigt «Zu Sanitas» dorthin, Feld `signup_url` in
-  `scripts/data/kuendigung_kanaele.json`. Andere Kassen bei Gelegenheit
-  gleich prüfen und eintragen.
-- **Partner-Route:** `calculator.sanitas.com/de/partner/123456` mit einer
-  sechsstelligen Vermittlernummer. Der Abschluss läuft dann über den Kanal
-  Partner und ist der Nummer zugeordnet. Die Nummer vergibt Sanitas, also
-  erst mit Vermittlervertrag (siehe oben). Sobald sie da ist, nur
-  `signup_url` anpassen.
-- **cmpID:** Der Rechner liest `?cmpID=…` und hält ihn 7 Tage im Cookie für
-  die eigene Auswertung. Ohne Absprache nur Analytics, wie UTM.
+- **Ohne Online-Anmeldung:** curaulta (Kontaktformular), KK Wädenswil (nur
+  PDF), vita surselva (Offertformular). Feld `signup_online: false`, der
+  Text verspricht dort keine «10 Minuten online».
+- **Gemeinsame Rechner:** Avenir, Mutuel, Philos teilen den Groupe-Mutuel-
+  Rechner, die Kasse wählt man im 3. Schritt. sana24 und Galenos laufen
+  über den Visana-Rechner. Kein Parameter gefunden, der die Marke vorwählt.
+- **Nur deutsch:** die BBT-Portale (bbtp.ch) der kleinen Kassen, SLKK.
+  Kein Englisch bei Agrisano, Assura, Atupri.
+
+### Offen: Vorbelegung per URL (Entscheid bei Matthias)
+
+Franchise oder Modell lässt sich bei keiner Kasse belegt per URL vorwählen.
+PLZ und Geburtsdatum gehen bei einigen, laut Code ihrer Rechner (nicht im
+Browser getestet):
+
+- **CSS:** `zip`, `birthdate`, `gender` auf `calculator.css.ch/start`
+- **Groupe Mutuel:** `npa`, `dateNaissance`, `sexe` auf `/poelGM/profile`
+- **Aquilana:** `birthday=JJJJ-MM-TT`, `postcode`
+- **ÖKK:** `PLZ`, `Jahrgang` oder `Geburtsdatum`, `Geschlecht`
+- Swica, EGK, Sympany nur mit kasseninternen Orts-IDs, nicht mit der PLZ.
+
+PLZ und Geburtsdatum hätten wir aus dem Kündigungsformular. Bedenken: das
+Geburtsdatum stünde in der URL und landet damit in den Trackern der Kasse
+(Google Ads, Adobe). Vor dem Einbau Datenschutz 3.x ergänzen oder nur die
+PLZ mitgeben.
 
 ## BCC an uns beim Mailversand an die Kasse: nein (entschieden 03.10.2026)
 

@@ -21,7 +21,11 @@
     "https://www.agrisano.ch/de/services/formulare",
     "https://www.agrisano.ch/de/kontakt"
    ],
-   "notes": "Agrisano nennt keinen Kanal fuer die OKP-Kuendigung und sagt weder ja noch nein zu E-Mail. Die Forderung nach 'rechtsgültiger Unterschrift' spricht eher fuer einen Brief mit Originalunterschrift; ob ein eingescannter unterschriebener Brief per E-Mail genuegt, bleibt offen. Die Formularseite sagt allgemein, alle Formulare koennten ausgedruckt und per Post oder gut eingescannt per E-Mail gesendet werden. Es gibt dort aber kein KVG-Kuendigungsformular, und der Satz bezieht sich nicht ausdruecklich auf Kuendigungen. Die allgemeine E-Mail der Krankenkasse ist info@agrisano.ch (Seite Hauptsitz), ohne Bezug zu Kuendigungen. Agrisano verweist grundsaetzlich an regionale Geschaeftsstellen als Ansprechpartner (je Kanton, nicht einzeln geprueft). Ein Kundenportal existiert (portal.agrisano.ch), eine Kuendigungsfunktion wird aber nicht genannt."
+   "notes": "Agrisano nennt keinen Kanal fuer die OKP-Kuendigung und sagt weder ja noch nein zu E-Mail. Die Forderung nach 'rechtsgültiger Unterschrift' spricht eher fuer einen Brief mit Originalunterschrift; ob ein eingescannter unterschriebener Brief per E-Mail genuegt, bleibt offen. Die Formularseite sagt allgemein, alle Formulare koennten ausgedruckt und per Post oder gut eingescannt per E-Mail gesendet werden. Es gibt dort aber kein KVG-Kuendigungsformular, und der Satz bezieht sich nicht ausdruecklich auf Kuendigungen. Die allgemeine E-Mail der Krankenkasse ist info@agrisano.ch (Seite Hauptsitz), ohne Bezug zu Kuendigungen. Agrisano verweist grundsaetzlich an regionale Geschaeftsstellen als Ansprechpartner (je Kanton, nicht einzeln geprueft). Ein Kundenportal existiert (portal.agrisano.ch), eine Kuendigungsfunktion wird aber nicht genannt.",
+   "signup": {
+    "de": "https://calculator.agrisano.ch/public/e/l/premium-calculator-home/de-CH/index",
+    "fr": "https://calculator.agrisano.ch/public/e/l/premium-calculator-home/fr-CH/index"
+   }
   },
   {
    "id": 32,
@@ -38,7 +42,11 @@
    "sources": [
     "https://www.aquilana.ch/service/kundenbereich/kuendigung"
    ],
-   "notes": "Einziger Versicherer dieser Gruppe, der E-Mail ausdrücklich zulässt, und zwar unter 'Kündigungsfristen Grundversicherungen nach KVG'. Link 'Jetzt Grundversicherung kündigen' führt auf calculator.aquilana.ch/cancellation-wizard (Linkziel aus dem Seitenquelltext; die Wizard-Seite selbst wurde nicht geöffnet). Allgemeiner Kundendienst: kundendienst@aquilana.ch, allgemein info@aquilana.ch. Auf der Seite ist ein Merkblatt Kündigungstermine 2026 verlinkt (/content/downloads/Broschüren/merkblatt_kuendigungstermin_2026.pdf, nicht geöffnet)."
+   "notes": "Einziger Versicherer dieser Gruppe, der E-Mail ausdrücklich zulässt, und zwar unter 'Kündigungsfristen Grundversicherungen nach KVG'. Link 'Jetzt Grundversicherung kündigen' führt auf calculator.aquilana.ch/cancellation-wizard (Linkziel aus dem Seitenquelltext; die Wizard-Seite selbst wurde nicht geöffnet). Allgemeiner Kundendienst: kundendienst@aquilana.ch, allgemein info@aquilana.ch. Auf der Seite ist ein Merkblatt Kündigungstermine 2026 verlinkt (/content/downloads/Broschüren/merkblatt_kuendigungstermin_2026.pdf, nicht geöffnet).",
+   "signup": {
+    "de": "https://calculator.aquilana.ch/"
+   },
+   "signup_note": "Eine URL für alle Sprachen, die App folgt der Browsersprache"
   },
   {
    "id": 1542,
@@ -59,7 +67,11 @@
     "https://cms-assets.assura.ch/2020/01/15/5e1f829f606802020-01-Lettre-rsiliation-LAMal_D.pdf",
     "https://static.assura.ch/blue/cockpit-assets/2025/09/29/CGA_LAMal_2026_DE_PDF_uid_68da853e119b3.pdf"
    ],
-   "notes": "Assura bietet E-Mail (kuendigung-widerruf.zusatzversicherungen@assura.ch), SMS und Onlineformular ausdruecklich NUR fuer Zusatzversicherungen (VVG) an. Fuer die Grundversicherung bei Assura selbst gibt es keine Kanalaussage; die AVB KVG 2026 regeln nur Mitteilungen VON Assura (Post/E-Mail/Kundenbereich). Die Anleitung mit Einschreiben und das Muster sind fuer die Kuendigung beim bisherigen Versicherer geschrieben, also generisch. Dass Assura fuer VVG eine separate E-Mail-Adresse fuehrt und fuer KVG nicht, spricht eher gegen E-Mail, ist aber keine ausdrueckliche Ablehnung. Die Seite /de/faq/meine-versicherung-verwalten lieferte leer (JS)."
+   "notes": "Assura bietet E-Mail (kuendigung-widerruf.zusatzversicherungen@assura.ch), SMS und Onlineformular ausdruecklich NUR fuer Zusatzversicherungen (VVG) an. Fuer die Grundversicherung bei Assura selbst gibt es keine Kanalaussage; die AVB KVG 2026 regeln nur Mitteilungen VON Assura (Post/E-Mail/Kundenbereich). Die Anleitung mit Einschreiben und das Muster sind fuer die Kuendigung beim bisherigen Versicherer geschrieben, also generisch. Dass Assura fuer VVG eine separate E-Mail-Adresse fuehrt und fuer KVG nicht, spricht eher gegen E-Mail, ist aber keine ausdrueckliche Ablehnung. Die Seite /de/faq/meine-versicherung-verwalten lieferte leer (JS).",
+   "signup": {
+    "de": "https://calculator.assura.ch/de?journey=Default",
+    "fr": "https://calculator.assura.ch/fr?journey=Default"
+   }
   },
   {
    "id": 312,
@@ -78,7 +90,11 @@
     "https://atupri.ch/de/kontakt",
     "https://atupri.ch/assets/f/253863/x/e951d6a187/kuendigung-okp.pdf"
    ],
-   "notes": "Die E-Mail-Verlinkung auf der Kuendigungsseite zeigt auf info@atupri.ch. Keine spezielle Kuendigungs-Postadresse; die Kontaktseite nennt drei Service Center mit identischer Firma. Das verlinkte PDF 'Kündigung OKP' ist eine Vorlage fuer die Kuendigung beim Vorversicherer (Wechsel zu Atupri) und enthaelt keine Atupri-Empfaengeradresse. Unterschrift nur ausdruecklich verlangt, wenn Atupri die Kuendigung per Vollmacht fuer einen uebernimmt. Die Seite war per curl nicht erreichbar (TLS-Timeout), wurde mit Python urllib geladen."
+   "notes": "Die E-Mail-Verlinkung auf der Kuendigungsseite zeigt auf info@atupri.ch. Keine spezielle Kuendigungs-Postadresse; die Kontaktseite nennt drei Service Center mit identischer Firma. Das verlinkte PDF 'Kündigung OKP' ist eine Vorlage fuer die Kuendigung beim Vorversicherer (Wechsel zu Atupri) und enthaelt keine Atupri-Empfaengeradresse. Unterschrift nur ausdruecklich verlangt, wenn Atupri die Kuendigung per Vollmacht fuer einen uebernimmt. Die Seite war per curl nicht erreichbar (TLS-Timeout), wurde mit Python urllib geladen.",
+   "signup": {
+    "de": "https://shop.atupri.ch/de",
+    "fr": "https://shop.atupri.ch/fr"
+   }
   },
   {
    "id": 343,
@@ -97,7 +113,13 @@
     "https://www.groupemutuel.ch/de/Privatkunden/Kundendienst/Antworten-auf-haufige-Fragen/Kuendigung.html",
     "https://www.groupemutuel.ch/de/Privatkunden/Kundendienst.html"
    ],
-   "notes": "Die Seite 'Versicherung wechseln' nennt als Wege explizit: Kundenportal, E-Mail (kunden@groupemutuel.ch), Brief mit Unterschrift und Datum. Groupe Mutuel behandelt Avenir, Mutuel, Philos (und AMB) als eine Gruppe mit einem gemeinsamen Prozess; auf den gelesenen Seiten keine markenspezifischen Kuendigungsadressen oder -E-Mails. Postadresse aus dem Seitenfuss (Rue des Cèdres 5, Case postale, 1919 Martigny), keine eigene Kuendigungsadresse genannt. Portal-Login: assures.groupemutuel.ch. Ausserdem allgemeines Online-Formular 'Allgemeine Anfrage Versicherungsvertrag' (/de/Privatkunden/Ihre-Anfragen-online/form-allgemeine-anfrage-versicherungsvertrag.html), nicht ausdruecklich als Kuendigungskanal beschrieben."
+   "notes": "Die Seite 'Versicherung wechseln' nennt als Wege explizit: Kundenportal, E-Mail (kunden@groupemutuel.ch), Brief mit Unterschrift und Datum. Groupe Mutuel behandelt Avenir, Mutuel, Philos (und AMB) als eine Gruppe mit einem gemeinsamen Prozess; auf den gelesenen Seiten keine markenspezifischen Kuendigungsadressen oder -E-Mails. Postadresse aus dem Seitenfuss (Rue des Cèdres 5, Case postale, 1919 Martigny), keine eigene Kuendigungsadresse genannt. Portal-Login: assures.groupemutuel.ch. Ausserdem allgemeines Online-Formular 'Allgemeine Anfrage Versicherungsvertrag' (/de/Privatkunden/Ihre-Anfragen-online/form-allgemeine-anfrage-versicherungsvertrag.html), nicht ausdruecklich als Kuendigungskanal beschrieben.",
+   "signup": {
+    "de": "https://www.groupemutuel.ch/poelGM/index.html?langue=de",
+    "fr": "https://www.groupemutuel.ch/poelGM/index.html?langue=fr",
+    "en": "https://www.groupemutuel.ch/poelGM/index.html?langue=en"
+   },
+   "signup_note": "Gemeinsamer Rechner der Groupe Mutuel, Kasse wählt man im 3. Schritt"
   },
   {
    "id": 1322,
@@ -119,7 +141,10 @@
     "https://www.kkbirchmeier.ch/Versicherungen",
     "https://birchmeier.bbtp.ch/docuploader/de/sunet/create/"
    ],
-   "notes": "Positives, aber indirektes Signal: Auf der Downloads-Seite heisst es zu den Formularen allgemein, unterzeichnete Formulare gingen per Post oder E-Mail (info@kkbirchmeier.ch). Eine Kuendigung bei Birchmeier selbst ist damit nicht ausdruecklich gemeint. Allgemeiner Kontakt: info@kkbirchmeier.ch (verschleiert, dekodiert; auch als mailto auf der Kontaktseite), Tel. 056 485 60 40. leistungen@kkbirchmeier.ch ist fuer Leistungen. Der 'Dokument-Uploader' (birchmeier.bbtp.ch/docuploader) ist nur fuer Rechnungen. Kundenportal: birchmeier.bbtp.ch/portal (Kuendigungsfunktion nicht erkennbar). Regional: laut AVB Art. 102 'ausschliesslich im Kanton Aargau taetig'."
+   "notes": "Positives, aber indirektes Signal: Auf der Downloads-Seite heisst es zu den Formularen allgemein, unterzeichnete Formulare gingen per Post oder E-Mail (info@kkbirchmeier.ch). Eine Kuendigung bei Birchmeier selbst ist damit nicht ausdruecklich gemeint. Allgemeiner Kontakt: info@kkbirchmeier.ch (verschleiert, dekodiert; auch als mailto auf der Kontaktseite), Tel. 056 485 60 40. leistungen@kkbirchmeier.ch ist fuer Leistungen. Der 'Dokument-Uploader' (birchmeier.bbtp.ch/docuploader) ist nur fuer Rechnungen. Kundenportal: birchmeier.bbtp.ch/portal (Kuendigungsfunktion nicht erkennbar). Regional: laut AVB Art. 102 'ausschliesslich im Kanton Aargau taetig'.",
+   "signup": {
+    "de": "https://birchmeier.bbtp.ch/portal/de/offerten"
+   }
   },
   {
    "id": 290,
@@ -140,7 +165,12 @@
     "https://www.concordia.ch/de/impressum.html",
     "https://www.concordia.ch/de/service/myconcordia/faq.html"
    ],
-   "notes": "VORSICHT bei der Einordnung: 'ja' stuetzt sich auf die Textform-Klausel im KVG-Reglement 2026, nicht auf eine Webseite, die E-Mail woertlich nennt. 'Nachweis durch Text' umfasst nach Schweizer Verstaendnis E-Mail (Visana erklaert denselben Begriff als 'z.B. E-Mail'). Das Reglement sagt zudem, CONCORDIA koenne auf concordia.ch Vorgaben zu diesen Formen machen; solche Vorgaben wurden nicht gefunden. info@concordia.ch ist die allgemeine Adresse aus Kontakt/Impressum, nicht ausdruecklich als Kuendigungsadresse bezeichnet. Keine Kuendigungsfunktion in myCONCORDIA gefunden (FAQ betrifft nur Kuendigung des Portal-Accounts)."
+   "notes": "VORSICHT bei der Einordnung: 'ja' stuetzt sich auf die Textform-Klausel im KVG-Reglement 2026, nicht auf eine Webseite, die E-Mail woertlich nennt. 'Nachweis durch Text' umfasst nach Schweizer Verstaendnis E-Mail (Visana erklaert denselben Begriff als 'z.B. E-Mail'). Das Reglement sagt zudem, CONCORDIA koenne auf concordia.ch Vorgaben zu diesen Formen machen; solche Vorgaben wurden nicht gefunden. info@concordia.ch ist die allgemeine Adresse aus Kontakt/Impressum, nicht ausdruecklich als Kuendigungsadresse bezeichnet. Keine Kuendigungsfunktion in myCONCORDIA gefunden (FAQ betrifft nur Kuendigung des Portal-Accounts).",
+   "signup": {
+    "de": "https://www.praemienrechner.concordia.ch/ipr/home?lang=de",
+    "fr": "https://www.praemienrechner.concordia.ch/ipr/home?lang=fr",
+    "en": "https://www.praemienrechner.concordia.ch/ipr/home?lang=en"
+   }
   },
   {
    "id": 8,
@@ -162,7 +192,12 @@
     "https://www.css.ch/en/private-customers/quick-easy/do-it-yourself/adjust-insurance/basic-insurance.html",
     "https://www.css.ch/en/private-customers/quick-easy/contact.html"
    ],
-   "notes": "Widerspruechliche Signale. Die Grundversicherungs-Seite erwaehnt 'digitale oder telefonische Meldungen' fuer die Grundversicherung, nennt aber weder E-Mail-Adresse noch Portalfunktion. Die Aussage 'Kuendigungen ... koennen auch per E-Mail oder ueber das Kundenportal myCSS mitgeteilt werden' steht auf der VVG-Revisionsseite und gilt ausdruecklich nur fuer Zusatzversicherungen (VVG). Auf der Wechselseite schreibt CSS allgemein: 'Nicht alle Krankenkassen akzeptieren eine Kuendigung per E-Mail, weil Ihre Unterschrift wichtig ist.' Keine KVG-AVB mit Formvorschrift gefunden (nur VVG-AVB mit Textform-Klausel). Kontaktseite nennt keine E-Mail, nur Kontaktformular und Tel. 0844 277 277. Drittseiten (kuendigung.org) nennen info@css.ch und 'Kundenbetreuung, Postfach 2550, 6002 Luzern', beides auf css.ch nicht bestaetigt."
+   "notes": "Widerspruechliche Signale. Die Grundversicherungs-Seite erwaehnt 'digitale oder telefonische Meldungen' fuer die Grundversicherung, nennt aber weder E-Mail-Adresse noch Portalfunktion. Die Aussage 'Kuendigungen ... koennen auch per E-Mail oder ueber das Kundenportal myCSS mitgeteilt werden' steht auf der VVG-Revisionsseite und gilt ausdruecklich nur fuer Zusatzversicherungen (VVG). Auf der Wechselseite schreibt CSS allgemein: 'Nicht alle Krankenkassen akzeptieren eine Kuendigung per E-Mail, weil Ihre Unterschrift wichtig ist.' Keine KVG-AVB mit Formvorschrift gefunden (nur VVG-AVB mit Textform-Klausel). Kontaktseite nennt keine E-Mail, nur Kontaktformular und Tel. 0844 277 277. Drittseiten (kuendigung.org) nennen info@css.ch und 'Kundenbetreuung, Postfach 2550, 6002 Luzern', beides auf css.ch nicht bestaetigt.",
+   "signup": {
+    "de": "https://calculator.css.ch/start?lang=de",
+    "fr": "https://calculator.css.ch/start?lang=fr",
+    "en": "https://calculator.css.ch/start?lang=en"
+   }
   },
   {
    "id": 820,
@@ -183,7 +218,12 @@
     "https://www.curaulta.ch/files/dokumente/AVB_Grundversicherung%20KVG.pdf",
     "https://www.curaulta.ch/"
    ],
-   "notes": "Allgemeiner Kontakt (nicht als Kuendigungskanal genannt): vella@curaulta.ch (Tel. 081 931 35 35) und vals@curaulta.ch (Tel. 081 935 11 44). Das Kontaktformular auf /kontakt hat das Anliegen 'Zustellung Dokumente an curaulta' mit Datei-Upload (pdf/doc), wird aber nicht ausdruecklich fuer Kuendigungen genannt. curaulta ist der Zusammenschluss von 'Cassa da malsauns Lumneziana' und 'sanavals Gesundheitskasse'. Die AVB-Fusszeile nennt noch info@lumneziana.ch, das ist veraltet. Regional: Grundversicherung laut Website nur fuer Einwohner des Kantons Graubuenden. Die Domain curaulta.ch ist korrekt."
+   "notes": "Allgemeiner Kontakt (nicht als Kuendigungskanal genannt): vella@curaulta.ch (Tel. 081 931 35 35) und vals@curaulta.ch (Tel. 081 935 11 44). Das Kontaktformular auf /kontakt hat das Anliegen 'Zustellung Dokumente an curaulta' mit Datei-Upload (pdf/doc), wird aber nicht ausdruecklich fuer Kuendigungen genannt. curaulta ist der Zusammenschluss von 'Cassa da malsauns Lumneziana' und 'sanavals Gesundheitskasse'. Die AVB-Fusszeile nennt noch info@lumneziana.ch, das ist veraltet. Regional: Grundversicherung laut Website nur fuer Einwohner des Kantons Graubuenden. Die Domain curaulta.ch ist korrekt.",
+   "signup": {
+    "de": "https://www.curaulta.ch/kontakt"
+   },
+   "signup_online": false,
+   "signup_note": "Kein Rechner, Offerte über das Kontaktformular"
   },
   {
    "id": 881,
@@ -204,7 +244,12 @@
     "https://www.egk.ch/egk-2026/dokumente/downloads/de/versicherungsbedingungen-avb-kvg-de.pdf",
     "https://www.egk.ch/de/services/kundenportal-app/myegk"
    ],
-   "notes": "Keine Kündigungsseite, kein Kündigungsformular und keine Aussage zu E-Mail gefunden (Sitemap mit 447 URLs durchsucht, kein Treffer zu Kündigung/Austritt). Allgemeine Kontakt-E-Mail (nur allgemeiner Kontakt, nicht für Kündigungen genannt): info@egk.ch. Die Kontaktseite nennt Telefon, E-Mail, Live-Chat und Kontaktformular für allgemeine Anliegen. myEGK-Portalseite erwähnt keine Kündigungsfunktion. Achtung: Wortlaut 'rechtsgültige, schriftliche Kündigung' spricht eher für unterschriebenen Brief, schliesst E-Mail aber nicht ausdrücklich aus."
+   "notes": "Keine Kündigungsseite, kein Kündigungsformular und keine Aussage zu E-Mail gefunden (Sitemap mit 447 URLs durchsucht, kein Treffer zu Kündigung/Austritt). Allgemeine Kontakt-E-Mail (nur allgemeiner Kontakt, nicht für Kündigungen genannt): info@egk.ch. Die Kontaktseite nennt Telefon, E-Mail, Live-Chat und Kontaktformular für allgemeine Anliegen. myEGK-Portalseite erwähnt keine Kündigungsfunktion. Achtung: Wortlaut 'rechtsgültige, schriftliche Kündigung' spricht eher für unterschriebenen Brief, schliesst E-Mail aber nicht ausdrücklich aus.",
+   "signup": {
+    "de": "https://www.egk.ch/berechnen",
+    "fr": "https://www.egk.ch/calculer",
+    "en": "https://www.egk.ch/calculate"
+   }
   },
   {
    "id": 134,
@@ -224,7 +269,10 @@
     "https://kkeinsiedeln.ch/avb-allgemeine-versicherungsbedingungen/",
     "https://kkeinsiedeln.ch/wp-content/uploads/2026/06/Versicherungsbedingungen-KVG-1.pdf"
    ],
-   "notes": "Allgemeiner Kontakt (NICHT als Kuendigungskanal genannt): info@kkeinsiedeln.ch (Kontaktseite: 'Allgemeine Anfragen'), Tel. 055 418 07 47. Das Kontaktformular hat kein Thema 'Kuendigung' (nur Adressaenderung, Unfalleinschluss, Bestellungen, Sponsoring, Anderes). Kundenportal kkeinsiedeln.bbtp.ch/portal existiert, eine Kuendigungsfunktion ist von aussen nicht erkennbar. Taetigkeitsgebiet laut FAQ: Kanton Schwyz und angrenzende Kantone. Statuten-PDF 2026 liefert keinen extrahierbaren Text. Die frueher verlinkte AGB Online-Kundenportal (wp-content/uploads/2021/01) ist nicht mehr abrufbar."
+   "notes": "Allgemeiner Kontakt (NICHT als Kuendigungskanal genannt): info@kkeinsiedeln.ch (Kontaktseite: 'Allgemeine Anfragen'), Tel. 055 418 07 47. Das Kontaktformular hat kein Thema 'Kuendigung' (nur Adressaenderung, Unfalleinschluss, Bestellungen, Sponsoring, Anderes). Kundenportal kkeinsiedeln.bbtp.ch/portal existiert, eine Kuendigungsfunktion ist von aussen nicht erkennbar. Taetigkeitsgebiet laut FAQ: Kanton Schwyz und angrenzende Kantone. Statuten-PDF 2026 liefert keinen extrahierbaren Text. Die frueher verlinkte AGB Online-Kundenportal (wp-content/uploads/2021/01) ist nicht mehr abrufbar.",
+   "signup": {
+    "de": "https://kkeinsiedeln.bbtp.ch/portal/offerten"
+   }
   },
   {
    "id": 1386,
@@ -246,7 +294,13 @@
     "https://www.galenos.ch/de/kontakt/",
     "https://www.galenos.ch/de/impressum/"
    ],
-   "notes": "Galenos gehört zur Visana-Gruppe, die AVB OKP sind gemeinsam mit Visana/sana24. Keine Aussage, ob E-Mail akzeptiert wird. Das Formular sieht Einschreiben vor, eine ausdrückliche Pflicht dazu steht aber nirgends. Allgemeine Kontakt-E-Mail (nur allgemeiner Kontakt): galenos@visana.ch; Kontaktseite nennt zusätzlich zuerich@visana.ch (Generalagentur Zürich). In der Kundenzone heisst es für einen anderen Talon (Adressänderung o.ä.) 'senden diesen per E-Mail an galenos@visana.ch', das bezieht sich nicht auf Kündigungen. Andere Formulare verweisen auf Visana Services AG, Weltpoststrasse 19, 3000 Bern 1 bzw. Galenos, Militärstrasse 36, 8021 Zürich, nicht für Kündigungen. Ein weiteres PDF (Galenos_Web_Kuendigungsformular_d.pdf, 2017) ist eine Vorlage zur Kündigung beim bisherigen Versicherer beim Wechsel zu Galenos."
+   "notes": "Galenos gehört zur Visana-Gruppe, die AVB OKP sind gemeinsam mit Visana/sana24. Keine Aussage, ob E-Mail akzeptiert wird. Das Formular sieht Einschreiben vor, eine ausdrückliche Pflicht dazu steht aber nirgends. Allgemeine Kontakt-E-Mail (nur allgemeiner Kontakt): galenos@visana.ch; Kontaktseite nennt zusätzlich zuerich@visana.ch (Generalagentur Zürich). In der Kundenzone heisst es für einen anderen Talon (Adressänderung o.ä.) 'senden diesen per E-Mail an galenos@visana.ch', das bezieht sich nicht auf Kündigungen. Andere Formulare verweisen auf Visana Services AG, Weltpoststrasse 19, 3000 Bern 1 bzw. Galenos, Militärstrasse 36, 8021 Zürich, nicht für Kündigungen. Ein weiteres PDF (Galenos_Web_Kuendigungsformular_d.pdf, 2017) ist eine Vorlage zur Kündigung beim bisherigen Versicherer beim Wechsel zu Galenos.",
+   "signup": {
+    "de": "https://dap.visana.ch/offer/?lang=de",
+    "fr": "https://dap.visana.ch/offer/?lang=fr",
+    "en": "https://dap.visana.ch/offer/?lang=en"
+   },
+   "signup_note": "Kein eigener Rechner, Visana-Rechner zeigt Galenos je nach Region"
   },
   {
    "id": 780,
@@ -267,7 +321,10 @@
     "https://www.glkv.ch/online-schalter/publikationen/faq-fragen-und-antworten.html/60",
     "https://www.glkv.ch/online-schalter/kommunikation/myglarner.html/89"
    ],
-   "notes": "Allgemeine Kontakt-E-Mail (nur allgemeiner Kontakt): info@glkv.ch; Agentur Näfels: Haus zur Beuge, Im Dorf 30, 8752 Näfels. Die FAQ-Seite zeigt auch im Browser nur die Überschrift, ohne Fragen und Antworten. Der Online-Schalter hat Formulare für Franchise, Modellwechsel, Vollmacht und Wegzug ins Ausland, aber keinen für Kündigung/Kassenwechsel. Die myGlarner-App nennt keine Kündigungsfunktion. Die Website antwortete zwischendurch mit 'Too Many Requests' (Rate Limit), daher nicht jede Online-Schalter-Seite im Volltext geprüft."
+   "notes": "Allgemeine Kontakt-E-Mail (nur allgemeiner Kontakt): info@glkv.ch; Agentur Näfels: Haus zur Beuge, Im Dorf 30, 8752 Näfels. Die FAQ-Seite zeigt auch im Browser nur die Überschrift, ohne Fragen und Antworten. Der Online-Schalter hat Formulare für Franchise, Modellwechsel, Vollmacht und Wegzug ins Ausland, aber keinen für Kündigung/Kassenwechsel. Die myGlarner-App nennt keine Kündigungsfunktion. Die Website antwortete zwischendurch mit 'Too Many Requests' (Rate Limit), daher nicht jede Online-Schalter-Seite im Volltext geprüft.",
+   "signup": {
+    "de": "https://glkv.bbtp.ch/portal/offerten"
+   }
   },
   {
    "id": 1562,
@@ -285,7 +342,12 @@
     "https://www.helsana.ch/de/private/services/versicherung/kuendigen.html",
     "https://www.helsana.ch/en/individuals/services/insurance/cancel.html"
    ],
-   "notes": "Die englische Seite nennt stattdessen cancellation@helsana.ch. Fuer DE-Nutzer kuendigungen@helsana.ch verwenden. Das Postfach hat den Zusatz 'D-CH', also Deutschschweiz; fuer FR/IT gibt es vermutlich eigene Postfaecher (nicht geprueft). Signierter Scan/Foto per Mail ist ausdruecklich der vorgesehene Weg."
+   "notes": "Die englische Seite nennt stattdessen cancellation@helsana.ch. Fuer DE-Nutzer kuendigungen@helsana.ch verwenden. Das Postfach hat den Zusatz 'D-CH', also Deutschschweiz; fuer FR/IT gibt es vermutlich eigene Postfaecher (nicht geprueft). Signierter Scan/Foto per Mail ist ausdruecklich der vorgesehene Weg.",
+   "signup": {
+    "de": "https://www.helsana.ch/de/private/versicherungen/praemienrechner.html",
+    "fr": "https://www.helsana.ch/fr/prives/assurances/calculateur-primes.html",
+    "en": "https://www.helsana.ch/en/individuals/insurance/premiumcalculator.html"
+   }
   },
   {
    "id": 360,
@@ -306,7 +368,10 @@
     "https://www.kklh.ch/kundenservice/policeaenderung/",
     "https://www.kklh.ch/files/Files/Dokumente/PDF_s/AVB_s/AVB_Grundversicherung.pdf"
    ],
-   "notes": "Die Kuendigungsseite erwaehnt E-Mail weder als moeglich noch als ausgeschlossen, sie empfiehlt nur Post (Einschreiben/A-Post Plus). Allgemeiner Kontakt (nicht als Kuendigungskanal genannt): info@kklh.ch (auf der Website verschleiert, als 'info@ kklh.ch' angezeigt), Tel. 041 989 70 00, Kontaktformular /ueber-uns/kontaktformular-standart/. Die Seite 'Policeaenderung' verweist fuer Aenderungen auf Telefon oder Kontaktformular, nicht spezifisch auf Kuendigungen. Taetigkeitsgebiet auf den gelesenen Seiten nicht konkret genannt."
+   "notes": "Die Kuendigungsseite erwaehnt E-Mail weder als moeglich noch als ausgeschlossen, sie empfiehlt nur Post (Einschreiben/A-Post Plus). Allgemeiner Kontakt (nicht als Kuendigungskanal genannt): info@kklh.ch (auf der Website verschleiert, als 'info@ kklh.ch' angezeigt), Tel. 041 989 70 00, Kontaktformular /ueber-uns/kontaktformular-standart/. Die Seite 'Policeaenderung' verweist fuer Aenderungen auf Telefon oder Kontaktformular, nicht spezifisch auf Kuendigungen. Taetigkeitsgebiet auf den gelesenen Seiten nicht konkret genannt.",
+   "signup": {
+    "de": "https://kklh.bbtp.ch/portal/de/offerten"
+   }
   },
   {
    "id": 246,
@@ -328,7 +393,10 @@
     "https://www.kkst.ch/download/pictures/5e/tuigijptaa4n93oze3xbd1xap6ffwl/avb_kvg_2026.pdf",
     "https://www.kkst.ch/kundenservice/vertragsaenderungen"
    ],
-   "notes": "'Schriftlich' ohne Angabe, ob E-Mail mit unterschriebenem PDF genuegt; die eigene Vorlage (Einschreiben, Unterschriftsspalte) deutet klar auf Brief hin, eine ausdrueckliche Absage an E-Mail gibt es aber nicht. Die E-Mail-Adressen sind auf der Website verschleiert (Base64/URL-kodiert) und wurden dekodiert: info@kkst.ch (Kundendienst: Versichertenkarte, Praemienrechnung, Versicherungsdeckung, allgemeine Mutationen), service@kkst.ch (Allgemeine Anfragen), leistungen@kkst.ch (Leistungsabteilung). Allgemeiner Kontakt, nicht als Kuendigungskanal genannt. Tel. +41 33 439 40 20. Taetigkeitsgebiet KVG laut AVB: BE, AG, GL, NW, OW, SO, SZ, UR, VS, ZG, ZH. Kundenportal: kkst.bbtp.ch/portal (Kuendigungsfunktion von aussen nicht erkennbar)."
+   "notes": "'Schriftlich' ohne Angabe, ob E-Mail mit unterschriebenem PDF genuegt; die eigene Vorlage (Einschreiben, Unterschriftsspalte) deutet klar auf Brief hin, eine ausdrueckliche Absage an E-Mail gibt es aber nicht. Die E-Mail-Adressen sind auf der Website verschleiert (Base64/URL-kodiert) und wurden dekodiert: info@kkst.ch (Kundendienst: Versichertenkarte, Praemienrechnung, Versicherungsdeckung, allgemeine Mutationen), service@kkst.ch (Allgemeine Anfragen), leistungen@kkst.ch (Leistungsabteilung). Allgemeiner Kontakt, nicht als Kuendigungskanal genannt. Tel. +41 33 439 40 20. Taetigkeitsgebiet KVG laut AVB: BE, AG, GL, NW, OW, SO, SZ, UR, VS, ZG, ZH. Kundenportal: kkst.bbtp.ch/portal (Kuendigungsfunktion von aussen nicht erkennbar).",
+   "signup": {
+    "de": "https://kkst.bbtp.ch/portal/de/offerten"
+   }
   },
   {
    "id": 1040,
@@ -349,7 +417,10 @@
     "https://www.kkv.ch/services-2/downloads/antragsformulare/",
     "https://www.kkv.ch/wp-content/uploads/2019/09/AGB-Kundenportal.pdf"
    ],
-   "notes": "Allgemeiner Kontakt (nicht als Kuendigungskanal genannt): info@kkv.ch, Tel. 027 948 00 50. vad@kkv.ch nur fuer vertrauensaerztliche Angelegenheiten. Die AVB-Fusszeile nennt noch kkv@visperterminen.ch, das ist veraltet. Suche in der WordPress-Suche der Website nach 'Kuendigung'/'kuendigen': keine Treffer. Kundenportal: kkv.bbtp.ch/portal (Kuendigungsfunktion von aussen nicht erkennbar). Taetigkeitsgebiet laut AVB B1 vorhanden, auf den gelesenen Seiten aber nicht konkret genannt. Die Domain kkv.ch ist korrekt."
+   "notes": "Allgemeiner Kontakt (nicht als Kuendigungskanal genannt): info@kkv.ch, Tel. 027 948 00 50. vad@kkv.ch nur fuer vertrauensaerztliche Angelegenheiten. Die AVB-Fusszeile nennt noch kkv@visperterminen.ch, das ist veraltet. Suche in der WordPress-Suche der Website nach 'Kuendigung'/'kuendigen': keine Treffer. Kundenportal: kkv.bbtp.ch/portal (Kuendigungsfunktion von aussen nicht erkennbar). Taetigkeitsgebiet laut AVB B1 vorhanden, auf den gelesenen Seiten aber nicht konkret genannt. Die Domain kkv.ch ist korrekt.",
+   "signup": {
+    "de": "https://kkv.bbtp.ch/portal/de/offerten"
+   }
   },
   {
    "id": 1318,
@@ -371,7 +442,12 @@
     "https://www.kkwaedenswil.ch/home/kk/files/dokumente/Kuendigungsvorlage.pdf",
     "https://www.kkwaedenswil.ch/home/kk/files/dokumente/AVB_Obligatorische_Krankenpflegeversicherung_Ausgabe_2019.pdf"
    ],
-   "notes": "Allgemeiner Kontakt (nicht als Kuendigungskanal genannt): info@kkwaedenswil.ch (auf der Website als 'info@ ! kkwaedenswil.ch' verschleiert), Tel. 043 477 71 71. Allgemeines Kontaktformular mit Freitext auf /kontakt. vad.kkwaedenswil@hin.ch nur fuer den Vertrauensarzt. Der Menuepunkt 'MY KKW' zeigt auf einen Platzhalter-Link (#ext-link-my-kkw-tbd), ein Kundenportal ist nicht erkennbar. Der Online-Schalter enthaelt nur PDF-Formulare, keine Kuendigung. Regional: Grundversicherung nur fuer die Kantone Zuerich, Aargau, Schwyz und Zug."
+   "notes": "Allgemeiner Kontakt (nicht als Kuendigungskanal genannt): info@kkwaedenswil.ch (auf der Website als 'info@ ! kkwaedenswil.ch' verschleiert), Tel. 043 477 71 71. Allgemeines Kontaktformular mit Freitext auf /kontakt. vad.kkwaedenswil@hin.ch nur fuer den Vertrauensarzt. Der Menuepunkt 'MY KKW' zeigt auf einen Platzhalter-Link (#ext-link-my-kkw-tbd), ein Kundenportal ist nicht erkennbar. Der Online-Schalter enthaelt nur PDF-Formulare, keine Kuendigung. Regional: Grundversicherung nur fuer die Kantone Zuerich, Aargau, Schwyz und Zug.",
+   "signup": {
+    "de": "https://www.kkwaedenswil.ch/versicherungen/online-schalter"
+   },
+   "signup_online": false,
+   "signup_note": "Kein Rechner, nur Prämien-PDF und Beitrittserklärung zum Ausdrucken"
   },
   {
    "id": 376,
@@ -394,7 +470,12 @@
     "https://www.kpt.ch/en/customer-services/customer-portal",
     "https://www.kpt.ch/documents/1acc4b13-5310-4e40-ba11-c77ae69faa34/KVG_de_09.2024.pdf"
    ],
-   "notes": "KPT sagt nirgends selbst, welche Kanaele es fuer die Kuendigung bei KPT akzeptiert. Der KPT-Ratgeber (allgemein fuer alle Kassen) sagt, man muesse schriftlich kuendigen, eine E-Mail reiche oft nicht, am besten Brief/Einschreiben, und ob E-Mail oder Portal geht, solle man bei der eigenen Kasse erfragen. Das ist kein Beleg fuer KPTs eigene Praxis. Allgemeine E-Mail info@kpt.ch steht im Impressum, aber ohne Bezug zu Kuendigungen, daher cancel_email = null. Die KPTnet-Portalseite nennt keine Kuendigungsfunktion (Belege, Daten aendern, Dokumente, Berater kontaktieren, Versichertenkarte). Die KVG-Vollzugsbestimmungen (09.2024) regeln keine Form fuer die OKP-Kuendigung. Die Kontaktseite kpt.ch/de/kontakt wird per JavaScript gerendert und war nicht lesbar. Postfach-Adresse von kunden-services ('Per Post an: KPT, Postfach, 3001 Bern', dort fuer Belege) und Impressum."
+   "notes": "KPT sagt nirgends selbst, welche Kanaele es fuer die Kuendigung bei KPT akzeptiert. Der KPT-Ratgeber (allgemein fuer alle Kassen) sagt, man muesse schriftlich kuendigen, eine E-Mail reiche oft nicht, am besten Brief/Einschreiben, und ob E-Mail oder Portal geht, solle man bei der eigenen Kasse erfragen. Das ist kein Beleg fuer KPTs eigene Praxis. Allgemeine E-Mail info@kpt.ch steht im Impressum, aber ohne Bezug zu Kuendigungen, daher cancel_email = null. Die KPTnet-Portalseite nennt keine Kuendigungsfunktion (Belege, Daten aendern, Dokumente, Berater kontaktieren, Versichertenkarte). Die KVG-Vollzugsbestimmungen (09.2024) regeln keine Form fuer die OKP-Kuendigung. Die Kontaktseite kpt.ch/de/kontakt wird per JavaScript gerendert und war nicht lesbar. Postfach-Adresse von kunden-services ('Per Post an: KPT, Postfach, 3001 Bern', dort fuer Belege) und Impressum.",
+   "signup": {
+    "de": "https://assistant.kpt.ch/de/personalien",
+    "fr": "https://assistant.kpt.ch/fr/donnees-personnelles",
+    "en": "https://assistant.kpt.ch/en/personal-details"
+   }
   },
   {
    "id": 1479,
@@ -413,7 +494,13 @@
     "https://www.groupemutuel.ch/de/Privatkunden/Kundendienst/Antworten-auf-haufige-Fragen/Kuendigung.html",
     "https://www.groupemutuel.ch/de/Privatkunden/Kundendienst.html"
    ],
-   "notes": "Keine markenspezifische Adresse oder E-Mail gefunden; die Groupe-Mutuel-Seiten sprechen fuer alle Kassen der Gruppe. Kassenwechsel innerhalb der Gruppe (Philos/Avenir/Mutuel/AMB) laeuft ueber dieselben Kanaele (Portal, kunden@groupemutuel.ch, Brief)."
+   "notes": "Keine markenspezifische Adresse oder E-Mail gefunden; die Groupe-Mutuel-Seiten sprechen fuer alle Kassen der Gruppe. Kassenwechsel innerhalb der Gruppe (Philos/Avenir/Mutuel/AMB) laeuft ueber dieselben Kanaele (Portal, kunden@groupemutuel.ch, Brief).",
+   "signup": {
+    "de": "https://www.groupemutuel.ch/poelGM/index.html?langue=de",
+    "fr": "https://www.groupemutuel.ch/poelGM/index.html?langue=fr",
+    "en": "https://www.groupemutuel.ch/poelGM/index.html?langue=en"
+   },
+   "signup_note": "Gemeinsamer Rechner der Groupe Mutuel"
   },
   {
    "id": 1535,
@@ -432,7 +519,13 @@
     "https://www.groupemutuel.ch/de/Privatkunden/Kundendienst/Antworten-auf-haufige-Fragen/Kuendigung.html",
     "https://www.groupemutuel.ch/de/Privatkunden/Kundendienst.html"
    ],
-   "notes": "Keine markenspezifische Adresse oder E-Mail gefunden; gemeinsamer Prozess der Groupe Mutuel."
+   "notes": "Keine markenspezifische Adresse oder E-Mail gefunden; gemeinsamer Prozess der Groupe Mutuel.",
+   "signup": {
+    "de": "https://www.groupemutuel.ch/poelGM/index.html?langue=de",
+    "fr": "https://www.groupemutuel.ch/poelGM/index.html?langue=fr",
+    "en": "https://www.groupemutuel.ch/poelGM/index.html?langue=en"
+   },
+   "signup_note": "Gemeinsamer Rechner der Groupe Mutuel"
   },
   {
    "id": 1401,
@@ -454,7 +547,10 @@
     "https://rhenusana.ch/wp-content/uploads/2022/11/KVG_KRANKENPFLEGEgrund_BAG_01_19.pdf",
     "https://rhenusana.bbtp.ch/docuploader/de/sunet/create/"
    ],
-   "notes": "Keine Kündigungsseite, kein Kündigungsformular, keine Aussage zur Form gefunden. Allgemeine Kontakt-E-Mail (nur allgemeiner Kontakt): info@rhenusana.ch; sie steht nicht sichtbar auf der Kontaktseite, sondern in deren strukturierten Daten sowie auf der Hilfeseite des Dokument-Uploaders (dort nur für Fragen zur Rechnungsübermittlung). Der Dokument-Uploader ist ausschliesslich für Rechnungen. Geschäftsstellen auch in Oberriet (Staatsstrasse 169) und Mels (ehem. Krankenkasse Stoffel, seit 1.1.2024 übernommen)."
+   "notes": "Keine Kündigungsseite, kein Kündigungsformular, keine Aussage zur Form gefunden. Allgemeine Kontakt-E-Mail (nur allgemeiner Kontakt): info@rhenusana.ch; sie steht nicht sichtbar auf der Kontaktseite, sondern in deren strukturierten Daten sowie auf der Hilfeseite des Dokument-Uploaders (dort nur für Fragen zur Rechnungsübermittlung). Der Dokument-Uploader ist ausschliesslich für Rechnungen. Geschäftsstellen auch in Oberriet (Staatsstrasse 169) und Mels (ehem. Krankenkasse Stoffel, seit 1.1.2024 übernommen).",
+   "signup": {
+    "de": "https://rhenusana.bbtp.ch/portal/de/offerten"
+   }
   },
   {
    "id": 1568,
@@ -473,7 +569,13 @@
     "https://www.visana.ch/dam/jcr:d624a2be-75c6-41c2-913b-74b5594ef00c/avb-obligatorische-krankenpflegeversicherung-kvg-de.pdf",
     "https://www.sana24.ch"
    ],
-   "notes": "sana24.ch leitet per 301 auf visana.ch um, es gibt keine eigene sana24-Kuendigungsseite. sana24 AG ist eine eigene KVG-Gesellschaft der Visana-Gruppe mit derselben Adresse wie Visana AG. Kanal-Informationen wie bei Visana (siehe dort): fuer die Grundversicherung keine ausdrueckliche E-Mail-Zusage gefunden. Im Kuendigungsschreiben 'sana24 AG' als Empfaenger nennen, nicht Visana AG."
+   "notes": "sana24.ch leitet per 301 auf visana.ch um, es gibt keine eigene sana24-Kuendigungsseite. sana24 AG ist eine eigene KVG-Gesellschaft der Visana-Gruppe mit derselben Adresse wie Visana AG. Kanal-Informationen wie bei Visana (siehe dort): fuer die Grundversicherung keine ausdrueckliche E-Mail-Zusage gefunden. Im Kuendigungsschreiben 'sana24 AG' als Empfaenger nennen, nicht Visana AG.",
+   "signup": {
+    "de": "https://dap.visana.ch/offer/?lang=de",
+    "fr": "https://dap.visana.ch/offer/?lang=fr",
+    "en": "https://dap.visana.ch/offer/?lang=en"
+   },
+   "signup_note": "Kein eigener Rechner, sana24.ch leitet auf visana.ch, Visana-Rechner"
   },
   {
    "id": 1509,
@@ -494,8 +596,12 @@
     "https://www.sanitas.com/en/private-customers/services/contact.html"
    ],
    "notes": "Sanitas empfiehlt sogar E-Mail an info@sanitas.com ('Am besten, Sie schicken uns Ihre schriftliche Kuendigung an info@sanitas.com'). Die Hinweise zur handschriftlichen Unterschrift aller Erwachsenen stehen auf der Wechselseite (Kuendigung beim bisherigen Versicherer), daher PDF mit eigenhaendiger Unterschrift beilegen. Sanitas Grundversicherungen AG ist die KVG-Gesellschaft (BAG 1509), gleiche Adresse wie die Gruppengesellschaften.",
-   "signup_url": "https://calculator.sanitas.com/{lang}",
-   "signup_url_note": "Prämienrechner direkt, geprüft 03.10.2026 im Code des Rechners. Keine Vorbelegung von PLZ, Franchise oder Modell per URL. Partner-Route calculator.sanitas.com/{lang}/partner/<6-stellige Vermittlernummer> braucht eine Nummer von Sanitas."
+   "signup": {
+    "de": "https://calculator.sanitas.com/de",
+    "fr": "https://calculator.sanitas.com/fr",
+    "en": "https://calculator.sanitas.com/en"
+   },
+   "signup_note": "Keine Vorbelegung per URL. Partner-Route /{lang}/partner/<6-stellige Vermittlernummer> braucht eine Nummer von Sanitas."
   },
   {
    "id": 923,
@@ -516,7 +622,10 @@
     "https://media.slkk.ch/filer_public/22/fe/22feaf20-77fe-48f5-b8e0-7ac6fb55154a/2025-08-27-slkk-62-kundigungsformular-okp-vvg-angehorige.pdf",
     "https://slkk.ch/de/aktuelles/so-vermeiden-sie-doppelversicherungen-und-sparen-pramie/"
    ],
-   "notes": "Allgemeine Kontakt-E-Mail (nur allgemeiner Kontakt): info@slkk.ch, steht auch in den AVB KVG unter 'Postadresse/Versicherungen'. Das Kündigungsformular im Download-Center ist eine Vorlage für Neukunden zur Kündigung beim BISHERIGEN Versicherer (Kopf 'Einschreiben (Ihre bisherige Krankenkasse)', Unterschrift aller Personen ab 18). Es sagt, die unterschriebene Kündigung entweder eingeschrieben direkt an die bisherige Kasse oder mit dem Antrag per E-Mail an info@slkk.ch zu senden. Das betrifft also Kündigungen anderer Kassen, die über die SLKK laufen, nicht die Kündigung bei der SLKK. Keine Kündigungsseite für die eigene OKP gefunden."
+   "notes": "Allgemeine Kontakt-E-Mail (nur allgemeiner Kontakt): info@slkk.ch, steht auch in den AVB KVG unter 'Postadresse/Versicherungen'. Das Kündigungsformular im Download-Center ist eine Vorlage für Neukunden zur Kündigung beim BISHERIGEN Versicherer (Kopf 'Einschreiben (Ihre bisherige Krankenkasse)', Unterschrift aller Personen ab 18). Es sagt, die unterschriebene Kündigung entweder eingeschrieben direkt an die bisherige Kasse oder mit dem Antrag per E-Mail an info@slkk.ch zu senden. Das betrifft also Kündigungen anderer Kassen, die über die SLKK laufen, nicht die Kündigung bei der SLKK. Keine Kündigungsseite für die eigene OKP gefunden.",
+   "signup": {
+    "de": "https://praemienrechner.slkk.seconag.com/?lang=de"
+   }
   },
   {
    "id": 941,
@@ -537,7 +646,11 @@
     "https://www.sodalis.ch/de/fuer-private/zu-sodalis-wechseln",
     "https://www.sodalis.ch/writable/media/1787921127-AVB_KVG_2026.pdf"
    ],
-   "notes": "'nein' stützt sich auf die FAQ-Formulierung (eingeschriebener Brief), die AVB schreiben die Form nicht vor. Das Online-Formular 'Versicherungsprodukt kündigen' bietet nur Zusatzprodukte zur Auswahl (Sana/Sana Plus, UTI, Moneta, Spitalversicherung, Denta, KTI, Ospita, PRS), keine Grundversicherung, daher kein Online-Kanal für die OKP. Allgemeine Kontakt-E-Mail (nur allgemeiner Kontakt): info@sodalis.ch; die Kontaktseite lädt ein, Anliegen 'über das Kontaktformular, per E-Mail oder per Postweg' zu schicken, ohne Bezug zu Kündigungen."
+   "notes": "'nein' stützt sich auf die FAQ-Formulierung (eingeschriebener Brief), die AVB schreiben die Form nicht vor. Das Online-Formular 'Versicherungsprodukt kündigen' bietet nur Zusatzprodukte zur Auswahl (Sana/Sana Plus, UTI, Moneta, Spitalversicherung, Denta, KTI, Ospita, PRS), keine Grundversicherung, daher kein Online-Kanal für die OKP. Allgemeine Kontakt-E-Mail (nur allgemeiner Kontakt): info@sodalis.ch; die Kontaktseite lädt ein, Anliegen 'über das Kontaktformular, per E-Mail oder per Postweg' zu schicken, ohne Bezug zu Kündigungen.",
+   "signup": {
+    "de": "https://web.sodalis.ch/portal/de/offerten",
+    "fr": "https://web.sodalis.ch/portal/fr/offerten"
+   }
   },
   {
    "id": 194,
@@ -559,7 +672,12 @@
     "https://sumiswalder.ch/sumiswalder-info-2021-11-teilrevision-versicherungsvertragsgesetz-vvg/",
     "https://sumiswalder.ch/privatkunden/eoffice/kundenportal/"
    ],
-   "notes": "Starkes, aber nicht eindeutiges Signal: E-Mail ist ausdruecklich erlaubt fuer Modellwechsel/Aufloesung eines ManagedCare-Modells innerhalb der Grundversicherung (FAQ), und laut Kundeninfo 2021-11 fuer Kuendigungen von VVG-Zusatzversicherungen. Dieselbe Kundeninfo sagt aber ausdruecklich, die Grundversicherung (KVG) sei von dieser VVG-Neuerung 'nicht betroffen'. Fuer den Versichererwechsel in der Grundversicherung ist E-Mail daher nicht ausdruecklich bestaetigt. Allgemeiner Kontakt: info@sumiswalder.ch (Kontaktseite), Tel. 034 432 30 60; portal@sumiswalder.ch nur fuer Portalfragen. Evidence-Zitat betrifft Modellwechsel, nicht Versichererwechsel. Taetigkeitsgebiet laut AVB: BE, LU, SO, AG, FR, ZH, BL, BS, SH, AR, AI, SG, GR, TG, VS, UR, SZ, OW, NW, GL, ZG."
+   "notes": "Starkes, aber nicht eindeutiges Signal: E-Mail ist ausdruecklich erlaubt fuer Modellwechsel/Aufloesung eines ManagedCare-Modells innerhalb der Grundversicherung (FAQ), und laut Kundeninfo 2021-11 fuer Kuendigungen von VVG-Zusatzversicherungen. Dieselbe Kundeninfo sagt aber ausdruecklich, die Grundversicherung (KVG) sei von dieser VVG-Neuerung 'nicht betroffen'. Fuer den Versichererwechsel in der Grundversicherung ist E-Mail daher nicht ausdruecklich bestaetigt. Allgemeiner Kontakt: info@sumiswalder.ch (Kontaktseite), Tel. 034 432 30 60; portal@sumiswalder.ch nur fuer Portalfragen. Evidence-Zitat betrifft Modellwechsel, nicht Versichererwechsel. Taetigkeitsgebiet laut AVB: BE, LU, SO, AG, FR, ZH, BL, BS, SH, AR, AI, SG, GR, TG, VS, UR, SZ, OW, NW, GL, ZG.",
+   "signup": {
+    "de": "https://portal.sumiswalder.ch/portal/de/offerten",
+    "fr": "https://portal.sumiswalder.ch/portal/fr/offerten",
+    "en": "https://portal.sumiswalder.ch/portal/en/offerten"
+   }
   },
   {
    "id": 1384,
@@ -580,7 +698,12 @@
     "https://www.swica.ch/en/about-swica/portrait/overview/data-privacy/publishing-details",
     "https://dam.swica.ch/image/upload/v1775121993/129_d_Kuendigungsblatt_nqgxft.pdf"
    ],
-   "notes": "E-Mail ist ausdruecklich erlaubt, SWICA nennt aber auf FAQ, Kontakt- und Impressumsseite KEINE E-Mail-Adresse (nur Kontaktformular, Tel. +41 58 800 99 33, datenschutz@swica.ch fuer Datenschutz). Das Kuendigungsblatt 129d ist ein Wechsel-Formular zur Kuendigung beim BISHERIGEN Versicherer (wird an SWICA geschickt, SWICA leitet weiter), kein Formular zur Kuendigung bei SWICA; es sieht Einschreiben und Unterschriften vor. BAG-Adresse kann leicht abweichen (Roemerstrasse 38, 8401 Winterthur), bitte gegen BAG-Liste abgleichen."
+   "notes": "E-Mail ist ausdruecklich erlaubt, SWICA nennt aber auf FAQ, Kontakt- und Impressumsseite KEINE E-Mail-Adresse (nur Kontaktformular, Tel. +41 58 800 99 33, datenschutz@swica.ch fuer Datenschutz). Das Kuendigungsblatt 129d ist ein Wechsel-Formular zur Kuendigung beim BISHERIGEN Versicherer (wird an SWICA geschickt, SWICA leitet weiter), kein Formular zur Kuendigung bei SWICA; es sieht Einschreiben und Unterschriften vor. BAG-Adresse kann leicht abweichen (Roemerstrasse 38, 8401 Winterthur), bitte gegen BAG-Liste abgleichen.",
+   "signup": {
+    "de": "https://calculate.swica.ch/de",
+    "fr": "https://calculate.swica.ch/fr",
+    "en": "https://calculate.swica.ch/en"
+   }
   },
   {
    "id": 1555,
@@ -604,7 +727,12 @@
     "https://www.visana.ch/dam/jcr:cfd7f191-ed7f-41b8-8b9a-dcbec3984286/merkblatt-kundeninformation-vvg.pdf",
     "https://www.visana.ch/ueber-visana/rechtliches/informationspflicht-art-45"
    ],
-   "notes": "Das Merkblatt 'Kundeninformation VVG' (Visana Versicherungen AG, gilt fuer Zusatzversicherungen) erlaubt Kuendigung per 'Nachweis durch Text' via E-Mail, MyVisana oder Kontaktformular ohne eigenhaendige Unterschrift, aber nur von einer persoenlichen, bei Visana hinterlegten E-Mail-Adresse und je erwachsene Person einzeln. Das gilt NICHT ausdruecklich fuer die Grundversicherung (Visana AG); die AVB KVG enthalten keine Formvorschrift, die Fristenseite spricht von 'Eingang auf dem Postweg'. Kontaktseite nennt kundenservice-center@visana.ch als allgemeine Adresse, ohne Bezug zu Kuendigungen. Kein Kuendigungsformular unter den Kontaktformularen. Das Visana-Kuendigungsschreiben-PDF (kuendigungsschreiben-krankenversicherung.pdf) liess sich nicht laden (404)."
+   "notes": "Das Merkblatt 'Kundeninformation VVG' (Visana Versicherungen AG, gilt fuer Zusatzversicherungen) erlaubt Kuendigung per 'Nachweis durch Text' via E-Mail, MyVisana oder Kontaktformular ohne eigenhaendige Unterschrift, aber nur von einer persoenlichen, bei Visana hinterlegten E-Mail-Adresse und je erwachsene Person einzeln. Das gilt NICHT ausdruecklich fuer die Grundversicherung (Visana AG); die AVB KVG enthalten keine Formvorschrift, die Fristenseite spricht von 'Eingang auf dem Postweg'. Kontaktseite nennt kundenservice-center@visana.ch als allgemeine Adresse, ohne Bezug zu Kuendigungen. Kein Kuendigungsformular unter den Kontaktformularen. Das Visana-Kuendigungsschreiben-PDF (kuendigungsschreiben-krankenversicherung.pdf) liess sich nicht laden (404).",
+   "signup": {
+    "de": "https://dap.visana.ch/offer/?lang=de",
+    "fr": "https://dap.visana.ch/offer/?lang=fr",
+    "en": "https://dap.visana.ch/offer/?lang=en"
+   }
   },
   {
    "id": 966,
@@ -626,7 +754,12 @@
     "https://www.vitasurselva.ch/fileadmin/user_upload/customers/vitasurselva/Reglemente/AVB/Krankenversicherung/Allgemeine_Bedingungen_KVG.pdf",
     "https://www.vitasurselva.ch/ueber-uns/datenschutz/"
    ],
-   "notes": "Die Kontaktseite nennt nur Adresse, Telefon +41 81 925 61 60, Fax +41 81 925 61 73 und ein Kontaktformular, keine E-Mail. Einzige gefundene E-Mail: info@vitasurselva.ch in der Datenschutzerklärung (dort für Datenschutzanliegen; nur als allgemeiner Kontakt zu werten). Die Prämienmitteilungs-Seite ist noch auf die Runde 2025/2026 datiert (Frist 28.11.2025); für 2026/2027 ist eine neue Frist zu erwarten, aber noch nicht publiziert gewesen."
+   "notes": "Die Kontaktseite nennt nur Adresse, Telefon +41 81 925 61 60, Fax +41 81 925 61 73 und ein Kontaktformular, keine E-Mail. Einzige gefundene E-Mail: info@vitasurselva.ch in der Datenschutzerklärung (dort für Datenschutzanliegen; nur als allgemeiner Kontakt zu werten). Die Prämienmitteilungs-Seite ist noch auf die Runde 2025/2026 datiert (Frist 28.11.2025); für 2026/2027 ist eine neue Frist zu erwarten, aber noch nicht publiziert gewesen.",
+   "signup": {
+    "de": "https://www.vitasurselva.ch/privatkunde/angebot/obligatorische-krankenversicherung/#c1168"
+   },
+   "signup_online": false,
+   "signup_note": "Kein Rechner, Offertformular auf der Seite"
   },
   {
    "id": 509,
@@ -645,7 +778,12 @@
     "https://www.sympany.ch/en/individuals/worth-to-know/basics/cancel-health-insurance.html",
     "https://www.sympany.ch/dam/jcr:a8a048f0-e732-4c72-8810-9196621d5b36/Kuendigungsformular_d.pdf"
    ],
-   "notes": "Die E-Mail-Adresse ist im HTML verschleiert (data-href-mailto, Zeichencode +37). Entschluesselt ergibt sie kuendigungen@sympany.ch; die Struktur ist konsistent, sie wurde aber nicht im Klartext auf der Seite gesehen. Vor der Veroeffentlichung sollte man sie im Browser gegenpruefen. Das Sympany-Kuendigungsformular (PDF, Vermerk 'Einschreiben') ist fuer den Wechsel zu Sympany gedacht, nicht fuer die Kuendigung bei Sympany. Vivao Sympany AG ist der KVG-Traeger der Marke Sympany."
+   "notes": "Die E-Mail-Adresse ist im HTML verschleiert (data-href-mailto, Zeichencode +37). Entschluesselt ergibt sie kuendigungen@sympany.ch; die Struktur ist konsistent, sie wurde aber nicht im Klartext auf der Seite gesehen. Vor der Veroeffentlichung sollte man sie im Browser gegenpruefen. Das Sympany-Kuendigungsformular (PDF, Vermerk 'Einschreiben') ist fuer den Wechsel zu Sympany gedacht, nicht fuer die Kuendigung bei Sympany. Vivao Sympany AG ist der KVG-Traeger der Marke Sympany.",
+   "signup": {
+    "de": "https://calculator.sympany.ch/?country=ch",
+    "fr": "https://calculator.sympany.ch/?country=ch&language=fr",
+    "en": "https://calculator.sympany.ch/?country=ch&language=en"
+   }
   },
   {
    "id": 455,
@@ -664,7 +802,13 @@
     "https://www.oekk.ch/de/themen-wissen/krankenkasse-kuendigen",
     "https://www.oekk.ch/uploads/files/02_Dokumente/01_PK/02_Service/3032_jahresendbrief_kuendigung_d_formular.pdf"
    ],
-   "notes": "Beide ÖKK-Seiten enthalten den Block 'Kündigung bei ÖKK': Agentur kontaktieren oder ausgefuelltes Formular an info@oekk.ch senden. Auf der Grundversicherungs-Seite ist der mailto-Link fehlerhaft ('www.info@oekk.ch'), der angezeigte Text lautet info@oekk.ch. Gleichzeitig sagt dieselbe Seite 'schriftlich' und empfiehlt Einschreiben, daher gibt es eine Spannung zwischen 'schriftlich' und dem E-Mail-Angebot. Fuer Zusatzversicherungen sagt ÖKK ausdruecklich, die Kuendigung koenne schriftlich oder in anderer digitaler Textform, etwa per Mail, erfolgen. Das verlinkte Formular 3032 ist eigentlich fuer den Wechsel zu ÖKK gedacht (Adressierung an 'Aktueller Versicherer', Vermerk A-Post Plus, Feld 'wird von ÖKK ausgefüllt'). privatkunden@oekk.ch plus Landquarter Postadresse sind fuer Neukunden genannt, wenn ÖKK die Kuendigung beim Vorversicherer uebernimmt. Portal myÖKK (myoekk.ch) existiert, aber keine Kuendigungsfunktion genannt."
+   "notes": "Beide ÖKK-Seiten enthalten den Block 'Kündigung bei ÖKK': Agentur kontaktieren oder ausgefuelltes Formular an info@oekk.ch senden. Auf der Grundversicherungs-Seite ist der mailto-Link fehlerhaft ('www.info@oekk.ch'), der angezeigte Text lautet info@oekk.ch. Gleichzeitig sagt dieselbe Seite 'schriftlich' und empfiehlt Einschreiben, daher gibt es eine Spannung zwischen 'schriftlich' und dem E-Mail-Angebot. Fuer Zusatzversicherungen sagt ÖKK ausdruecklich, die Kuendigung koenne schriftlich oder in anderer digitaler Textform, etwa per Mail, erfolgen. Das verlinkte Formular 3032 ist eigentlich fuer den Wechsel zu ÖKK gedacht (Adressierung an 'Aktueller Versicherer', Vermerk A-Post Plus, Feld 'wird von ÖKK ausgefüllt'). privatkunden@oekk.ch plus Landquarter Postadresse sind fuer Neukunden genannt, wenn ÖKK die Kuendigung beim Vorversicherer uebernimmt. Portal myÖKK (myoekk.ch) existiert, aber keine Kuendigungsfunktion genannt.",
+   "signup": {
+    "de": "https://oekk.ch/klickweb-oekk/personen?Lang=de",
+    "fr": "https://oekk.ch/klickweb-oekk/personen?Lang=fr",
+    "en": "https://oekk.ch/klickweb-oekk/personen?Lang=en"
+   }
   }
- ]
+ ],
+ "signup_stand": "2026-10-03"
 }

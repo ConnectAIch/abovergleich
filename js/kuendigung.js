@@ -70,6 +70,7 @@
     nx_post: { de: 'PDF ausdrucken und per Post an {n}, spätestens eine Woche vor dem {d}.', fr: 'Imprimer le PDF et l’envoyer par la poste à {n}, au plus tard une semaine avant le {d}.', en: 'Print the PDF and post it to {n}, at least one week before {d}.' },
     nx_neu: { de: 'Bei {n} anmelden', fr: 'S’inscrire chez {n}', en: 'Sign up with {n}' },
     nx_neu_sub: { de: 'Online, etwa 10 Minuten, ohne Gesundheitsfragen. AHV-Nummer bereithalten, Beginn {d}.', fr: 'En ligne, environ 10 minutes, sans questions de santé. Numéro AVS sous la main, début le {d}.', en: 'Online, about 10 minutes, no health questions. Have your AHV number ready, start {d}.' },
+    nx_neu_form: { de: '{n} hat keine Online-Anmeldung: Offerte anfordern oder Beitrittsformular ausfüllen. Beginn {d}.', fr: '{n} n’a pas d’inscription en ligne : demandez une offre ou remplissez le formulaire d’adhésion. Début le {d}.', en: '{n} has no online sign-up: request an offer or fill in the membership form. Start {d}.' },
     nx_find: { de: 'Günstigste Kasse finden', fr: 'Trouver la caisse la moins chère', en: 'Find the cheapest insurer' },
     nx_find_sub: { de: 'Dann dort anmelden, online in etwa 10 Minuten.', fr: 'Puis s’y inscrire, en ligne en 10 minutes environ.', en: 'Then sign up there, online in about 10 minutes.' },
     nx_conf: { de: 'Danach bestätigt die neue Kasse den Wechsel. Bis dahin bleibst du bei {k} versichert.', fr: 'Ensuite, la nouvelle caisse confirme le changement. D’ici là, vous restez assuré chez {k}.', en: 'The new insurer then confirms the switch. Until then you stay insured with {k}.' },
@@ -152,7 +153,12 @@
   // endet erst, wenn die neue sie bestätigt), aber so vergisst man keinen Teil.
   var neu = KASSEN.find(function (k) { return String(k.id) === new URLSearchParams(location.search).get('neu'); });
   if (neu && String(neu.id) === sel.value) neu = null;
-  var neuGo = neu && neu.url ? neu.url + '?utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=kk-wechsel' : null;
+  // UTM anhängen, auch wenn der Rechner-Link schon ? oder # enthält
+  function utm(u) {
+    var h = u.indexOf('#'), a = h < 0 ? u : u.slice(0, h), z = h < 0 ? '' : u.slice(h);
+    return a + (a.indexOf('?') < 0 ? '?' : '&') + 'utm_source=abovergleich.com&utm_medium=affiliate&utm_campaign=kk-wechsel' + z;
+  }
+  var neuGo = neu && neu.url ? utm(neu.url) : null;
   // Aus dem Rechner mit «Wechseln»: zwei Schritte als Leiste. Schritt 2 wird
   // aktiv, sobald der Brief verschickt ist (siehe done()).
   function stepper(step) {
@@ -474,7 +480,7 @@
       body: JSON.stringify({
         email: email, wecker: $('kd-wecker').checked, pdf: b64, filename: fileName(L), signiert: !!sig,
         kasse: k.name, kanal: k.mail ? 'mail' : k.portal ? 'portal' : 'post', ziel: k.mail || k.portal || '',
-        deadline: D.deadline_text, neu: neu ? neu.name : '', neu_url: neu && neu.url ? neu.url : '', lang: UI,
+        deadline: D.deadline_text, neu: neu ? neu.name : '', neu_url: neu && neu.url ? neu.url : '', neu_online: !neu || neu.online !== false, lang: UI,
         plz: plzOf() || pr.plz, jahrgang: jahrgangOf() || pr.year, franchise: pr.franchise,
         accident_included: pr.accident === true, current_insurer_id: k.id, new_insurer_id: neu ? neu.id : null,
         paid_monthly: (function () { try { return parseFloat((localStorage.getItem('kk-paid') || '').replace(',', '.')) || null; } catch (e) { return null; } })(),
@@ -504,7 +510,7 @@
     }
     var step2 = neu
       ? (neuGo ? '<a class="kd-go sec" href="' + esc(neuGo) + '" target="_blank" rel="noopener sponsored">' + t('nx_neu', { n: esc(neu.name) }) + ' &rarr;</a>' : '<strong>' + t('nx_neu', { n: esc(neu.name) }) + '</strong>') +
-        '<div class="kd-nx-sub">' + t('nx_neu_sub', { d: esc(D.start) }) + '</div>'
+        '<div class="kd-nx-sub">' + (neu.online === false ? t('nx_neu_form', { n: esc(neu.name), d: esc(D.start) }) : t('nx_neu_sub', { d: esc(D.start) })) + '</div>'
       : '<a class="kd-go sec" href="' + esc(D.calc) + '">' + t('nx_find') + ' &rarr;</a><div class="kd-nx-sub">' + t('nx_find_sub') + '</div>';
     box.innerHTML = '<div class="kd-done-head"><div class="kd-done-icon">✓</div><div><strong>' + t('done_t') + '</strong>' +
       '<p>' + t('done_1', { m: esc(val('kd-email')) }) + ' <span class="kd-done-small">' + t('done_2') + '</span></p></div></div>' +
