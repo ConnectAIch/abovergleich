@@ -14,12 +14,24 @@ Kasse einen Partner-Parameter oder eine eigene Landingpage. Erster Schritt:
 Sanitas Vertrieb anschreiben, danach Concordia, KPT, Assura (die häufigsten
 «neu»-Kassen im Rechner, siehe kk_events). Entscheid bei Matthias.
 
-## Deep-Links zur Anmeldung mit Franchise und Modell (offen seit 03.10.2026)
+## Deep-Links zur Anmeldung: Sanitas geprüft (03.10.2026)
 
-Ob sanitas.com Franchise, Modell und Unfall per URL vorbelegen kann, war am
-3.10.2026 nicht prüfbar (Website in Wartung). Nachschauen: Prämienrechner
-der Kasse ausfüllen und beobachten, ob die Werte in der URL landen. Wenn ja,
-in `neu_url` aus dem Rechner-Profil (kk-profile) anhängen.
+Im Code des Sanitas-Rechners (calculator.sanitas.com) nachgesehen:
+
+- **Keine Vorbelegung per URL.** PLZ, Geburtsdatum, Franchise und Modell
+  lassen sich nicht mitgeben. Es gibt eine interne Vorbelegung (Vorname,
+  Geschlecht, Geburtsdatum, Region, PLZ), die nur die eigene Website nutzt.
+- **Direkt in den Rechner** geht `calculator.sanitas.com/de` (fr, en, it).
+  Seit 03.10.2026 zeigt «Zu Sanitas» dorthin, Feld `signup_url` in
+  `scripts/data/kuendigung_kanaele.json`. Andere Kassen bei Gelegenheit
+  gleich prüfen und eintragen.
+- **Partner-Route:** `calculator.sanitas.com/de/partner/123456` mit einer
+  sechsstelligen Vermittlernummer. Der Abschluss läuft dann über den Kanal
+  Partner und ist der Nummer zugeordnet. Die Nummer vergibt Sanitas, also
+  erst mit Vermittlervertrag (siehe oben). Sobald sie da ist, nur
+  `signup_url` anpassen.
+- **cmpID:** Der Rechner liest `?cmpID=…` und hält ihn 7 Tage im Cookie für
+  die eigene Auswertung. Ohne Absprache nur Analytics, wie UTM.
 
 ## BCC an uns beim Mailversand an die Kasse: nein (entschieden 03.10.2026)
 

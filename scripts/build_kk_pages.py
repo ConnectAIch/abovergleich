@@ -2292,7 +2292,9 @@ def kuendigen_page(kv):
             "portal": x.get("online_channel") if ok and not x.get("cancel_email") else None,
             "post_only": x.get("email_accepted") == "nein",
             "src": (x.get("sources") or [None])[0],
-            "url": f"https://www.{x['web']}" if x.get("web") else None,
+            # Anmeldung: direkt in den Prämienrechner, wo wir ihn kennen
+            "url": (x["signup_url"].replace("{lang}", i18n.LANG) if x.get("signup_url")
+                    else f"https://www.{x['web']}" if x.get("web") else None),
         }
 
     stand = i18n.date_short(kan_doc["stand"]) if i18n.LANG == "en" else ".".join(str(int(t)) for t in reversed(kan_doc["stand"].split("-")))

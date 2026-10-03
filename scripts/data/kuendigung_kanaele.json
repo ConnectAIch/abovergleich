@@ -493,7 +493,9 @@
     "https://www.sanitas.com/en/about-sanitas/important-legal-information/publication-details.html",
     "https://www.sanitas.com/en/private-customers/services/contact.html"
    ],
-   "notes": "Sanitas empfiehlt sogar E-Mail an info@sanitas.com ('Am besten, Sie schicken uns Ihre schriftliche Kuendigung an info@sanitas.com'). Die Hinweise zur handschriftlichen Unterschrift aller Erwachsenen stehen auf der Wechselseite (Kuendigung beim bisherigen Versicherer), daher PDF mit eigenhaendiger Unterschrift beilegen. Sanitas Grundversicherungen AG ist die KVG-Gesellschaft (BAG 1509), gleiche Adresse wie die Gruppengesellschaften."
+   "notes": "Sanitas empfiehlt sogar E-Mail an info@sanitas.com ('Am besten, Sie schicken uns Ihre schriftliche Kuendigung an info@sanitas.com'). Die Hinweise zur handschriftlichen Unterschrift aller Erwachsenen stehen auf der Wechselseite (Kuendigung beim bisherigen Versicherer), daher PDF mit eigenhaendiger Unterschrift beilegen. Sanitas Grundversicherungen AG ist die KVG-Gesellschaft (BAG 1509), gleiche Adresse wie die Gruppengesellschaften.",
+   "signup_url": "https://calculator.sanitas.com/{lang}",
+   "signup_url_note": "Prämienrechner direkt, geprüft 03.10.2026 im Code des Rechners. Keine Vorbelegung von PLZ, Franchise oder Modell per URL. Partner-Route calculator.sanitas.com/{lang}/partner/<6-stellige Vermittlernummer> braucht eine Nummer von Sanitas."
   },
   {
    "id": 923,
