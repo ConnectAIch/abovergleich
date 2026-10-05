@@ -1767,7 +1767,7 @@ def award_page():
             cards.append(f"""<div class="win" id="{a['id']}">
   <img src="{award_badge_url(a['id'])}" alt="{e(la['alt'])}" width="240" height="384" loading="lazy">
   <div>
-    <h3>{kasse_link(a['insurer'], a['name'])}</h3>
+    <h3>{kasse_link(a['insurer'], a['brand'])}</h3>
     <p class="meta">{e(la['headline'])} · {e(la['fact'])}</p>
     <div class="variants">
       <a href="{award_badge_url(a['id'])}">{T("Hochformat hell", "Portrait clair", "Portrait light")}</a><a href="{award_badge_url(a['id'], '-dunkel')}">{T("Hochformat dunkel", "Portrait sombre", "Portrait dark")}</a>

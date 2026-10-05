@@ -20,6 +20,12 @@ import re
 
 import i18n
 
+# Schreibweise der Marke, wo die Kasse sie anders will als INSURER_NAMES. Gilt
+# für alles, was die Kasse selbst verwendet: Badge, Alt-Text, Textbaustein. Unsere
+# eigenen Texte schreiben den Namen wie überall (auch «Swica»), und der Name bleibt
+# anderswo Schlüssel. Concordia bat am 05.10.2026 darum, sonst kein Einsatz der Badges.
+BRAND_SPELLING = {"Concordia": "CONCORDIA"}
+
 PLACE = {1: "SIEGER", 2: "ZWEITER", 3: "DRITTER"}
 PLACE_TEXT = {1: "Sieger", 2: "Zweiter", 3: "Dritter"}
 PLACE_I18N = {"fr": {1: "VAINQUEUR", 2: "DEUXIÈME", 3: "TROISIÈME"}, "en": {1: "WINNER", 2: "SECOND", 3: "THIRD"}}
@@ -114,13 +120,14 @@ def compute(rating, year, cantons, main_region, adm_cost):
 
     def add(group, cat_key, cat_label, headline, rank, i, fact, link, raw=None, canton=None, note=None):
         name = nat[i]["name"]
+        brand = BRAND_SPELLING.get(name, name)
         label_for_press = cat_label
         aid = f"{cat_key}-{slug(name)}"
         awards.append({
-            "id": aid, "group": group, "rank": rank, "insurer": i, "name": name,
+            "id": aid, "group": group, "rank": rank, "insurer": i, "name": name, "brand": brand,
             "place": PLACE[rank], "category": cat_label, "headline": headline, "fact": fact, "link": link,
-            "alt": f"abovergleich Preistreue-Award {year}: {headline}, {name}",
-            "pressText": press_text(group, rank, name, label_for_press, year, rating["years"][0]),
+            "alt": f"abovergleich Preistreue-Award {year}: {headline}, {brand}",
+            "pressText": press_text(group, rank, brand, label_for_press, year, rating["years"][0]),
             "_cat": cat_key, "_raw": raw, "_canton": canton, "_note": note,
         })
 
@@ -167,7 +174,7 @@ def canton_phrase(c, lang):
 
 def localize(a, lang, year, y0):
     """Texte eines Awards auf Französisch oder Englisch."""
-    name, rank, group = a["name"], a["rank"], a["group"]
+    name, rank, group = a["brand"], a["rank"], a["group"]
     T = lambda fr, en: fr if lang == "fr" else en
     award = T("Prix Constance des primes", "Price Consistency Award")
     if group == "Gesamtwertung":
@@ -269,15 +276,17 @@ def svg_hoch(a, year, dark=False):
     t1, t2, _ = BADGE_TOP[a.get("lang", "de")]
     t2 = t2.format(y=year)
     (s2, ls2), _ = BADGE_SIZE[a.get("lang", "de")]
-    lines = _lines(a["name"])
+    lines = _lines(a["brand"])
     cat = e(a["category"].upper())
     cat_size = 11 if len(cat) <= 20 else 9.5
     if len(lines) > 1:
         name_svg = (f'<text class="v" x="105" y="238" text-anchor="middle" font-size="22" fill="{p["name"]}">{e(lines[0])}</text>\n'
                     f'  <text class="v" x="105" y="264" text-anchor="middle" font-size="22" fill="{p["name"]}">{e(lines[1])}</text>')
     else:
-        size = 28 if len(a["name"]) <= 10 else 23
-        name_svg = f'<text class="v" x="105" y="252" text-anchor="middle" font-size="{size}" fill="{p["name"]}">{e(a["name"])}</text>'
+        size = 28 if len(a["brand"]) <= 10 else 23
+        if a["brand"].isupper() and len(a["brand"]) > 5:   # Versalien laufen breiter (CONCORDIA)
+            size = 25
+        name_svg = f'<text class="v" x="105" y="252" text-anchor="middle" font-size="{size}" fill="{p["name"]}">{e(a["brand"])}</text>'
     return f"""<svg xmlns="http://www.w3.org/2000/svg" width="240" height="384" viewBox="0 0 210 336" role="img" aria-label="{e(a['alt'])}">
   <title>{e(a['alt'])}</title>
   <style>.s{{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif}}.v{{font-family:Georgia,'Times New Roman',serif}}</style>
@@ -315,7 +324,7 @@ def svg_hoch(a, year, dark=False):
 def svg_quer(a, year, dark=False):
     p = _palette(a["rank"], dark)
     e = html.escape
-    name_size = 22 if len(a["name"]) <= 16 else 17
+    name_size = 22 if len(a["brand"]) <= 16 else 17
     top = BADGE_TOP[a.get("lang", "de")][2].format(y=year)
     _, (st, lt) = BADGE_SIZE[a.get("lang", "de")]
     bottom = f"{a['place']} · {a['category'].upper()}"
@@ -336,7 +345,7 @@ def svg_quer(a, year, dark=False):
   <rect x="0.5" y="0.5" width="329" height="95" rx="11.5" fill="none" stroke="{p['edge']}"/>
   <text class="v" x="39" y="59" text-anchor="middle" font-size="34" fill="#1c1917">{a['rank']}</text>
   <text class="s" x="94" y="22" font-size="{st}" font-weight="700" letter-spacing="{lt}" fill="{p['gold']}"{_fit(top, st, lt, 224)}>{e(top)}</text>
-  <text class="v" x="94" y="50" font-size="{name_size}" fill="{p['name']}">{e(a['name'])}</text>
+  <text class="v" x="94" y="50" font-size="{name_size}" fill="{p['name']}">{e(a['brand'])}</text>
   <text class="s" x="94" y="69" font-size="9" font-weight="600" letter-spacing="1.2"{_fit(bottom, 9, 1.2, 224)}><tspan fill="{p['acc']}">{a['place']}</tspan><tspan fill="{p['mute']}"> · {e(a['category'].upper())}</tspan></text>
   <text class="s" x="94" y="85" font-size="8.5" font-weight="700" letter-spacing="0.2" fill="{p['gold']}">abovergleich.com</text>
 </svg>
