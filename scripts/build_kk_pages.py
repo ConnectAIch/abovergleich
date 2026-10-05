@@ -2257,6 +2257,7 @@ KUENDIGEN_CSS = """
   .kd-actions { align-items:center; }
   .kd-actions button.kd-link { background:none; padding:12px 6px; font-weight:600; color:var(--accent-dark); }
   .kd-done { display:block; }
+  .kd-done[hidden] { display:none; }
   .kd-done-head { display:flex; gap:14px; align-items:flex-start; }
   .kd-done-small { display:block; font-size:13px; color:var(--muted); margin-top:4px; }
   .kd-nx-h { font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; font-size:16px; margin:16px 0 8px; }
