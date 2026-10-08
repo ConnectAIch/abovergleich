@@ -2179,12 +2179,7 @@ KUENDIGEN_CSS = """
   .kd-form .full { grid-column:1 / -1; }
   .kd-check { display:flex; gap:8px; align-items:flex-start; font-size:14px; color:var(--text2); }
   .kd-check input { width:auto; margin-top:4px; }
-  .kd-zusatz { border:0; padding:0; margin:0; display:flex; flex-direction:column; gap:8px; }
-  .kd-zusatz legend { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); margin-bottom:8px; }
-  .kd-form .kd-zusatz .kd-check { text-transform:none; letter-spacing:0; font-size:15px; font-weight:500; color:var(--text); margin:0; }
-  .kd-reco { font-size:11px; font-weight:700; color:var(--green); background:rgba(22,163,74,.1); border-radius:999px; padding:1px 8px; margin-left:4px; white-space:nowrap; }
-  .kd-warn { font-size:14px; line-height:1.5; color:var(--text2); background:rgba(234,88,12,.07); border-left:3px solid var(--orange); border-radius:8px; padding:12px 14px; }
-  .kd-warn a { color:var(--accent-dark); }
+  .kd-zusatz-note { font-size:14px; line-height:1.5; color:var(--muted); margin:0; }
   .kd-plzort { display:grid; grid-template-columns:110px 1fr; gap:10px; }
   .kd-form .kd-invalid { border-color:var(--orange); background:rgba(234,88,12,.05); }
   .kd-send { background:var(--surface); border:2px solid var(--accent); border-radius:14px; padding:18px 20px; margin:18px 0 12px; }
@@ -2398,13 +2393,7 @@ def kuendigen_page(kv):
   <div><label for="kd-street">{T("Strasse und Nr.", "Rue et n°", "Street and no.")}</label><input id="kd-street" autocomplete="address-line1"></div>
   <div class="kd-plzort"><div><label for="kd-plz">{T("PLZ", "NPA", "Postcode")}</label><input id="kd-plz" autocomplete="postal-code" inputmode="numeric" maxlength="4" placeholder="{T("8004", "1003", "8004")}"></div><div><label for="kd-ort">{T("Ort", "Localité", "Town")}</label><input id="kd-ort" autocomplete="address-level2" placeholder="{T("Zürich", "Lausanne", "Zurich")}"></div></div>
   <div class="full"><label for="kd-email">{T("E-Mail", "E-mail", "Email")} <span class="kd-lbl-note">{T("dorthin kommt das PDF", "le PDF y est envoyé", "the PDF goes here")}</span></label><input id="kd-email" type="email" autocomplete="email" placeholder="{T("du@beispiel.ch", "vous@exemple.ch", "you@example.ch")}"></div>
-  <fieldset class="kd-zusatz full"><legend>{T("Zusatzversicherung bei dieser Kasse", "Assurance complémentaire auprès de cette caisse", "Supplementary insurance with this insurer")} {tip(zus_tip + f' <a href="{prov}">' + T("Mehr dazu", "En savoir plus", "More") + '</a>')}</legend>
-    <label class="kd-check"><input type="radio" name="kd-zusatz" value="behalten" checked> {T("Behalten, nur die Grundversicherung kündigen", "La garder, ne résilier que l’assurance de base", "Keep it, cancel basic insurance only")} <span class="kd-reco">{T("empfohlen", "recommandé", "recommended")}</span></label>
-    <label class="kd-check"><input type="radio" name="kd-zusatz" value="kuendigen"> {T("Auch kündigen", "La résilier aussi", "Cancel it too")}</label>
-    <div class="kd-warn" id="kd-zusatz-warn" hidden>{T(f'<strong>Gut überlegen.</strong> Die neue Kasse darf Gesundheitsfragen stellen und dich ablehnen, und die Zusatzversicherung hat eigene Fristen, oft drei Monate. Kündige sie erst, wenn die neue schriftlich zugesagt hat. <a href="{prov}">Warum Berater zum Wechsel drängen</a>',
-      f'<strong>Réfléchissez bien.</strong> La nouvelle caisse peut poser des questions de santé et vous refuser, et l’assurance complémentaire a ses propres délais, souvent trois mois. Ne la résiliez que lorsque la nouvelle vous a accepté par écrit. <a href="{prov}">Pourquoi les conseillers poussent au changement</a>',
-      f'<strong>Think twice.</strong> The new insurer may ask health questions and refuse you, and supplementary insurance has its own notice periods, often three months. Only cancel it once the new insurer has accepted you in writing. <a href="{prov}">Why advisers push you to switch</a>')}</div>
-  </fieldset>
+  <p class="kd-zusatz-note full">{T("Gekündigt wird nur die Grundversicherung. Deine Zusatzversicherung läuft weiter, das steht auch so im Brief.", "Seule l’assurance de base est résiliée. Votre assurance complémentaire est maintenue, la lettre le précise.", "Only basic insurance is cancelled. Your supplementary insurance continues, and the letter says so.")} {tip(zus_tip + f' <a href="{prov}">' + T("Mehr dazu", "En savoir plus", "More") + '</a>')}</p>
   <details class="kd-more full"><summary>{more_lbl} <span class="kd-lbl-note">{T("Versicherten-Nr., Kinder, Sprache des Briefs", "n° d’assuré, enfants, langue de la lettre", "policy no., children, letter language")}</span></summary>
     <div class="kd-more-grid">
       <div><label for="kd-nr">{T("Versicherten-Nr.", "N° d’assuré", "Policy no.")} <span class="kd-lbl-note">{T("steht auf der Karte", "sur la carte d’assuré", "on your insurance card")}</span></label><input id="kd-nr"></div>

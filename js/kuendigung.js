@@ -102,7 +102,6 @@
           more: 'Hiermit kündige ich die obligatorische Krankenpflegeversicherung nach KVG für mich und die folgenden Personen',
           one: 'Hiermit kündige ich meine obligatorische Krankenpflegeversicherung nach KVG', on: ' fristgerecht auf den ',
           keep: 'Meine Zusatzversicherungen sind von dieser Kündigung nicht betroffen und laufen weiter.',
-          also: 'Zusätzlich kündige ich meine Zusatzversicherungen nach VVG auf den nächstmöglichen Termin.',
           confirm: 'Bitte bestätigen Sie mir den Eingang der Kündigung schriftlich.', hello: 'Sehr geehrte Damen und Herren', bye: 'Freundliche Grüsse',
           dateSep: ', ', footer: 'Erstellt mit abovergleich.com, dem unabhängigen Krankenkassen-Vergleich',
           m_body: 'Im Anhang sende ich Ihnen meine unterschriebene Kündigung der Grundversicherung auf den ', m_name: 'Name: ', m_nr: 'Versicherten-Nr.: ',
@@ -113,7 +112,6 @@
           more: 'Par la présente, je résilie dans les délais l’assurance obligatoire des soins selon la LAMal pour moi-même et pour les personnes suivantes',
           one: 'Par la présente, je résilie dans les délais mon assurance obligatoire des soins selon la LAMal', on: ' pour le ',
           keep: 'Mes assurances complémentaires ne sont pas concernées par cette résiliation et sont maintenues.',
-          also: 'Je résilie en outre mes assurances complémentaires selon la LCA pour la prochaine échéance possible.',
           confirm: 'Je vous prie de bien vouloir me confirmer par écrit la réception de cette résiliation.', hello: 'Madame, Monsieur,',
           bye: 'Veuillez agréer, Madame, Monsieur, mes salutations distinguées.', dateSep: ', le ',
           footer: 'Créé avec abovergleich.com, le comparatif indépendant des caisses-maladie',
@@ -300,9 +298,8 @@
     if (ids.length) subject.push(ids.join(', '));
     var body = [(more.length ? b('more') : b('one')) + b('on') + endText() + (more.length ? (LL() === 'fr' ? ' :' : ':') : '.')];
     more.forEach(function (m) { body.push('- ' + m); });
-    var zusatz = (document.querySelector('input[name="kd-zusatz"]:checked') || {}).value;
-    if (zusatz === 'behalten') body.push('', b('keep'));
-    if (zusatz === 'kuendigen') body.push('', b('also'));
+    // Zusatzversicherung kuendigen gibt es hier bewusst nicht mehr (08.10.2026, versehentlich mitgekuendigt)
+    body.push('', b('keep'));
     body.push('', b('confirm'));
     return {
       kasse: k, name: name,
@@ -504,7 +501,6 @@
     var body = {
       event: event, quelle: 'editor', kasse_alt: L.kasse ? L.kasse.id : null, kasse_neu: neu ? neu.id : null,
       plz: plzOf(), jahrgang: jahrgangOf(),
-      zusatz: (document.querySelector('input[name="kd-zusatz"]:checked') || {}).value,
       kanal: L.kasse ? (L.kasse.mail ? 'mail' : L.kasse.portal ? 'portal' : 'post') : null,
     };
     try {
@@ -622,12 +618,6 @@
     if (!$(id)) return;
     $(id).addEventListener('input', render);
     $(id).addEventListener('change', render);
-  });
-  Array.prototype.forEach.call(document.querySelectorAll('input[name="kd-zusatz"]'), function (r) {
-    r.addEventListener('change', function () {
-      $('kd-zusatz-warn').hidden = !document.querySelector('input[name="kd-zusatz"][value="kuendigen"]').checked;
-      render();
-    });
   });
   render();
 })();
