@@ -2257,7 +2257,12 @@ KUENDIGEN_CSS = """
   .kd-done[hidden] { display:none; }
   .kd-closed { background:rgba(234,88,12,.07); border-left:4px solid var(--orange); border-radius:10px; padding:14px 16px; font-size:15px; line-height:1.6; margin:12px 0 24px; }
   .kd-closed[hidden] { display:none; }
-  .kd-closed a { display:inline-block; margin-top:8px; color:var(--accent-dark); font-weight:600; }
+  .kd-closed a { color:var(--accent-dark); font-weight:600; }
+  .kd-wk { margin-top:16px; padding-top:14px; border-top:1px solid var(--border2); }
+  .kd-wk p { margin:2px 0 0; font-size:14px; }
+  .kd-wk .kd-form { margin:10px 0 12px; }
+  .kd-wk .kd-go { background:var(--accent); color:var(--text); border:none; border-radius:10px; padding:11px 18px; font:inherit; font-weight:700; cursor:pointer; }
+  .kd-wk .kd-go:disabled { opacity:.6; cursor:default; }
   #kd-pad.kd-invalid { border:2px solid var(--orange); background:rgba(234,88,12,.04); }
   .kd-done-head { display:flex; gap:14px; align-items:flex-start; }
   .kd-done-small { display:block; font-size:13px; color:var(--muted); margin-top:4px; }
@@ -2390,7 +2395,18 @@ def kuendigen_page(kv):
 <div id="kd-closed" class="kd-closed" hidden>{T(f"<strong>Die Frist für den 1. Januar {YEAR} ist vorbei.</strong> Die Kündigung musste bis {dl} bei der Kasse sein. Der nächste Wechsel ist auf den 1. Januar {YEAR + 1} möglich, mit Kündigung bis 30. November {YEAR}. Nur im Standardmodell mit Franchise 300 geht es schon auf den 1. Juli, mit Kündigung bis 31. März.",
   f"<strong>Le délai pour le 1er janvier {YEAR} est passé.</strong> La résiliation devait parvenir à la caisse au plus tard le {dl}. Le prochain changement est possible au 1er janvier {YEAR + 1}, avec résiliation d’ici au 30 novembre {YEAR}. Seulement en modèle standard avec franchise 300, c’est possible dès le 1er juillet, avec résiliation d’ici au 31 mars.",
   f"<strong>The deadline for 1 January {YEAR} has passed.</strong> Your cancellation had to reach the insurer by {dl}. The next switch is possible on 1 January {YEAR + 1}, cancelling by 30 November {YEAR}. Only in the standard model with a 300 deductible can you switch on 1 July, cancelling by 31 March.")}
-  <a href="{calc}">{T("Prämien vergleichen und nächstes Jahr erinnern lassen", "Comparer les primes et recevoir un rappel l’an prochain", "Compare premiums and get a reminder next year")} &rarr;</a></div>
+  <div class="kd-wk">
+    <strong>{T("Damit du es nächstes Mal nicht verpasst", "Pour ne pas le manquer la prochaine fois", "So you don’t miss it next time")}</strong>
+    <p>{T("Ende September, wenn die neuen Prämien da sind, schicken wir dir deinen Vergleich. Eine Mail im Jahr.", "Fin septembre, quand les nouvelles primes sont publiées, nous vous envoyons votre comparatif. Un e-mail par an.", "At the end of September, when the new premiums are out, we send you your comparison. One email a year.")}</p>
+    <div class="kd-form">
+      <div class="full"><label for="wk-email">{T("E-Mail", "E-mail", "Email")}</label><input id="wk-email" type="email" autocomplete="email" placeholder="{T("du@beispiel.ch", "vous@exemple.ch", "you@example.ch")}"></div>
+      <div class="kd-plzort"><div><label for="wk-plz">{T("PLZ", "NPA", "Postcode")}</label><input id="wk-plz" autocomplete="postal-code" inputmode="numeric" maxlength="4"></div><div><label for="wk-year">{T("Jahrgang", "Année de naissance", "Year of birth")}</label><input id="wk-year" inputmode="numeric" maxlength="4" placeholder="1985"></div></div>
+      <div><label for="wk-fr">{T("Franchise", "Franchise", "Deductible")}</label><select id="wk-fr">{"".join(f'<option value="{v}"{" selected" if v == 2500 else ""}>CHF {v:,}</option>'.replace(",", "’") for v in (300, 500, 1000, 1500, 2000, 2500))}</select></div>
+    </div>
+    <button type="button" id="wk-go" class="kd-go">{T("Wecker stellen", "Activer le rappel", "Set reminder")}</button>
+    <div id="wk-msg" class="kd-msg" role="status"></div>
+    <div class="kd-terms">{T(f'Du bekommst zuerst eine Mail zum Bestätigen. <a href="{i18n.url("datenschutz")}#wecker" target="_blank">Datenschutz</a>', f'Vous recevez d’abord un e-mail de confirmation. <a href="{i18n.url("datenschutz")}#wecker" target="_blank">Protection des données</a>', f'You first get an email to confirm. <a href="{i18n.url("datenschutz")}#wecker" target="_blank">Privacy</a>')}</div>
+  </div></div>
 <div id="kd-tool">
 <p class="kd-intro">{T("Ausfüllen, unterschreiben, fertig. Das PDF kommt per Mail, abschicken an die Kasse tust du selbst.",
   "Remplir, signer, terminé. Le PDF arrive par e-mail, c’est vous qui l’envoyez à la caisse.",

@@ -56,6 +56,9 @@
     no_sig: { de: 'Bitte noch unterschreiben. Ohne Unterschrift kann die Kasse die Kündigung zurückweisen, und dann ist die Frist vielleicht schon vorbei.',
               fr: 'Veuillez encore signer. Sans signature, la caisse peut refuser la résiliation, et le délai sera peut-être déjà passé.',
               en: 'Please sign first. Without a signature the insurer can reject the cancellation, and by then the deadline may have passed.' },
+    wk_ok: { de: 'Fast geschafft: Bitte bestätige die Mail an {m}.', fr: 'Presque fini : veuillez confirmer l’e-mail envoyé à {m}.', en: 'Almost done: please confirm the email sent to {m}.' },
+    wk_already: { de: 'Dein Wecker ist schon eingeschaltet.', fr: 'Votre rappel est déjà activé.', en: 'Your reminder is already on.' },
+    wk_bad: { de: 'Bitte E-Mail, PLZ und Jahrgang prüfen.', fr: 'Veuillez vérifier l’e-mail, le NPA et l’année de naissance.', en: 'Please check email, postcode and year of birth.' },
     closed_left: { de: 'Die Frist ist vorbei.', fr: 'Le délai est passé.', en: 'The deadline has passed.' },
     no_kasse: { de: 'Bitte zuerst deine Kasse wählen.', fr: 'Veuillez d’abord choisir votre caisse.', en: 'Please choose your insurer first.' },
     missing: { de: 'Bitte noch ausfüllen: {f}.', fr: 'Veuillez encore remplir : {f}.', en: 'Please still fill in: {f}.' },
@@ -201,6 +204,32 @@
     $('kd-left').textContent = t('closed_left');
     $('kd-tool').hidden = true;
     $('kd-closed').hidden = false;
+    closedWecker();
+  }
+  // Nach der Frist: Wecker fürs nächste Jahr, gleiche Anmeldung wie im Rechner
+  // (Funktion wecker, Double Opt-in). Angaben aus dem Rechner vorbelegen.
+  function closedWecker() {
+    var pr = {};
+    try { pr = JSON.parse(localStorage.getItem('kk-profile') || 'null') || {}; } catch (e) {}
+    if (pr.plz) $('wk-plz').value = pr.plz;
+    if (pr.year) $('wk-year').value = pr.year;
+    if (pr.franchise) $('wk-fr').value = String(pr.franchise);
+    $('wk-go').onclick = function () {
+      var btn = this, email = $('wk-email').value.trim(), plz = $('wk-plz').value.trim(), year = $('wk-year').value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(email) || !/^\d{4}$/.test(plz) || !/^(19|20)\d{2}$/.test(year)) {
+        $('wk-msg').textContent = t('wk_bad');
+        return;
+      }
+      btn.disabled = true;
+      fetch('https://zexpmaegqsayleaohiip.supabase.co/functions/v1/wecker', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, plz: plz, jahrgang: year, franchise: $('wk-fr').value, accident_included: pr.accident === true, lang: UI }) })
+        .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+        .then(function (x) {
+          if (!x.ok || x.j.error) throw new Error(x.j.error || '');
+          $('wk-msg').textContent = x.j.already ? t('wk_already') : t('wk_ok', { m: email });
+        })
+        .catch(function (err) { btn.disabled = false; $('wk-msg').textContent = (err && err.message) || t('send_fail'); });
+    };
   }
 
   function kasse() { return KASSEN.find(function (x) { return String(x.id) === sel.value; }) || null; }
