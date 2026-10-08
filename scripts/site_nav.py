@@ -26,6 +26,57 @@ LINKS = {
            ("kassen", "", "Insurers"), ("kuendigen", "", "Cancel"), ("blog", "", "Guide"),
            ("https://handyabo.com/en/", "", "Mobile plans")],
 }
+# Frist-Leiste unten am Bildschirm: build_kk_pages.py setzt FRIST_ISO. Läuft
+# site_nav allein (ohne Frist), bleibt eine vorhandene Leiste unverändert.
+# Nicht auf der Kündigungsseite selbst (dort steht die Frist gross) und nicht
+# auf Seiten ohne Bezug zur Krankenkasse.
+FRIST_ISO = None
+FRIST_SKIP = {"kuendigen", "hausrat", "impressum", "datenschutz", "kontakt"}
+FRIST_TXT = {
+    "de": ("Kündigen nur bis {d}.", "Bis dann muss die Kündigung bei deiner Kasse eingetroffen sein, sonst bleibst du ein weiteres Jahr.",
+           "Kündigung erstellen", "Noch {n} Tage.", "Heute ist der letzte Tag.", "Schliessen"),
+    "fr": ("Résilier jusqu’au {d} seulement.", "La résiliation doit être parvenue à votre caisse à cette date, sinon vous y restez une année de plus.",
+           "Créer la résiliation", "Encore {n} jours.", "C’est le dernier jour.", "Fermer"),
+    "en": ("Cancel by {d} only.", "Your cancellation must have reached your insurer by then, or you stay another year.",
+           "Create cancellation", "{n} days left.", "Today is the last day.", "Close"),
+}
+FRIST_RE = re.compile(r"\n*<!-- frist -->.*?<!-- /frist -->", re.S)
+
+
+def frist_html(path):
+    """Leiste mit der Kündigungsfrist, leer wo sie nicht hingehört. Sie ist
+    zuerst versteckt; das Skript zeigt sie nur bis zur Frist und nur, wenn
+    sie in diesem Fenster nicht weggeklickt wurde."""
+    if not FRIST_ISO:
+        return ""
+    key, _ = i18n.route_of(path)
+    lang = i18n.lang_of(path)
+    # auch nicht auf Unterseiten der Kündigung (PDF-Abholseite aus der Mail)
+    if key in FRIST_SKIP or path.startswith(i18n.url("kuendigen", lang)):
+        return ""
+    head, body, cta, left, last, close = FRIST_TXT[lang]
+    d = i18n.date_long(FRIST_ISO, lang).rsplit(" ", 1)[0]
+    return f"""<!-- frist -->
+<div class="frist-bar" id="frist-bar" data-frist="{FRIST_ISO}" hidden>
+  <p><strong>{head.format(d=d)}</strong> {body} <span id="frist-left"></span></p>
+  <a href="{i18n.url("kuendigen", lang)}" class="frist-cta">{cta} &rarr;</a>
+  <button type="button" class="frist-x" aria-label="{close}">&times;</button>
+</div>
+<script>(function () {{
+  var b = document.getElementById('frist-bar'), k = 'frist-' + b.dataset.frist;
+  var n = Math.floor((new Date(b.dataset.frist + 'T23:59:59') - new Date()) / 864e5);
+  try {{ if (n < 0 || sessionStorage.getItem(k)) return; }} catch (e) {{ if (n < 0) return; }}
+  document.getElementById('frist-left').textContent = n === 0 ? {last!r} : {left!r}.replace('{{n}}', n);
+  b.hidden = false;
+  document.body.style.paddingBottom = b.offsetHeight + 'px';
+  b.querySelector('.frist-x').onclick = function () {{
+    b.hidden = true; document.body.style.paddingBottom = '';
+    try {{ sessionStorage.setItem(k, '1'); }} catch (e) {{}}
+  }};
+}})();</script>
+<!-- /frist -->"""
+
+
 CTA = {"de": "Prämien vergleichen", "fr": "Comparer les primes", "en": "Compare premiums"}
 MENU = {"de": "Menü", "fr": "Menu", "en": "Menu"}
 SWITCH_LABEL = {"de": "Sprache", "fr": "Langue", "en": "Language"}
@@ -88,6 +139,11 @@ def apply_static():
     for rel, f in static_files():
         s = f.read_text(encoding="utf-8")
         new, n = re.subn(r"<nav>.*?</nav>", lambda _: nav_html(rel), s, count=1, flags=re.S)
+        if n and FRIST_ISO:
+            new = FRIST_RE.sub("", new)
+            bar = frist_html(rel)
+            if bar:
+                new = new.replace("</nav>", "</nav>\n" + bar, 1)
         if n and new != s:
             f.write_text(new, encoding="utf-8")
 

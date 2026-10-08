@@ -128,7 +128,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles/shared.css?v=88082246">
+<link rel="stylesheet" href="/styles/shared.css?v=e82520eb">
 
 <style>
   /* HERO */
@@ -697,6 +697,25 @@
     <span></span><span></span><span></span>
   </button>
 </nav>
+<!-- frist -->
+<div class="frist-bar" id="frist-bar" data-frist="2026-11-30" hidden>
+  <p><strong>Résilier jusqu’au 30 novembre seulement.</strong> La résiliation doit être parvenue à votre caisse à cette date, sinon vous y restez une année de plus. <span id="frist-left"></span></p>
+  <a href="/fr/resilier-caisse-maladie/" class="frist-cta">Créer la résiliation &rarr;</a>
+  <button type="button" class="frist-x" aria-label="Fermer">&times;</button>
+</div>
+<script>(function () {
+  var b = document.getElementById('frist-bar'), k = 'frist-' + b.dataset.frist;
+  var n = Math.floor((new Date(b.dataset.frist + 'T23:59:59') - new Date()) / 864e5);
+  try { if (n < 0 || sessionStorage.getItem(k)) return; } catch (e) { if (n < 0) return; }
+  document.getElementById('frist-left').textContent = n === 0 ? 'C’est le dernier jour.' : 'Encore {n} jours.'.replace('{n}', n);
+  b.hidden = false;
+  document.body.style.paddingBottom = b.offsetHeight + 'px';
+  b.querySelector('.frist-x').onclick = function () {
+    b.hidden = true; document.body.style.paddingBottom = '';
+    try { sessionStorage.setItem(k, '1'); } catch (e) {}
+  };
+})();</script>
+<!-- /frist -->
 
 <!-- HERO with KK Calculator -->
 <section class="hero" id="kk-rechner">
@@ -1052,7 +1071,7 @@
 <section class="cta-section">
   <div class="cta-inner">
     <h2>Vérifiez votre prime avant le délai</h2>
-    <p>Vous pouvez changer chaque année au 1er janvier. Vous devez résilier d’ici le 30 novembre, par recommandé.</p>
+    <p>Vous pouvez changer chaque année au 1er janvier. La résiliation doit être parvenue à votre caisse au plus tard le 30 novembre.</p>
     <a href="#kk-rechner" class="cta-btn">Vers le calculateur de primes &rarr;</a>
   </div>
 </section>

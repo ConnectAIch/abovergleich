@@ -448,3 +448,21 @@ a.kasse-link:hover { color: var(--accent-dark); }
 @media (pointer: coarse) {
   input, select, textarea { font-size: 16px !important; }
 }
+
+/* Frist-Leiste (scripts/site_nav.py): dunkel, also helles Gelb */
+.frist-bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 90; display: flex; align-items: center; gap: 12px 18px;
+  padding: 12px 52px 12px 24px; background: var(--dark); color: var(--dark-text); box-shadow: 0 -4px 18px rgba(0,0,0,.18); }
+.frist-bar[hidden] { display: none; }
+.frist-bar p { margin: 0; flex: 1 1 auto; font-size: 14px; line-height: 1.45; color: var(--dark-muted); }
+.frist-bar strong { color: var(--accent); }
+.frist-bar #frist-left { color: var(--dark-text); font-weight: 600; white-space: nowrap; }
+.frist-cta { flex: 0 0 auto; background: var(--accent); color: var(--dark) !important; font-weight: 700; font-size: 14px;
+  padding: 9px 16px; border-radius: 10px; text-decoration: none !important; white-space: nowrap; }
+.frist-x { position: absolute; top: 6px; right: 10px; background: none; border: 0; color: var(--dark-muted); font-size: 22px;
+  line-height: 1; cursor: pointer; padding: 6px; }
+@media (max-width: 640px) {
+  .frist-bar { flex-wrap: wrap; gap: 8px; padding: 10px 40px 10px 16px; }
+  .frist-bar p { font-size: 13px; line-height: 1.4; flex-basis: 100%; }
+  .frist-cta { font-size: 13px; padding: 7px 12px; }
+  .frist-x { top: 2px; right: 6px; }
+}

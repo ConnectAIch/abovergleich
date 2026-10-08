@@ -51,7 +51,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles/shared.css?v=88082246">
+<link rel="stylesheet" href="/styles/shared.css?v=e82520eb">
 <style>
   .kk-rating { background:var(--surface); border:1px solid var(--border2); border-radius:14px; padding:20px 22px; margin:20px 0; }
   .kk-rating-head { display:flex; justify-content:space-between; gap:16px; align-items:flex-start; margin-bottom:12px; }
@@ -149,6 +149,25 @@
     <span></span><span></span><span></span>
   </button>
 </nav>
+<!-- frist -->
+<div class="frist-bar" id="frist-bar" data-frist="2026-11-30" hidden>
+  <p><strong>Cancel by 30 November only.</strong> Your cancellation must have reached your insurer by then, or you stay another year. <span id="frist-left"></span></p>
+  <a href="/en/cancel-health-insurance/" class="frist-cta">Create cancellation &rarr;</a>
+  <button type="button" class="frist-x" aria-label="Close">&times;</button>
+</div>
+<script>(function () {
+  var b = document.getElementById('frist-bar'), k = 'frist-' + b.dataset.frist;
+  var n = Math.floor((new Date(b.dataset.frist + 'T23:59:59') - new Date()) / 864e5);
+  try { if (n < 0 || sessionStorage.getItem(k)) return; } catch (e) { if (n < 0) return; }
+  document.getElementById('frist-left').textContent = n === 0 ? 'Today is the last day.' : '{n} days left.'.replace('{n}', n);
+  b.hidden = false;
+  document.body.style.paddingBottom = b.offsetHeight + 'px';
+  b.querySelector('.frist-x').onclick = function () {
+    b.hidden = true; document.body.style.paddingBottom = '';
+    try { sessionStorage.setItem(k, '1'); } catch (e) {}
+  };
+})();</script>
+<!-- /frist -->
 
 <article class="article kk-page">
 <div class="award-page">

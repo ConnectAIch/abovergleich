@@ -53,6 +53,10 @@
     f_name: { de: 'Name', fr: 'Nom', en: 'Name' }, f_birth: { de: 'Geburtsdatum', fr: 'Date de naissance', en: 'Date of birth' },
     f_street: { de: 'Strasse', fr: 'Rue', en: 'Street' }, f_plz: { de: 'PLZ', fr: 'NPA', en: 'Postcode' },
     f_ort: { de: 'Ort', fr: 'Localité', en: 'Town' }, f_email: { de: 'E-Mail', fr: 'E-mail', en: 'Email' },
+    no_sig: { de: 'Bitte noch unterschreiben. Ohne Unterschrift kann die Kasse die Kündigung zurückweisen, und dann ist die Frist vielleicht schon vorbei.',
+              fr: 'Veuillez encore signer. Sans signature, la caisse peut refuser la résiliation, et le délai sera peut-être déjà passé.',
+              en: 'Please sign first. Without a signature the insurer can reject the cancellation, and by then the deadline may have passed.' },
+    closed_left: { de: 'Die Frist ist vorbei.', fr: 'Le délai est passé.', en: 'The deadline has passed.' },
     no_kasse: { de: 'Bitte zuerst deine Kasse wählen.', fr: 'Veuillez d’abord choisir votre caisse.', en: 'Please choose your insurer first.' },
     missing: { de: 'Bitte noch ausfüllen: {f}.', fr: 'Veuillez encore remplir : {f}.', en: 'Please still fill in: {f}.' },
     sent_txt: { de: 'Mail ist unterwegs an {m}. Klick dort auf «Kündigung herunterladen», damit bestätigst du auch deine Adresse. Nichts da? Schau im Spam-Ordner.',
@@ -191,6 +195,13 @@
 
   var days = Math.floor((DEADLINE - new Date()) / 86400000);
   if (days >= 0) $('kd-left').textContent = days === 0 ? t('last') : t('left', { n: days });
+  // Nach der Frist keinen Brief mehr «fristgerecht auf den 31. Dezember»
+  // erstellen lassen, er käme zu spät. Die Seite erklärt den nächsten Termin.
+  if (days < 0) {
+    $('kd-left').textContent = t('closed_left');
+    $('kd-tool').hidden = true;
+    $('kd-closed').hidden = false;
+  }
 
   function kasse() { return KASSEN.find(function (x) { return String(x.id) === sel.value; }) || null; }
   stepper(1);
@@ -268,6 +279,7 @@
     drawing = false;
     try { pad.releasePointerCapture(e.pointerId); } catch (err) {}
     sig = crop();
+    if (sig) pad.classList.remove('kd-invalid');
     padState();
     render();
   }
@@ -429,6 +441,15 @@
   function withPdf(btn, fn) {
     var label = btn.textContent;
     if (!check()) return;
+    // Unterschrift ist Pflicht: Die Mail an die Kasse spricht von der
+    // unterschriebenen Kündigung, und ein ungezeichneter Brief per Post fällt
+    // erst auf, wenn die Kasse nachfragt, oft nach der Frist.
+    if (!sig) {
+      $('kd-msg').textContent = t('no_sig');
+      pad.classList.add('kd-invalid');
+      pad.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
     $('kd-msg').textContent = '';
     btn.disabled = true;
     btn.textContent = t('wait');

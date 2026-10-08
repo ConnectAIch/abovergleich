@@ -48,6 +48,7 @@ YEAR = 2027
 PREV = YEAR - 1
 DEADLINE_ISO = f"{PREV}-11-30"   # Kündigung Grundversicherung, Eingang bei der Kasse
 PUBLISHED = "2026-09-30"
+site_nav.FRIST_ISO = DEADLINE_ISO
 
 
 def deadline(short=False):
@@ -503,6 +504,7 @@ def page(path, title, description, body, jsonld, alts=None):
 <body>
 
 {site_nav.nav_html(path, alts)}
+{site_nav.frist_html(path)}
 
 <article class="article kk-page">
 {body}
@@ -2253,6 +2255,10 @@ KUENDIGEN_CSS = """
   .kd-actions button.kd-link { background:none; padding:12px 6px; font-weight:600; color:var(--accent-dark); }
   .kd-done { display:block; }
   .kd-done[hidden] { display:none; }
+  .kd-closed { background:rgba(234,88,12,.07); border-left:4px solid var(--orange); border-radius:10px; padding:14px 16px; font-size:15px; line-height:1.6; margin:12px 0 24px; }
+  .kd-closed[hidden] { display:none; }
+  .kd-closed a { display:inline-block; margin-top:8px; color:var(--accent-dark); font-weight:600; }
+  #kd-pad.kd-invalid { border:2px solid var(--orange); background:rgba(234,88,12,.04); }
   .kd-done-head { display:flex; gap:14px; align-items:flex-start; }
   .kd-done-small { display:block; font-size:13px; color:var(--muted); margin-top:4px; }
   .kd-nx-h { font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; font-size:16px; margin:16px 0 8px; }
@@ -2381,6 +2387,11 @@ def kuendigen_page(kv):
 <ol id="wechsel" class="kd-stepper" hidden></ol>
 
 <h2 id="vorlage">{T("Kündigungsbrief erstellen", "Créer la lettre de résiliation", "Create your cancellation letter")}</h2>
+<div id="kd-closed" class="kd-closed" hidden>{T(f"<strong>Die Frist für den 1. Januar {YEAR} ist vorbei.</strong> Die Kündigung musste bis {dl} bei der Kasse sein. Der nächste Wechsel ist auf den 1. Januar {YEAR + 1} möglich, mit Kündigung bis 30. November {YEAR}. Nur im Standardmodell mit Franchise 300 geht es schon auf den 1. Juli, mit Kündigung bis 31. März.",
+  f"<strong>Le délai pour le 1er janvier {YEAR} est passé.</strong> La résiliation devait parvenir à la caisse au plus tard le {dl}. Le prochain changement est possible au 1er janvier {YEAR + 1}, avec résiliation d’ici au 30 novembre {YEAR}. Seulement en modèle standard avec franchise 300, c’est possible dès le 1er juillet, avec résiliation d’ici au 31 mars.",
+  f"<strong>The deadline for 1 January {YEAR} has passed.</strong> Your cancellation had to reach the insurer by {dl}. The next switch is possible on 1 January {YEAR + 1}, cancelling by 30 November {YEAR}. Only in the standard model with a 300 deductible can you switch on 1 July, cancelling by 31 March.")}
+  <a href="{calc}">{T("Prämien vergleichen und nächstes Jahr erinnern lassen", "Comparer les primes et recevoir un rappel l’an prochain", "Compare premiums and get a reminder next year")} &rarr;</a></div>
+<div id="kd-tool">
 <p class="kd-intro">{T("Ausfüllen, unterschreiben, fertig. Das PDF kommt per Mail, abschicken an die Kasse tust du selbst.",
   "Remplir, signer, terminé. Le PDF arrive par e-mail, c’est vous qui l’envoyez à la caisse.",
   "Fill in, sign, done. The PDF arrives by email; you send it to the insurer yourself.")}
@@ -2416,6 +2427,7 @@ def kuendigen_page(kv):
 <div id="kd-msg" class="kd-msg" role="status"></div>
 <div id="kd-done" class="kd-done" hidden></div>
 <details class="kd-preview"><summary>{T("Brief ansehen", "Voir la lettre", "View the letter")}</summary><div id="kd-brief"></div></details>
+</div>
 
 <h2>{T("So läuft der Wechsel", "Comment se passe le changement", "How the switch works")}</h2>
 <ol>
