@@ -1963,19 +1963,23 @@ def kasse_page(i, cur, by_canton_cur, prev_idx, insurers, ic, top3_cur, kv, nu):
     group_name = group.split(" (")[0] if group else None
     siblings = [j for j in KASSE_SLUG if j != i and ((kv.get(j) or {}).get("group") or "").split(" (")[0] == group_name] if group_name else []
 
-    title = L(f"{name} Prämien {YEAR}: Erhöhung, Modelle und Rating", f"{name} primes {YEAR} : hausse, modèles et notation",
-              f"{name} premiums {YEAR}: increase, models and rating")
+    # «Kündigung» im Title: die Seiten stehen für «<Kasse> Prämien 2027» auf
+    # Platz 5 bis 11, für «<Kasse> kündigen» tauchten sie trotz eigenem
+    # Abschnitt mit Adresse gar nicht auf (GSC, 28.10.2026).
+    title = L(f"{name} Prämien {YEAR}: Erhöhung, Rating, Kündigung", f"{name} primes {YEAR} : hausse, notation, résiliation",
+              f"{name} premiums {YEAR}: increase, rating, cancellation")
+    dl = deadline(short=True)
     if chg is not None:
-        desc = L(f"{name} {YEAR}: Standardprämie {pct(chg)} gegenüber {PREV}. Alle Kantone und Modelle, "
-                 f"Preistreue-Note und Kündigungsadresse. Offizielle BAG-Daten.",
-                 f"{name} {YEAR} : prime standard {pct(chg)} par rapport à {PREV}. Tous les cantons et modèles, "
-                 f"note de constance et adresse de résiliation. Données de l’OFSP.",
-                 f"{name} {YEAR}: standard premium {pct(chg)} versus {PREV}. All cantons and models, "
-                 f"price consistency score and cancellation address. Official FOPH data.")
+        desc = L(f"{name} {YEAR}: Standardprämie {pct(chg)} gegenüber {PREV}. Alle Kantone, Modelle und "
+                 f"Preistreue-Note. Kündigen bis {dl}: Adresse und Vorlage.",
+                 f"{name} {YEAR} : prime standard {pct(chg)} par rapport à {PREV}. Cantons, modèles, "
+                 f"note de constance. Résilier d’ici au {dl} : adresse et lettre.",
+                 f"{name} {YEAR}: standard premium {pct(chg)} versus {PREV}. All cantons, models and "
+                 f"price consistency score. Cancel by {dl}: address and letter.")
     else:
-        desc = L(f"{name} {YEAR}: Prämien in allen Kantonen, Modelle, Preistreue-Note und Kündigungsadresse. BAG-Daten.",
-                 f"{name} {YEAR} : primes dans tous les cantons, modèles, note de constance et adresse de résiliation. Données OFSP.",
-                 f"{name} {YEAR}: premiums in all cantons, models, price consistency score and cancellation address. FOPH data.")
+        desc = L(f"{name} {YEAR}: Prämien in allen Kantonen, Modelle, Preistreue-Note. Kündigen bis {dl}: Adresse und Vorlage.",
+                 f"{name} {YEAR} : primes dans tous les cantons, modèles, note de constance. Résilier d’ici au {dl} : adresse et lettre.",
+                 f"{name} {YEAR}: premiums in all cantons, models, price consistency score. Cancel by {dl}: address and letter.")
 
     crumbs = [home_crumb(), (L("Kassen", "Caisses", "Insurers"), i18n.url("kassen")), (name, path)]
     p = [crumbs_html(crumbs)]
