@@ -449,7 +449,8 @@ ANALYTICS = """<script>
   window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
 </script>
 <script defer src="/_vercel/insights/script.js"></script>
-<script defer src="/_vercel/speed-insights/script.js"></script>"""
+<script defer src="/_vercel/speed-insights/script.js"></script>
+<script defer src="/js/klicks.js"></script>"""
 
 
 def page(path, title, description, body, jsonld, alts=None):
@@ -2902,7 +2903,7 @@ def bust_assets():
     Ändert sich die Datei, ändert sich die URL, und Browser laden sie neu."""
     import hashlib
     assets = {}
-    for rel in ("styles/shared.css", "js/combobox.js", "js/kuendigung.js", "js/rechner.js", "rating-daten.json",
+    for rel in ("styles/shared.css", "js/combobox.js", "js/kuendigung.js", "js/rechner.js", "js/klicks.js", "rating-daten.json",
                 "favicon.svg", "favicon.ico", "apple-touch-icon.png"):
         f = ROOT / rel
         if f.exists():
