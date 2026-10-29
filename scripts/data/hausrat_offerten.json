@@ -1,0 +1,102 @@
+{
+  "_info": "Echte Offerten aus den oeffentlichen Online-Rechnern, ohne Kontaktdaten und ohne Abschluss. Quelle fuer die Tabelle auf /hausratversicherung/ (DE/FR/EN), gebaut von scripts/build_hausrat.py. Bei neuer Runde: alle Zeilen neu rechnen, Datum anpassen, Script laufen lassen.",
+  "stand": "29.10.2026",
+  "profil": {
+    "personen": 1,
+    "jahrgang": 1991,
+    "wohnung": "Miete, 3.5 Zimmer, Mehrfamilienhaus",
+    "plz": "8004 Zuerich",
+    "hausratsumme": 85000,
+    "haftpflicht": "5 Mio., wo waehlbar",
+    "zahlung": "jaehrlich"
+  },
+  "offerten": [
+    {
+      "id": "mobiliar", "name": "Die Mobiliar", "paket": "Minima",
+      "total": 230.58, "hausrat": 138.55, "haftpflicht": 92.03,
+      "sb": {"de": "400", "fr": "400", "en": "400"},
+      "url": "https://www.mobiliar.ch/privatpersonen/wohnen-und-eigentum/hausratversicherung",
+      "rechner": "secure.mobiliar.ch/praemienrechner",
+      "notiz": {
+        "de": "Grunddeckung ohne Diebstahl auswärts. Abgaben nicht separat ausgewiesen. Paket Classic mit SB 200, Diebstahl auswärts, Glas und Kasko: CHF 520.91.",
+        "fr": "Couverture de base sans vol hors du domicile. Taxes non indiquées séparément. Paquet Classic avec franchise 200, vol hors du domicile, bris de glace et casco&nbsp;: CHF 520.91.",
+        "en": "Basic cover without theft away from home. Taxes not shown separately. Classic package with CHF 200 excess, theft away from home, glass and accidental damage: CHF 520.91."
+      }
+    },
+    {
+      "id": "zurich", "name": "Zurich", "paket": "Basic",
+      "total": 278.90, "hausrat": null, "haftpflicht": null,
+      "sb": {"de": "400 / Haftpflicht 500", "fr": "400 / RC 500", "en": "400 / liability 500"},
+      "url": "https://www.zurich.ch/de/privat/wohnen-events/hausratversicherung",
+      "rechner": "pl.direct.zurich.ch",
+      "notiz": {
+        "de": "Haftpflicht nur 3 Mio. Paket Optimum mit SB 200, 5 Mio., Diebstahl auswärts, Glas und Grobfahrlässigkeit: CHF 451.90.",
+        "fr": "RC limitée à 3 mio. Paquet Optimum avec franchise 200, 5 mio., vol hors du domicile, bris de glace et faute grave&nbsp;: CHF 451.90.",
+        "en": "Liability only CHF 3m. Optimum package with CHF 200 excess, CHF 5m, theft away from home, glass and gross negligence: CHF 451.90."
+      }
+    },
+    {
+      "id": "smile", "name": "Smile", "paket": "Hausrat + Privathaftpflicht",
+      "paket_i18n": {"fr": "Ménage + RC privée", "en": "Contents + liability"},
+      "total": 296.40, "hausrat": 218.80, "haftpflicht": 77.60,
+      "sb": {"de": "200", "fr": "200", "en": "200"},
+      "url": "https://www.smile-insurances.com/ch/main/de/home/versicherung/haushaltversicherung.html",
+      "rechner": "app.smile-insurances.ch",
+      "notiz": {
+        "de": "Online-Marke von Helvetia. Nur online, kein Berater. Inkl. Abgaben.",
+        "fr": "Marque en ligne d'Helvetia. Uniquement en ligne, sans conseiller. Taxes comprises.",
+        "en": "Helvetia's online brand. Online only, no adviser. Taxes included."
+      }
+    },
+    {
+      "id": "axa", "name": "AXA", "paket": "Small",
+      "total": 360.65, "hausrat": null, "haftpflicht": null,
+      "sb": {"de": "500", "fr": "500", "en": "500"},
+      "url": "https://www.axa.ch/de/privatkunden/angebote/wohnen-eigentum/hausratversicherung.html",
+      "rechner": "axa.ch/de/rechner/haushaltversicherung",
+      "notiz": {
+        "de": "Diebstahl auswärts bis CHF 2'000 inklusive. Inkl. Abgaben und eines einmaligen Rabatts von 5%. Mit AXA-Vorschlag von CHF 53'900 Hausratsumme: CHF 319.00.",
+        "fr": "Vol hors du domicile jusqu'à CHF 2'000 inclus. Taxes et rabais unique de 5&nbsp;% compris. Avec la somme proposée par AXA (CHF 53'900)&nbsp;: CHF 319.00.",
+        "en": "Theft away from home up to CHF 2'000 included. Taxes and a one-off 5% discount included. With AXA's suggested sum of CHF 53'900: CHF 319.00."
+      }
+    },
+    {
+      "id": "helvetia", "name": "Helvetia", "paket": "Hausrat + Privathaftpflicht",
+      "paket_i18n": {"fr": "Ménage + RC privée", "en": "Contents + liability"},
+      "total": 363.30, "hausrat": null, "haftpflicht": null,
+      "sb": {"de": "200", "fr": "200", "en": "200"},
+      "url": "https://www.helvetia.com/ch/web/de/privatkunden/versicherungen/hausratversicherung.html",
+      "rechner": "helvetia.com Prämienrechner",
+      "notiz": {
+        "de": "Seit dem Zusammenschluss auch für Baloise. CHF 21.40 Abgaben inklusive. Laufzeit 2 Jahre, jährlich kündbar.",
+        "fr": "Depuis la fusion, aussi pour Baloise. CHF 21.40 de taxes compris. Durée 2 ans, résiliable chaque année.",
+        "en": "Since the merger, also covers Baloise. CHF 21.40 in taxes included. 2-year term, can be cancelled yearly."
+      }
+    },
+    {
+      "id": "generali", "name": "Generali", "paket": "Hausrat + Privathaftpflicht",
+      "paket_i18n": {"fr": "Ménage + RC privée", "en": "Contents + liability"},
+      "total": 376.60, "hausrat": 294.50, "haftpflicht": 82.10,
+      "sb": {"de": "200", "fr": "200", "en": "200"},
+      "url": "https://www.generali.ch/de/privatpersonen/wohnen-eigentum/hausratversicherung",
+      "rechner": "generali.ch/de/applikationen/praemie-berechnen-hausratversicherung",
+      "notiz": {
+        "de": "Diebstahl auswärts und Kasko je CHF 2'000, Grobfahrlässigkeit inklusive. Vorgeschlagene Laufzeit 5 Jahre.",
+        "fr": "Vol hors du domicile et casco jusqu'à CHF 2'000 chacun, faute grave incluse. Durée proposée&nbsp;: 5 ans.",
+        "en": "Theft away from home and accidental damage up to CHF 2'000 each, gross negligence included. Suggested term: 5 years."
+      }
+    }
+  ],
+  "ohne_haftpflicht": [
+    {
+      "id": "allianz", "name": "Allianz Suisse", "hausrat": 280.80,
+      "url": "https://www.allianz.ch/de/privatkunden/angebote/wohnen-recht/hausratversicherung.html",
+      "rechner": "tarif.allianz.ch",
+      "notiz": {
+        "de": "Der Online-Rechner rechnet nur den Hausrat: CHF 280.80 mit SB 200 und den empfohlenen Zusätzen (Diebstahl auswärts, Kasko, Grobfahrlässigkeit). Privathaftpflicht separat.",
+        "fr": "Le calculateur en ligne ne chiffre que l'assurance ménage&nbsp;: CHF 280.80 avec franchise 200 et les options recommandées (vol hors du domicile, casco, faute grave). RC privée à part.",
+        "en": "The online calculator only prices contents cover: CHF 280.80 with CHF 200 excess and the recommended add-ons (theft away from home, accidental damage, gross negligence). Liability is separate."
+      }
+    }
+  ]
+}

@@ -2850,7 +2850,7 @@ abovergleich.com hilft beim Sparen auf der Grundversicherung. Die Leistungen sin
 - [Preistreue-Award {YEAR}]({SITE}/krankenkassen-rating/award/): Gesamtsieger, Kategoriensieger und Sieger je Kanton, mit Regeln.
 - [Verwaltungskosten der Krankenkassen]({SITE}{BLOG_VERWALTUNG}): Verwaltung, Werbung und Vermittler-Provisionen je Kasse (BAG), mit Reserven und Preistreue-Note.
 - [Krankenkasse kündigen]({SITE}/krankenkasse-kuendigen/): Frist {deadline()}, Kündigungs-Editor mit Unterschrift und PDF, Kündigungsweg (Mail oder Post) und Adresse jeder Kasse laut BAG.
-- [Hausrat & Haftpflicht]({SITE}/hausratversicherung/): Bedarfsrechner und Anbieter-Vergleich.
+- [Hausrat & Haftpflicht]({SITE}/hausratversicherung/): Echte Offerten von 7 Versicherern für 3.5 Zimmer in Zürich (Stand 29.10.2026) und Bedarfsrechner.
 - [Unsere Methode]({SITE}/methode/): Wie wir vergleichen und warum wir keine Telefonnummern verlangen.
 
 ## Kantone
