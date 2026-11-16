@@ -441,6 +441,8 @@ PAGE_CSS = """
   details.kk-gemeinden summary { cursor:pointer; color:var(--accent-dark); }
   details.kk-gemeinden p { font-size:13px !important; line-height:1.7 !important; margin-top:8px; }
   .kk-faq h3 { margin-top:24px; }
+  .kk-frist { background:var(--surface); border:1px solid var(--border2); border-left:4px solid var(--accent); border-radius:10px; padding:12px 16px; margin:16px 0; font-size:15px !important; line-height:1.55 !important; }
+  .kk-frist a { color:var(--accent-dark); font-weight:700; white-space:nowrap; }
   @media (max-width:768px) { .kk-facts { grid-template-columns:1fr; } }
 """
 
@@ -457,7 +459,7 @@ def page(path, title, description, body, jsonld, alts=None):
     """alts: {Sprache: Pfad} derselben Seite, für hreflang und die Sprachwahl."""
     url = f"{SITE}{path}"
     lang = i18n.LANG
-    if len(description) > 160 or len(title) > 70:
+    if len(description) > 160 or len(title) > 65:
         print(f"! {path}: Titel {len(title)} / Beschreibung {len(description)} Zeichen, Google kürzt ab")
     ld = "\n".join(f'<script type="application/ld+json">\n{json.dumps(x, ensure_ascii=False, indent=1)}\n</script>' for x in jsonld)
     alt_links = (site_nav.hreflang_html(alts) + "\n") if alts else ""
@@ -546,6 +548,22 @@ def breadcrumb(items):
     }
 
 
+def article_ld(title, description, path, published):
+    """Article-Markup für Ratgeber-Seiten. dateModified setzt write_sitemap()
+    auf das Datum der letzten Inhaltsänderung (inhalt.py)."""
+    return {
+        "@context": "https://schema.org", "@type": "Article",
+        "headline": title, "description": description,
+        "inLanguage": i18n.HREFLANG[i18n.LANG],
+        "image": f"{SITE}/og-image.png",
+        "datePublished": published, "dateModified": published,
+        "author": {"@type": "Organization", "@id": f"{SITE}/#organization", "name": "abovergleich.com", "url": f"{SITE}/"},
+        "publisher": {"@type": "Organization", "@id": f"{SITE}/#organization", "name": "abovergleich.com",
+                      "logo": {"@type": "ImageObject", "url": f"{SITE}/logo.png", "width": 512, "height": 512}},
+        "mainEntityOfPage": f"{SITE}{path}",
+    }
+
+
 def faq(pairs):
     return {
         "@context": "https://schema.org", "@type": "FAQPage",
@@ -559,6 +577,23 @@ def faq(pairs):
 def crumbs_html(items):
     parts = [f'<a href="{p}">{e(n)}</a>' for n, p in items[:-1]] + [e(items[-1][0])]
     return f'<div class="kk-crumbs">{" &rsaquo; ".join(parts)}</div>'
+
+
+def frist_box(kasse=None):
+    """Hinweis auf die Kündigungsfrist mit Link auf die Kündigungsseite, oben auf
+    Kantons-, Kassen- und Prämienseiten. Diese Seiten ranken für «Prämien 2027»
+    auf Platz 7 bis 12, die Kündigungsseite für «krankenkasse kündigen» auf 86
+    (GSC 16.11.2026); der Link mit dem Suchbegriff als Ankertext gibt ihr Gewicht.
+    Immer mit Datum, damit der Satz nach der Frist nicht falsch wird. Verlinkt
+    die kanonische URL ohne ?kasse=, damit der Ankertext dort ankommt."""
+    who = L(f"bei {e(kasse)}", f"à {e(kasse)}", f"{e(kasse)}") if kasse else L("bei der Kasse", "à la caisse", "the insurer")
+    k = i18n.url("kuendigen")
+    return L(f'<p class="kk-frist"><strong>Wechsel auf den 1. Januar {YEAR}:</strong> Die Kündigung muss bis {deadline()} {who} eingetroffen sein. '
+             f'<a href="{k}">Krankenkasse kündigen mit Vorlage &rarr;</a></p>',
+             f'<p class="kk-frist"><strong>Changer au 1er janvier {YEAR} :</strong> la résiliation doit parvenir {who} au plus tard le {deadline()}. '
+             f'<a href="{k}">Résilier sa caisse-maladie avec modèle &rarr;</a></p>',
+             f'<p class="kk-frist"><strong>Switching on 1 January {YEAR}:</strong> your cancellation must reach {who} by {deadline()}. '
+             f'<a href="{k}">Cancel health insurance with a template &rarr;</a></p>')
 
 
 def rank_table(rows, show_model=True):
@@ -614,7 +649,7 @@ def canton_page(c, cur, prev_idx, cantons, insurers_c, regions):
               f"Cheapest health insurance {name} {YEAR}: premiums compared")
     if len(title) > 65:
         title = L(f"Krankenkasse {name} {YEAR}: die günstigsten Prämien",
-                  f"Caisse-maladie {name} {YEAR} : les primes les moins chères",
+                  f"{name} {YEAR} : caisse-maladie la moins chère",
                   f"Health insurance {name} {YEAR}: cheapest premiums")
     desc = L(f"Krankenkasse {name} {YEAR}: ab CHF {chf(cheapest['premium'])} ({cheapest['insurer']}, Franchise 2'500), "
              f"Prämien im Schnitt {pct(info['change_pct'])}. Alle Kassen, BAG-Daten, Preistreue-Rating.",
@@ -642,6 +677,7 @@ def canton_page(c, cur, prev_idx, cantons, insurers_c, regions):
         f'<p class="kk-lead">The cheapest basic health insurance for adults {e(ik)} costs '
         f'<strong>CHF {chf(cheapest["premium"])} per month</strong> in {YEAR} ({ch_txt}, '
         f'deductible 2\'500, {where}). Benefits are set by law and identical at every insurer, you only pay a different price.</p>'))
+    parts.append(frist_box())
     lbl1 = L(f"Prämienveränderung {e(name)} {PREV} auf {YEAR} (Standardmodell, Franchise 300)",
              f"Évolution des primes {e(name)} de {PREV} à {YEAR} (modèle standard, franchise 300)",
              f"Premium change {e(name)} {PREV} to {YEAR} (standard model, deductible 300)")
@@ -790,8 +826,8 @@ def hub_page(cantons, cheapest_by_canton):
               f"Cheapest health insurer {YEAR} by canton: all 26 cantons")
     desc = L(f"Krankenkassenprämien {YEAR} für alle 26 Kantone: günstigste Kasse, durchschnittliche Standardprämie "
              f"und Veränderung zu {PREV}. Offizielle BAG-Daten.",
-             f"Primes d’assurance-maladie {YEAR} pour les 26 cantons : caisse la moins chère, prime standard moyenne "
-             f"et évolution par rapport à {PREV}. Données officielles de l’OFSP.",
+             f"Primes d’assurance-maladie {YEAR} des 26 cantons : caisse la moins chère, prime standard moyenne "
+             f"et évolution depuis {PREV}. Données de l’OFSP.",
              f"Health insurance premiums {YEAR} for all 26 cantons: cheapest insurer, average standard premium "
              f"and change since {PREV}. Official FOPH data.")
     rows = []
@@ -855,9 +891,9 @@ def report_page(cantons, insurers, nat, model_counts, jojo):
               f"Primes d’assurance-maladie {YEAR} : la hausse dans votre canton",
               f"Health insurance premiums {YEAR}: how much they rise in your canton")
     desc = L(f"Prämien {YEAR}: +{bag:.1f}% im Schnitt (BAG). Unsere Auswertung aller Kassen und "
-             f"Kantone: wer am stärksten aufschlägt, wer günstig bleibt, und bis wann du wechseln kannst.",
-             f"Primes {YEAR} : +{bag_t} % en moyenne (OFSP). Notre analyse de toutes les caisses et de tous les cantons : "
-             f"qui augmente le plus, qui reste avantageux et jusqu’à quand changer.",
+             f"Kantone: wer am stärksten aufschlägt, wer günstig bleibt, bis wann du wechselst.",
+             f"Primes {YEAR} : +{bag_t} % en moyenne (OFSP). Notre analyse des caisses et des cantons : "
+             f"qui augmente le plus, qui reste avantageux, jusqu’à quand changer.",
              f"Premiums {YEAR}: +{bag_t}% on average (FOPH). Our analysis of all insurers and cantons: "
              f"who raises most, who stays cheap, and the deadline to switch.")
     hi, lo = by_change[0], by_change[-1]
@@ -925,6 +961,7 @@ def report_page(cantons, insurers, nat, model_counts, jojo):
           f"<p class=\"kk-lead\">Health insurance premiums are rising again in {YEAR}. According to the Federal Office of Public Health, the average premium goes up by "
           f"<strong>{bag_t}%</strong> (<a href=\"{BAG_OFFICIAL['source_url']}\">SRF</a>). "
           f"We compared the premiums of every insurer in every canton: the average hides how differently insurers raise their prices.</p>"),
+        frist_box(),
         f"""<div class="kk-facts">
   <div class="kk-fact"><div class="kk-fact-val">+{bag_t}&#8239;%</div><div class="kk-fact-label">{L(f"mittlere Prämie {YEAR} laut BAG", f"prime moyenne {YEAR} selon l’OFSP", f"average premium {YEAR} according to the FOPH")}</div></div>
   <div class="kk-fact"><div class="kk-fact-val">{pct(nat)}</div><div class="kk-fact-label">{L("Standardmodell, Franchise 300, unsere Auswertung", "modèle standard, franchise 300, notre analyse", "standard model, deductible 300, our analysis")}</div></div>
@@ -1557,7 +1594,7 @@ def rating_page(r):
     T = lambda de, fr, en: L(de, fr, en)
     body = f"""{crumbs_html([home_crumb(), ("Rating" if i18n.LANG != "fr" else "Constance des primes", path)])}
 <div class="article-badge">{rn} {YEAR}</div>
-<h1>{T(f"Krankenkassen-Rating {YEAR}: Welche Kasse ist dauerhaft günstig?", f"Constance des primes {YEAR} : quelle caisse-maladie reste avantageuse ?", f"Health insurance rating {YEAR}: which insurer stays cheap?")}</h1>
+<h1>{T(f"Krankenkassen-Rating {YEAR}: Welche Kasse ist dauerhaft günstig?", f"Constance des primes {YEAR} : quelle caisse reste avantageuse ?", f"Health insurance rating {YEAR}: which insurer stays cheap?")}</h1>
 <div class="article-meta">{T(f"Aus den BAG-Prämien {y0} bis {YEAR} · nur harte Zahlen, keine Bewertungen", f"D’après les primes de l’OFSP de {y0} à {YEAR} · uniquement des chiffres, aucun avis", f"From FOPH premiums {y0} to {YEAR} · hard numbers only, no reviews")}</div>
 <p class="kk-lead">{T("Die günstigste Kasse von heute ist nicht automatisch eine gute Wahl. Manche sind ein Jahr günstig und schlagen danach kräftig auf, andere streichen Tarife und zwingen dich zum Wechseln. Unser Rating zeigt, welche Kassen <strong>über die Jahre</strong> günstig bleiben.",
   "La caisse la moins chère aujourd’hui n’est pas forcément un bon choix. Certaines sont avantageuses une année puis augmentent fortement, d’autres suppriment des tarifs et vous obligent à changer. Notre notation montre quelles caisses restent avantageuses <strong>au fil des ans</strong>.",
@@ -1631,7 +1668,7 @@ def rating_page(r):
 <p class="kk-note">{T(f"Quellen: BAG, Prämien der obligatorischen Krankenversicherung {y0} bis {YEAR} (opendata.swiss); BAG über priminfo.admin.ch, Solvenzquoten per 1.1.2026; BAG, Aufsichtsdaten OKP; KVV Art. 101. Angaben ohne Gewähr.",
   f"Sources : OFSP, primes de l’assurance obligatoire des soins {y0} à {YEAR} (opendata.swiss) ; OFSP via priminfo.admin.ch, taux de solvabilité au 1.1.2026 ; OFSP, données de surveillance AOS ; OAMal art. 101. Sans garantie.",
   f"Sources: FOPH, compulsory health insurance premiums {y0} to {YEAR} (opendata.swiss); FOPH via priminfo.admin.ch, solvency ratios as of 1 January 2026; FOPH supervisory data; KVV Art. 101. No liability for accuracy.")}</p>"""
-    h1 = T(f"Krankenkassen-Rating {YEAR}: Welche Kasse ist dauerhaft günstig?", f"Constance des primes {YEAR} : quelle caisse-maladie reste avantageuse ?",
+    h1 = T(f"Krankenkassen-Rating {YEAR}: Welche Kasse ist dauerhaft günstig?", f"Constance des primes {YEAR} : quelle caisse reste avantageuse ?",
            f"Health insurance rating {YEAR}: which insurer stays cheap?")
     jsonld = [breadcrumb([home_crumb(), ("Rating" if i18n.LANG != "fr" else "Constance des primes", path)]), faq(qa),
               {"@context": "https://schema.org", "@type": "Article", "headline": h1,
@@ -1640,7 +1677,7 @@ def rating_page(r):
                "publisher": {"@type": "Organization", "name": "abovergleich.com", "url": SITE}, "mainEntityOfPage": f"{SITE}{path}"}]
     desc = T(f"Preistreue-Rating aller Krankenkassen aus den BAG-Prämien {y0} bis {YEAR}: Preis, Konstanz, Treue, Tarife und Reserven. "
              f"{top[0]['name']} schneidet am besten ab.",
-             f"Notation Constance des primes de toutes les caisses-maladie, d’après les primes de l’OFSP {y0} à {YEAR} : prix, constance, tarifs, réserves. "
+             f"Constance des primes de toutes les caisses-maladie, d’après les primes de l’OFSP {y0} à {YEAR} : prix, constance, tarifs, réserves. "
              f"{top[0]['name']} arrive en tête.",
              f"Price Consistency Rating of all Swiss health insurers from FOPH premiums {y0} to {YEAR}: price, consistency, tariffs and reserves. "
              f"{top[0]['name']} comes out best.")
@@ -1969,6 +2006,9 @@ def kasse_page(i, cur, by_canton_cur, prev_idx, insurers, ic, top3_cur, kv, nu):
     # Abschnitt mit Adresse gar nicht auf (GSC, 28.10.2026).
     title = L(f"{name} Prämien {YEAR}: Erhöhung, Rating, Kündigung", f"{name} primes {YEAR} : hausse, notation, résiliation",
               f"{name} premiums {YEAR}: increase, rating, cancellation")
+    if len(title) > 65:   # lange Kassennamen (Einsiedler Krankenkasse, KK Luzerner Hinterland)
+        title = L(f"{name} Prämien {YEAR}: Erhöhung, Kündigung", f"{name} primes {YEAR} : hausse, résiliation",
+                  f"{name} premiums {YEAR}: increase, cancellation")
     dl = deadline(short=True)
     if chg is not None:
         desc = L(f"{name} {YEAR}: Standardprämie {pct(chg)} gegenüber {PREV}. Alle Kantone, Modelle und "
@@ -2028,6 +2068,7 @@ def kasse_page(i, cur, by_canton_cur, prev_idx, insurers, ic, top3_cur, kv, nu):
         f'<div class="kk-fact"><div class="kk-fact-val">{v}</div><div class="kk-fact-label">{l}</div></div>' for v, l in facts) + "</div>")
     p.append(f'<a class="kk-cta" href="{i18n.url("home")}?kasse={i}#kk-rechner">'
              + L(f"Mit deiner {e(name)}-Rechnung vergleichen", f"Comparer avec votre facture {e(name)}", f"Compare with your {e(name)} bill") + " &rarr;</a>")
+    p.append(frist_box(name))
     p.append(rating_kasse_card(i))
 
     p.append(L(f"<h2>{e(name)} {YEAR} in jedem Kanton</h2>", f"<h2>{e(name)} {YEAR} dans chaque canton</h2>", f"<h2>{e(name)} {YEAR} in every canton</h2>"))
@@ -2083,6 +2124,10 @@ def kasse_page(i, cur, by_canton_cur, prev_idx, insurers, ic, top3_cur, kv, nu):
     p.append(L(f'<p><a href="{kd}">Kündigungsbrief an {e(name)} erstellen</a>, fertig zum Ausdrucken.</p>',
                f'<p><a href="{kd}">Créer la lettre de résiliation pour {e(name)}</a>, prête à imprimer.</p>',
                f'<p><a href="{kd}">Create a cancellation letter to {e(name)}</a>, ready to print.</p>'))
+    kh = i18n.url("kuendigen")
+    p.append(L(f'<p>Fristen, Sonderfälle und die Adressen aller Kassen: <a href="{kh}">Krankenkasse kündigen</a>.</p>',
+               f'<p>Délais, cas particuliers et adresses de toutes les caisses : <a href="{kh}">résilier sa caisse-maladie</a>.</p>',
+               f'<p>Deadlines, special cases and the addresses of all insurers: <a href="{kh}">cancel health insurance</a>.</p>'))
 
     qa = []
     if chg is not None:
@@ -2388,8 +2433,7 @@ def kuendigen_page(kv):
                 "Switching supplementary insurance rarely pays off. The new insurer may ask health questions, impose exclusions or refuse you, and joining gets more expensive with age. Advisers still often push for it, because they earn up to 16 monthly premiums in commission.")
     more_lbl = T("Weitere Angaben", "Autres indications", "More details")
     body = f"""{crumbs_html(crumbs)}
-<div class="article-badge">{T("Frist", "Délai", "Deadline")} {dl}</div>
-<h1>{T(f"Krankenkasse kündigen: bis {dls}, mit Vorlage", f"Résilier sa caisse-maladie : d’ici au {dls}, avec modèle", f"Cancel your health insurance: by {dls}, with template")}</h1>
+<h1>{T(f"Krankenkasse kündigen mit Vorlage: Frist {dl}", f"Résilier sa caisse-maladie avec modèle de lettre : délai au {dl}", f"Cancel your health insurance with a template: deadline {dl}")}</h1>
 <div class="article-meta">{T(f"Grundversicherung auf den 1. Januar {YEAR} wechseln · Brief in 2 Minuten", f"Changer d’assurance de base au 1er janvier {YEAR} · lettre en 2 minutes", f"Switch basic insurance on 1 January {YEAR} · letter in 2 minutes")}</div>
 <p class="kk-lead">{T(f"Bis <strong>{dl}</strong> muss die Kündigung bei deiner Kasse <strong>eingetroffen</strong> sein.",
   f"La résiliation doit être <strong>parvenue</strong> à votre caisse au plus tard le <strong>{dl}</strong>.",
@@ -2494,12 +2538,15 @@ def kuendigen_page(kv):
 <script id="kd-data" type="application/json">{kd_data}</script>
 <script src="/js/combobox.js"></script>
 <script src="/js/kuendigung.js"></script>"""
-    html_out = page(path, T(f"Krankenkasse kündigen {PREV}: Frist {dls}, Vorlage und Adressen",
-                            f"Résilier sa caisse-maladie {PREV} : délai {dls}, modèle et adresses",
-                            f"Cancel health insurance {PREV}: deadline {dls}, template and addresses"),
-                    T(f"Grundversicherung kündigen: bis {dl} muss die Kündigung bei der Kasse sein. Kostenlose Vorlage, Adressen aller Kassen, Schritt für Schritt.",
-                      f"Résilier l’assurance de base : la résiliation doit parvenir à la caisse d’ici au {dl}. Modèle gratuit, adresses de toutes les caisses.",
-                      f"Cancel basic health insurance: your cancellation must reach the insurer by {dl}. Free template, addresses of all insurers, step by step."),
+    # Title vorne mit dem Suchbegriff, «Vorlage» drin (GSC 16.11.2026: «krankenkasse
+    # kündigen vorlage» Platz 37, «krankenkasse kündigen» Platz 86), Frist mit Jahr,
+    # damit der Satz nach dem 30. November nicht falsch wird. Höchstens 65 Zeichen.
+    html_out = page(path, T(f"Krankenkasse kündigen: Vorlage und Frist {dl}",
+                            f"Résilier sa caisse-maladie : modèle, délai au {dl}",
+                            f"Cancel health insurance: template, deadline {dl}"),
+                    T(f"Kündigung der Krankenkasse: bis {dl} muss sie bei der Kasse sein. Kostenlose Vorlage mit Unterschrift als PDF, Adressen aller {len(ids)} Kassen.",
+                      f"Résiliation de la caisse-maladie : elle doit parvenir à la caisse d’ici au {dl}. Modèle gratuit avec signature en PDF, adresses des {len(ids)} caisses.",
+                      f"Cancelling Swiss health insurance: your letter must reach the insurer by {dl}. Free template with signature as PDF, addresses of all {len(ids)} insurers."),
                     body, [breadcrumb(crumbs), faq(qa)], dict(i18n.ROUTES["kuendigen"]))
     return path, html_out.replace("</style>", KUENDIGEN_CSS + "</style>", 1)
 
@@ -2713,12 +2760,12 @@ def blog_verwaltung_page():
                     for y in sorted(MARKT_WERBUNG))
     if i18n.LANG != "en":
         mrows = mrows.replace(".", ",")
-    title = T("Verwaltungskosten der Krankenkassen: was jede Kasse ausgibt", "Frais administratifs des caisses-maladie : ce que dépense chaque caisse",
+    title = T("Verwaltungskosten der Krankenkassen: was jede Kasse ausgibt", "Frais administratifs des caisses-maladie, caisse par caisse",
               "Health insurers’ administrative costs: what each insurer spends")
     desc = T("Verwaltung, Werbung und Vermittler-Provisionen je Krankenkasse in der Grundversicherung, "
              "mit Reserven und Preistreue-Note. Alle Zahlen vom BAG.",
-             "Administration, publicité et commissions aux intermédiaires par caisse-maladie dans l’assurance de base, "
-             "avec réserves et note de constance. Tous les chiffres de l’OFSP.",
+             "Administration, publicité et commissions de chaque caisse-maladie dans l’assurance de base, "
+             "avec réserves et note de constance. Chiffres de l’OFSP.",
              "Administration, advertising and broker commissions per health insurer in basic insurance, "
              "with reserves and price consistency score. All figures from the FOPH.")
     short = T("Verwaltungskosten", "Frais administratifs", "Administrative costs")
@@ -2793,14 +2840,21 @@ def blog_verwaltung_page():
 <p class="kk-note">{T(f"Quellen: BAG, Aufsichtsdaten der obligatorischen Krankenpflegeversicherung (Verwaltungsaufwand je versicherte Person, {first} bis {last}); BAG, Auswertungen Verwaltungskosten (Werbeaufwand und Provisionen, Jahresrechnung definitiv {vj}); BAG über priminfo.admin.ch, Solvenzquoten per 1.1.2026. Werbung und Provisionen umfassen nur die Grundversicherung.",
   f"Sources : OFSP, données de surveillance de l’assurance obligatoire des soins (frais administratifs par assuré, {first} à {last}) ; OFSP, analyses des frais administratifs (publicité et commissions, comptes annuels définitifs {vj}) ; OFSP via priminfo.admin.ch, taux de solvabilité au 1.1.2026. La publicité et les commissions ne concernent que l’assurance de base.",
   f"Sources: FOPH, supervisory data on compulsory health insurance (administrative costs per insured person, {first} to {last}); FOPH, analyses of administrative costs (advertising and commissions, final annual accounts {vj}); FOPH via priminfo.admin.ch, solvency ratios as of 1 January 2026. Advertising and commissions cover basic insurance only.")}</p>"""
-    return path, page(path, title, desc, body, [breadcrumb(crumbs)], dict(i18n.ROUTES[BLOG_VERWALTUNG_KEY]))
+    # erschienen DE am 1.10.2026 (fff919f), FR/EN am 2.10.2026 (316897b)
+    art = article_ld(title, desc, path, T("2026-10-01", "2026-10-02", "2026-10-02"))
+    return path, page(path, title, desc, body, [art, breadcrumb(crumbs)], dict(i18n.ROUTES[BLOG_VERWALTUNG_KEY]))
 
 
 def write_sitemap(groups):
     """groups: Liste von ({Sprache: Pfad}, Priorität). Jede URL nennt ihre
     Gegenstücke in den anderen Sprachen (xhtml:link), wie Google es für
-    mehrsprachige Seiten empfiehlt."""
-    today = date.today().isoformat()
+    mehrsprachige Seiten empfiehlt.
+
+    lastmod ist das Datum der letzten Inhaltsänderung laut Git (inhalt.py),
+    nicht das Builddatum. Bis 16.11.2026 trugen alle URLs dasselbe Datum.
+    Muss deshalb nach allen Schreibvorgängen laufen (auch bust_assets).
+    Setzt dasselbe Datum als dateModified ins JSON-LD der Seite."""
+    import inhalt
     static_pr = {"home": "1.0", "hausrat": "0.9", "methode": "0.6", "blog": "0.6"}
     items = []
     for key in i18n.STATIC:
@@ -2815,12 +2869,28 @@ def write_sitemap(groups):
         if len(alts) > 1 and "de" in alts:
             links += f'\n    <xhtml:link rel="alternate" hreflang="x-default" href="{SITE}{alts["de"]}"/>'
         for l, p in alts.items():
-            out.append(f"  <url>\n    <loc>{SITE}{p}</loc>\n    <lastmod>{today}</lastmod>\n    <priority>{pr}</priority>"
+            mod = inhalt.datum(inhalt.url_zu_datei(p))
+            set_date_modified(ROOT / inhalt.url_zu_datei(p), mod)
+            out.append(f"  <url>\n    <loc>{SITE}{p}</loc>\n    <lastmod>{mod}</lastmod>\n    <priority>{pr}</priority>"
                        f"{links if len(alts) > 1 else ''}\n  </url>")
     (ROOT / "sitemap.xml").write_text(
         f'<?xml version="1.0" encoding="UTF-8"?>\n<!-- generiert von scripts/build_kk_pages.py -->\n'
         f'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n'
         + "\n".join(out) + '\n</urlset>\n', encoding="utf-8")
+
+
+def set_date_modified(f, mod):
+    """dateModified im JSON-LD auf das Inhaltsdatum, nie vor datePublished.
+    Ändert nur den Head, also nicht den Fingerabdruck der Seite."""
+    if not f.exists():
+        return
+    t = f.read_text(encoding="utf-8")
+    pub = re.search(r'"datePublished":\s*"(\d{4}-\d{2}-\d{2})"', t)
+    if pub and pub.group(1) > mod:
+        mod = pub.group(1)
+    new = re.sub(r'("dateModified":\s*")\d{4}-\d{2}-\d{2}(")', rf"\g<1>{mod}\g<2>", t)
+    if new != t:
+        f.write_text(new, encoding="utf-8")
 
 
 def write_llms(n_insurers, nat):
@@ -3049,7 +3119,6 @@ def main():
     }, ensure_ascii=False, indent=1), encoding="utf-8")
 
     paths = [p for alts, _ in groups.values() for p in alts.values()]
-    write_sitemap(list(groups.values()))
     site_nav.apply_static()
     try:
         import sync_handyabo
@@ -3057,6 +3126,7 @@ def main():
     except (Exception, SystemExit) as err:  # handyabo nicht erreichbar: Kacheln bleiben wie sie sind
         print(f"! handyabo-Zahlen nicht aktualisiert: {err}")
     bust_assets()
+    write_sitemap(list(groups.values()))   # zuletzt: lastmod aus dem fertigen Inhalt
     print(f"✓ {len(paths)} Seiten, national {nat:+.2f}% (Standard F300), "
           f"Kantone {min(v['change_pct'] for v in cantons.values()):+.1f} bis {max(v['change_pct'] for v in cantons.values()):+.1f}%")
 

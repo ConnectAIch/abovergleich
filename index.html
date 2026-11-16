@@ -36,10 +36,48 @@
 {
   "@context": "https://schema.org",
   "@type": "WebSite",
+  "@id": "https://abovergleich.com/#website",
   "name": "abovergleich.com",
   "url": "https://abovergleich.com",
   "description": "Unabhängiger Vergleich für die Schweiz: Krankenkassen, Handy-Abo, Internet und mehr. Basierend auf offiziellen BAG-Daten.",
-  "inLanguage": "de-CH"
+  "inLanguage": "de-CH",
+  "publisher": { "@id": "https://abovergleich.com/#organization" }
+}
+</script>
+
+<!-- Structured Data: Organization -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://abovergleich.com/#organization",
+  "name": "abovergleich.com",
+  "url": "https://abovergleich.com/",
+  "logo": {
+    "@type": "ImageObject",
+    "url": "https://abovergleich.com/logo.png",
+    "width": 512,
+    "height": 512
+  },
+  "description": "Unabhängiger Krankenkassen-Vergleich für die Schweiz mit den offiziellen Prämien des Bundesamts für Gesundheit (BAG). Ein Angebot von Connect AI.",
+  "areaServed": {
+    "@type": "Country",
+    "name": "Schweiz"
+  },
+  "parentOrganization": {
+    "@type": "Organization",
+    "@id": "https://www.connectai.ch/#organization",
+    "name": "Connect AI",
+    "url": "https://www.connectai.ch",
+    "identifier": {
+      "@type": "PropertyValue",
+      "propertyID": "UID",
+      "value": "CHE-446.400.027"
+    },
+    "sameAs": [
+      "https://www.uid.admin.ch/Detail.aspx?uid_id=CHE446400027"
+    ]
+  }
 }
 </script>
 
@@ -93,32 +131,6 @@
 }
 </script>
 
-<!-- Structured Data: HowTo -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "HowTo",
-  "name": "Krankenkasse wechseln in der Schweiz",
-  "description": "So wechselst du deine Krankenkasse in 3 Schritten und sparst bis zu CHF 1200 pro Jahr.",
-  "step": [
-    {
-      "@type": "HowToStep",
-      "name": "Prämie vergleichen",
-      "text": "PLZ eingeben und günstigste Kasse finden. Die Grundversicherung ist bei allen Kassen gesetzlich identisch. Nur der Preis unterscheidet sich."
-    },
-    {
-      "@type": "HowToStep",
-      "name": "Kündigen bis 30. November",
-      "text": "Schriftlich bei der aktuellen Kasse kündigen. Die Kündigung muss bis Ende November eingegangen sein."
-    },
-    {
-      "@type": "HowToStep",
-      "name": "Neue Kasse ab 1. Januar",
-      "text": "Bei der neuen Kasse anmelden. Die Aufnahme wird bestätigt und der Versicherungsschutz ist lückenlos garantiert."
-    }
-  ]
-}
-</script>
 
 <meta name="robots" content="index, follow">
 
