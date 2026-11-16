@@ -1,0 +1,55 @@
+# Nach jedem erfolgreichen Production-Deploy auf Vercel die Seiten bei
+# IndexNow melden (Bing, Yandex), deren Inhalt sich seit dem vorherigen
+# Production-Deploy geändert hat. Bis 16.11.2026 lief scripts/indexnow.py nur
+# von Hand und schickte dann die ganze Sitemap.
+#
+# Vercel legt pro Deploy ein GitHub-Deployment an und meldet dessen Status;
+# darauf hört dieser Workflow. Ein Neubau, der nur Prüfsummen an CSS/JS
+# ändert, meldet nichts (Fingerabdruck in scripts/inhalt.py).
+name: IndexNow
+on:
+  deployment_status:
+
+permissions:
+  contents: read
+  deployments: read
+
+jobs:
+  melden:
+    if: github.event.deployment_status.state == 'success' && github.event.deployment.environment == 'Production'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.deployment.sha }}
+          fetch-depth: 0
+
+      # Der vorherige Deploy, nicht einfach der vorherige Commit: ein Push mit
+      # mehreren Commits wird nur einmal deployt. Ältere Deployments stehen
+      # nach dem neuen auf «inactive», darum zählt, ob je «success» gemeldet
+      # wurde. Derselbe Commit noch einmal deployt: nichts zu melden.
+      - name: Vorherigen Production-Deploy finden
+        id: vorher
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AKTUELL: ${{ github.event.deployment.id }}
+          SHA: ${{ github.event.deployment.sha }}
+        run: |
+          von=""
+          for row in $(gh api "repos/$GITHUB_REPOSITORY/deployments?environment=Production&per_page=30" \
+                         --jq ".[] | select(.id != $AKTUELL) | \"\(.id),\(.sha)\""); do
+            id=${row%,*}; sha=${row#*,}
+            git merge-base --is-ancestor "$sha" "$SHA" 2>/dev/null || continue
+            ok=$(gh api "repos/$GITHUB_REPOSITORY/deployments/$id/statuses" --jq 'any(.[]; .state == "success")')
+            if [ "$ok" = "true" ]; then von=$sha; break; fi
+          done
+          [ -n "$von" ] || von=$(git rev-parse "$SHA~1")
+          echo "Vergleiche $von..$SHA"
+          echo "von=$von" >> "$GITHUB_OUTPUT"
+
+      - name: Geänderte Seiten melden
+        env:
+          VON: ${{ steps.vorher.outputs.von }}
+          BIS: ${{ github.event.deployment.sha }}
+        run: python3 scripts/indexnow.py --von "$VON" --bis "$BIS"

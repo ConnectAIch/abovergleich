@@ -37,8 +37,11 @@ anpassen. Erzeugt die 26 Kantonsseiten unter `/krankenkasse/`, die Auswertung
 als eigene URL stehen. Die Namen der Kassen kommen aus `INSURER_NAMES` in
 `premium_analysis.py` (BAG-Verzeichnis der zugelassenen Krankenversicherer).
 
-Nach dem Deploy: `python3 indexnow.py` meldet alle Sitemap-URLs an Bing und
-Co.; in der Google Search Console die Sitemap neu einreichen.
+Nach dem Deploy meldet `.github/workflows/indexnow.yml` die Seiten mit
+geändertem Inhalt an Bing und Co., von selbst. `lastmod` in der Sitemap ist
+das Datum der letzten Inhaltsänderung laut Git (`inhalt.py`), nicht das
+Builddatum; darum vor dem Build committen, was schon fertig ist. In der Google
+Search Console die Sitemap neu einreichen.
 
 ### 4. In die Datenbank laden und Rechner umschalten
 
